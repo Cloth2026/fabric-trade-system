@@ -466,6 +466,89 @@ Prisma 模型口径：
 - 再实现面料库新增 / 编辑 API 中的供应商货源写入逻辑。
 - UI 层先保持现有新增面料页面风格，只在后续小步加入“供应商货源”子表单或抽屉，不要一次性大改页面。
 
+### 2026-09-13 修正供应商报价历史模型
+
+本轮目标：
+
+- 根据产品与技术审核意见，只修正“面料供应商关系 + 报价历史”的数据模型。
+- 不开发 API，不修改 UI，不开发寄样、报价、订单、库存或其他业务模块。
+
+数据安全检查：
+
+- 本轮开始前执行 `npm.cmd run prisma:migrate:status`，开发库 `fabric_trade_dev` 与已有 2 个 migration 同步。
+- 已查询 `FabricSupplier` 和 `FabricSupplierQuote` 数据量，两张表均为 0 行。
+- 因此本轮删除上一版新表中的冗余字段不会造成当前开发库业务数据丢失。
+- 仍然没有删除 `Fabric` 上的 legacy 字段。
+
+模型修正：
+
+- `FabricSupplier` 只保存长期供货关系字段：
+  - `tenantId`
+  - `fabricId`
+  - `supplierId`
+  - `supplierFabricCode`
+  - `sampleStatus`
+  - `qualityDifferences`
+  - `isPreferred`
+  - `remarks`
+  - `createdAt`
+  - `updatedAt`
+- 从 `FabricSupplier` 移除：
+  - `purchasePrice`
+  - `currency`
+  - `pricingUnit`
+  - `minimumOrderQty`
+  - `leadTime`
+  - `contactName`
+  - `quoteDate`
+- `FabricSupplierQuote` 保存每一次报价快照：
+  - `tenantId`
+  - `fabricSupplierId`
+  - `purchasePrice`，必填
+  - `currency`
+  - `pricingUnit`
+  - `minimumOrderQty`
+  - `leadTime`
+  - `contactName`
+  - `quoteDate`，必填，默认当前时间
+  - `qualityDifferences`
+  - `remarks`
+  - `createdAt`
+- 从 `FabricSupplierQuote` 移除冗余字段：
+  - `fabricId`
+  - `supplierId`
+  - `supplierFabricCode`
+
+修改文件：
+
+- `prisma/schema.prisma`
+- `prisma/migrations/20260913094627_refine_supplier_quote_history_model/migration.sql`
+- `src/generated/prisma/`
+- `docs/FABRIC_LIBRARY_FIELDS.md`
+- `docs/DEV_LOG.md`
+- `PROJECT_OVERVIEW.md`
+
+数据迁移风险：
+
+- 新增 migration 中 Prisma 会提示删除列风险，但当前两张表均为空。
+- 如果其他环境已经写入 `FabricSupplier` 或 `FabricSupplierQuote` 数据，应用本 migration 前需要先备份，并按业务规则把旧关系表中的价格字段迁移到报价历史。
+- 当前开发库不存在该风险。
+
+验证：
+
+- `npx.cmd prisma validate` 通过。
+- `npx.cmd prisma migrate dev --name refine_supplier_quote_history_model` 通过，并创建 / 应用增量 migration。
+- `npm.cmd run prisma:generate` 通过。
+- `npm.cmd run prisma:migrate:status` 通过，开发库当前有 3 个 migration 且 schema up to date。
+- `npm.cmd run lint` 通过。
+- `npm.cmd run build` 通过。
+
+下一步建议：
+
+- 基于修正后的模型实现供应商报价历史 Zod schema。
+- API 写入报价时必须通过 `fabricSupplierId` 找到面料和供应商，不再让前端提交冗余 `fabricId` / `supplierId`。
+- UI 后续展示最新报价时，从 `FabricSupplier.quotes` 按 `quoteDate` 或 `createdAt` 排序取最新记录。
+
 ## 未决问题
 
 - 梭织经纬密是否要在 MVP 中设为必填，当前暂定为选填但纳入待补标记。

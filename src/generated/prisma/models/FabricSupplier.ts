@@ -20,18 +20,8 @@ export type FabricSupplierModel = runtime.Types.Result.DefaultSelection<Prisma.$
 
 export type AggregateFabricSupplier = {
   _count: FabricSupplierCountAggregateOutputType | null
-  _avg: FabricSupplierAvgAggregateOutputType | null
-  _sum: FabricSupplierSumAggregateOutputType | null
   _min: FabricSupplierMinAggregateOutputType | null
   _max: FabricSupplierMaxAggregateOutputType | null
-}
-
-export type FabricSupplierAvgAggregateOutputType = {
-  purchasePrice: runtime.Decimal | null
-}
-
-export type FabricSupplierSumAggregateOutputType = {
-  purchasePrice: runtime.Decimal | null
 }
 
 export type FabricSupplierMinAggregateOutputType = {
@@ -40,13 +30,6 @@ export type FabricSupplierMinAggregateOutputType = {
   fabricId: string | null
   supplierId: string | null
   supplierFabricCode: string | null
-  purchasePrice: runtime.Decimal | null
-  currency: string | null
-  pricingUnit: $Enums.PricingUnit | null
-  minimumOrderQty: string | null
-  leadTime: string | null
-  contactName: string | null
-  quoteDate: Date | null
   sampleStatus: string | null
   qualityDifferences: string | null
   isPreferred: boolean | null
@@ -61,13 +44,6 @@ export type FabricSupplierMaxAggregateOutputType = {
   fabricId: string | null
   supplierId: string | null
   supplierFabricCode: string | null
-  purchasePrice: runtime.Decimal | null
-  currency: string | null
-  pricingUnit: $Enums.PricingUnit | null
-  minimumOrderQty: string | null
-  leadTime: string | null
-  contactName: string | null
-  quoteDate: Date | null
   sampleStatus: string | null
   qualityDifferences: string | null
   isPreferred: boolean | null
@@ -82,13 +58,6 @@ export type FabricSupplierCountAggregateOutputType = {
   fabricId: number
   supplierId: number
   supplierFabricCode: number
-  purchasePrice: number
-  currency: number
-  pricingUnit: number
-  minimumOrderQty: number
-  leadTime: number
-  contactName: number
-  quoteDate: number
   sampleStatus: number
   qualityDifferences: number
   isPreferred: number
@@ -99,27 +68,12 @@ export type FabricSupplierCountAggregateOutputType = {
 }
 
 
-export type FabricSupplierAvgAggregateInputType = {
-  purchasePrice?: true
-}
-
-export type FabricSupplierSumAggregateInputType = {
-  purchasePrice?: true
-}
-
 export type FabricSupplierMinAggregateInputType = {
   id?: true
   tenantId?: true
   fabricId?: true
   supplierId?: true
   supplierFabricCode?: true
-  purchasePrice?: true
-  currency?: true
-  pricingUnit?: true
-  minimumOrderQty?: true
-  leadTime?: true
-  contactName?: true
-  quoteDate?: true
   sampleStatus?: true
   qualityDifferences?: true
   isPreferred?: true
@@ -134,13 +88,6 @@ export type FabricSupplierMaxAggregateInputType = {
   fabricId?: true
   supplierId?: true
   supplierFabricCode?: true
-  purchasePrice?: true
-  currency?: true
-  pricingUnit?: true
-  minimumOrderQty?: true
-  leadTime?: true
-  contactName?: true
-  quoteDate?: true
   sampleStatus?: true
   qualityDifferences?: true
   isPreferred?: true
@@ -155,13 +102,6 @@ export type FabricSupplierCountAggregateInputType = {
   fabricId?: true
   supplierId?: true
   supplierFabricCode?: true
-  purchasePrice?: true
-  currency?: true
-  pricingUnit?: true
-  minimumOrderQty?: true
-  leadTime?: true
-  contactName?: true
-  quoteDate?: true
   sampleStatus?: true
   qualityDifferences?: true
   isPreferred?: true
@@ -209,18 +149,6 @@ export type FabricSupplierAggregateArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: FabricSupplierAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: FabricSupplierSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: FabricSupplierMinAggregateInputType
@@ -251,8 +179,6 @@ export type FabricSupplierGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   _count?: FabricSupplierCountAggregateInputType | true
-  _avg?: FabricSupplierAvgAggregateInputType
-  _sum?: FabricSupplierSumAggregateInputType
   _min?: FabricSupplierMinAggregateInputType
   _max?: FabricSupplierMaxAggregateInputType
 }
@@ -263,13 +189,6 @@ export type FabricSupplierGroupByOutputType = {
   fabricId: string
   supplierId: string
   supplierFabricCode: string | null
-  purchasePrice: runtime.Decimal | null
-  currency: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty: string | null
-  leadTime: string | null
-  contactName: string | null
-  quoteDate: Date | null
   sampleStatus: string | null
   qualityDifferences: string | null
   isPreferred: boolean
@@ -277,8 +196,6 @@ export type FabricSupplierGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   _count: FabricSupplierCountAggregateOutputType | null
-  _avg: FabricSupplierAvgAggregateOutputType | null
-  _sum: FabricSupplierSumAggregateOutputType | null
   _min: FabricSupplierMinAggregateOutputType | null
   _max: FabricSupplierMaxAggregateOutputType | null
 }
@@ -307,13 +224,6 @@ export type FabricSupplierWhereInput = {
   fabricId?: Prisma.StringFilter<"FabricSupplier"> | string
   supplierId?: Prisma.StringFilter<"FabricSupplier"> | string
   supplierFabricCode?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
-  purchasePrice?: Prisma.DecimalNullableFilter<"FabricSupplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFilter<"FabricSupplier"> | string
-  pricingUnit?: Prisma.EnumPricingUnitFilter<"FabricSupplier"> | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
-  leadTime?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
-  contactName?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
-  quoteDate?: Prisma.DateTimeNullableFilter<"FabricSupplier"> | Date | string | null
   sampleStatus?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   qualityDifferences?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   isPreferred?: Prisma.BoolFilter<"FabricSupplier"> | boolean
@@ -332,13 +242,6 @@ export type FabricSupplierOrderByWithRelationInput = {
   fabricId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   supplierFabricCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  purchasePrice?: Prisma.SortOrderInput | Prisma.SortOrder
-  currency?: Prisma.SortOrder
-  pricingUnit?: Prisma.SortOrder
-  minimumOrderQty?: Prisma.SortOrderInput | Prisma.SortOrder
-  leadTime?: Prisma.SortOrderInput | Prisma.SortOrder
-  contactName?: Prisma.SortOrderInput | Prisma.SortOrder
-  quoteDate?: Prisma.SortOrderInput | Prisma.SortOrder
   sampleStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   qualityDifferences?: Prisma.SortOrderInput | Prisma.SortOrder
   isPreferred?: Prisma.SortOrder
@@ -361,13 +264,6 @@ export type FabricSupplierWhereUniqueInput = Prisma.AtLeast<{
   fabricId?: Prisma.StringFilter<"FabricSupplier"> | string
   supplierId?: Prisma.StringFilter<"FabricSupplier"> | string
   supplierFabricCode?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
-  purchasePrice?: Prisma.DecimalNullableFilter<"FabricSupplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFilter<"FabricSupplier"> | string
-  pricingUnit?: Prisma.EnumPricingUnitFilter<"FabricSupplier"> | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
-  leadTime?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
-  contactName?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
-  quoteDate?: Prisma.DateTimeNullableFilter<"FabricSupplier"> | Date | string | null
   sampleStatus?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   qualityDifferences?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   isPreferred?: Prisma.BoolFilter<"FabricSupplier"> | boolean
@@ -386,13 +282,6 @@ export type FabricSupplierOrderByWithAggregationInput = {
   fabricId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   supplierFabricCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  purchasePrice?: Prisma.SortOrderInput | Prisma.SortOrder
-  currency?: Prisma.SortOrder
-  pricingUnit?: Prisma.SortOrder
-  minimumOrderQty?: Prisma.SortOrderInput | Prisma.SortOrder
-  leadTime?: Prisma.SortOrderInput | Prisma.SortOrder
-  contactName?: Prisma.SortOrderInput | Prisma.SortOrder
-  quoteDate?: Prisma.SortOrderInput | Prisma.SortOrder
   sampleStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   qualityDifferences?: Prisma.SortOrderInput | Prisma.SortOrder
   isPreferred?: Prisma.SortOrder
@@ -400,10 +289,8 @@ export type FabricSupplierOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.FabricSupplierCountOrderByAggregateInput
-  _avg?: Prisma.FabricSupplierAvgOrderByAggregateInput
   _max?: Prisma.FabricSupplierMaxOrderByAggregateInput
   _min?: Prisma.FabricSupplierMinOrderByAggregateInput
-  _sum?: Prisma.FabricSupplierSumOrderByAggregateInput
 }
 
 export type FabricSupplierScalarWhereWithAggregatesInput = {
@@ -415,13 +302,6 @@ export type FabricSupplierScalarWhereWithAggregatesInput = {
   fabricId?: Prisma.StringWithAggregatesFilter<"FabricSupplier"> | string
   supplierId?: Prisma.StringWithAggregatesFilter<"FabricSupplier"> | string
   supplierFabricCode?: Prisma.StringNullableWithAggregatesFilter<"FabricSupplier"> | string | null
-  purchasePrice?: Prisma.DecimalNullableWithAggregatesFilter<"FabricSupplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringWithAggregatesFilter<"FabricSupplier"> | string
-  pricingUnit?: Prisma.EnumPricingUnitWithAggregatesFilter<"FabricSupplier"> | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.StringNullableWithAggregatesFilter<"FabricSupplier"> | string | null
-  leadTime?: Prisma.StringNullableWithAggregatesFilter<"FabricSupplier"> | string | null
-  contactName?: Prisma.StringNullableWithAggregatesFilter<"FabricSupplier"> | string | null
-  quoteDate?: Prisma.DateTimeNullableWithAggregatesFilter<"FabricSupplier"> | Date | string | null
   sampleStatus?: Prisma.StringNullableWithAggregatesFilter<"FabricSupplier"> | string | null
   qualityDifferences?: Prisma.StringNullableWithAggregatesFilter<"FabricSupplier"> | string | null
   isPreferred?: Prisma.BoolWithAggregatesFilter<"FabricSupplier"> | boolean
@@ -433,13 +313,6 @@ export type FabricSupplierScalarWhereWithAggregatesInput = {
 export type FabricSupplierCreateInput = {
   id?: string
   supplierFabricCode?: string | null
-  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty?: string | null
-  leadTime?: string | null
-  contactName?: string | null
-  quoteDate?: Date | string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
   isPreferred?: boolean
@@ -458,13 +331,6 @@ export type FabricSupplierUncheckedCreateInput = {
   fabricId: string
   supplierId: string
   supplierFabricCode?: string | null
-  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty?: string | null
-  leadTime?: string | null
-  contactName?: string | null
-  quoteDate?: Date | string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
   isPreferred?: boolean
@@ -477,13 +343,6 @@ export type FabricSupplierUncheckedCreateInput = {
 export type FabricSupplierUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -502,13 +361,6 @@ export type FabricSupplierUncheckedUpdateInput = {
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -524,13 +376,6 @@ export type FabricSupplierCreateManyInput = {
   fabricId: string
   supplierId: string
   supplierFabricCode?: string | null
-  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty?: string | null
-  leadTime?: string | null
-  contactName?: string | null
-  quoteDate?: Date | string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
   isPreferred?: boolean
@@ -542,13 +387,6 @@ export type FabricSupplierCreateManyInput = {
 export type FabricSupplierUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -563,13 +401,6 @@ export type FabricSupplierUncheckedUpdateManyInput = {
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -600,13 +431,6 @@ export type FabricSupplierCountOrderByAggregateInput = {
   fabricId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   supplierFabricCode?: Prisma.SortOrder
-  purchasePrice?: Prisma.SortOrder
-  currency?: Prisma.SortOrder
-  pricingUnit?: Prisma.SortOrder
-  minimumOrderQty?: Prisma.SortOrder
-  leadTime?: Prisma.SortOrder
-  contactName?: Prisma.SortOrder
-  quoteDate?: Prisma.SortOrder
   sampleStatus?: Prisma.SortOrder
   qualityDifferences?: Prisma.SortOrder
   isPreferred?: Prisma.SortOrder
@@ -615,23 +439,12 @@ export type FabricSupplierCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type FabricSupplierAvgOrderByAggregateInput = {
-  purchasePrice?: Prisma.SortOrder
-}
-
 export type FabricSupplierMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   fabricId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   supplierFabricCode?: Prisma.SortOrder
-  purchasePrice?: Prisma.SortOrder
-  currency?: Prisma.SortOrder
-  pricingUnit?: Prisma.SortOrder
-  minimumOrderQty?: Prisma.SortOrder
-  leadTime?: Prisma.SortOrder
-  contactName?: Prisma.SortOrder
-  quoteDate?: Prisma.SortOrder
   sampleStatus?: Prisma.SortOrder
   qualityDifferences?: Prisma.SortOrder
   isPreferred?: Prisma.SortOrder
@@ -646,23 +459,12 @@ export type FabricSupplierMinOrderByAggregateInput = {
   fabricId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
   supplierFabricCode?: Prisma.SortOrder
-  purchasePrice?: Prisma.SortOrder
-  currency?: Prisma.SortOrder
-  pricingUnit?: Prisma.SortOrder
-  minimumOrderQty?: Prisma.SortOrder
-  leadTime?: Prisma.SortOrder
-  contactName?: Prisma.SortOrder
-  quoteDate?: Prisma.SortOrder
   sampleStatus?: Prisma.SortOrder
   qualityDifferences?: Prisma.SortOrder
   isPreferred?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type FabricSupplierSumOrderByAggregateInput = {
-  purchasePrice?: Prisma.SortOrder
 }
 
 export type FabricSupplierScalarRelationFilter = {
@@ -813,13 +615,6 @@ export type FabricSupplierUpdateOneRequiredWithoutQuotesNestedInput = {
 export type FabricSupplierCreateWithoutTenantInput = {
   id?: string
   supplierFabricCode?: string | null
-  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty?: string | null
-  leadTime?: string | null
-  contactName?: string | null
-  quoteDate?: Date | string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
   isPreferred?: boolean
@@ -836,13 +631,6 @@ export type FabricSupplierUncheckedCreateWithoutTenantInput = {
   fabricId: string
   supplierId: string
   supplierFabricCode?: string | null
-  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty?: string | null
-  leadTime?: string | null
-  contactName?: string | null
-  quoteDate?: Date | string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
   isPreferred?: boolean
@@ -887,13 +675,6 @@ export type FabricSupplierScalarWhereInput = {
   fabricId?: Prisma.StringFilter<"FabricSupplier"> | string
   supplierId?: Prisma.StringFilter<"FabricSupplier"> | string
   supplierFabricCode?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
-  purchasePrice?: Prisma.DecimalNullableFilter<"FabricSupplier"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFilter<"FabricSupplier"> | string
-  pricingUnit?: Prisma.EnumPricingUnitFilter<"FabricSupplier"> | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
-  leadTime?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
-  contactName?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
-  quoteDate?: Prisma.DateTimeNullableFilter<"FabricSupplier"> | Date | string | null
   sampleStatus?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   qualityDifferences?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   isPreferred?: Prisma.BoolFilter<"FabricSupplier"> | boolean
@@ -905,13 +686,6 @@ export type FabricSupplierScalarWhereInput = {
 export type FabricSupplierCreateWithoutSupplierInput = {
   id?: string
   supplierFabricCode?: string | null
-  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty?: string | null
-  leadTime?: string | null
-  contactName?: string | null
-  quoteDate?: Date | string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
   isPreferred?: boolean
@@ -928,13 +702,6 @@ export type FabricSupplierUncheckedCreateWithoutSupplierInput = {
   tenantId: string
   fabricId: string
   supplierFabricCode?: string | null
-  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty?: string | null
-  leadTime?: string | null
-  contactName?: string | null
-  quoteDate?: Date | string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
   isPreferred?: boolean
@@ -973,13 +740,6 @@ export type FabricSupplierUpdateManyWithWhereWithoutSupplierInput = {
 export type FabricSupplierCreateWithoutFabricInput = {
   id?: string
   supplierFabricCode?: string | null
-  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty?: string | null
-  leadTime?: string | null
-  contactName?: string | null
-  quoteDate?: Date | string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
   isPreferred?: boolean
@@ -996,13 +756,6 @@ export type FabricSupplierUncheckedCreateWithoutFabricInput = {
   tenantId: string
   supplierId: string
   supplierFabricCode?: string | null
-  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty?: string | null
-  leadTime?: string | null
-  contactName?: string | null
-  quoteDate?: Date | string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
   isPreferred?: boolean
@@ -1041,13 +794,6 @@ export type FabricSupplierUpdateManyWithWhereWithoutFabricInput = {
 export type FabricSupplierCreateWithoutQuotesInput = {
   id?: string
   supplierFabricCode?: string | null
-  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty?: string | null
-  leadTime?: string | null
-  contactName?: string | null
-  quoteDate?: Date | string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
   isPreferred?: boolean
@@ -1065,13 +811,6 @@ export type FabricSupplierUncheckedCreateWithoutQuotesInput = {
   fabricId: string
   supplierId: string
   supplierFabricCode?: string | null
-  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty?: string | null
-  leadTime?: string | null
-  contactName?: string | null
-  quoteDate?: Date | string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
   isPreferred?: boolean
@@ -1099,13 +838,6 @@ export type FabricSupplierUpdateToOneWithWhereWithoutQuotesInput = {
 export type FabricSupplierUpdateWithoutQuotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1123,13 +855,6 @@ export type FabricSupplierUncheckedUpdateWithoutQuotesInput = {
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1143,13 +868,6 @@ export type FabricSupplierCreateManyTenantInput = {
   fabricId: string
   supplierId: string
   supplierFabricCode?: string | null
-  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty?: string | null
-  leadTime?: string | null
-  contactName?: string | null
-  quoteDate?: Date | string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
   isPreferred?: boolean
@@ -1161,13 +879,6 @@ export type FabricSupplierCreateManyTenantInput = {
 export type FabricSupplierUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1184,13 +895,6 @@ export type FabricSupplierUncheckedUpdateWithoutTenantInput = {
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1205,13 +909,6 @@ export type FabricSupplierUncheckedUpdateManyWithoutTenantInput = {
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1225,13 +922,6 @@ export type FabricSupplierCreateManySupplierInput = {
   tenantId: string
   fabricId: string
   supplierFabricCode?: string | null
-  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty?: string | null
-  leadTime?: string | null
-  contactName?: string | null
-  quoteDate?: Date | string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
   isPreferred?: boolean
@@ -1243,13 +933,6 @@ export type FabricSupplierCreateManySupplierInput = {
 export type FabricSupplierUpdateWithoutSupplierInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1266,13 +949,6 @@ export type FabricSupplierUncheckedUpdateWithoutSupplierInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1287,13 +963,6 @@ export type FabricSupplierUncheckedUpdateManyWithoutSupplierInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1307,13 +976,6 @@ export type FabricSupplierCreateManyFabricInput = {
   tenantId: string
   supplierId: string
   supplierFabricCode?: string | null
-  purchasePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
-  pricingUnit: $Enums.PricingUnit
-  minimumOrderQty?: string | null
-  leadTime?: string | null
-  contactName?: string | null
-  quoteDate?: Date | string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
   isPreferred?: boolean
@@ -1325,13 +987,6 @@ export type FabricSupplierCreateManyFabricInput = {
 export type FabricSupplierUpdateWithoutFabricInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1348,13 +1003,6 @@ export type FabricSupplierUncheckedUpdateWithoutFabricInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1369,13 +1017,6 @@ export type FabricSupplierUncheckedUpdateManyWithoutFabricInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchasePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
-  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quoteDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1421,13 +1062,6 @@ export type FabricSupplierSelect<ExtArgs extends runtime.Types.Extensions.Intern
   fabricId?: boolean
   supplierId?: boolean
   supplierFabricCode?: boolean
-  purchasePrice?: boolean
-  currency?: boolean
-  pricingUnit?: boolean
-  minimumOrderQty?: boolean
-  leadTime?: boolean
-  contactName?: boolean
-  quoteDate?: boolean
   sampleStatus?: boolean
   qualityDifferences?: boolean
   isPreferred?: boolean
@@ -1447,13 +1081,6 @@ export type FabricSupplierSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   fabricId?: boolean
   supplierId?: boolean
   supplierFabricCode?: boolean
-  purchasePrice?: boolean
-  currency?: boolean
-  pricingUnit?: boolean
-  minimumOrderQty?: boolean
-  leadTime?: boolean
-  contactName?: boolean
-  quoteDate?: boolean
   sampleStatus?: boolean
   qualityDifferences?: boolean
   isPreferred?: boolean
@@ -1471,13 +1098,6 @@ export type FabricSupplierSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   fabricId?: boolean
   supplierId?: boolean
   supplierFabricCode?: boolean
-  purchasePrice?: boolean
-  currency?: boolean
-  pricingUnit?: boolean
-  minimumOrderQty?: boolean
-  leadTime?: boolean
-  contactName?: boolean
-  quoteDate?: boolean
   sampleStatus?: boolean
   qualityDifferences?: boolean
   isPreferred?: boolean
@@ -1495,13 +1115,6 @@ export type FabricSupplierSelectScalar = {
   fabricId?: boolean
   supplierId?: boolean
   supplierFabricCode?: boolean
-  purchasePrice?: boolean
-  currency?: boolean
-  pricingUnit?: boolean
-  minimumOrderQty?: boolean
-  leadTime?: boolean
-  contactName?: boolean
-  quoteDate?: boolean
   sampleStatus?: boolean
   qualityDifferences?: boolean
   isPreferred?: boolean
@@ -1510,7 +1123,7 @@ export type FabricSupplierSelectScalar = {
   updatedAt?: boolean
 }
 
-export type FabricSupplierOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "fabricId" | "supplierId" | "supplierFabricCode" | "purchasePrice" | "currency" | "pricingUnit" | "minimumOrderQty" | "leadTime" | "contactName" | "quoteDate" | "sampleStatus" | "qualityDifferences" | "isPreferred" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["fabricSupplier"]>
+export type FabricSupplierOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "fabricId" | "supplierId" | "supplierFabricCode" | "sampleStatus" | "qualityDifferences" | "isPreferred" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["fabricSupplier"]>
 export type FabricSupplierInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   fabric?: boolean | Prisma.FabricDefaultArgs<ExtArgs>
@@ -1543,13 +1156,6 @@ export type $FabricSupplierPayload<ExtArgs extends runtime.Types.Extensions.Inte
     fabricId: string
     supplierId: string
     supplierFabricCode: string | null
-    purchasePrice: runtime.Decimal | null
-    currency: string
-    pricingUnit: $Enums.PricingUnit
-    minimumOrderQty: string | null
-    leadTime: string | null
-    contactName: string | null
-    quoteDate: Date | null
     sampleStatus: string | null
     qualityDifferences: string | null
     isPreferred: boolean
@@ -1988,13 +1594,6 @@ export interface FabricSupplierFieldRefs {
   readonly fabricId: Prisma.FieldRef<"FabricSupplier", 'String'>
   readonly supplierId: Prisma.FieldRef<"FabricSupplier", 'String'>
   readonly supplierFabricCode: Prisma.FieldRef<"FabricSupplier", 'String'>
-  readonly purchasePrice: Prisma.FieldRef<"FabricSupplier", 'Decimal'>
-  readonly currency: Prisma.FieldRef<"FabricSupplier", 'String'>
-  readonly pricingUnit: Prisma.FieldRef<"FabricSupplier", 'PricingUnit'>
-  readonly minimumOrderQty: Prisma.FieldRef<"FabricSupplier", 'String'>
-  readonly leadTime: Prisma.FieldRef<"FabricSupplier", 'String'>
-  readonly contactName: Prisma.FieldRef<"FabricSupplier", 'String'>
-  readonly quoteDate: Prisma.FieldRef<"FabricSupplier", 'DateTime'>
   readonly sampleStatus: Prisma.FieldRef<"FabricSupplier", 'String'>
   readonly qualityDifferences: Prisma.FieldRef<"FabricSupplier", 'String'>
   readonly isPreferred: Prisma.FieldRef<"FabricSupplier", 'Boolean'>

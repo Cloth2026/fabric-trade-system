@@ -67,8 +67,14 @@
 
 一个面料可以对应多个供应商。供应商关系和报价历史拆成两层：
 
-1. `FabricSupplier`：面料与供应商的长期供货关系，保存当前常用或最新供货条件。
-2. `FabricSupplierQuote`：供应商报价历史，每次报价新增一条记录，不覆盖旧价格。
+1. `FabricSupplier`：面料与供应商的长期供货关系，只保存稳定关系字段。
+2. `FabricSupplierQuote`：供应商报价历史，每次报价新增一条快照记录，不覆盖旧价格。
+
+设计规则：
+
+- `FabricSupplier` 不保存价格、币种、计价单位、MOQ、交期、联系人和报价日期，避免“当前条件”和最新报价不同步。
+- `FabricSupplierQuote` 不冗余保存 `fabricId`、`supplierId`、`supplierFabricCode`，统一通过 `FabricSupplier` 关联读取面料、供应商和供应商货号。
+- 每条报价历史必须有 `purchasePrice` 和 `quoteDate`；`quoteDate` 默认当前时间。
 
 `FabricSupplier` 字段：
 
@@ -76,13 +82,6 @@
 | --- | --- | --- | --- |
 | supplierId | 是 | 供应商引用 | 关联 `Supplier` |
 | supplierFabricCode | 否 | 文本 | 供应商自己的货号 / 品号 |
-| purchasePrice | 否 | 金额 | 当前常用或最新采购价 |
-| currency | 是 | 文本 | 默认 `CNY` |
-| pricingUnit | 是 | 枚举 | `kg` / `meter`，应与面料类型规则保持一致 |
-| minimumOrderQty | 否 | 文本 | 起订量，MVP 先文本化 |
-| leadTime | 否 | 文本 | 交期，MVP 先文本化 |
-| contactName | 否 | 文本 | 该供应商对应联系人 |
-| quoteDate | 否 | 日期 | 当前关系上的最新报价日期 |
 | sampleStatus | 否 | 枚举 key | V1 只记录供应商关系中的样品状态，不展开寄样流程 |
 | qualityDifferences | 否 | 多行文本 | 同款面料不同供应商的品质差异 |
 | isPreferred | 否 | 布尔 | 是否优先供应商 |
@@ -93,16 +92,13 @@
 | 字段 | 必填 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | fabricSupplierId | 是 | 关系引用 | 关联 `FabricSupplier` |
-| fabricId | 是 | 面料引用 | 冗余保存，便于查询 |
-| supplierId | 是 | 供应商引用 | 冗余保存，便于查询 |
-| supplierFabricCode | 否 | 文本 | 报价当时的供应商货号 |
-| purchasePrice | 否 | 金额 | 报价价格 |
+| purchasePrice | 是 | 金额 | 报价价格 |
 | currency | 是 | 文本 | 默认 `CNY` |
 | pricingUnit | 是 | 枚举 | `kg` / `meter` |
 | minimumOrderQty | 否 | 文本 | 报价当时起订量 |
 | leadTime | 否 | 文本 | 报价当时交期 |
 | contactName | 否 | 文本 | 报价联系人 |
-| quoteDate | 否 | 日期 | 报价日期 |
+| quoteDate | 是 | 日期 | 报价日期，默认当前时间 |
 | qualityDifferences | 否 | 多行文本 | 报价或批次相关品质差异 |
 | remarks | 否 | 多行文本 | 其他说明 |
 

@@ -41,8 +41,8 @@
 - `ConfigOption`：可维护枚举配置。支持系统级和未来租户级配置。
 - `Supplier`：供应商。可作为来源供应商、坯布供应商、染整厂、后工艺厂等。
 - `Fabric`：面料主档案。
-- `FabricSupplier`：面料与供应商的供货关系。一个面料可以对应多个供应商。
-- `FabricSupplierQuote`：面料供应商报价历史。每次报价新增记录，避免覆盖旧价格。
+- `FabricSupplier`：面料与供应商的长期供货关系。一个面料可以对应多个供应商，只保存稳定关系字段。
+- `FabricSupplierQuote`：面料供应商报价历史。每次报价新增快照记录，避免覆盖旧价格。
 - `GreigeFabric`：坯布信息。
 - `DyeingFinishing`：染整信息。
 - `PostProcess`：后工艺信息。
@@ -56,7 +56,9 @@
 - `Fabric.pricingUnit` 由面料类型派生：针织默认 `kg`，梭织默认 `meter`。
 - V1 暂不管理面料颜色。
 - 不再用 `Fabric.supplierId`、`Fabric.supplierQuote` 等单一字段表示唯一供应商；这些旧字段暂时保留用于安全迁移。
-- 供应商价格管理采用 `FabricSupplier` 当前供货关系 + `FabricSupplierQuote` 报价历史。
+- 供应商价格管理采用 `FabricSupplier` 长期关系 + `FabricSupplierQuote` 报价历史。
+- `FabricSupplier` 不保存价格、币种、计价单位、MOQ、交期、联系人和报价日期。
+- `FabricSupplierQuote` 的 `purchasePrice` 和 `quoteDate` 必填；面料、供应商和供应商货号统一通过 `FabricSupplier` 读取。
 - 用途、适用季节、认证标准不是自由文本，保存为配置项 key 数组：
   - `usageOptionKeys`
   - `seasonOptionKeys`
@@ -95,7 +97,7 @@
 - 已创建开发数据库 `fabric_trade_dev`。
 - 已执行 Prisma migration。
 - 已执行默认枚举 seed。
-- 已新增面料多供应商货源和报价历史数据模型。
+- 已新增并修正面料多供应商货源和报价历史数据模型。
 
 ## 正在开发的功能
 
@@ -118,7 +120,7 @@
 - 当前 UI 中部分旧静态数据存在编码显示异常，需要在后续真实数据接入时清理。
 - 权限、登录、租户上下文、操作日志写入尚未真正接入业务流程。
 - 入库批次、图片/色卡/样品模块暂时不作为当前优先级。
-- 旧的 `Fabric` 单供应商字段尚未迁移到 `FabricSupplier` / `FabricSupplierQuote`，本轮只新增模型，不删除旧字段。
+- 旧的 `Fabric` 单供应商字段尚未迁移到 `FabricSupplier` / `FabricSupplierQuote`，当前不删除旧字段。
 
 ## 下一步原计划
 

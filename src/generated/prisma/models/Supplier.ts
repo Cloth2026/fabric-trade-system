@@ -225,7 +225,6 @@ export type SupplierWhereInput = {
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   sourceFabrics?: Prisma.FabricListRelationFilter
   fabricSuppliers?: Prisma.FabricSupplierListRelationFilter
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteListRelationFilter
   greigeFabrics?: Prisma.GreigeFabricListRelationFilter
   dyeingFinishings?: Prisma.DyeingFinishingListRelationFilter
   postProcesses?: Prisma.PostProcessListRelationFilter
@@ -246,7 +245,6 @@ export type SupplierOrderByWithRelationInput = {
   tenant?: Prisma.TenantOrderByWithRelationInput
   sourceFabrics?: Prisma.FabricOrderByRelationAggregateInput
   fabricSuppliers?: Prisma.FabricSupplierOrderByRelationAggregateInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteOrderByRelationAggregateInput
   greigeFabrics?: Prisma.GreigeFabricOrderByRelationAggregateInput
   dyeingFinishings?: Prisma.DyeingFinishingOrderByRelationAggregateInput
   postProcesses?: Prisma.PostProcessOrderByRelationAggregateInput
@@ -270,7 +268,6 @@ export type SupplierWhereUniqueInput = Prisma.AtLeast<{
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   sourceFabrics?: Prisma.FabricListRelationFilter
   fabricSuppliers?: Prisma.FabricSupplierListRelationFilter
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteListRelationFilter
   greigeFabrics?: Prisma.GreigeFabricListRelationFilter
   dyeingFinishings?: Prisma.DyeingFinishingListRelationFilter
   postProcesses?: Prisma.PostProcessListRelationFilter
@@ -322,7 +319,6 @@ export type SupplierCreateInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
   sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingCreateNestedManyWithoutFactoryInput
   postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFactoryInput
@@ -342,7 +338,6 @@ export type SupplierUncheckedCreateInput = {
   updatedAt?: Date | string
   sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedCreateNestedManyWithoutFactoryInput
   postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFactoryInput
@@ -362,7 +357,6 @@ export type SupplierUpdateInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
   sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUpdateManyWithoutFactoryNestedInput
   postProcesses?: Prisma.PostProcessUpdateManyWithoutFactoryNestedInput
@@ -382,7 +376,6 @@ export type SupplierUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedUpdateManyWithoutFactoryNestedInput
   postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFactoryNestedInput
@@ -558,20 +551,6 @@ export type SupplierUpdateOneRequiredWithoutFabricSuppliersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SupplierUpdateToOneWithWhereWithoutFabricSuppliersInput, Prisma.SupplierUpdateWithoutFabricSuppliersInput>, Prisma.SupplierUncheckedUpdateWithoutFabricSuppliersInput>
 }
 
-export type SupplierCreateNestedOneWithoutFabricSupplierQuotesInput = {
-  create?: Prisma.XOR<Prisma.SupplierCreateWithoutFabricSupplierQuotesInput, Prisma.SupplierUncheckedCreateWithoutFabricSupplierQuotesInput>
-  connectOrCreate?: Prisma.SupplierCreateOrConnectWithoutFabricSupplierQuotesInput
-  connect?: Prisma.SupplierWhereUniqueInput
-}
-
-export type SupplierUpdateOneRequiredWithoutFabricSupplierQuotesNestedInput = {
-  create?: Prisma.XOR<Prisma.SupplierCreateWithoutFabricSupplierQuotesInput, Prisma.SupplierUncheckedCreateWithoutFabricSupplierQuotesInput>
-  connectOrCreate?: Prisma.SupplierCreateOrConnectWithoutFabricSupplierQuotesInput
-  upsert?: Prisma.SupplierUpsertWithoutFabricSupplierQuotesInput
-  connect?: Prisma.SupplierWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.SupplierUpdateToOneWithWhereWithoutFabricSupplierQuotesInput, Prisma.SupplierUpdateWithoutFabricSupplierQuotesInput>, Prisma.SupplierUncheckedUpdateWithoutFabricSupplierQuotesInput>
-}
-
 export type SupplierCreateNestedOneWithoutGreigeFabricsInput = {
   create?: Prisma.XOR<Prisma.SupplierCreateWithoutGreigeFabricsInput, Prisma.SupplierUncheckedCreateWithoutGreigeFabricsInput>
   connectOrCreate?: Prisma.SupplierCreateOrConnectWithoutGreigeFabricsInput
@@ -648,7 +627,6 @@ export type SupplierCreateWithoutTenantInput = {
   updatedAt?: Date | string
   sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingCreateNestedManyWithoutFactoryInput
   postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFactoryInput
@@ -667,7 +645,6 @@ export type SupplierUncheckedCreateWithoutTenantInput = {
   updatedAt?: Date | string
   sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedCreateNestedManyWithoutFactoryInput
   postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFactoryInput
@@ -728,7 +705,6 @@ export type SupplierCreateWithoutSourceFabricsInput = {
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingCreateNestedManyWithoutFactoryInput
   postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFactoryInput
@@ -747,7 +723,6 @@ export type SupplierUncheckedCreateWithoutSourceFabricsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedCreateNestedManyWithoutFactoryInput
   postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFactoryInput
@@ -782,7 +757,6 @@ export type SupplierUpdateWithoutSourceFabricsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUpdateManyWithoutFactoryNestedInput
   postProcesses?: Prisma.PostProcessUpdateManyWithoutFactoryNestedInput
@@ -801,7 +775,6 @@ export type SupplierUncheckedUpdateWithoutSourceFabricsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedUpdateManyWithoutFactoryNestedInput
   postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFactoryNestedInput
@@ -820,7 +793,6 @@ export type SupplierCreateWithoutFabricSuppliersInput = {
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
   sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingCreateNestedManyWithoutFactoryInput
   postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFactoryInput
@@ -839,7 +811,6 @@ export type SupplierUncheckedCreateWithoutFabricSuppliersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedCreateNestedManyWithoutFactoryInput
   postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFactoryInput
@@ -874,7 +845,6 @@ export type SupplierUpdateWithoutFabricSuppliersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
   sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUpdateManyWithoutFactoryNestedInput
   postProcesses?: Prisma.PostProcessUpdateManyWithoutFactoryNestedInput
@@ -893,99 +863,6 @@ export type SupplierUncheckedUpdateWithoutFabricSuppliersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutSupplierNestedInput
-  greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
-  dyeingFinishings?: Prisma.DyeingFinishingUncheckedUpdateManyWithoutFactoryNestedInput
-  postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFactoryNestedInput
-  stockInBatches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutSupplierNestedInput
-}
-
-export type SupplierCreateWithoutFabricSupplierQuotesInput = {
-  id?: string
-  name: string
-  type?: string | null
-  contactName?: string | null
-  phone?: string | null
-  address?: string | null
-  status?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
-  sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
-  fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
-  greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
-  dyeingFinishings?: Prisma.DyeingFinishingCreateNestedManyWithoutFactoryInput
-  postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFactoryInput
-  stockInBatches?: Prisma.FabricStockInBatchCreateNestedManyWithoutSupplierInput
-}
-
-export type SupplierUncheckedCreateWithoutFabricSupplierQuotesInput = {
-  id?: string
-  tenantId: string
-  name: string
-  type?: string | null
-  contactName?: string | null
-  phone?: string | null
-  address?: string | null
-  status?: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
-  fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
-  greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
-  dyeingFinishings?: Prisma.DyeingFinishingUncheckedCreateNestedManyWithoutFactoryInput
-  postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFactoryInput
-  stockInBatches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutSupplierInput
-}
-
-export type SupplierCreateOrConnectWithoutFabricSupplierQuotesInput = {
-  where: Prisma.SupplierWhereUniqueInput
-  create: Prisma.XOR<Prisma.SupplierCreateWithoutFabricSupplierQuotesInput, Prisma.SupplierUncheckedCreateWithoutFabricSupplierQuotesInput>
-}
-
-export type SupplierUpsertWithoutFabricSupplierQuotesInput = {
-  update: Prisma.XOR<Prisma.SupplierUpdateWithoutFabricSupplierQuotesInput, Prisma.SupplierUncheckedUpdateWithoutFabricSupplierQuotesInput>
-  create: Prisma.XOR<Prisma.SupplierCreateWithoutFabricSupplierQuotesInput, Prisma.SupplierUncheckedCreateWithoutFabricSupplierQuotesInput>
-  where?: Prisma.SupplierWhereInput
-}
-
-export type SupplierUpdateToOneWithWhereWithoutFabricSupplierQuotesInput = {
-  where?: Prisma.SupplierWhereInput
-  data: Prisma.XOR<Prisma.SupplierUpdateWithoutFabricSupplierQuotesInput, Prisma.SupplierUncheckedUpdateWithoutFabricSupplierQuotesInput>
-}
-
-export type SupplierUpdateWithoutFabricSupplierQuotesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
-  sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
-  fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
-  greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
-  dyeingFinishings?: Prisma.DyeingFinishingUpdateManyWithoutFactoryNestedInput
-  postProcesses?: Prisma.PostProcessUpdateManyWithoutFactoryNestedInput
-  stockInBatches?: Prisma.FabricStockInBatchUpdateManyWithoutSupplierNestedInput
-}
-
-export type SupplierUncheckedUpdateWithoutFabricSupplierQuotesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
-  fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedUpdateManyWithoutFactoryNestedInput
   postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFactoryNestedInput
@@ -1005,7 +882,6 @@ export type SupplierCreateWithoutGreigeFabricsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
   sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingCreateNestedManyWithoutFactoryInput
   postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFactoryInput
   stockInBatches?: Prisma.FabricStockInBatchCreateNestedManyWithoutSupplierInput
@@ -1024,7 +900,6 @@ export type SupplierUncheckedCreateWithoutGreigeFabricsInput = {
   updatedAt?: Date | string
   sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedCreateNestedManyWithoutFactoryInput
   postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFactoryInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutSupplierInput
@@ -1059,7 +934,6 @@ export type SupplierUpdateWithoutGreigeFabricsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
   sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUpdateManyWithoutFactoryNestedInput
   postProcesses?: Prisma.PostProcessUpdateManyWithoutFactoryNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUpdateManyWithoutSupplierNestedInput
@@ -1078,7 +952,6 @@ export type SupplierUncheckedUpdateWithoutGreigeFabricsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedUpdateManyWithoutFactoryNestedInput
   postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFactoryNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutSupplierNestedInput
@@ -1097,7 +970,6 @@ export type SupplierCreateWithoutDyeingFinishingsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
   sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
   postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFactoryInput
   stockInBatches?: Prisma.FabricStockInBatchCreateNestedManyWithoutSupplierInput
@@ -1116,7 +988,6 @@ export type SupplierUncheckedCreateWithoutDyeingFinishingsInput = {
   updatedAt?: Date | string
   sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
   postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFactoryInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutSupplierInput
@@ -1151,7 +1022,6 @@ export type SupplierUpdateWithoutDyeingFinishingsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
   sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
   postProcesses?: Prisma.PostProcessUpdateManyWithoutFactoryNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUpdateManyWithoutSupplierNestedInput
@@ -1170,7 +1040,6 @@ export type SupplierUncheckedUpdateWithoutDyeingFinishingsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
   postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFactoryNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutSupplierNestedInput
@@ -1189,7 +1058,6 @@ export type SupplierCreateWithoutPostProcessesInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
   sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingCreateNestedManyWithoutFactoryInput
   stockInBatches?: Prisma.FabricStockInBatchCreateNestedManyWithoutSupplierInput
@@ -1208,7 +1076,6 @@ export type SupplierUncheckedCreateWithoutPostProcessesInput = {
   updatedAt?: Date | string
   sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedCreateNestedManyWithoutFactoryInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutSupplierInput
@@ -1243,7 +1110,6 @@ export type SupplierUpdateWithoutPostProcessesInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
   sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUpdateManyWithoutFactoryNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUpdateManyWithoutSupplierNestedInput
@@ -1262,7 +1128,6 @@ export type SupplierUncheckedUpdateWithoutPostProcessesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedUpdateManyWithoutFactoryNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutSupplierNestedInput
@@ -1281,7 +1146,6 @@ export type SupplierCreateWithoutStockInBatchesInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
   sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingCreateNestedManyWithoutFactoryInput
   postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFactoryInput
@@ -1300,7 +1164,6 @@ export type SupplierUncheckedCreateWithoutStockInBatchesInput = {
   updatedAt?: Date | string
   sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedCreateNestedManyWithoutFactoryInput
   postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFactoryInput
@@ -1335,7 +1198,6 @@ export type SupplierUpdateWithoutStockInBatchesInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
   sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUpdateManyWithoutFactoryNestedInput
   postProcesses?: Prisma.PostProcessUpdateManyWithoutFactoryNestedInput
@@ -1354,7 +1216,6 @@ export type SupplierUncheckedUpdateWithoutStockInBatchesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedUpdateManyWithoutFactoryNestedInput
   postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFactoryNestedInput
@@ -1384,7 +1245,6 @@ export type SupplierUpdateWithoutTenantInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUpdateManyWithoutFactoryNestedInput
   postProcesses?: Prisma.PostProcessUpdateManyWithoutFactoryNestedInput
@@ -1403,7 +1263,6 @@ export type SupplierUncheckedUpdateWithoutTenantInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
-  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedUpdateManyWithoutFactoryNestedInput
   postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFactoryNestedInput
@@ -1430,7 +1289,6 @@ export type SupplierUncheckedUpdateManyWithoutTenantInput = {
 export type SupplierCountOutputType = {
   sourceFabrics: number
   fabricSuppliers: number
-  fabricSupplierQuotes: number
   greigeFabrics: number
   dyeingFinishings: number
   postProcesses: number
@@ -1440,7 +1298,6 @@ export type SupplierCountOutputType = {
 export type SupplierCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sourceFabrics?: boolean | SupplierCountOutputTypeCountSourceFabricsArgs
   fabricSuppliers?: boolean | SupplierCountOutputTypeCountFabricSuppliersArgs
-  fabricSupplierQuotes?: boolean | SupplierCountOutputTypeCountFabricSupplierQuotesArgs
   greigeFabrics?: boolean | SupplierCountOutputTypeCountGreigeFabricsArgs
   dyeingFinishings?: boolean | SupplierCountOutputTypeCountDyeingFinishingsArgs
   postProcesses?: boolean | SupplierCountOutputTypeCountPostProcessesArgs
@@ -1469,13 +1326,6 @@ export type SupplierCountOutputTypeCountSourceFabricsArgs<ExtArgs extends runtim
  */
 export type SupplierCountOutputTypeCountFabricSuppliersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.FabricSupplierWhereInput
-}
-
-/**
- * SupplierCountOutputType without action
- */
-export type SupplierCountOutputTypeCountFabricSupplierQuotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.FabricSupplierQuoteWhereInput
 }
 
 /**
@@ -1521,7 +1371,6 @@ export type SupplierSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   sourceFabrics?: boolean | Prisma.Supplier$sourceFabricsArgs<ExtArgs>
   fabricSuppliers?: boolean | Prisma.Supplier$fabricSuppliersArgs<ExtArgs>
-  fabricSupplierQuotes?: boolean | Prisma.Supplier$fabricSupplierQuotesArgs<ExtArgs>
   greigeFabrics?: boolean | Prisma.Supplier$greigeFabricsArgs<ExtArgs>
   dyeingFinishings?: boolean | Prisma.Supplier$dyeingFinishingsArgs<ExtArgs>
   postProcesses?: boolean | Prisma.Supplier$postProcessesArgs<ExtArgs>
@@ -1575,7 +1424,6 @@ export type SupplierInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   sourceFabrics?: boolean | Prisma.Supplier$sourceFabricsArgs<ExtArgs>
   fabricSuppliers?: boolean | Prisma.Supplier$fabricSuppliersArgs<ExtArgs>
-  fabricSupplierQuotes?: boolean | Prisma.Supplier$fabricSupplierQuotesArgs<ExtArgs>
   greigeFabrics?: boolean | Prisma.Supplier$greigeFabricsArgs<ExtArgs>
   dyeingFinishings?: boolean | Prisma.Supplier$dyeingFinishingsArgs<ExtArgs>
   postProcesses?: boolean | Prisma.Supplier$postProcessesArgs<ExtArgs>
@@ -1595,7 +1443,6 @@ export type $SupplierPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     tenant: Prisma.$TenantPayload<ExtArgs>
     sourceFabrics: Prisma.$FabricPayload<ExtArgs>[]
     fabricSuppliers: Prisma.$FabricSupplierPayload<ExtArgs>[]
-    fabricSupplierQuotes: Prisma.$FabricSupplierQuotePayload<ExtArgs>[]
     greigeFabrics: Prisma.$GreigeFabricPayload<ExtArgs>[]
     dyeingFinishings: Prisma.$DyeingFinishingPayload<ExtArgs>[]
     postProcesses: Prisma.$PostProcessPayload<ExtArgs>[]
@@ -2009,7 +1856,6 @@ export interface Prisma__SupplierClient<T, Null = never, ExtArgs extends runtime
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   sourceFabrics<T extends Prisma.Supplier$sourceFabricsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Supplier$sourceFabricsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FabricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   fabricSuppliers<T extends Prisma.Supplier$fabricSuppliersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Supplier$fabricSuppliersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FabricSupplierPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  fabricSupplierQuotes<T extends Prisma.Supplier$fabricSupplierQuotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Supplier$fabricSupplierQuotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FabricSupplierQuotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   greigeFabrics<T extends Prisma.Supplier$greigeFabricsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Supplier$greigeFabricsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GreigeFabricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dyeingFinishings<T extends Prisma.Supplier$dyeingFinishingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Supplier$dyeingFinishingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DyeingFinishingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   postProcesses<T extends Prisma.Supplier$postProcessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Supplier$postProcessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostProcessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2499,30 +2345,6 @@ export type Supplier$fabricSuppliersArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.FabricSupplierScalarFieldEnum | Prisma.FabricSupplierScalarFieldEnum[]
-}
-
-/**
- * Supplier.fabricSupplierQuotes
- */
-export type Supplier$fabricSupplierQuotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the FabricSupplierQuote
-   */
-  select?: Prisma.FabricSupplierQuoteSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the FabricSupplierQuote
-   */
-  omit?: Prisma.FabricSupplierQuoteOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.FabricSupplierQuoteInclude<ExtArgs> | null
-  where?: Prisma.FabricSupplierQuoteWhereInput
-  orderBy?: Prisma.FabricSupplierQuoteOrderByWithRelationInput | Prisma.FabricSupplierQuoteOrderByWithRelationInput[]
-  cursor?: Prisma.FabricSupplierQuoteWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.FabricSupplierQuoteScalarFieldEnum | Prisma.FabricSupplierQuoteScalarFieldEnum[]
 }
 
 /**
