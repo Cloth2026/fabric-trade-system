@@ -1,0 +1,348 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TenantStatus {
+  active
+  inactive
+}
+
+enum UserStatus {
+  active
+  inactive
+}
+
+enum FabricType {
+  knitted
+  woven
+}
+
+enum PricingUnit {
+  kg
+  meter
+}
+
+enum ConfigScope {
+  system
+  tenant
+}
+
+enum ProcessInfoStatus {
+  none
+  pending
+  available
+}
+
+model Tenant {
+  id                   String                @id @default(cuid())
+  name                 String
+  code                 String                @unique
+  status               TenantStatus          @default(active)
+  users                User[]
+  suppliers            Supplier[]
+  configOptions        ConfigOption[]
+  fabrics              Fabric[]
+  fabricSuppliers      FabricSupplier[]
+  fabricSupplierQuotes FabricSupplierQuote[]
+  batches              FabricStockInBatch[]
+  logs                 OperationLog[]
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+}
+
+model User {
+  id        String         @id @default(cuid())
+  tenant    Tenant         @relation(fields: [tenantId], references: [id])
+  tenantId  String
+  email     String
+  username  String
+  name      String
+  role      String         @default("admin")
+  status    UserStatus     @default(active)
+  logs      OperationLog[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@unique([tenantId, email])
+  @@unique([tenantId, username])
+  @@index([tenantId])
+}
+
+model ConfigOption {
+  id        String      @id @default(cuid())
+  tenant    Tenant?     @relation(fields: [tenantId], references: [id])
+  tenantId  String?
+  ownerKey  String      @default("system")
+  scope     ConfigScope @default(system)
+  group     String
+  key       String
+  label     String
+  sortOrder Int         @default(0)
+  enabled   Boolean     @default(true)
+  isDefault Boolean     @default(false)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@unique([ownerKey, group, key])
+  @@index([tenantId])
+  @@index([ownerKey])
+  @@index([group, enabled])
+}
+
+model Supplier {
+  id                   String                @id @default(cuid())
+  tenant               Tenant                @relation(fields: [tenantId], references: [id])
+  tenantId             String
+  name                 String
+  type                 String?
+  contactName          String?
+  phone                String?
+  address              String?
+  status               String                @default("active")
+  sourceFabrics        Fabric[]              @relation("FabricSourceSupplier")
+  fabricSuppliers      FabricSupplier[]
+  fabricSupplierQuotes FabricSupplierQuote[]
+  greigeFabrics        GreigeFabric[]        @relation("GreigeSupplier")
+  dyeingFinishings     DyeingFinishing[]     @relation("DyeingFactory")
+  postProcesses        PostProcess[]         @relation("PostProcessFactory")
+  stockInBatches       FabricStockInBatch[]
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+
+  @@index([tenantId])
+  @@index([tenantId, name])
+  @@index([tenantId, type])
+}
+
+model Fabric {
+  id                      String                @id @default(cuid())
+  tenant                  Tenant                @relation(fields: [tenantId], references: [id])
+  tenantId                String
+  code                    String                @db.VarChar(64)
+  englishName             String?
+  name                    String
+  fabricType              FabricType
+  pricingUnit             PricingUnit
+  developmentSource       String
+  status                  String                @default("incomplete")
+  composition             String
+  weight                  String
+  width                   String
+  yarnCount               String?
+  warpWeftDensity         String?
+  category                String?
+  structure               String?
+  tags                    String[]
+  usageOptionKeys         String[]
+  seasonOptionKeys        String[]
+  certificationOptionKeys String[]
+  elasticity              String?
+  supplier                Supplier?             @relation("FabricSourceSupplier", fields: [supplierId], references: [id])
+  supplierId              String?
+  sourceContact           String?
+  sourceDate              DateTime?
+  finishedReferencePrice  Decimal?              @db.Decimal(12, 2)
+  supplierQuote           Decimal?              @db.Decimal(12, 2)
+  minimumOrderQty         String?
+  repurchaseStatus        String?
+  tubeWeight              String?
+  tolerance               String?
+  greigeStatus            ProcessInfoStatus     @default(pending)
+  dyeingStatus            ProcessInfoStatus     @default(pending)
+  postProcessStatus       ProcessInfoStatus     @default(pending)
+  colorFastness           String?
+  pilling                 String?
+  inspectionConclusion    String?
+  handFeel                String?
+  remarks                 String?
+  completenessPercent     Int                   @default(0)
+  missingInfoFlags        String[]
+  greige                  GreigeFabric?
+  dyeingFinishing         DyeingFinishing?
+  postProcesses           PostProcess[]
+  supplierSources         FabricSupplier[]
+  supplierQuotes          FabricSupplierQuote[]
+  stockInBatches          FabricStockInBatch[]
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+  @@index([tenantId, fabricType])
+  @@index([tenantId, developmentSource])
+  @@index([tenantId, status])
+  @@index([tenantId, supplierId])
+}
+
+model FabricSupplier {
+  id                 String                @id @default(cuid())
+  tenant             Tenant                @relation(fields: [tenantId], references: [id])
+  tenantId           String
+  fabric             Fabric                @relation(fields: [fabricId], references: [id], onDelete: Cascade)
+  fabricId           String
+  supplier           Supplier              @relation(fields: [supplierId], references: [id])
+  supplierId         String
+  supplierFabricCode String?
+  purchasePrice      Decimal?              @db.Decimal(12, 2)
+  currency           String                @default("CNY") @db.VarChar(3)
+  pricingUnit        PricingUnit
+  minimumOrderQty    String?
+  leadTime           String?
+  contactName        String?
+  quoteDate          DateTime?
+  sampleStatus       String?
+  qualityDifferences String?
+  isPreferred        Boolean               @default(false)
+  remarks            String?
+  quotes             FabricSupplierQuote[]
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+
+  @@unique([tenantId, fabricId, supplierId])
+  @@index([tenantId])
+  @@index([tenantId, fabricId])
+  @@index([tenantId, supplierId])
+  @@index([tenantId, isPreferred])
+}
+
+model FabricSupplierQuote {
+  id                 String         @id @default(cuid())
+  tenant             Tenant         @relation(fields: [tenantId], references: [id])
+  tenantId           String
+  fabricSupplier     FabricSupplier @relation(fields: [fabricSupplierId], references: [id], onDelete: Cascade)
+  fabricSupplierId   String
+  fabric             Fabric         @relation(fields: [fabricId], references: [id], onDelete: Cascade)
+  fabricId           String
+  supplier           Supplier       @relation(fields: [supplierId], references: [id])
+  supplierId         String
+  supplierFabricCode String?
+  purchasePrice      Decimal?       @db.Decimal(12, 2)
+  currency           String         @default("CNY") @db.VarChar(3)
+  pricingUnit        PricingUnit
+  minimumOrderQty    String?
+  leadTime           String?
+  contactName        String?
+  quoteDate          DateTime?
+  qualityDifferences String?
+  remarks            String?
+  createdAt          DateTime       @default(now())
+
+  @@index([tenantId])
+  @@index([tenantId, fabricId])
+  @@index([tenantId, supplierId])
+  @@index([fabricSupplierId, quoteDate])
+}
+
+model GreigeFabric {
+  id            String    @id @default(cuid())
+  fabric        Fabric    @relation(fields: [fabricId], references: [id], onDelete: Cascade)
+  fabricId      String    @unique
+  supplier      Supplier? @relation("GreigeSupplier", fields: [supplierId], references: [id])
+  supplierId    String?
+  code          String?
+  name          String?
+  composition   String?
+  weight        String?
+  width         String?
+  yarnOrDensity String?
+  unitPrice     Decimal?  @db.Decimal(12, 2)
+  lossRate      String?
+  remarks       String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([supplierId])
+}
+
+model DyeingFinishing {
+  id          String    @id @default(cuid())
+  fabric      Fabric    @relation(fields: [fabricId], references: [id], onDelete: Cascade)
+  fabricId    String    @unique
+  processType String?
+  factory     Supplier? @relation("DyeingFactory", fields: [factoryId], references: [id])
+  factoryId   String?
+  unitPrice   Decimal?  @db.Decimal(12, 2)
+  lossRate    String?
+  leadTime    String?
+  cautions    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([factoryId])
+}
+
+model PostProcess {
+  id                String    @id @default(cuid())
+  fabric            Fabric    @relation(fields: [fabricId], references: [id], onDelete: Cascade)
+  fabricId          String
+  processType       String?
+  factory           Supplier? @relation("PostProcessFactory", fields: [factoryId], references: [id])
+  factoryId         String?
+  effectDescription String?
+  unitPrice         Decimal?  @db.Decimal(12, 2)
+  lossRate          String?
+  minimumOrderQty   String?
+  leadTime          String?
+  riskNotes         String?
+  remarks           String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([fabricId])
+  @@index([factoryId])
+}
+
+model FabricStockInBatch {
+  id               String      @id @default(cuid())
+  tenant           Tenant      @relation(fields: [tenantId], references: [id])
+  tenantId         String
+  fabric           Fabric      @relation(fields: [fabricId], references: [id])
+  fabricId         String
+  batchNo          String
+  stockInSource    String
+  supplier         Supplier?   @relation(fields: [supplierId], references: [id])
+  supplierId       String?
+  quantity         Decimal     @db.Decimal(14, 3)
+  unit             PricingUnit
+  unitPrice        Decimal?    @db.Decimal(12, 2)
+  totalAmount      Decimal?    @db.Decimal(14, 2)
+  vatOrLotNo       String?
+  storageLocation  String?
+  swatchQuantity   Int         @default(0)
+  sampleQuantity   Int         @default(0)
+  imageUrls        String[]
+  isDataComplete   Boolean     @default(false)
+  missingInfoFlags String[]
+  remarks          String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  @@unique([tenantId, batchNo])
+  @@index([tenantId])
+  @@index([fabricId])
+  @@index([supplierId])
+}
+
+model OperationLog {
+  id         String   @id @default(cuid())
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId   String
+  user       User?    @relation(fields: [userId], references: [id])
+  userId     String?
+  module     String
+  action     String
+  targetType String?
+  targetId   String?
+  detail     Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([tenantId])
+  @@index([tenantId, module])
+  @@index([tenantId, createdAt])
+}
