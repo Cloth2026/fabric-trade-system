@@ -152,3 +152,22 @@ npm run dev
 ```
 
 环境变量请参考 `.env.example`，不要提交真实 `.env`。
+## Backend Status - 2026-09-13
+
+- `POST /api/fabrics` exists and creates a fabric plus optional greige, dyeing/finishing, post-processes, supplier relations, initial supplier quote snapshots, and operation log in one transaction.
+- `GET /api/suppliers` exists and searches active suppliers within the current server-side tenant only.
+- Temporary single-tenant context is centralized in `src/server/tenant.ts`.
+- Create-fabric validation is centralized in `src/server/fabrics/schema.ts`.
+- Completeness calculation is centralized in `src/server/fabrics/completeness.ts`.
+- The UI drawer is still not bound to the API.
+- Fabric list reading/editing is still not implemented.
+- No new migration was needed in this backend foundation round.
+
+## Next Plan - Updated 2026-09-13
+
+1. Implement config-options read API.
+2. Bind the create-fabric drawer to `POST /api/fabrics`.
+3. Add UI field-level validation display and save success feedback.
+4. Read fabric list from the database instead of static data.
+5. Add fabric detail read API and edit API.
+6. Keep customer quotation, samples, orders, and inventory for later dedicated phases.

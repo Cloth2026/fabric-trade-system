@@ -565,3 +565,47 @@ Prisma 模型口径：
 3. 读 `docs/DEV_LOG.md`。
 4. 检查 `git status --short`。
 5. 如果继续面料库落地，优先实现新增面料 API 和 Zod 校验。
+### 2026-09-13 Add fabric creation backend foundation
+
+Goal:
+- Implement the backend foundation for creating fabrics without binding the existing create-fabric UI drawer yet.
+- Keep scope limited to fabric creation, supplier search, validation, temporary tenant context, completeness calculation, and tests.
+
+Completed:
+- Added a temporary server-side tenant context in `src/server/tenant.ts`.
+- Added server-side Zod validation for create-fabric payloads in `src/server/fabrics/schema.ts`.
+- Added config key validation through `ConfigOption` in `src/server/config-options.ts`.
+- Added independent completeness calculation in `src/server/fabrics/completeness.ts`.
+- Added transactional fabric creation service in `src/server/fabrics/create-fabric.ts`.
+- Added supplier search service in `src/server/suppliers.ts`.
+- Added `POST /api/fabrics`.
+- Added `GET /api/suppliers`.
+- Added automated tests in `tests/fabric-backend.test.ts`.
+- Added `tsx` as a dev dependency to run TypeScript tests with Node's built-in test runner.
+
+Important rules implemented:
+- `tenantId` is always resolved server-side and is never trusted from the client payload.
+- `pricingUnit` is derived server-side: `knitted -> kg`, `woven -> meter`.
+- Fabric code must start with `SDD-` and must be unique within the current tenant.
+- Required fields: `code`, `name`, `fabricType`, `developmentSource`, `composition`, `weight`, `width`.
+- Config-backed keys must exist and be enabled before saving.
+- Supplier IDs must belong to the current tenant.
+- Fabric creation runs in one database transaction.
+- `FabricSupplierQuote` is created only under a current-tenant `FabricSupplier` relation.
+- Legacy `Fabric.supplierId`, `Fabric.supplierQuote`, and `Fabric.minimumOrderQty` are not written by the new API.
+
+Validation:
+- `npm.cmd test` passed, 10 tests.
+- `npx.cmd prisma validate` passed.
+- `npm.cmd run prisma:generate` passed.
+- `npm.cmd run prisma:migrate:status` passed, database schema is up to date with 3 migrations.
+- `npm.cmd run lint` passed.
+- `npm.cmd run build` passed.
+
+Notes:
+- `git fetch origin` failed in this environment because GitHub credentials were unavailable. Local `HEAD` and local `origin/main` both pointed to `0eec6c5` before implementation.
+- The rollback test intentionally triggers a duplicate `FabricSupplier` relation. Prisma prints the expected unique-constraint error, and the test confirms the fabric record is rolled back.
+
+Next suggested step:
+- Bind the existing create-fabric drawer to `POST /api/fabrics` in a small UI pass, including field-level errors and save success feedback.
+- Add a config-options read API before building the future enum management screens.
