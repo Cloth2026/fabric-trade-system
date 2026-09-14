@@ -24,9 +24,10 @@
 
 - `src/app/page.tsx`：当前面料库主页面与新增面料入口。
 - `src/components/fabrics/`：新增面料统一状态、基础字段、工艺字段、多供应商字段和真实提交抽屉。
-- `src/components/suppliers/`：供应商与下属生产单元的静态 UI 原型、示例数据、详情抽屉和新增/编辑表单。
+- `src/components/suppliers/`：供应商与下属生产单元的真实管理页面、详情抽屉和新增/编辑表单。
 - `src/components/form/`：Spatial Glass 风格的通用表单控件。
 - `src/lib/api/fabric-client.ts`：配置、供应商搜索和新增面料的前端 API 封装。
+- `src/lib/api/supplier-client.ts`：供应商与生产单元查询、创建和更新的前端 API 封装。
 - `src/app/globals.css`：全局样式、空间玻璃 UI、抽屉动效等。
 - `src/lib/prisma.ts`：Prisma Client 初始化。
 - `prisma/schema.prisma`：数据库模型。
@@ -109,8 +110,8 @@
 - 已实现多供应商增删、首选唯一、可选首次报价、字段级错误和保存成功反馈。
 - 已实现坯布、染整、后工艺状态与明细清理/展开联动。
 - 已实现服务器控制租户和计价单位，前端 payload 不包含 `tenantId` 或 `pricingUnit`。
-- 已完成供应商基础管理静态 UI 原型：专业表格、搜索/筛选、详情抽屉、新增/编辑表单、多角色与启用/停用演示。该原型只更新浏览器内存，不调用供应商 API、不写入数据库。
-- 已完成供应商下属“生产单元”静态 UI 原型：支持分厂、事业部、染色/印花/后整理等车间类型，提供详情内搜索筛选、能力卡片、空状态、二级详情、新增/编辑和启用/暂停合作演示。
+- 已完成供应商基础管理真实 UI：专业表格、服务端搜索/筛选、详情读取、新增/编辑、多角色与启用/停用。
+- 已完成供应商下属“生产单元”真实 UI：服务端搜索筛选、能力卡片、空状态、二级详情、新增/编辑和启用/暂停合作。
 - 已完成供应商与生产单元 Prisma 数据模型，并为面料货源及报价历史增加可选生产单元关联。
 
 ## 正在开发的功能
@@ -121,15 +122,13 @@
 - 新增成功后刷新真实列表
 - 面料详情读取
 - 后续独立开发面料编辑
-- 供应商基础管理页面正在等待产品设计确认，目前仅为静态 UI 原型。
-- 供应商与生产单元数据模型已完成，真实供应商 API 与静态 UI 绑定仍待后续独立开发。
+- 供应商与生产单元已完成数据模型、后端 API 和真实 UI 接入。
 
 ## 已知问题
 
 - 面料库列表仍使用静态数据，尚未从数据库读取。
 - 开发数据库当前没有供应商记录，供应商搜索在录入供应商前会显示空结果。
-- 供应商基础管理尚无读写 API 或真实 UI 持久化逻辑；当前页面中的新增、编辑、停用和关联数据仍为静态演示。
-- 生产单元数据库模型已经建立，但静态 UI 尚未连接该模型，刷新页面仍会恢复示例数据。
+- 供应商“关联面料”尚未接入，目前明确显示“后续开放”，不展示虚假报价或合作记录。
 - PostgreSQL 安装过程中曾误装到 C 盘，后来已将运行服务路径和注册表调整到 `D:\PostgreSQLServer`；C 盘保留过备份目录，后续可人工清理。
 - 当前 UI 中部分旧静态数据存在编码显示异常，需要在后续真实数据接入时清理。
 - 权限和登录尚未实现；当前使用集中管理的临时服务端单租户上下文。
@@ -191,7 +190,9 @@ npm run dev
 - Cross-tenant detail and update requests return 404; invalid payloads return 400; name uniqueness conflicts return 409.
 - Production units do not expose DELETE endpoints. Normal business lifecycle uses active/inactive suppliers and active/paused units.
 - Future fabric-source and quote APIs must verify both production-unit tenant ownership and that the unit belongs to the same supplier as `FabricSupplier`.
-- The existing supplier and production-unit UI remains a browser-memory static prototype and is not connected in this phase.
+- The supplier and production-unit UI now reads and writes these APIs. Browser-memory example records were removed; only stable-key Chinese label maps remain on the client.
+- Supplier management explicitly sends `status=all`, while create-fabric supplier search omits status and therefore remains active-only.
+- Related fabric, quote, and cooperation previews are intentionally marked `后续开放` until those modules are implemented.
 ## Backend Hardening - 2026-09-13
 
 - `sample_status` is now part of repeatable seed data.

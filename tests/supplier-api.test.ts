@@ -163,6 +163,41 @@ describe("supplier API", () => {
     assert.ok(log);
   });
 
+  test("status=all returns active and inactive suppliers while the default remains active-only", async () => {
+    const defaultResponse = await getSuppliersRoute(
+      new Request(`http://localhost/api/suppliers?q=${encodeURIComponent(supplierPrefix)}&limit=50`),
+    );
+    const allResponse = await getSuppliersRoute(
+      new Request(`http://localhost/api/suppliers?q=${encodeURIComponent(supplierPrefix)}&status=all&limit=50`),
+    );
+    const defaultBody = await defaultResponse.json();
+    const allBody = await allResponse.json();
+
+    assert.equal(defaultBody.suppliers.every((supplier: { status: string }) => supplier.status === "active"), true);
+    assert.equal(allBody.suppliers.some((supplier: { id: string }) => supplier.id === inactiveSupplierId), true);
+  });
+
+  test("rejects a non-empty invalid email and accepts an empty email", async () => {
+    const invalidResponse = await postSupplierRoute(
+      jsonRequest("http://localhost/api/suppliers", "POST", {
+        name: `${supplierPrefix} Invalid Email`,
+        roles: ["fabric_supplier"],
+        email: "not-an-email",
+      }),
+    );
+    const emptyResponse = await postSupplierRoute(
+      jsonRequest("http://localhost/api/suppliers", "POST", {
+        name: `${supplierPrefix} Empty Email`,
+        roles: ["fabric_supplier"],
+        email: "   ",
+      }),
+    );
+
+    assert.equal(invalidResponse.status, 400);
+    assert.equal(emptyResponse.status, 201);
+    assert.equal((await emptyResponse.json()).supplier.email, null);
+  });
+
   test("updates and changes supplier status with operation logs", async () => {
     const response = await patchSupplierRoute(
       jsonRequest(`http://localhost/api/suppliers/${baseSupplierId}`, "PATCH", {

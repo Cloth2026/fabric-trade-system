@@ -1,15 +1,26 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 import {
+  createSupplier,
+  createSupplierUnit,
+  fetchSuppliers,
+  patchSupplier,
+  patchSupplierUnit,
+} from "../src/lib/api/supplier-client";
+import type { SupplierRecord, SupplierUnitRecord } from "../src/lib/api/supplier-client";
+import {
   createEmptySupplierForm,
-  filterSupplierPrototypes,
-  initialSupplierPrototypes,
+  supplierFormToPayload,
+  supplierRoleLabels,
+  supplierStatusLabels,
   supplierToForm,
 } from "../src/components/suppliers/supplier-prototype-data";
 import {
   createEmptySupplierUnitForm,
-  filterSupplierUnitPrototypes,
-  initialSupplierUnitPrototypes,
+  supplierUnitBusinessTypeLabels,
+  supplierUnitFormLabels,
+  supplierUnitFormToPayload,
+  supplierUnitStatusLabels,
   supplierUnitToForm,
 } from "../src/components/suppliers/supplier-unit-prototype-data";
 import {
@@ -18,105 +29,146 @@ import {
   validateSupplierUnitForm,
 } from "../src/components/suppliers/supplier-unit-form-drawer";
 
-describe("supplier management static prototype", () => {
-  test("includes six suppliers with multi-role examples", () => {
-    assert.equal(initialSupplierPrototypes.length, 6);
-    assert.deepEqual(initialSupplierPrototypes[0].roles, ["面料供应商", "贸易商"]);
+const supplier: SupplierRecord = {
+  id: "supplier-real-1",
+  name: "测试供应商",
+  type: null,
+  roles: ["fabric_supplier", "trading_company"],
+  status: "active",
+  country: "中国",
+  city: "绍兴",
+  address: null,
+  contactName: "陈经理",
+  phone: "13800000000",
+  email: "chen@example.com",
+  socialContact: null,
+  specialties: "针织面料",
+  defaultLeadTime: "7天",
+  defaultMoq: "300kg",
+  paymentTerms: null,
+  cooperationComment: null,
+  riskNote: null,
+  remarks: null,
+  createdAt: "2026-09-14T12:00:00.000Z",
+  updatedAt: "2026-09-14T12:00:00.000Z",
+  _count: { productionUnits: 1 },
+};
+
+const unit: SupplierUnitRecord = {
+  id: "unit-real-1",
+  supplierId: supplier.id,
+  name: "染色一车间",
+  unitForm: "workshop",
+  businessTypes: ["dyeing", "finishing"],
+  status: "active",
+  primaryBusiness: "涤纶染色",
+  primaryProducts: "春亚纺",
+  materialScope: "涤纶",
+  processCapabilities: "染色、定型",
+  restrictions: null,
+  defaultMoq: "500kg/色",
+  regularLeadTime: "12天",
+  peakLeadTime: "18天",
+  supportsSampling: true,
+  managerName: "王经理",
+  phone: null,
+  socialContact: null,
+  qualityFeatures: null,
+  riskNote: null,
+  remarks: null,
+  createdAt: "2026-09-14T12:00:00.000Z",
+  updatedAt: "2026-09-14T12:00:00.000Z",
+  supplier: { id: supplier.id, name: supplier.name, status: supplier.status },
+};
+
+describe("supplier UI API mapping", () => {
+  test("shows Chinese labels while retaining stable backend keys", () => {
+    assert.equal(supplierRoleLabels.fabric_supplier, "面料供应商");
+    assert.equal(supplierStatusLabels.active, "启用");
+    assert.equal(supplierUnitFormLabels.workshop, "车间");
+    assert.equal(supplierUnitBusinessTypeLabels.dyeing, "染色");
+    assert.equal(supplierUnitStatusLabels.paused, "暂停合作");
   });
 
-  test("searches by supplier name, contact, and phone", () => {
-    const filters = { role: "全部角色" as const, status: "全部状态" as const };
+  test("maps controlled supplier form data to backend field names and keys", () => {
+    const form = supplierToForm(supplier);
+    form.roles.push("dyeing_factory");
+    const payload = supplierFormToPayload(form);
 
-    assert.equal(filterSupplierPrototypes(initialSupplierPrototypes, { ...filters, query: "宏达" })[0].name, "盛泽宏达织造厂");
-    assert.equal(filterSupplierPrototypes(initialSupplierPrototypes, { ...filters, query: "何敏" })[0].name, "广州中大市场A12档");
-    assert.equal(filterSupplierPrototypes(initialSupplierPrototypes, { ...filters, query: "7166" })[0].name, "吴江新彩染整有限公司");
+    assert.deepEqual(payload.roles, ["fabric_supplier", "trading_company", "dyeing_factory"]);
+    assert.equal(payload.status, "active");
+    assert.equal(payload.defaultLeadTime, "7天");
+    assert.equal(payload.defaultMoq, "300kg");
+    assert.equal("tenantId" in payload, false);
+    assert.deepEqual(supplier.roles, ["fabric_supplier", "trading_company"]);
   });
 
-  test("filters by role and cooperation status", () => {
-    const dyeingSuppliers = filterSupplierPrototypes(initialSupplierPrototypes, {
-      query: "",
-      role: "染厂",
-      status: "全部状态",
-    });
-    const inactiveSuppliers = filterSupplierPrototypes(initialSupplierPrototypes, {
-      query: "",
-      role: "全部角色",
-      status: "停用",
-    });
+  test("maps controlled production-unit form data to backend field names and keys", () => {
+    const form = supplierUnitToForm(unit);
+    form.status = "paused";
+    form.businessTypes.push("inspection");
+    const payload = supplierUnitFormToPayload(form);
 
-    assert.deepEqual(dyeingSuppliers.map((supplier) => supplier.name), ["吴江新彩染整有限公司"]);
-    assert.deepEqual(inactiveSuppliers.map((supplier) => supplier.name), ["海宁恒丰后整理厂"]);
+    assert.equal(payload.unitForm, "workshop");
+    assert.deepEqual(payload.businessTypes, ["dyeing", "finishing", "inspection"]);
+    assert.equal(payload.status, "paused");
+    assert.equal(payload.regularLeadTime, "12天");
+    assert.equal(payload.supportsSampling, true);
+    assert.equal("supplierId" in payload, false);
   });
 
-  test("create defaults and edit conversion keep controlled form data isolated", () => {
-    const emptyForm = createEmptySupplierForm();
-    const editForm = supplierToForm(initialSupplierPrototypes[0]);
+  test("keeps create defaults and production-unit validation", () => {
+    const supplierForm = createEmptySupplierForm();
+    const unitForm = createEmptySupplierUnitForm();
+    unitForm.name = "测试单元";
 
-    assert.equal(emptyForm.status, "启用");
-    assert.deepEqual(emptyForm.roles, []);
-    assert.equal(editForm.name, "绍兴柯桥针织面料有限公司");
-    editForm.roles.push("染厂");
-    assert.deepEqual(initialSupplierPrototypes[0].roles, ["面料供应商", "贸易商"]);
-  });
-
-  test("keeps production units under their supplier instead of creating suppliers", () => {
-    assert.equal(initialSupplierUnitPrototypes.length, 4);
-    assert.equal(initialSupplierUnitPrototypes.filter((unit) => unit.supplierId === "supplier-wujiang-dyeing").length, 2);
-    assert.equal(initialSupplierUnitPrototypes.filter((unit) => unit.supplierId === "supplier-keqiao-printing").length, 2);
-    assert.equal(initialSupplierUnitPrototypes.filter((unit) => unit.supplierId === "supplier-kq-knit").length, 0);
-    assert.equal(initialSupplierUnitPrototypes[0].unitForm, "车间");
-    assert.deepEqual(initialSupplierUnitPrototypes[0].businessTypes, ["染色", "后整理"]);
-    assert.deepEqual(initialSupplierUnitPrototypes[1].businessTypes, ["染色"]);
-    assert.equal(initialSupplierUnitPrototypes[2].unitForm, "部门");
-    assert.deepEqual(initialSupplierUnitPrototypes[2].businessTypes, ["印花"]);
-  });
-
-  test("searches production units by name, business, products, and process capabilities", () => {
-    const filters = { unitForm: "全部形式" as const, businessType: "全部业务" as const, status: "全部状态" as const };
-
-    assert.equal(filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { ...filters, query: "染色一" })[0].name, "染色一车间");
-    assert.equal(filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { ...filters, query: "小批量" })[0].name, "数码印花部");
-    assert.equal(filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { ...filters, query: "锦氨" })[0].name, "染色二车间");
-    assert.equal(filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { ...filters, query: "防泼水前处理" })[0].name, "染色一车间");
-  });
-
-  test("filters production units by form, business type, and status", () => {
-    const departmentUnits = filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { query: "", unitForm: "部门", businessType: "全部业务", status: "全部状态" });
-    const printingUnits = filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { query: "", unitForm: "全部形式", businessType: "印花", status: "全部状态" });
-    const pausedUnits = filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { query: "", unitForm: "全部形式", businessType: "全部业务", status: "暂停合作" });
-
-    assert.deepEqual(departmentUnits.map((unit) => unit.name), ["数码印花部"]);
-    assert.deepEqual(printingUnits.map((unit) => unit.name), ["数码印花部", "圆网印花车间"]);
-    assert.deepEqual(pausedUnits.map((unit) => unit.name), ["圆网印花车间"]);
-  });
-
-  test("production unit create defaults and edit draft do not mutate examples", () => {
-    const emptyForm = createEmptySupplierUnitForm();
-    const editForm = supplierUnitToForm(initialSupplierUnitPrototypes[0]);
-
-    assert.equal(emptyForm.status, "启用");
-    assert.equal(emptyForm.unitForm, "其他");
-    assert.deepEqual(emptyForm.businessTypes, []);
-    assert.equal(emptyForm.samplingSupport, "支持");
-    editForm.name = "未保存的临时名称";
-    editForm.qualityFeatures = "未保存的临时质量说明";
-    editForm.businessTypes.push("检验");
-    assert.equal(initialSupplierUnitPrototypes[0].name, "染色一车间");
-    assert.equal(initialSupplierUnitPrototypes[0].qualityFeatures, "深色稳定，浅色注意缸差");
-    assert.deepEqual(initialSupplierUnitPrototypes[0].businessTypes, ["染色", "后整理"]);
-  });
-
-  test("requires a business type and clears its error after selection", () => {
-    const form = createEmptySupplierUnitForm();
-    form.name = "测试生产单元";
-
-    const errors = validateSupplierUnitForm(form);
+    assert.equal(supplierForm.status, "active");
+    assert.equal(unitForm.status, "active");
+    assert.equal(unitForm.unitForm, "other");
+    const errors = validateSupplierUnitForm(unitForm);
     assert.equal(errors.businessTypes, "请至少选择一个业务类型");
     assert.equal(canSubmitSupplierUnitForm(errors), false);
+    unitForm.businessTypes = ["dyeing"];
+    assert.equal(clearSupplierUnitFormError(errors, "businessTypes").businessTypes, undefined);
+    assert.equal(canSubmitSupplierUnitForm(validateSupplierUnitForm(unitForm)), true);
+  });
 
-    form.businessTypes = ["染色"];
-    const clearedErrors = clearSupplierUnitFormError(errors, "businessTypes");
-    assert.equal(clearedErrors.businessTypes, undefined);
-    assert.equal(canSubmitSupplierUnitForm(validateSupplierUnitForm(form)), true);
+  test("sends status=all and real create/update requests", async () => {
+    const originalFetch = globalThis.fetch;
+    const requests: Array<{ url: string; method: string; body?: unknown }> = [];
+    globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
+      requests.push({
+        url,
+        method: init?.method ?? "GET",
+        body: typeof init?.body === "string" ? JSON.parse(init.body) : undefined,
+      });
+      const responseBody = url.includes("supplier-units") || url.includes("/units")
+        ? { unit }
+        : url.includes("/api/suppliers?")
+          ? { suppliers: [supplier] }
+          : { supplier };
+      return Response.json(responseBody);
+    }) as typeof fetch;
+
+    try {
+      await fetchSuppliers({ status: "all", role: "fabric_supplier", q: "测试", limit: 50 });
+      await createSupplier(supplierFormToPayload(supplierToForm(supplier)));
+      await patchSupplier(supplier.id, { status: "inactive" });
+      await createSupplierUnit(supplier.id, supplierUnitFormToPayload(supplierUnitToForm(unit)));
+      await patchSupplierUnit(unit.id, { status: "paused" });
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+
+    assert.match(requests[0].url, /status=all/);
+    assert.match(requests[0].url, /role=fabric_supplier/);
+    assert.equal(requests[1].method, "POST");
+    assert.deepEqual((requests[1].body as { roles: string[] }).roles, ["fabric_supplier", "trading_company"]);
+    assert.equal(requests[2].method, "PATCH");
+    assert.deepEqual(requests[2].body, { status: "inactive" });
+    assert.equal(requests[3].method, "POST");
+    assert.equal((requests[3].body as { unitForm: string }).unitForm, "workshop");
+    assert.equal(requests[4].method, "PATCH");
   });
 });

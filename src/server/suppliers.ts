@@ -107,14 +107,17 @@ export async function searchSuppliers(options: SupplierSearchOptions = {}) {
   const role = options.role
     ? parsePayload(z.enum(supplierRoles), options.role, "Invalid supplier role.")
     : undefined;
-  const status = options.status
-    ? parsePayload(z.enum(supplierStatuses), options.status, "Invalid supplier status.")
-    : "active";
+  const status =
+    options.status === "all"
+      ? undefined
+      : options.status
+        ? parsePayload(z.enum(supplierStatuses), options.status, "Invalid supplier status.")
+        : "active";
 
   return prisma.supplier.findMany({
     where: {
       tenantId: tenant.id,
-      status,
+      ...(status ? { status } : {}),
       ...(role ? { roles: { has: role } } : {}),
       ...(query
         ? {

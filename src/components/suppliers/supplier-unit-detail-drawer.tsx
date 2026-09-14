@@ -6,6 +6,7 @@ import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import type { SupplierPrototype } from "./supplier-prototype-data";
 import type { SupplierUnitPrototype } from "./supplier-unit-prototype-data";
+import { supplierUnitBusinessTypeLabels, supplierUnitFormLabels, supplierUnitStatusLabels } from "./supplier-unit-prototype-data";
 
 function UnitDetailSection({ icon: Icon, title, children, tone }: { icon: LucideIcon; title: string; children: ReactNode; tone: "blue" | "emerald" | "violet" | "amber" | "cyan" }) {
   const tones = {
@@ -26,7 +27,7 @@ function UnitDetailSection({ icon: Icon, title, children, tone }: { icon: Lucide
   );
 }
 
-function UnitDetailField({ label, value, wide = false }: { label: string; value: string; wide?: boolean }) {
+function UnitDetailField({ label, value, wide = false }: { label: string; value: string | null | undefined; wide?: boolean }) {
   return <div className={wide ? "sm:col-span-2" : ""}><div className="text-xs text-stone-500">{label}</div><div className="mt-1 text-sm leading-6 text-stone-800">{value || "未填写"}</div></div>;
 }
 
@@ -62,12 +63,12 @@ export function SupplierUnitDetailDrawer({
         <div className="shrink-0 border-b border-white/28 px-5 py-4">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
-              <div className="flex items-center gap-2 text-xs font-medium text-violet-700"><Factory className="size-4" />生产单元详情<span className="rounded-full border border-violet-200/54 bg-violet-50/64 px-2 py-0.5 text-[11px]">静态原型</span></div>
+              <div className="flex items-center gap-2 text-xs font-medium text-violet-700"><Factory className="size-4" />生产单元详情</div>
               <h2 className="mt-2 truncate text-xl font-semibold text-stone-950">{unit.name}</h2>
               <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                <span className="rounded-full border border-white/44 bg-white/50 px-2 py-1 text-xs text-stone-700">{unit.unitForm}</span>
-                {unit.businessTypes.map((businessType) => <span className="rounded-full border border-violet-200/50 bg-violet-50/56 px-2 py-1 text-xs text-violet-800" key={businessType}>{businessType}</span>)}
-                <span className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs ${unit.status === "启用" ? "bg-emerald-50/82 text-emerald-800" : "bg-amber-50/82 text-amber-800"}`}>{unit.status === "启用" ? <CheckCircle2 className="size-3" /> : <CircleDashed className="size-3" />}{unit.status}</span>
+                <span className="rounded-full border border-white/44 bg-white/50 px-2 py-1 text-xs text-stone-700">{supplierUnitFormLabels[unit.unitForm]}</span>
+                {unit.businessTypes.map((businessType) => <span className="rounded-full border border-violet-200/50 bg-violet-50/56 px-2 py-1 text-xs text-violet-800" key={businessType}>{supplierUnitBusinessTypeLabels[businessType]}</span>)}
+                <span className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs ${unit.status === "active" ? "bg-emerald-50/82 text-emerald-800" : "bg-amber-50/82 text-amber-800"}`}>{unit.status === "active" ? <CheckCircle2 className="size-3" /> : <CircleDashed className="size-3" />}{supplierUnitStatusLabels[unit.status]}</span>
               </div>
             </div>
             <button aria-label="关闭生产单元详情" className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-white/30 bg-white/28 transition hover:bg-white/48" onClick={() => setIsClosing(true)} type="button"><X className="size-4" /></button>
@@ -79,13 +80,13 @@ export function SupplierUnitDetailDrawer({
 
           <UnitDetailSection icon={Building2} title="基础信息" tone="blue">
             <UnitDetailField label="单元名称" value={unit.name} />
-            <UnitDetailField label="单元形式" value={unit.unitForm} />
+            <UnitDetailField label="单元形式" value={supplierUnitFormLabels[unit.unitForm]} />
             <UnitDetailField label="所属供应商" value={supplier.name} wide />
-            <UnitDetailField label="合作状态" value={unit.status} />
+            <UnitDetailField label="合作状态" value={supplierUnitStatusLabels[unit.status]} />
           </UnitDetailSection>
 
           <UnitDetailSection icon={BriefcaseBusiness} title="业务能力" tone="violet">
-            <UnitDetailField label="业务类型" value={unit.businessTypes.join("、")} wide />
+            <UnitDetailField label="业务类型" value={unit.businessTypes.map((value) => supplierUnitBusinessTypeLabels[value]).join("、")} wide />
             <UnitDetailField label="主要业务" value={unit.primaryBusiness} wide />
             <UnitDetailField label="主要产品 / 面料" value={unit.primaryProducts} wide />
             <UnitDetailField label="原料范围" value={unit.materialScope} />
@@ -94,16 +95,16 @@ export function SupplierUnitDetailDrawer({
           </UnitDetailSection>
 
           <UnitDetailSection icon={Handshake} title="合作条件" tone="emerald">
-            <UnitDetailField label="默认 MOQ" value={unit.moq} />
-            <UnitDetailField label="参考常规交期" value={unit.leadTime} />
+            <UnitDetailField label="默认 MOQ" value={unit.defaultMoq ?? ""} />
+            <UnitDetailField label="参考常规交期" value={unit.regularLeadTime ?? ""} />
             <UnitDetailField label="参考旺季交期" value={unit.peakLeadTime} />
-            <UnitDetailField label="打样能力" value={unit.samplingSupport} />
+            <UnitDetailField label="打样能力" value={unit.supportsSampling ? "支持" : "不支持"} />
           </UnitDetailSection>
 
           <UnitDetailSection icon={Contact} title="联系信息" tone="cyan">
-            <UnitDetailField label="负责人" value={unit.manager} />
+            <UnitDetailField label="负责人" value={unit.managerName ?? ""} />
             <UnitDetailField label="电话" value={unit.phone} />
-            <UnitDetailField label="微信 / 其他联系方式" value={unit.wechat} wide />
+            <UnitDetailField label="微信 / 其他联系方式" value={unit.socialContact ?? ""} wide />
           </UnitDetailSection>
 
           <UnitDetailSection icon={ShieldCheck} title="质量与合作记录" tone="amber">
@@ -114,10 +115,10 @@ export function SupplierUnitDetailDrawer({
         </div>
 
         <div className="shrink-0 border-t border-white/28 bg-white/28 p-4 backdrop-blur-2xl">
-          <div className="mb-3 text-xs text-stone-500">静态 UI 原型，本轮不会写入数据库</div>
+          <div className="mb-3 text-xs text-stone-500">状态修改会立即写入当前租户</div>
           <div className="grid grid-cols-2 gap-2">
             <button className="flex h-10 items-center justify-center gap-2 rounded-xl border border-white/34 bg-white/36 text-sm text-stone-800 transition hover:bg-white/56" onClick={() => onEdit(unit)} type="button"><Pencil className="size-4" />编辑生产单元</button>
-            <button className={`flex h-10 items-center justify-center gap-2 rounded-xl border text-sm transition ${unit.status === "启用" ? "border-amber-200/70 bg-amber-50/54 text-amber-900 hover:bg-amber-100/68" : "border-emerald-200/70 bg-emerald-50/54 text-emerald-900 hover:bg-emerald-100/68"}`} onClick={() => onToggleStatus(unit)} type="button"><Power className="size-4" />{unit.status === "启用" ? "暂停合作" : "重新启用"}</button>
+            <button className={`flex h-10 items-center justify-center gap-2 rounded-xl border text-sm transition ${unit.status === "active" ? "border-amber-200/70 bg-amber-50/54 text-amber-900 hover:bg-amber-100/68" : "border-emerald-200/70 bg-emerald-50/54 text-emerald-900 hover:bg-emerald-100/68"}`} onClick={() => onToggleStatus(unit)} type="button"><Power className="size-4" />{unit.status === "active" ? "暂停合作" : "重新启用"}</button>
           </div>
         </div>
       </aside>

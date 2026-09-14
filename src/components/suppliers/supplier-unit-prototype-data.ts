@@ -1,33 +1,52 @@
-export const supplierUnitForms = [
-  "分厂",
-  "事业部",
-  "车间",
-  "部门",
-  "生产线",
-  "外协点",
-  "其他",
-] as const;
+import type { SupplierUnitPayload, SupplierUnitRecord } from "@/lib/api/supplier-client";
+import {
+  supplierUnitBusinessTypes as supplierUnitBusinessTypeKeys,
+  supplierUnitForms as supplierUnitFormKeys,
+} from "@/server/suppliers/constants";
+import type {
+  SupplierUnitBusinessType,
+  SupplierUnitForm,
+  SupplierUnitStatus,
+} from "@/server/suppliers/constants";
 
-export const supplierUnitBusinessTypes = [
-  "坯布",
-  "织造",
-  "染色",
-  "印花",
-  "后整理",
-  "涂层",
-  "复合",
-  "检验",
-  "其他",
-] as const;
+export type {
+  SupplierUnitBusinessType,
+  SupplierUnitForm,
+  SupplierUnitStatus,
+} from "@/server/suppliers/constants";
+export type SupplierUnitPrototype = SupplierUnitRecord;
 
-export type SupplierUnitForm = (typeof supplierUnitForms)[number];
-export type SupplierUnitBusinessType = (typeof supplierUnitBusinessTypes)[number];
-export type SupplierUnitStatus = "启用" | "暂停合作";
-export type SamplingSupport = "支持" | "不支持";
+export const supplierUnitFormLabels: Record<SupplierUnitForm, string> = {
+  branch: "分厂",
+  business_unit: "事业部",
+  workshop: "车间",
+  department: "部门",
+  production_line: "生产线",
+  outsourced_site: "外协点",
+  other: "其他",
+};
 
-export type SupplierUnitPrototype = {
-  id: string;
-  supplierId: string;
+export const supplierUnitBusinessTypeLabels: Record<SupplierUnitBusinessType, string> = {
+  greige: "坯布",
+  weaving: "织造",
+  dyeing: "染色",
+  printing: "印花",
+  finishing: "后整理",
+  coating: "涂层",
+  laminating: "复合",
+  inspection: "检验",
+  other: "其他",
+};
+
+export const supplierUnitStatusLabels: Record<SupplierUnitStatus, string> = {
+  active: "启用",
+  paused: "暂停合作",
+};
+
+export const supplierUnitForms = supplierUnitFormKeys;
+export const supplierUnitBusinessTypes = supplierUnitBusinessTypeKeys;
+
+export type SupplierUnitFormState = {
   name: string;
   unitForm: SupplierUnitForm;
   businessTypes: SupplierUnitBusinessType[];
@@ -37,178 +56,90 @@ export type SupplierUnitPrototype = {
   materialScope: string;
   processCapabilities: string;
   restrictions: string;
-  moq: string;
-  leadTime: string;
+  defaultMoq: string;
+  regularLeadTime: string;
   peakLeadTime: string;
-  samplingSupport: SamplingSupport;
-  manager: string;
+  supportsSampling: boolean;
+  managerName: string;
   phone: string;
-  wechat: string;
+  socialContact: string;
   qualityFeatures: string;
   riskNote: string;
   remarks: string;
 };
 
-export type SupplierUnitFormState = Omit<SupplierUnitPrototype, "id" | "supplierId">;
-
-export const initialSupplierUnitPrototypes: SupplierUnitPrototype[] = [
-  {
-    id: "unit-xincai-dyeing-1",
-    supplierId: "supplier-wujiang-dyeing",
-    name: "染色一车间",
-    unitForm: "车间",
-    businessTypes: ["染色", "后整理"],
-    status: "启用",
-    primaryBusiness: "涤纶梭织染色",
-    primaryProducts: "75D四面弹、春亚纺、涤塔夫",
-    materialScope: "涤纶、涤氨",
-    processCapabilities: "分散染料染色、定型、柔软整理及防泼水前处理",
-    restrictions: "暂不承接高含量尼龙及超薄亮面产品",
-    moq: "500kg/色",
-    leadTime: "12-15天",
-    peakLeadTime: "18-22天",
-    samplingSupport: "支持",
-    manager: "王经理",
-    phone: "138 6258 1036",
-    wechat: "xincai-wang01",
-    qualityFeatures: "深色稳定，浅色注意缸差",
-    riskNote: "浅色补单需保留首缸色样并复核缸差",
-    remarks: "适合常规涤纶梭织大货。",
-  },
-  {
-    id: "unit-xincai-dyeing-2",
-    supplierId: "supplier-wujiang-dyeing",
-    name: "染色二车间",
-    unitForm: "车间",
-    businessTypes: ["染色"],
-    status: "启用",
-    primaryBusiness: "尼龙及弹力面料染色",
-    primaryProducts: "尼龙四面弹、锦氨面料",
-    materialScope: "尼龙、锦氨",
-    processCapabilities: "酸性染色、弹力定型、手感整理",
-    restrictions: "不承接含金属纤维产品",
-    moq: "800kg/色",
-    leadTime: "10-12天",
-    peakLeadTime: "15-18天",
-    samplingSupport: "支持",
-    manager: "李经理",
-    phone: "137 7166 4210",
-    wechat: "xincai-li02",
-    qualityFeatures: "弹力布经验较好",
-    riskNote: "高弹产品需在投产前确认成品门幅",
-    remarks: "锦氨产品优先安排该车间。",
-  },
-  {
-    id: "unit-jincheng-digital",
-    supplierId: "supplier-keqiao-printing",
-    name: "数码印花部",
-    unitForm: "部门",
-    businessTypes: ["印花"],
-    status: "启用",
-    primaryBusiness: "小批量数码印花",
-    primaryProducts: "涤纶印花布",
-    materialScope: "涤纶、涤氨",
-    processCapabilities: "数码直喷、热转印、快速花型分色",
-    restrictions: "不承接荧光色大货连续印花",
-    moq: "100米/花型",
-    leadTime: "5-7天",
-    peakLeadTime: "8-12天",
-    samplingSupport: "支持",
-    manager: "周主管",
-    phone: "136 7689 2088",
-    wechat: "jincheng-digital",
-    qualityFeatures: "打样速度快",
-    riskNote: "大货前需确认底布批次与数码色样",
-    remarks: "适合开发单和小批量快返。",
-  },
-  {
-    id: "unit-jincheng-rotary",
-    supplierId: "supplier-keqiao-printing",
-    name: "圆网印花车间",
-    unitForm: "车间",
-    businessTypes: ["印花"],
-    status: "暂停合作",
-    primaryBusiness: "大货连续印花",
-    primaryProducts: "涤纶梭织印花布",
-    materialScope: "涤纶梭织",
-    processCapabilities: "圆网制版、连续印花、蒸化水洗",
-    restrictions: "不适合低于 1,500 米的短单",
-    moq: "3,000米/花型",
-    leadTime: "15-20天",
-    peakLeadTime: "25-30天",
-    samplingSupport: "不支持",
-    manager: "陈经理",
-    phone: "135 8856 3190",
-    wechat: "jincheng-chen",
-    qualityFeatures: "适合大货，制版周期较长",
-    riskNote: "近期排期波动，恢复合作前需重新确认交期",
-    remarks: "保留产能资料，当前暂停新项目。",
-  },
-];
-
 export function createEmptySupplierUnitForm(): SupplierUnitFormState {
   return {
     name: "",
-    unitForm: "其他",
+    unitForm: "other",
     businessTypes: [],
-    status: "启用",
+    status: "active",
     primaryBusiness: "",
     primaryProducts: "",
     materialScope: "",
     processCapabilities: "",
     restrictions: "",
-    moq: "",
-    leadTime: "",
+    defaultMoq: "",
+    regularLeadTime: "",
     peakLeadTime: "",
-    samplingSupport: "支持",
-    manager: "",
+    supportsSampling: true,
+    managerName: "",
     phone: "",
-    wechat: "",
+    socialContact: "",
     qualityFeatures: "",
     riskNote: "",
     remarks: "",
   };
 }
 
-export function supplierUnitToForm(unit: SupplierUnitPrototype): SupplierUnitFormState {
+export function supplierUnitToForm(unit: SupplierUnitRecord): SupplierUnitFormState {
   return {
     name: unit.name,
     unitForm: unit.unitForm,
     businessTypes: [...unit.businessTypes],
     status: unit.status,
-    primaryBusiness: unit.primaryBusiness,
-    primaryProducts: unit.primaryProducts,
-    materialScope: unit.materialScope,
-    processCapabilities: unit.processCapabilities,
-    restrictions: unit.restrictions,
-    moq: unit.moq,
-    leadTime: unit.leadTime,
-    peakLeadTime: unit.peakLeadTime,
-    samplingSupport: unit.samplingSupport,
-    manager: unit.manager,
-    phone: unit.phone,
-    wechat: unit.wechat,
-    qualityFeatures: unit.qualityFeatures,
-    riskNote: unit.riskNote,
-    remarks: unit.remarks,
+    primaryBusiness: unit.primaryBusiness ?? "",
+    primaryProducts: unit.primaryProducts ?? "",
+    materialScope: unit.materialScope ?? "",
+    processCapabilities: unit.processCapabilities ?? "",
+    restrictions: unit.restrictions ?? "",
+    defaultMoq: unit.defaultMoq ?? "",
+    regularLeadTime: unit.regularLeadTime ?? "",
+    peakLeadTime: unit.peakLeadTime ?? "",
+    supportsSampling: unit.supportsSampling,
+    managerName: unit.managerName ?? "",
+    phone: unit.phone ?? "",
+    socialContact: unit.socialContact ?? "",
+    qualityFeatures: unit.qualityFeatures ?? "",
+    riskNote: unit.riskNote ?? "",
+    remarks: unit.remarks ?? "",
   };
 }
 
-export function filterSupplierUnitPrototypes(
-  units: SupplierUnitPrototype[],
-  filters: {
-    query: string;
-    unitForm: "全部形式" | SupplierUnitForm;
-    businessType: "全部业务" | SupplierUnitBusinessType;
-    status: "全部状态" | SupplierUnitStatus;
-  },
-) {
-  const keyword = filters.query.trim().toLowerCase();
-  return units.filter((unit) => {
-    const matchesKeyword = !keyword || [unit.name, unit.primaryBusiness, unit.primaryProducts, unit.processCapabilities].join(" ").toLowerCase().includes(keyword);
-    const matchesForm = filters.unitForm === "全部形式" || unit.unitForm === filters.unitForm;
-    const matchesBusinessType = filters.businessType === "全部业务" || unit.businessTypes.includes(filters.businessType);
-    const matchesStatus = filters.status === "全部状态" || unit.status === filters.status;
-    return matchesKeyword && matchesForm && matchesBusinessType && matchesStatus;
-  });
+function optionalValue(value: string) {
+  return value.trim() || null;
+}
+
+export function supplierUnitFormToPayload(state: SupplierUnitFormState): SupplierUnitPayload {
+  return {
+    name: state.name.trim(),
+    unitForm: state.unitForm,
+    businessTypes: [...state.businessTypes],
+    status: state.status,
+    primaryBusiness: optionalValue(state.primaryBusiness),
+    primaryProducts: optionalValue(state.primaryProducts),
+    materialScope: optionalValue(state.materialScope),
+    processCapabilities: optionalValue(state.processCapabilities),
+    restrictions: optionalValue(state.restrictions),
+    defaultMoq: optionalValue(state.defaultMoq),
+    regularLeadTime: optionalValue(state.regularLeadTime),
+    peakLeadTime: optionalValue(state.peakLeadTime),
+    supportsSampling: state.supportsSampling,
+    managerName: optionalValue(state.managerName),
+    phone: optionalValue(state.phone),
+    socialContact: optionalValue(state.socialContact),
+    qualityFeatures: optionalValue(state.qualityFeatures),
+    riskNote: optionalValue(state.riskNote),
+    remarks: optionalValue(state.remarks),
+  };
 }

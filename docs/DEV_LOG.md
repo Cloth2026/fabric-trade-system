@@ -825,3 +825,28 @@ Validation:
 - `npm.cmd test` passed: 63 tests, including existing fabric creation coverage.
 - `npm.cmd run lint` passed.
 - `npm.cmd run build` passed with Next.js 16.3.5 and all eight API routes recognized.
+
+### 2026-09-14 Connect supplier management UI to real APIs
+
+Goal:
+- Replace browser-memory supplier and production-unit examples with tenant-isolated API data while preserving the approved Spatial Glass UI.
+
+Completed:
+- Added `status=all` support for supplier management while preserving active-only supplier search when status is omitted.
+- Added optional supplier email format validation in the server Zod schema.
+- Connected supplier list, search, role/status filters, detail, create, edit, activation, and deactivation to real APIs.
+- Connected production-unit list, search, form/business/status filters, detail, create, edit, activation, and pause to real APIs.
+- Added loading, retry, empty, field-error, duplicate-name, saving, and success states.
+- Kept Chinese labels in the UI and stable English keys in every API payload.
+- Removed all static supplier and production-unit business records from the client bundle.
+- Replaced fabricated related-fabric, quote, and cooperation previews with an explicit `后续开放` state.
+
+Scope note:
+- No Prisma schema, migration, seed, create-fabric flow, or unrelated module was changed.
+
+Validation:
+- `npm.cmd test` passed: 61 tests across 13 suites.
+- `npm.cmd run lint` passed.
+- `npm.cmd run build` passed with Next.js 16.3.5 and all supplier routes recognized.
+- Browser regression passed for supplier create/edit/status/search/filter, production-unit create/edit/status/search, and create-fabric drawer open/close.
+- Browser screenshots: `supplier-list-live.png`, `supplier-detail-live.png`, `supplier-form-live.png`, and `supplier-unit-live.png`.

@@ -17,6 +17,14 @@ const optionalText = (maxLength = 2_000) =>
     },
     z.string().max(maxLength).nullable().optional(),
   );
+const optionalEmail = z.preprocess(
+  (value) => {
+    if (typeof value !== "string") return value;
+    const trimmed = value.trim();
+    return trimmed === "" ? null : trimmed;
+  },
+  z.email().max(320).nullable().optional(),
+);
 
 const uniqueEnumArray = <T extends readonly [string, ...string[]]>(values: T) =>
   z
@@ -33,7 +41,7 @@ const supplierFields = {
   address: optionalText(1_000),
   contactName: optionalText(200),
   phone: optionalText(100),
-  email: optionalText(320),
+  email: optionalEmail,
   socialContact: optionalText(300),
   specialties: optionalText(),
   defaultLeadTime: optionalText(500),
