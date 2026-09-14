@@ -20,8 +20,10 @@ import {
 import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
 import { CreateFabricDrawer } from "@/components/fabrics/create-fabric-drawer";
+import { SupplierManagementPage } from "@/components/suppliers/supplier-management-page";
 
 type ViewMode = "cards" | "table" | "batches";
+type ActiveModule = "面料库" | "供应商";
 type FabricType = "针织" | "梭织";
 type FabricStatus = "待完善" | "可销售" | "停用";
 type DevelopmentSource = "自主研发" | "市场采购" | "客户来样" | "供应商提供" | "展会采集";
@@ -159,6 +161,7 @@ const batches = [
 const navItems = ["工作台", "面料库", "供应商", "客户", "报价", "订单"];
 
 export default function Home() {
+  const [activeModule, setActiveModule] = useState<ActiveModule>("面料库");
   const [view, setView] = useState<ViewMode>("cards");
   const [query, setQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<"全部" | FabricType>("全部");
@@ -183,6 +186,14 @@ export default function Home() {
 
   const incompleteCount = fabrics.filter((fabric) => fabric.status === "待完善").length;
   const totalInventory = "11,160";
+
+  const openModule = (module: ActiveModule) => {
+    setActiveModule(module);
+    if (module === "供应商") {
+      setSelected(null);
+      setShowCreate(false);
+    }
+  };
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-[#d8d3c8] text-stone-950">
@@ -214,14 +225,18 @@ export default function Home() {
             {navItems.map((item) => (
               <button
                 className={`flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-left transition ${
-                  item === "面料库"
+                  item === activeModule
                     ? "bg-white/72 text-stone-950 shadow-[0_12px_32px_rgba(255,255,255,0.18)]"
                     : "text-white/76 hover:bg-white/18 hover:text-white"
                 }`}
                 key={item}
+                onClick={() => {
+                  if (item === "面料库" || item === "供应商") openModule(item);
+                }}
+                type="button"
               >
                 {item}
-                {item === "面料库" ? <ChevronRight className="size-4" /> : null}
+                {item === activeModule ? <ChevronRight className="size-4" /> : null}
               </button>
             ))}
           </nav>
@@ -237,6 +252,7 @@ export default function Home() {
           </div>
         </aside>
 
+        {activeModule === "供应商" ? <SupplierManagementPage /> : (
         <section className="flex min-w-0 flex-1 flex-col overflow-hidden bg-white/10">
           <header className="flex h-14 shrink-0 items-center justify-between border-b border-white/18 bg-white/18 px-4 shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)] backdrop-blur-3xl">
             <div className="flex items-center gap-3">
@@ -332,9 +348,14 @@ export default function Home() {
             </div>
           </section>
         </section>
+        )}
 
-        <FabricDrawer fabric={selected} onClose={() => setSelected(null)} />
-        <CreateFabricDrawer open={showCreate} onClose={() => setShowCreate(false)} />
+        {activeModule === "面料库" ? (
+          <>
+            <FabricDrawer fabric={selected} onClose={() => setSelected(null)} />
+            <CreateFabricDrawer open={showCreate} onClose={() => setShowCreate(false)} />
+          </>
+        ) : null}
       </div>
     </main>
   );

@@ -685,3 +685,24 @@ Known note:
 Next suggested step:
 - Implement real fabric list reading and refresh the list after creation.
 - Then add fabric detail reading and editing as a separate reviewed phase.
+
+### 2026-09-14 Prototype supplier management UI
+
+Goal:
+- Review the supplier master-data product design before any supplier backend or database work.
+- Keep the existing Spatial Glass Fabric OS layout and the connected create-fabric flow unchanged.
+
+Completed:
+- Added a clickable supplier workspace entry in the existing left navigation.
+- Added four restrained summary cards, a searchable and filterable professional table, and six representative static suppliers.
+- Added a read-only supplier detail drawer with separate base, primary contact, cooperation, risk, and linked-data preview sections.
+- Added one controlled create/edit supplier form with multi-role selection and browser-memory-only draft updates.
+- Added static enable/disable and linked-fabric demonstrations without calling an API or writing the database.
+- Added focused tests for the static supplier dataset, search, filters, create defaults, and edit-prefill isolation.
+- Saved product-review screenshots under `docs/supplier-*-prototype.png`.
+
+Scope note:
+- This is a static UI prototype only. No Prisma schema, migration, seed, supplier API, or database behavior was added or changed.
+
+Next suggested step:
+- Review and approve the supplier list, detail, and form information architecture before designing the supplier data model or real API.
