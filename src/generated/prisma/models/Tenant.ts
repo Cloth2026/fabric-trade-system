@@ -192,6 +192,7 @@ export type TenantWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   users?: Prisma.UserListRelationFilter
   suppliers?: Prisma.SupplierListRelationFilter
+  supplierUnits?: Prisma.SupplierUnitListRelationFilter
   configOptions?: Prisma.ConfigOptionListRelationFilter
   fabrics?: Prisma.FabricListRelationFilter
   fabricSuppliers?: Prisma.FabricSupplierListRelationFilter
@@ -209,6 +210,7 @@ export type TenantOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   users?: Prisma.UserOrderByRelationAggregateInput
   suppliers?: Prisma.SupplierOrderByRelationAggregateInput
+  supplierUnits?: Prisma.SupplierUnitOrderByRelationAggregateInput
   configOptions?: Prisma.ConfigOptionOrderByRelationAggregateInput
   fabrics?: Prisma.FabricOrderByRelationAggregateInput
   fabricSuppliers?: Prisma.FabricSupplierOrderByRelationAggregateInput
@@ -229,6 +231,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   users?: Prisma.UserListRelationFilter
   suppliers?: Prisma.SupplierListRelationFilter
+  supplierUnits?: Prisma.SupplierUnitListRelationFilter
   configOptions?: Prisma.ConfigOptionListRelationFilter
   fabrics?: Prisma.FabricListRelationFilter
   fabricSuppliers?: Prisma.FabricSupplierListRelationFilter
@@ -270,6 +273,7 @@ export type TenantCreateInput = {
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
@@ -287,6 +291,7 @@ export type TenantUncheckedCreateInput = {
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionUncheckedCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
@@ -304,6 +309,7 @@ export type TenantUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
@@ -321,6 +327,7 @@ export type TenantUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
@@ -449,6 +456,20 @@ export type TenantUpdateOneRequiredWithoutSuppliersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutSuppliersInput, Prisma.TenantUpdateWithoutSuppliersInput>, Prisma.TenantUncheckedUpdateWithoutSuppliersInput>
 }
 
+export type TenantCreateNestedOneWithoutSupplierUnitsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutSupplierUnitsInput, Prisma.TenantUncheckedCreateWithoutSupplierUnitsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutSupplierUnitsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutSupplierUnitsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutSupplierUnitsInput, Prisma.TenantUncheckedCreateWithoutSupplierUnitsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutSupplierUnitsInput
+  upsert?: Prisma.TenantUpsertWithoutSupplierUnitsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutSupplierUnitsInput, Prisma.TenantUpdateWithoutSupplierUnitsInput>, Prisma.TenantUncheckedUpdateWithoutSupplierUnitsInput>
+}
+
 export type TenantCreateNestedOneWithoutFabricsInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutFabricsInput, Prisma.TenantUncheckedCreateWithoutFabricsInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutFabricsInput
@@ -527,6 +548,7 @@ export type TenantCreateWithoutUsersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
@@ -543,6 +565,7 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionUncheckedCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
@@ -575,6 +598,7 @@ export type TenantUpdateWithoutUsersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
@@ -591,6 +615,7 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
@@ -608,6 +633,7 @@ export type TenantCreateWithoutConfigOptionsInput = {
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
@@ -624,6 +650,7 @@ export type TenantUncheckedCreateWithoutConfigOptionsInput = {
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
@@ -656,6 +683,7 @@ export type TenantUpdateWithoutConfigOptionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
@@ -672,6 +700,7 @@ export type TenantUncheckedUpdateWithoutConfigOptionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
@@ -687,6 +716,7 @@ export type TenantCreateWithoutSuppliersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
@@ -703,6 +733,7 @@ export type TenantUncheckedCreateWithoutSuppliersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionUncheckedCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
@@ -735,6 +766,7 @@ export type TenantUpdateWithoutSuppliersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
@@ -751,6 +783,91 @@ export type TenantUncheckedUpdateWithoutSuppliersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
+  configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
+  fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
+  fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutSupplierUnitsInput = {
+  id?: string
+  name: string
+  code: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  configOptions?: Prisma.ConfigOptionCreateNestedManyWithoutTenantInput
+  fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
+  fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
+  batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutSupplierUnitsInput = {
+  id?: string
+  name: string
+  code: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  configOptions?: Prisma.ConfigOptionUncheckedCreateNestedManyWithoutTenantInput
+  fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
+  fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
+  batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutSupplierUnitsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutSupplierUnitsInput, Prisma.TenantUncheckedCreateWithoutSupplierUnitsInput>
+}
+
+export type TenantUpsertWithoutSupplierUnitsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutSupplierUnitsInput, Prisma.TenantUncheckedUpdateWithoutSupplierUnitsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutSupplierUnitsInput, Prisma.TenantUncheckedCreateWithoutSupplierUnitsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutSupplierUnitsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutSupplierUnitsInput, Prisma.TenantUncheckedUpdateWithoutSupplierUnitsInput>
+}
+
+export type TenantUpdateWithoutSupplierUnitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  configOptions?: Prisma.ConfigOptionUpdateManyWithoutTenantNestedInput
+  fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
+  fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
+  batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutSupplierUnitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
@@ -768,6 +885,7 @@ export type TenantCreateWithoutFabricsInput = {
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
@@ -784,6 +902,7 @@ export type TenantUncheckedCreateWithoutFabricsInput = {
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionUncheckedCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
@@ -816,6 +935,7 @@ export type TenantUpdateWithoutFabricsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
@@ -832,6 +952,7 @@ export type TenantUncheckedUpdateWithoutFabricsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
@@ -848,6 +969,7 @@ export type TenantCreateWithoutFabricSuppliersInput = {
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
@@ -864,6 +986,7 @@ export type TenantUncheckedCreateWithoutFabricSuppliersInput = {
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionUncheckedCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
@@ -896,6 +1019,7 @@ export type TenantUpdateWithoutFabricSuppliersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
@@ -912,6 +1036,7 @@ export type TenantUncheckedUpdateWithoutFabricSuppliersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
@@ -928,6 +1053,7 @@ export type TenantCreateWithoutFabricSupplierQuotesInput = {
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
@@ -944,6 +1070,7 @@ export type TenantUncheckedCreateWithoutFabricSupplierQuotesInput = {
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionUncheckedCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
@@ -976,6 +1103,7 @@ export type TenantUpdateWithoutFabricSupplierQuotesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
@@ -992,6 +1120,7 @@ export type TenantUncheckedUpdateWithoutFabricSupplierQuotesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
@@ -1008,6 +1137,7 @@ export type TenantCreateWithoutBatchesInput = {
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
@@ -1024,6 +1154,7 @@ export type TenantUncheckedCreateWithoutBatchesInput = {
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionUncheckedCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
@@ -1056,6 +1187,7 @@ export type TenantUpdateWithoutBatchesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
@@ -1072,6 +1204,7 @@ export type TenantUncheckedUpdateWithoutBatchesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
@@ -1088,6 +1221,7 @@ export type TenantCreateWithoutLogsInput = {
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
@@ -1104,6 +1238,7 @@ export type TenantUncheckedCreateWithoutLogsInput = {
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutTenantInput
   configOptions?: Prisma.ConfigOptionUncheckedCreateNestedManyWithoutTenantInput
   fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
@@ -1136,6 +1271,7 @@ export type TenantUpdateWithoutLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
@@ -1152,6 +1288,7 @@ export type TenantUncheckedUpdateWithoutLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
   fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
@@ -1167,6 +1304,7 @@ export type TenantUncheckedUpdateWithoutLogsInput = {
 export type TenantCountOutputType = {
   users: number
   suppliers: number
+  supplierUnits: number
   configOptions: number
   fabrics: number
   fabricSuppliers: number
@@ -1178,6 +1316,7 @@ export type TenantCountOutputType = {
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | TenantCountOutputTypeCountUsersArgs
   suppliers?: boolean | TenantCountOutputTypeCountSuppliersArgs
+  supplierUnits?: boolean | TenantCountOutputTypeCountSupplierUnitsArgs
   configOptions?: boolean | TenantCountOutputTypeCountConfigOptionsArgs
   fabrics?: boolean | TenantCountOutputTypeCountFabricsArgs
   fabricSuppliers?: boolean | TenantCountOutputTypeCountFabricSuppliersArgs
@@ -1208,6 +1347,13 @@ export type TenantCountOutputTypeCountUsersArgs<ExtArgs extends runtime.Types.Ex
  */
 export type TenantCountOutputTypeCountSuppliersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SupplierWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountSupplierUnitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupplierUnitWhereInput
 }
 
 /**
@@ -1262,6 +1408,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   updatedAt?: boolean
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
   suppliers?: boolean | Prisma.Tenant$suppliersArgs<ExtArgs>
+  supplierUnits?: boolean | Prisma.Tenant$supplierUnitsArgs<ExtArgs>
   configOptions?: boolean | Prisma.Tenant$configOptionsArgs<ExtArgs>
   fabrics?: boolean | Prisma.Tenant$fabricsArgs<ExtArgs>
   fabricSuppliers?: boolean | Prisma.Tenant$fabricSuppliersArgs<ExtArgs>
@@ -1302,6 +1449,7 @@ export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
   suppliers?: boolean | Prisma.Tenant$suppliersArgs<ExtArgs>
+  supplierUnits?: boolean | Prisma.Tenant$supplierUnitsArgs<ExtArgs>
   configOptions?: boolean | Prisma.Tenant$configOptionsArgs<ExtArgs>
   fabrics?: boolean | Prisma.Tenant$fabricsArgs<ExtArgs>
   fabricSuppliers?: boolean | Prisma.Tenant$fabricSuppliersArgs<ExtArgs>
@@ -1318,6 +1466,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     users: Prisma.$UserPayload<ExtArgs>[]
     suppliers: Prisma.$SupplierPayload<ExtArgs>[]
+    supplierUnits: Prisma.$SupplierUnitPayload<ExtArgs>[]
     configOptions: Prisma.$ConfigOptionPayload<ExtArgs>[]
     fabrics: Prisma.$FabricPayload<ExtArgs>[]
     fabricSuppliers: Prisma.$FabricSupplierPayload<ExtArgs>[]
@@ -1728,6 +1877,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   users<T extends Prisma.Tenant$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   suppliers<T extends Prisma.Tenant$suppliersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$suppliersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  supplierUnits<T extends Prisma.Tenant$supplierUnitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$supplierUnitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupplierUnitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   configOptions<T extends Prisma.Tenant$configOptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$configOptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConfigOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   fabrics<T extends Prisma.Tenant$fabricsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$fabricsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FabricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   fabricSuppliers<T extends Prisma.Tenant$fabricSuppliersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$fabricSuppliersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FabricSupplierPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2207,6 +2357,30 @@ export type Tenant$suppliersArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.SupplierScalarFieldEnum | Prisma.SupplierScalarFieldEnum[]
+}
+
+/**
+ * Tenant.supplierUnits
+ */
+export type Tenant$supplierUnitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupplierUnit
+   */
+  select?: Prisma.SupplierUnitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupplierUnit
+   */
+  omit?: Prisma.SupplierUnitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupplierUnitInclude<ExtArgs> | null
+  where?: Prisma.SupplierUnitWhereInput
+  orderBy?: Prisma.SupplierUnitOrderByWithRelationInput | Prisma.SupplierUnitOrderByWithRelationInput[]
+  cursor?: Prisma.SupplierUnitWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupplierUnitScalarFieldEnum | Prisma.SupplierUnitScalarFieldEnum[]
 }
 
 /**

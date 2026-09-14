@@ -75,12 +75,15 @@
 - `FabricSupplier` 不保存价格、币种、计价单位、MOQ、交期、联系人和报价日期，避免“当前条件”和最新报价不同步。
 - `FabricSupplierQuote` 不冗余保存 `fabricId`、`supplierId`、`supplierFabricCode`，统一通过 `FabricSupplier` 关联读取面料、供应商和供应商货号。
 - 每条报价历史必须有 `purchasePrice` 和 `quoteDate`；`quoteDate` 默认当前时间。
+- `FabricSupplier.supplierUnitId` 可选记录当前常用或负责该面料的生产单元；同一租户、面料和供应商仍只保留一条长期供货关系。
+- `FabricSupplierQuote.supplierUnitId` 独立保存当次报价实际对应的生产单元，后续修改长期关系上的常用生产单元不会改写历史报价。
 
 `FabricSupplier` 字段：
 
 | 字段 | 必填 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | supplierId | 是 | 供应商引用 | 关联 `Supplier` |
+| supplierUnitId | 否 | 生产单元引用 | 当前常用或负责该面料的生产单元 |
 | supplierFabricCode | 否 | 文本 | 供应商自己的货号 / 品号 |
 | sampleStatus | 否 | 枚举 key | V1 只记录供应商关系中的样品状态，不展开寄样流程 |
 | qualityDifferences | 否 | 多行文本 | 同款面料不同供应商的品质差异 |
@@ -92,6 +95,7 @@
 | 字段 | 必填 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | fabricSupplierId | 是 | 关系引用 | 关联 `FabricSupplier` |
+| supplierUnitId | 否 | 生产单元引用 | 当次报价实际对应的生产单元，作为历史快照保留 |
 | purchasePrice | 是 | 金额 | 报价价格 |
 | currency | 是 | 文本 | 默认 `CNY` |
 | pricingUnit | 是 | 枚举 | `kg` / `meter` |

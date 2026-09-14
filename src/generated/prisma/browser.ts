@@ -38,6 +38,11 @@ export type ConfigOption = Prisma.ConfigOptionModel
  */
 export type Supplier = Prisma.SupplierModel
 /**
+ * Model SupplierUnit
+ * 
+ */
+export type SupplierUnit = Prisma.SupplierUnitModel
+/**
  * Model Fabric
  * 
  */

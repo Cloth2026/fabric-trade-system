@@ -32,6 +32,17 @@ export type SupplierMinAggregateOutputType = {
   contactName: string | null
   phone: string | null
   address: string | null
+  country: string | null
+  city: string | null
+  email: string | null
+  socialContact: string | null
+  specialties: string | null
+  defaultLeadTime: string | null
+  defaultMoq: string | null
+  paymentTerms: string | null
+  cooperationComment: string | null
+  riskNote: string | null
+  remarks: string | null
   status: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -45,6 +56,17 @@ export type SupplierMaxAggregateOutputType = {
   contactName: string | null
   phone: string | null
   address: string | null
+  country: string | null
+  city: string | null
+  email: string | null
+  socialContact: string | null
+  specialties: string | null
+  defaultLeadTime: string | null
+  defaultMoq: string | null
+  paymentTerms: string | null
+  cooperationComment: string | null
+  riskNote: string | null
+  remarks: string | null
   status: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -55,9 +77,21 @@ export type SupplierCountAggregateOutputType = {
   tenantId: number
   name: number
   type: number
+  roles: number
   contactName: number
   phone: number
   address: number
+  country: number
+  city: number
+  email: number
+  socialContact: number
+  specialties: number
+  defaultLeadTime: number
+  defaultMoq: number
+  paymentTerms: number
+  cooperationComment: number
+  riskNote: number
+  remarks: number
   status: number
   createdAt: number
   updatedAt: number
@@ -73,6 +107,17 @@ export type SupplierMinAggregateInputType = {
   contactName?: true
   phone?: true
   address?: true
+  country?: true
+  city?: true
+  email?: true
+  socialContact?: true
+  specialties?: true
+  defaultLeadTime?: true
+  defaultMoq?: true
+  paymentTerms?: true
+  cooperationComment?: true
+  riskNote?: true
+  remarks?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -86,6 +131,17 @@ export type SupplierMaxAggregateInputType = {
   contactName?: true
   phone?: true
   address?: true
+  country?: true
+  city?: true
+  email?: true
+  socialContact?: true
+  specialties?: true
+  defaultLeadTime?: true
+  defaultMoq?: true
+  paymentTerms?: true
+  cooperationComment?: true
+  riskNote?: true
+  remarks?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -96,9 +152,21 @@ export type SupplierCountAggregateInputType = {
   tenantId?: true
   name?: true
   type?: true
+  roles?: true
   contactName?: true
   phone?: true
   address?: true
+  country?: true
+  city?: true
+  email?: true
+  socialContact?: true
+  specialties?: true
+  defaultLeadTime?: true
+  defaultMoq?: true
+  paymentTerms?: true
+  cooperationComment?: true
+  riskNote?: true
+  remarks?: true
   status?: true
   createdAt?: true
   updatedAt?: true
@@ -182,9 +250,21 @@ export type SupplierGroupByOutputType = {
   tenantId: string
   name: string
   type: string | null
+  roles: string[]
   contactName: string | null
   phone: string | null
   address: string | null
+  country: string | null
+  city: string | null
+  email: string | null
+  socialContact: string | null
+  specialties: string | null
+  defaultLeadTime: string | null
+  defaultMoq: string | null
+  paymentTerms: string | null
+  cooperationComment: string | null
+  riskNote: string | null
+  remarks: string | null
   status: string
   createdAt: Date
   updatedAt: Date
@@ -216,13 +296,26 @@ export type SupplierWhereInput = {
   tenantId?: Prisma.StringFilter<"Supplier"> | string
   name?: Prisma.StringFilter<"Supplier"> | string
   type?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  roles?: Prisma.StringNullableListFilter<"Supplier">
   contactName?: Prisma.StringNullableFilter<"Supplier"> | string | null
   phone?: Prisma.StringNullableFilter<"Supplier"> | string | null
   address?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  country?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  city?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  email?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  socialContact?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  specialties?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  defaultLeadTime?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  defaultMoq?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  paymentTerms?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  cooperationComment?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  riskNote?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  remarks?: Prisma.StringNullableFilter<"Supplier"> | string | null
   status?: Prisma.StringFilter<"Supplier"> | string
   createdAt?: Prisma.DateTimeFilter<"Supplier"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Supplier"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  productionUnits?: Prisma.SupplierUnitListRelationFilter
   sourceFabrics?: Prisma.FabricListRelationFilter
   fabricSuppliers?: Prisma.FabricSupplierListRelationFilter
   greigeFabrics?: Prisma.GreigeFabricListRelationFilter
@@ -236,13 +329,26 @@ export type SupplierOrderByWithRelationInput = {
   tenantId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrderInput | Prisma.SortOrder
+  roles?: Prisma.SortOrder
   contactName?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
+  country?: Prisma.SortOrderInput | Prisma.SortOrder
+  city?: Prisma.SortOrderInput | Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  socialContact?: Prisma.SortOrderInput | Prisma.SortOrder
+  specialties?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultLeadTime?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultMoq?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentTerms?: Prisma.SortOrderInput | Prisma.SortOrder
+  cooperationComment?: Prisma.SortOrderInput | Prisma.SortOrder
+  riskNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  remarks?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
+  productionUnits?: Prisma.SupplierUnitOrderByRelationAggregateInput
   sourceFabrics?: Prisma.FabricOrderByRelationAggregateInput
   fabricSuppliers?: Prisma.FabricSupplierOrderByRelationAggregateInput
   greigeFabrics?: Prisma.GreigeFabricOrderByRelationAggregateInput
@@ -259,13 +365,26 @@ export type SupplierWhereUniqueInput = Prisma.AtLeast<{
   tenantId?: Prisma.StringFilter<"Supplier"> | string
   name?: Prisma.StringFilter<"Supplier"> | string
   type?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  roles?: Prisma.StringNullableListFilter<"Supplier">
   contactName?: Prisma.StringNullableFilter<"Supplier"> | string | null
   phone?: Prisma.StringNullableFilter<"Supplier"> | string | null
   address?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  country?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  city?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  email?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  socialContact?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  specialties?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  defaultLeadTime?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  defaultMoq?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  paymentTerms?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  cooperationComment?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  riskNote?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  remarks?: Prisma.StringNullableFilter<"Supplier"> | string | null
   status?: Prisma.StringFilter<"Supplier"> | string
   createdAt?: Prisma.DateTimeFilter<"Supplier"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Supplier"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  productionUnits?: Prisma.SupplierUnitListRelationFilter
   sourceFabrics?: Prisma.FabricListRelationFilter
   fabricSuppliers?: Prisma.FabricSupplierListRelationFilter
   greigeFabrics?: Prisma.GreigeFabricListRelationFilter
@@ -279,9 +398,21 @@ export type SupplierOrderByWithAggregationInput = {
   tenantId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrderInput | Prisma.SortOrder
+  roles?: Prisma.SortOrder
   contactName?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
+  country?: Prisma.SortOrderInput | Prisma.SortOrder
+  city?: Prisma.SortOrderInput | Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  socialContact?: Prisma.SortOrderInput | Prisma.SortOrder
+  specialties?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultLeadTime?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultMoq?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentTerms?: Prisma.SortOrderInput | Prisma.SortOrder
+  cooperationComment?: Prisma.SortOrderInput | Prisma.SortOrder
+  riskNote?: Prisma.SortOrderInput | Prisma.SortOrder
+  remarks?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -298,9 +429,21 @@ export type SupplierScalarWhereWithAggregatesInput = {
   tenantId?: Prisma.StringWithAggregatesFilter<"Supplier"> | string
   name?: Prisma.StringWithAggregatesFilter<"Supplier"> | string
   type?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
+  roles?: Prisma.StringNullableListFilter<"Supplier">
   contactName?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
   address?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
+  country?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
+  city?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
+  email?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
+  socialContact?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
+  specialties?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
+  defaultLeadTime?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
+  defaultMoq?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
+  paymentTerms?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
+  cooperationComment?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
+  riskNote?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
+  remarks?: Prisma.StringNullableWithAggregatesFilter<"Supplier"> | string | null
   status?: Prisma.StringWithAggregatesFilter<"Supplier"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Supplier"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Supplier"> | Date | string
@@ -310,13 +453,26 @@ export type SupplierCreateInput = {
   id?: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
+  productionUnits?: Prisma.SupplierUnitCreateNestedManyWithoutSupplierInput
   sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
@@ -330,12 +486,25 @@ export type SupplierUncheckedCreateInput = {
   tenantId: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutSupplierInput
   sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
@@ -348,13 +517,26 @@ export type SupplierUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
+  productionUnits?: Prisma.SupplierUnitUpdateManyWithoutSupplierNestedInput
   sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
@@ -368,12 +550,25 @@ export type SupplierUncheckedUpdateInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutSupplierNestedInput
   sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
@@ -387,9 +582,21 @@ export type SupplierCreateManyInput = {
   tenantId: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -399,9 +606,21 @@ export type SupplierUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -412,9 +631,21 @@ export type SupplierUncheckedUpdateManyInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -430,14 +661,34 @@ export type SupplierOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type SupplierCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   type?: Prisma.SortOrder
+  roles?: Prisma.SortOrder
   contactName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  country?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  socialContact?: Prisma.SortOrder
+  specialties?: Prisma.SortOrder
+  defaultLeadTime?: Prisma.SortOrder
+  defaultMoq?: Prisma.SortOrder
+  paymentTerms?: Prisma.SortOrder
+  cooperationComment?: Prisma.SortOrder
+  riskNote?: Prisma.SortOrder
+  remarks?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -451,6 +702,17 @@ export type SupplierMaxOrderByAggregateInput = {
   contactName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  country?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  socialContact?: Prisma.SortOrder
+  specialties?: Prisma.SortOrder
+  defaultLeadTime?: Prisma.SortOrder
+  defaultMoq?: Prisma.SortOrder
+  paymentTerms?: Prisma.SortOrder
+  cooperationComment?: Prisma.SortOrder
+  riskNote?: Prisma.SortOrder
+  remarks?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -464,19 +726,30 @@ export type SupplierMinOrderByAggregateInput = {
   contactName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  country?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  socialContact?: Prisma.SortOrder
+  specialties?: Prisma.SortOrder
+  defaultLeadTime?: Prisma.SortOrder
+  defaultMoq?: Prisma.SortOrder
+  paymentTerms?: Prisma.SortOrder
+  cooperationComment?: Prisma.SortOrder
+  riskNote?: Prisma.SortOrder
+  remarks?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
-export type SupplierNullableScalarRelationFilter = {
-  is?: Prisma.SupplierWhereInput | null
-  isNot?: Prisma.SupplierWhereInput | null
-}
-
 export type SupplierScalarRelationFilter = {
   is?: Prisma.SupplierWhereInput
   isNot?: Prisma.SupplierWhereInput
+}
+
+export type SupplierNullableScalarRelationFilter = {
+  is?: Prisma.SupplierWhereInput | null
+  isNot?: Prisma.SupplierWhereInput | null
 }
 
 export type SupplierCreateNestedManyWithoutTenantInput = {
@@ -519,6 +792,29 @@ export type SupplierUncheckedUpdateManyWithoutTenantNestedInput = {
   update?: Prisma.SupplierUpdateWithWhereUniqueWithoutTenantInput | Prisma.SupplierUpdateWithWhereUniqueWithoutTenantInput[]
   updateMany?: Prisma.SupplierUpdateManyWithWhereWithoutTenantInput | Prisma.SupplierUpdateManyWithWhereWithoutTenantInput[]
   deleteMany?: Prisma.SupplierScalarWhereInput | Prisma.SupplierScalarWhereInput[]
+}
+
+export type SupplierCreaterolesInput = {
+  set: string[]
+}
+
+export type SupplierUpdaterolesInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type SupplierCreateNestedOneWithoutProductionUnitsInput = {
+  create?: Prisma.XOR<Prisma.SupplierCreateWithoutProductionUnitsInput, Prisma.SupplierUncheckedCreateWithoutProductionUnitsInput>
+  connectOrCreate?: Prisma.SupplierCreateOrConnectWithoutProductionUnitsInput
+  connect?: Prisma.SupplierWhereUniqueInput
+}
+
+export type SupplierUpdateOneRequiredWithoutProductionUnitsNestedInput = {
+  create?: Prisma.XOR<Prisma.SupplierCreateWithoutProductionUnitsInput, Prisma.SupplierUncheckedCreateWithoutProductionUnitsInput>
+  connectOrCreate?: Prisma.SupplierCreateOrConnectWithoutProductionUnitsInput
+  upsert?: Prisma.SupplierUpsertWithoutProductionUnitsInput
+  connect?: Prisma.SupplierWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SupplierUpdateToOneWithWhereWithoutProductionUnitsInput, Prisma.SupplierUpdateWithoutProductionUnitsInput>, Prisma.SupplierUncheckedUpdateWithoutProductionUnitsInput>
 }
 
 export type SupplierCreateNestedOneWithoutSourceFabricsInput = {
@@ -619,12 +915,25 @@ export type SupplierCreateWithoutTenantInput = {
   id?: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  productionUnits?: Prisma.SupplierUnitCreateNestedManyWithoutSupplierInput
   sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
@@ -637,12 +946,25 @@ export type SupplierUncheckedCreateWithoutTenantInput = {
   id?: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutSupplierInput
   sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
@@ -685,25 +1007,190 @@ export type SupplierScalarWhereInput = {
   tenantId?: Prisma.StringFilter<"Supplier"> | string
   name?: Prisma.StringFilter<"Supplier"> | string
   type?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  roles?: Prisma.StringNullableListFilter<"Supplier">
   contactName?: Prisma.StringNullableFilter<"Supplier"> | string | null
   phone?: Prisma.StringNullableFilter<"Supplier"> | string | null
   address?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  country?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  city?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  email?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  socialContact?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  specialties?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  defaultLeadTime?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  defaultMoq?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  paymentTerms?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  cooperationComment?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  riskNote?: Prisma.StringNullableFilter<"Supplier"> | string | null
+  remarks?: Prisma.StringNullableFilter<"Supplier"> | string | null
   status?: Prisma.StringFilter<"Supplier"> | string
   createdAt?: Prisma.DateTimeFilter<"Supplier"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Supplier"> | Date | string
+}
+
+export type SupplierCreateWithoutProductionUnitsInput = {
+  id?: string
+  name: string
+  type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
+  contactName?: string | null
+  phone?: string | null
+  address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
+  sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
+  fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
+  greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
+  dyeingFinishings?: Prisma.DyeingFinishingCreateNestedManyWithoutFactoryInput
+  postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFactoryInput
+  stockInBatches?: Prisma.FabricStockInBatchCreateNestedManyWithoutSupplierInput
+}
+
+export type SupplierUncheckedCreateWithoutProductionUnitsInput = {
+  id?: string
+  tenantId: string
+  name: string
+  type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
+  contactName?: string | null
+  phone?: string | null
+  address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
+  fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
+  greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
+  dyeingFinishings?: Prisma.DyeingFinishingUncheckedCreateNestedManyWithoutFactoryInput
+  postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFactoryInput
+  stockInBatches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutSupplierInput
+}
+
+export type SupplierCreateOrConnectWithoutProductionUnitsInput = {
+  where: Prisma.SupplierWhereUniqueInput
+  create: Prisma.XOR<Prisma.SupplierCreateWithoutProductionUnitsInput, Prisma.SupplierUncheckedCreateWithoutProductionUnitsInput>
+}
+
+export type SupplierUpsertWithoutProductionUnitsInput = {
+  update: Prisma.XOR<Prisma.SupplierUpdateWithoutProductionUnitsInput, Prisma.SupplierUncheckedUpdateWithoutProductionUnitsInput>
+  create: Prisma.XOR<Prisma.SupplierCreateWithoutProductionUnitsInput, Prisma.SupplierUncheckedCreateWithoutProductionUnitsInput>
+  where?: Prisma.SupplierWhereInput
+}
+
+export type SupplierUpdateToOneWithWhereWithoutProductionUnitsInput = {
+  where?: Prisma.SupplierWhereInput
+  data: Prisma.XOR<Prisma.SupplierUpdateWithoutProductionUnitsInput, Prisma.SupplierUncheckedUpdateWithoutProductionUnitsInput>
+}
+
+export type SupplierUpdateWithoutProductionUnitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
+  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
+  sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
+  fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
+  greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
+  dyeingFinishings?: Prisma.DyeingFinishingUpdateManyWithoutFactoryNestedInput
+  postProcesses?: Prisma.PostProcessUpdateManyWithoutFactoryNestedInput
+  stockInBatches?: Prisma.FabricStockInBatchUpdateManyWithoutSupplierNestedInput
+}
+
+export type SupplierUncheckedUpdateWithoutProductionUnitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
+  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
+  fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
+  greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
+  dyeingFinishings?: Prisma.DyeingFinishingUncheckedUpdateManyWithoutFactoryNestedInput
+  postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFactoryNestedInput
+  stockInBatches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutSupplierNestedInput
 }
 
 export type SupplierCreateWithoutSourceFabricsInput = {
   id?: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
+  productionUnits?: Prisma.SupplierUnitCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingCreateNestedManyWithoutFactoryInput
@@ -716,12 +1203,25 @@ export type SupplierUncheckedCreateWithoutSourceFabricsInput = {
   tenantId: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedCreateNestedManyWithoutFactoryInput
@@ -749,13 +1249,26 @@ export type SupplierUpdateWithoutSourceFabricsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
+  productionUnits?: Prisma.SupplierUnitUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUpdateManyWithoutFactoryNestedInput
@@ -768,12 +1281,25 @@ export type SupplierUncheckedUpdateWithoutSourceFabricsInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedUpdateManyWithoutFactoryNestedInput
@@ -785,13 +1311,26 @@ export type SupplierCreateWithoutFabricSuppliersInput = {
   id?: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
+  productionUnits?: Prisma.SupplierUnitCreateNestedManyWithoutSupplierInput
   sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingCreateNestedManyWithoutFactoryInput
@@ -804,12 +1343,25 @@ export type SupplierUncheckedCreateWithoutFabricSuppliersInput = {
   tenantId: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutSupplierInput
   sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedCreateNestedManyWithoutFactoryInput
@@ -837,13 +1389,26 @@ export type SupplierUpdateWithoutFabricSuppliersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
+  productionUnits?: Prisma.SupplierUnitUpdateManyWithoutSupplierNestedInput
   sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUpdateManyWithoutFactoryNestedInput
@@ -856,12 +1421,25 @@ export type SupplierUncheckedUpdateWithoutFabricSuppliersInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutSupplierNestedInput
   sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedUpdateManyWithoutFactoryNestedInput
@@ -873,13 +1451,26 @@ export type SupplierCreateWithoutGreigeFabricsInput = {
   id?: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
+  productionUnits?: Prisma.SupplierUnitCreateNestedManyWithoutSupplierInput
   sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingCreateNestedManyWithoutFactoryInput
@@ -892,12 +1483,25 @@ export type SupplierUncheckedCreateWithoutGreigeFabricsInput = {
   tenantId: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutSupplierInput
   sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedCreateNestedManyWithoutFactoryInput
@@ -925,13 +1529,26 @@ export type SupplierUpdateWithoutGreigeFabricsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
+  productionUnits?: Prisma.SupplierUnitUpdateManyWithoutSupplierNestedInput
   sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUpdateManyWithoutFactoryNestedInput
@@ -944,12 +1561,25 @@ export type SupplierUncheckedUpdateWithoutGreigeFabricsInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutSupplierNestedInput
   sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
   dyeingFinishings?: Prisma.DyeingFinishingUncheckedUpdateManyWithoutFactoryNestedInput
@@ -961,13 +1591,26 @@ export type SupplierCreateWithoutDyeingFinishingsInput = {
   id?: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
+  productionUnits?: Prisma.SupplierUnitCreateNestedManyWithoutSupplierInput
   sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
@@ -980,12 +1623,25 @@ export type SupplierUncheckedCreateWithoutDyeingFinishingsInput = {
   tenantId: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutSupplierInput
   sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
@@ -1013,13 +1669,26 @@ export type SupplierUpdateWithoutDyeingFinishingsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
+  productionUnits?: Prisma.SupplierUnitUpdateManyWithoutSupplierNestedInput
   sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
@@ -1032,12 +1701,25 @@ export type SupplierUncheckedUpdateWithoutDyeingFinishingsInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutSupplierNestedInput
   sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
@@ -1049,13 +1731,26 @@ export type SupplierCreateWithoutPostProcessesInput = {
   id?: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
+  productionUnits?: Prisma.SupplierUnitCreateNestedManyWithoutSupplierInput
   sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
@@ -1068,12 +1763,25 @@ export type SupplierUncheckedCreateWithoutPostProcessesInput = {
   tenantId: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutSupplierInput
   sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
@@ -1101,13 +1809,26 @@ export type SupplierUpdateWithoutPostProcessesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
+  productionUnits?: Prisma.SupplierUnitUpdateManyWithoutSupplierNestedInput
   sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
@@ -1120,12 +1841,25 @@ export type SupplierUncheckedUpdateWithoutPostProcessesInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutSupplierNestedInput
   sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
@@ -1137,13 +1871,26 @@ export type SupplierCreateWithoutStockInBatchesInput = {
   id?: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSuppliersInput
+  productionUnits?: Prisma.SupplierUnitCreateNestedManyWithoutSupplierInput
   sourceFabrics?: Prisma.FabricCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricCreateNestedManyWithoutSupplierInput
@@ -1156,12 +1903,25 @@ export type SupplierUncheckedCreateWithoutStockInBatchesInput = {
   tenantId: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutSupplierInput
   sourceFabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutSupplierInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutSupplierInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedCreateNestedManyWithoutSupplierInput
@@ -1189,13 +1949,26 @@ export type SupplierUpdateWithoutStockInBatchesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSuppliersNestedInput
+  productionUnits?: Prisma.SupplierUnitUpdateManyWithoutSupplierNestedInput
   sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
@@ -1208,12 +1981,25 @@ export type SupplierUncheckedUpdateWithoutStockInBatchesInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutSupplierNestedInput
   sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
@@ -1225,9 +2011,21 @@ export type SupplierCreateManyTenantInput = {
   id?: string
   name: string
   type?: string | null
+  roles?: Prisma.SupplierCreaterolesInput | string[]
   contactName?: string | null
   phone?: string | null
   address?: string | null
+  country?: string | null
+  city?: string | null
+  email?: string | null
+  socialContact?: string | null
+  specialties?: string | null
+  defaultLeadTime?: string | null
+  defaultMoq?: string | null
+  paymentTerms?: string | null
+  cooperationComment?: string | null
+  riskNote?: string | null
+  remarks?: string | null
   status?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1237,12 +2035,25 @@ export type SupplierUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionUnits?: Prisma.SupplierUnitUpdateManyWithoutSupplierNestedInput
   sourceFabrics?: Prisma.FabricUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUpdateManyWithoutSupplierNestedInput
@@ -1255,12 +2066,25 @@ export type SupplierUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  productionUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutSupplierNestedInput
   sourceFabrics?: Prisma.FabricUncheckedUpdateManyWithoutSupplierNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput
   greigeFabrics?: Prisma.GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput
@@ -1273,9 +2097,21 @@ export type SupplierUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.SupplierUpdaterolesInput | string[]
   contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specialties?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultLeadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultMoq?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cooperationComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  riskNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1287,6 +2123,7 @@ export type SupplierUncheckedUpdateManyWithoutTenantInput = {
  */
 
 export type SupplierCountOutputType = {
+  productionUnits: number
   sourceFabrics: number
   fabricSuppliers: number
   greigeFabrics: number
@@ -1296,6 +2133,7 @@ export type SupplierCountOutputType = {
 }
 
 export type SupplierCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  productionUnits?: boolean | SupplierCountOutputTypeCountProductionUnitsArgs
   sourceFabrics?: boolean | SupplierCountOutputTypeCountSourceFabricsArgs
   fabricSuppliers?: boolean | SupplierCountOutputTypeCountFabricSuppliersArgs
   greigeFabrics?: boolean | SupplierCountOutputTypeCountGreigeFabricsArgs
@@ -1312,6 +2150,13 @@ export type SupplierCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
    * Select specific fields to fetch from the SupplierCountOutputType
    */
   select?: Prisma.SupplierCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * SupplierCountOutputType without action
+ */
+export type SupplierCountOutputTypeCountProductionUnitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupplierUnitWhereInput
 }
 
 /**
@@ -1362,13 +2207,26 @@ export type SupplierSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   tenantId?: boolean
   name?: boolean
   type?: boolean
+  roles?: boolean
   contactName?: boolean
   phone?: boolean
   address?: boolean
+  country?: boolean
+  city?: boolean
+  email?: boolean
+  socialContact?: boolean
+  specialties?: boolean
+  defaultLeadTime?: boolean
+  defaultMoq?: boolean
+  paymentTerms?: boolean
+  cooperationComment?: boolean
+  riskNote?: boolean
+  remarks?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  productionUnits?: boolean | Prisma.Supplier$productionUnitsArgs<ExtArgs>
   sourceFabrics?: boolean | Prisma.Supplier$sourceFabricsArgs<ExtArgs>
   fabricSuppliers?: boolean | Prisma.Supplier$fabricSuppliersArgs<ExtArgs>
   greigeFabrics?: boolean | Prisma.Supplier$greigeFabricsArgs<ExtArgs>
@@ -1383,9 +2241,21 @@ export type SupplierSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   tenantId?: boolean
   name?: boolean
   type?: boolean
+  roles?: boolean
   contactName?: boolean
   phone?: boolean
   address?: boolean
+  country?: boolean
+  city?: boolean
+  email?: boolean
+  socialContact?: boolean
+  specialties?: boolean
+  defaultLeadTime?: boolean
+  defaultMoq?: boolean
+  paymentTerms?: boolean
+  cooperationComment?: boolean
+  riskNote?: boolean
+  remarks?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1397,9 +2267,21 @@ export type SupplierSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   tenantId?: boolean
   name?: boolean
   type?: boolean
+  roles?: boolean
   contactName?: boolean
   phone?: boolean
   address?: boolean
+  country?: boolean
+  city?: boolean
+  email?: boolean
+  socialContact?: boolean
+  specialties?: boolean
+  defaultLeadTime?: boolean
+  defaultMoq?: boolean
+  paymentTerms?: boolean
+  cooperationComment?: boolean
+  riskNote?: boolean
+  remarks?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1411,17 +2293,30 @@ export type SupplierSelectScalar = {
   tenantId?: boolean
   name?: boolean
   type?: boolean
+  roles?: boolean
   contactName?: boolean
   phone?: boolean
   address?: boolean
+  country?: boolean
+  city?: boolean
+  email?: boolean
+  socialContact?: boolean
+  specialties?: boolean
+  defaultLeadTime?: boolean
+  defaultMoq?: boolean
+  paymentTerms?: boolean
+  cooperationComment?: boolean
+  riskNote?: boolean
+  remarks?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SupplierOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "name" | "type" | "contactName" | "phone" | "address" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["supplier"]>
+export type SupplierOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "name" | "type" | "roles" | "contactName" | "phone" | "address" | "country" | "city" | "email" | "socialContact" | "specialties" | "defaultLeadTime" | "defaultMoq" | "paymentTerms" | "cooperationComment" | "riskNote" | "remarks" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["supplier"]>
 export type SupplierInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  productionUnits?: boolean | Prisma.Supplier$productionUnitsArgs<ExtArgs>
   sourceFabrics?: boolean | Prisma.Supplier$sourceFabricsArgs<ExtArgs>
   fabricSuppliers?: boolean | Prisma.Supplier$fabricSuppliersArgs<ExtArgs>
   greigeFabrics?: boolean | Prisma.Supplier$greigeFabricsArgs<ExtArgs>
@@ -1441,6 +2336,7 @@ export type $SupplierPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   name: "Supplier"
   objects: {
     tenant: Prisma.$TenantPayload<ExtArgs>
+    productionUnits: Prisma.$SupplierUnitPayload<ExtArgs>[]
     sourceFabrics: Prisma.$FabricPayload<ExtArgs>[]
     fabricSuppliers: Prisma.$FabricSupplierPayload<ExtArgs>[]
     greigeFabrics: Prisma.$GreigeFabricPayload<ExtArgs>[]
@@ -1453,9 +2349,21 @@ export type $SupplierPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     tenantId: string
     name: string
     type: string | null
+    roles: string[]
     contactName: string | null
     phone: string | null
     address: string | null
+    country: string | null
+    city: string | null
+    email: string | null
+    socialContact: string | null
+    specialties: string | null
+    defaultLeadTime: string | null
+    defaultMoq: string | null
+    paymentTerms: string | null
+    cooperationComment: string | null
+    riskNote: string | null
+    remarks: string | null
     status: string
     createdAt: Date
     updatedAt: Date
@@ -1854,6 +2762,7 @@ readonly fields: SupplierFieldRefs;
 export interface Prisma__SupplierClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  productionUnits<T extends Prisma.Supplier$productionUnitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Supplier$productionUnitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupplierUnitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sourceFabrics<T extends Prisma.Supplier$sourceFabricsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Supplier$sourceFabricsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FabricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   fabricSuppliers<T extends Prisma.Supplier$fabricSuppliersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Supplier$fabricSuppliersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FabricSupplierPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   greigeFabrics<T extends Prisma.Supplier$greigeFabricsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Supplier$greigeFabricsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GreigeFabricPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1893,9 +2802,21 @@ export interface SupplierFieldRefs {
   readonly tenantId: Prisma.FieldRef<"Supplier", 'String'>
   readonly name: Prisma.FieldRef<"Supplier", 'String'>
   readonly type: Prisma.FieldRef<"Supplier", 'String'>
+  readonly roles: Prisma.FieldRef<"Supplier", 'String[]'>
   readonly contactName: Prisma.FieldRef<"Supplier", 'String'>
   readonly phone: Prisma.FieldRef<"Supplier", 'String'>
   readonly address: Prisma.FieldRef<"Supplier", 'String'>
+  readonly country: Prisma.FieldRef<"Supplier", 'String'>
+  readonly city: Prisma.FieldRef<"Supplier", 'String'>
+  readonly email: Prisma.FieldRef<"Supplier", 'String'>
+  readonly socialContact: Prisma.FieldRef<"Supplier", 'String'>
+  readonly specialties: Prisma.FieldRef<"Supplier", 'String'>
+  readonly defaultLeadTime: Prisma.FieldRef<"Supplier", 'String'>
+  readonly defaultMoq: Prisma.FieldRef<"Supplier", 'String'>
+  readonly paymentTerms: Prisma.FieldRef<"Supplier", 'String'>
+  readonly cooperationComment: Prisma.FieldRef<"Supplier", 'String'>
+  readonly riskNote: Prisma.FieldRef<"Supplier", 'String'>
+  readonly remarks: Prisma.FieldRef<"Supplier", 'String'>
   readonly status: Prisma.FieldRef<"Supplier", 'String'>
   readonly createdAt: Prisma.FieldRef<"Supplier", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Supplier", 'DateTime'>
@@ -2297,6 +3218,30 @@ export type SupplierDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Suppliers to delete.
    */
   limit?: number
+}
+
+/**
+ * Supplier.productionUnits
+ */
+export type Supplier$productionUnitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupplierUnit
+   */
+  select?: Prisma.SupplierUnitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupplierUnit
+   */
+  omit?: Prisma.SupplierUnitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupplierUnitInclude<ExtArgs> | null
+  where?: Prisma.SupplierUnitWhereInput
+  orderBy?: Prisma.SupplierUnitOrderByWithRelationInput | Prisma.SupplierUnitOrderByWithRelationInput[]
+  cursor?: Prisma.SupplierUnitWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupplierUnitScalarFieldEnum | Prisma.SupplierUnitScalarFieldEnum[]
 }
 
 /**

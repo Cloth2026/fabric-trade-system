@@ -45,6 +45,7 @@ model Tenant {
   status               TenantStatus          @default(active)
   users                User[]
   suppliers            Supplier[]
+  supplierUnits        SupplierUnit[]
   configOptions        ConfigOption[]
   fabrics              Fabric[]
   fabricSuppliers      FabricSupplier[]
@@ -95,27 +96,76 @@ model ConfigOption {
 }
 
 model Supplier {
-  id               String               @id @default(cuid())
-  tenant           Tenant               @relation(fields: [tenantId], references: [id])
-  tenantId         String
-  name             String
-  type             String?
-  contactName      String?
-  phone            String?
-  address          String?
-  status           String               @default("active")
-  sourceFabrics    Fabric[]             @relation("FabricSourceSupplier")
-  fabricSuppliers  FabricSupplier[]
-  greigeFabrics    GreigeFabric[]       @relation("GreigeSupplier")
-  dyeingFinishings DyeingFinishing[]    @relation("DyeingFactory")
-  postProcesses    PostProcess[]        @relation("PostProcessFactory")
-  stockInBatches   FabricStockInBatch[]
-  createdAt        DateTime             @default(now())
-  updatedAt        DateTime             @updatedAt
+  id                 String               @id @default(cuid())
+  tenant             Tenant               @relation(fields: [tenantId], references: [id])
+  tenantId           String
+  name               String
+  type               String?
+  roles              String[]             @default([])
+  contactName        String?
+  phone              String?
+  address            String?
+  country            String?
+  city               String?
+  email              String?
+  socialContact      String?
+  specialties        String?
+  defaultLeadTime    String?
+  defaultMoq         String?
+  paymentTerms       String?
+  cooperationComment String?
+  riskNote           String?
+  remarks            String?
+  status             String               @default("active")
+  productionUnits    SupplierUnit[]
+  sourceFabrics      Fabric[]             @relation("FabricSourceSupplier")
+  fabricSuppliers    FabricSupplier[]
+  greigeFabrics      GreigeFabric[]       @relation("GreigeSupplier")
+  dyeingFinishings   DyeingFinishing[]    @relation("DyeingFactory")
+  postProcesses      PostProcess[]        @relation("PostProcessFactory")
+  stockInBatches     FabricStockInBatch[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
 
   @@index([tenantId])
   @@index([tenantId, name])
   @@index([tenantId, type])
+}
+
+model SupplierUnit {
+  id                   String                @id @default(cuid())
+  tenant               Tenant                @relation(fields: [tenantId], references: [id])
+  tenantId             String
+  supplier             Supplier              @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  supplierId           String
+  name                 String
+  unitForm             String
+  businessTypes        String[]
+  status               String                @default("active")
+  primaryBusiness      String?
+  primaryProducts      String?
+  materialScope        String?
+  processCapabilities  String?
+  restrictions         String?
+  defaultMoq           String?
+  regularLeadTime      String?
+  peakLeadTime         String?
+  supportsSampling     Boolean               @default(true)
+  managerName          String?
+  phone                String?
+  socialContact        String?
+  qualityFeatures      String?
+  riskNote             String?
+  remarks              String?
+  fabricSuppliers      FabricSupplier[]      @relation("FabricSupplierProductionUnit")
+  fabricSupplierQuotes FabricSupplierQuote[] @relation("FabricSupplierQuoteProductionUnit")
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+
+  @@unique([tenantId, supplierId, name])
+  @@index([tenantId])
+  @@index([supplierId])
+  @@index([tenantId, status])
 }
 
 model Fabric {
@@ -185,6 +235,8 @@ model FabricSupplier {
   fabricId           String
   supplier           Supplier              @relation(fields: [supplierId], references: [id])
   supplierId         String
+  supplierUnit       SupplierUnit?          @relation("FabricSupplierProductionUnit", fields: [supplierUnitId], references: [id], onDelete: SetNull)
+  supplierUnitId     String?
   supplierFabricCode String?
   sampleStatus       String?
   qualityDifferences String?
@@ -199,6 +251,7 @@ model FabricSupplier {
   @@index([tenantId, fabricId])
   @@index([tenantId, supplierId])
   @@index([tenantId, isPreferred])
+  @@index([supplierUnitId])
 }
 
 model FabricSupplierQuote {
@@ -207,6 +260,8 @@ model FabricSupplierQuote {
   tenantId           String
   fabricSupplier     FabricSupplier @relation(fields: [fabricSupplierId], references: [id], onDelete: Cascade)
   fabricSupplierId   String
+  supplierUnit       SupplierUnit?  @relation("FabricSupplierQuoteProductionUnit", fields: [supplierUnitId], references: [id], onDelete: SetNull)
+  supplierUnitId     String?
   purchasePrice      Decimal        @db.Decimal(12, 2)
   currency           String         @default("CNY") @db.VarChar(3)
   pricingUnit        PricingUnit
@@ -220,6 +275,7 @@ model FabricSupplierQuote {
 
   @@index([tenantId])
   @@index([fabricSupplierId, quoteDate])
+  @@index([supplierUnitId])
 }
 
 model GreigeFabric {

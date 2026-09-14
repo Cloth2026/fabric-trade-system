@@ -55,6 +55,7 @@ export const ModelName = {
   User: 'User',
   ConfigOption: 'ConfigOption',
   Supplier: 'Supplier',
+  SupplierUnit: 'SupplierUnit',
   Fabric: 'Fabric',
   FabricSupplier: 'FabricSupplier',
   FabricSupplierQuote: 'FabricSupplierQuote',
@@ -131,15 +132,57 @@ export const SupplierScalarFieldEnum = {
   tenantId: 'tenantId',
   name: 'name',
   type: 'type',
+  roles: 'roles',
   contactName: 'contactName',
   phone: 'phone',
   address: 'address',
+  country: 'country',
+  city: 'city',
+  email: 'email',
+  socialContact: 'socialContact',
+  specialties: 'specialties',
+  defaultLeadTime: 'defaultLeadTime',
+  defaultMoq: 'defaultMoq',
+  paymentTerms: 'paymentTerms',
+  cooperationComment: 'cooperationComment',
+  riskNote: 'riskNote',
+  remarks: 'remarks',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type SupplierScalarFieldEnum = (typeof SupplierScalarFieldEnum)[keyof typeof SupplierScalarFieldEnum]
+
+
+export const SupplierUnitScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  supplierId: 'supplierId',
+  name: 'name',
+  unitForm: 'unitForm',
+  businessTypes: 'businessTypes',
+  status: 'status',
+  primaryBusiness: 'primaryBusiness',
+  primaryProducts: 'primaryProducts',
+  materialScope: 'materialScope',
+  processCapabilities: 'processCapabilities',
+  restrictions: 'restrictions',
+  defaultMoq: 'defaultMoq',
+  regularLeadTime: 'regularLeadTime',
+  peakLeadTime: 'peakLeadTime',
+  supportsSampling: 'supportsSampling',
+  managerName: 'managerName',
+  phone: 'phone',
+  socialContact: 'socialContact',
+  qualityFeatures: 'qualityFeatures',
+  riskNote: 'riskNote',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SupplierUnitScalarFieldEnum = (typeof SupplierUnitScalarFieldEnum)[keyof typeof SupplierUnitScalarFieldEnum]
 
 
 export const FabricScalarFieldEnum = {
@@ -195,6 +238,7 @@ export const FabricSupplierScalarFieldEnum = {
   tenantId: 'tenantId',
   fabricId: 'fabricId',
   supplierId: 'supplierId',
+  supplierUnitId: 'supplierUnitId',
   supplierFabricCode: 'supplierFabricCode',
   sampleStatus: 'sampleStatus',
   qualityDifferences: 'qualityDifferences',
@@ -211,6 +255,7 @@ export const FabricSupplierQuoteScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   fabricSupplierId: 'fabricSupplierId',
+  supplierUnitId: 'supplierUnitId',
   purchasePrice: 'purchasePrice',
   currency: 'currency',
   pricingUnit: 'pricingUnit',

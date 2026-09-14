@@ -401,6 +401,7 @@ export const ModelName = {
   User: 'User',
   ConfigOption: 'ConfigOption',
   Supplier: 'Supplier',
+  SupplierUnit: 'SupplierUnit',
   Fabric: 'Fabric',
   FabricSupplier: 'FabricSupplier',
   FabricSupplierQuote: 'FabricSupplierQuote',
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "configOption" | "supplier" | "fabric" | "fabricSupplier" | "fabricSupplierQuote" | "greigeFabric" | "dyeingFinishing" | "postProcess" | "fabricStockInBatch" | "operationLog"
+    modelProps: "tenant" | "user" | "configOption" | "supplier" | "supplierUnit" | "fabric" | "fabricSupplier" | "fabricSupplierQuote" | "greigeFabric" | "dyeingFinishing" | "postProcess" | "fabricStockInBatch" | "operationLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -721,6 +722,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.SupplierCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.SupplierCountAggregateOutputType> | number
+        }
+      }
+    }
+    SupplierUnit: {
+      payload: Prisma.$SupplierUnitPayload<ExtArgs>
+      fields: Prisma.SupplierUnitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SupplierUnitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupplierUnitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SupplierUnitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupplierUnitPayload>
+        }
+        findFirst: {
+          args: Prisma.SupplierUnitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupplierUnitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SupplierUnitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupplierUnitPayload>
+        }
+        findMany: {
+          args: Prisma.SupplierUnitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupplierUnitPayload>[]
+        }
+        create: {
+          args: Prisma.SupplierUnitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupplierUnitPayload>
+        }
+        createMany: {
+          args: Prisma.SupplierUnitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SupplierUnitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupplierUnitPayload>[]
+        }
+        delete: {
+          args: Prisma.SupplierUnitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupplierUnitPayload>
+        }
+        update: {
+          args: Prisma.SupplierUnitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupplierUnitPayload>
+        }
+        deleteMany: {
+          args: Prisma.SupplierUnitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SupplierUnitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SupplierUnitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupplierUnitPayload>[]
+        }
+        upsert: {
+          args: Prisma.SupplierUnitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SupplierUnitPayload>
+        }
+        aggregate: {
+          args: Prisma.SupplierUnitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSupplierUnit>
+        }
+        groupBy: {
+          args: Prisma.SupplierUnitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SupplierUnitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SupplierUnitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SupplierUnitCountAggregateOutputType> | number
         }
       }
     }
@@ -1405,15 +1480,57 @@ export const SupplierScalarFieldEnum = {
   tenantId: 'tenantId',
   name: 'name',
   type: 'type',
+  roles: 'roles',
   contactName: 'contactName',
   phone: 'phone',
   address: 'address',
+  country: 'country',
+  city: 'city',
+  email: 'email',
+  socialContact: 'socialContact',
+  specialties: 'specialties',
+  defaultLeadTime: 'defaultLeadTime',
+  defaultMoq: 'defaultMoq',
+  paymentTerms: 'paymentTerms',
+  cooperationComment: 'cooperationComment',
+  riskNote: 'riskNote',
+  remarks: 'remarks',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type SupplierScalarFieldEnum = (typeof SupplierScalarFieldEnum)[keyof typeof SupplierScalarFieldEnum]
+
+
+export const SupplierUnitScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  supplierId: 'supplierId',
+  name: 'name',
+  unitForm: 'unitForm',
+  businessTypes: 'businessTypes',
+  status: 'status',
+  primaryBusiness: 'primaryBusiness',
+  primaryProducts: 'primaryProducts',
+  materialScope: 'materialScope',
+  processCapabilities: 'processCapabilities',
+  restrictions: 'restrictions',
+  defaultMoq: 'defaultMoq',
+  regularLeadTime: 'regularLeadTime',
+  peakLeadTime: 'peakLeadTime',
+  supportsSampling: 'supportsSampling',
+  managerName: 'managerName',
+  phone: 'phone',
+  socialContact: 'socialContact',
+  qualityFeatures: 'qualityFeatures',
+  riskNote: 'riskNote',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SupplierUnitScalarFieldEnum = (typeof SupplierUnitScalarFieldEnum)[keyof typeof SupplierUnitScalarFieldEnum]
 
 
 export const FabricScalarFieldEnum = {
@@ -1469,6 +1586,7 @@ export const FabricSupplierScalarFieldEnum = {
   tenantId: 'tenantId',
   fabricId: 'fabricId',
   supplierId: 'supplierId',
+  supplierUnitId: 'supplierUnitId',
   supplierFabricCode: 'supplierFabricCode',
   sampleStatus: 'sampleStatus',
   qualityDifferences: 'qualityDifferences',
@@ -1485,6 +1603,7 @@ export const FabricSupplierQuoteScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   fabricSupplierId: 'fabricSupplierId',
+  supplierUnitId: 'supplierUnitId',
   purchasePrice: 'purchasePrice',
   currency: 'currency',
   pricingUnit: 'pricingUnit',
@@ -1973,6 +2092,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   configOption?: Prisma.ConfigOptionOmit
   supplier?: Prisma.SupplierOmit
+  supplierUnit?: Prisma.SupplierUnitOmit
   fabric?: Prisma.FabricOmit
   fabricSupplier?: Prisma.FabricSupplierOmit
   fabricSupplierQuote?: Prisma.FabricSupplierQuoteOmit

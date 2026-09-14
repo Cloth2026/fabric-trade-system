@@ -29,6 +29,7 @@ export type FabricSupplierMinAggregateOutputType = {
   tenantId: string | null
   fabricId: string | null
   supplierId: string | null
+  supplierUnitId: string | null
   supplierFabricCode: string | null
   sampleStatus: string | null
   qualityDifferences: string | null
@@ -43,6 +44,7 @@ export type FabricSupplierMaxAggregateOutputType = {
   tenantId: string | null
   fabricId: string | null
   supplierId: string | null
+  supplierUnitId: string | null
   supplierFabricCode: string | null
   sampleStatus: string | null
   qualityDifferences: string | null
@@ -57,6 +59,7 @@ export type FabricSupplierCountAggregateOutputType = {
   tenantId: number
   fabricId: number
   supplierId: number
+  supplierUnitId: number
   supplierFabricCode: number
   sampleStatus: number
   qualityDifferences: number
@@ -73,6 +76,7 @@ export type FabricSupplierMinAggregateInputType = {
   tenantId?: true
   fabricId?: true
   supplierId?: true
+  supplierUnitId?: true
   supplierFabricCode?: true
   sampleStatus?: true
   qualityDifferences?: true
@@ -87,6 +91,7 @@ export type FabricSupplierMaxAggregateInputType = {
   tenantId?: true
   fabricId?: true
   supplierId?: true
+  supplierUnitId?: true
   supplierFabricCode?: true
   sampleStatus?: true
   qualityDifferences?: true
@@ -101,6 +106,7 @@ export type FabricSupplierCountAggregateInputType = {
   tenantId?: true
   fabricId?: true
   supplierId?: true
+  supplierUnitId?: true
   supplierFabricCode?: true
   sampleStatus?: true
   qualityDifferences?: true
@@ -188,6 +194,7 @@ export type FabricSupplierGroupByOutputType = {
   tenantId: string
   fabricId: string
   supplierId: string
+  supplierUnitId: string | null
   supplierFabricCode: string | null
   sampleStatus: string | null
   qualityDifferences: string | null
@@ -223,6 +230,7 @@ export type FabricSupplierWhereInput = {
   tenantId?: Prisma.StringFilter<"FabricSupplier"> | string
   fabricId?: Prisma.StringFilter<"FabricSupplier"> | string
   supplierId?: Prisma.StringFilter<"FabricSupplier"> | string
+  supplierUnitId?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   supplierFabricCode?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   sampleStatus?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   qualityDifferences?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
@@ -233,6 +241,7 @@ export type FabricSupplierWhereInput = {
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   fabric?: Prisma.XOR<Prisma.FabricScalarRelationFilter, Prisma.FabricWhereInput>
   supplier?: Prisma.XOR<Prisma.SupplierScalarRelationFilter, Prisma.SupplierWhereInput>
+  supplierUnit?: Prisma.XOR<Prisma.SupplierUnitNullableScalarRelationFilter, Prisma.SupplierUnitWhereInput> | null
   quotes?: Prisma.FabricSupplierQuoteListRelationFilter
 }
 
@@ -241,6 +250,7 @@ export type FabricSupplierOrderByWithRelationInput = {
   tenantId?: Prisma.SortOrder
   fabricId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
+  supplierUnitId?: Prisma.SortOrderInput | Prisma.SortOrder
   supplierFabricCode?: Prisma.SortOrderInput | Prisma.SortOrder
   sampleStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   qualityDifferences?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -251,6 +261,7 @@ export type FabricSupplierOrderByWithRelationInput = {
   tenant?: Prisma.TenantOrderByWithRelationInput
   fabric?: Prisma.FabricOrderByWithRelationInput
   supplier?: Prisma.SupplierOrderByWithRelationInput
+  supplierUnit?: Prisma.SupplierUnitOrderByWithRelationInput
   quotes?: Prisma.FabricSupplierQuoteOrderByRelationAggregateInput
 }
 
@@ -263,6 +274,7 @@ export type FabricSupplierWhereUniqueInput = Prisma.AtLeast<{
   tenantId?: Prisma.StringFilter<"FabricSupplier"> | string
   fabricId?: Prisma.StringFilter<"FabricSupplier"> | string
   supplierId?: Prisma.StringFilter<"FabricSupplier"> | string
+  supplierUnitId?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   supplierFabricCode?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   sampleStatus?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   qualityDifferences?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
@@ -273,6 +285,7 @@ export type FabricSupplierWhereUniqueInput = Prisma.AtLeast<{
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   fabric?: Prisma.XOR<Prisma.FabricScalarRelationFilter, Prisma.FabricWhereInput>
   supplier?: Prisma.XOR<Prisma.SupplierScalarRelationFilter, Prisma.SupplierWhereInput>
+  supplierUnit?: Prisma.XOR<Prisma.SupplierUnitNullableScalarRelationFilter, Prisma.SupplierUnitWhereInput> | null
   quotes?: Prisma.FabricSupplierQuoteListRelationFilter
 }, "id" | "tenantId_fabricId_supplierId">
 
@@ -281,6 +294,7 @@ export type FabricSupplierOrderByWithAggregationInput = {
   tenantId?: Prisma.SortOrder
   fabricId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
+  supplierUnitId?: Prisma.SortOrderInput | Prisma.SortOrder
   supplierFabricCode?: Prisma.SortOrderInput | Prisma.SortOrder
   sampleStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   qualityDifferences?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -301,6 +315,7 @@ export type FabricSupplierScalarWhereWithAggregatesInput = {
   tenantId?: Prisma.StringWithAggregatesFilter<"FabricSupplier"> | string
   fabricId?: Prisma.StringWithAggregatesFilter<"FabricSupplier"> | string
   supplierId?: Prisma.StringWithAggregatesFilter<"FabricSupplier"> | string
+  supplierUnitId?: Prisma.StringNullableWithAggregatesFilter<"FabricSupplier"> | string | null
   supplierFabricCode?: Prisma.StringNullableWithAggregatesFilter<"FabricSupplier"> | string | null
   sampleStatus?: Prisma.StringNullableWithAggregatesFilter<"FabricSupplier"> | string | null
   qualityDifferences?: Prisma.StringNullableWithAggregatesFilter<"FabricSupplier"> | string | null
@@ -322,6 +337,7 @@ export type FabricSupplierCreateInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutFabricSuppliersInput
   fabric: Prisma.FabricCreateNestedOneWithoutSupplierSourcesInput
   supplier: Prisma.SupplierCreateNestedOneWithoutFabricSuppliersInput
+  supplierUnit?: Prisma.SupplierUnitCreateNestedOneWithoutFabricSuppliersInput
   quotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutFabricSupplierInput
 }
 
@@ -330,6 +346,7 @@ export type FabricSupplierUncheckedCreateInput = {
   tenantId: string
   fabricId: string
   supplierId: string
+  supplierUnitId?: string | null
   supplierFabricCode?: string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
@@ -352,6 +369,7 @@ export type FabricSupplierUpdateInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutFabricSuppliersNestedInput
   fabric?: Prisma.FabricUpdateOneRequiredWithoutSupplierSourcesNestedInput
   supplier?: Prisma.SupplierUpdateOneRequiredWithoutFabricSuppliersNestedInput
+  supplierUnit?: Prisma.SupplierUnitUpdateOneWithoutFabricSuppliersNestedInput
   quotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutFabricSupplierNestedInput
 }
 
@@ -360,6 +378,7 @@ export type FabricSupplierUncheckedUpdateInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -375,6 +394,7 @@ export type FabricSupplierCreateManyInput = {
   tenantId: string
   fabricId: string
   supplierId: string
+  supplierUnitId?: string | null
   supplierFabricCode?: string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
@@ -400,6 +420,7 @@ export type FabricSupplierUncheckedUpdateManyInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -430,6 +451,7 @@ export type FabricSupplierCountOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   fabricId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
+  supplierUnitId?: Prisma.SortOrder
   supplierFabricCode?: Prisma.SortOrder
   sampleStatus?: Prisma.SortOrder
   qualityDifferences?: Prisma.SortOrder
@@ -444,6 +466,7 @@ export type FabricSupplierMaxOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   fabricId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
+  supplierUnitId?: Prisma.SortOrder
   supplierFabricCode?: Prisma.SortOrder
   sampleStatus?: Prisma.SortOrder
   qualityDifferences?: Prisma.SortOrder
@@ -458,6 +481,7 @@ export type FabricSupplierMinOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   fabricId?: Prisma.SortOrder
   supplierId?: Prisma.SortOrder
+  supplierUnitId?: Prisma.SortOrder
   supplierFabricCode?: Prisma.SortOrder
   sampleStatus?: Prisma.SortOrder
   qualityDifferences?: Prisma.SortOrder
@@ -556,6 +580,48 @@ export type FabricSupplierUncheckedUpdateManyWithoutSupplierNestedInput = {
   deleteMany?: Prisma.FabricSupplierScalarWhereInput | Prisma.FabricSupplierScalarWhereInput[]
 }
 
+export type FabricSupplierCreateNestedManyWithoutSupplierUnitInput = {
+  create?: Prisma.XOR<Prisma.FabricSupplierCreateWithoutSupplierUnitInput, Prisma.FabricSupplierUncheckedCreateWithoutSupplierUnitInput> | Prisma.FabricSupplierCreateWithoutSupplierUnitInput[] | Prisma.FabricSupplierUncheckedCreateWithoutSupplierUnitInput[]
+  connectOrCreate?: Prisma.FabricSupplierCreateOrConnectWithoutSupplierUnitInput | Prisma.FabricSupplierCreateOrConnectWithoutSupplierUnitInput[]
+  createMany?: Prisma.FabricSupplierCreateManySupplierUnitInputEnvelope
+  connect?: Prisma.FabricSupplierWhereUniqueInput | Prisma.FabricSupplierWhereUniqueInput[]
+}
+
+export type FabricSupplierUncheckedCreateNestedManyWithoutSupplierUnitInput = {
+  create?: Prisma.XOR<Prisma.FabricSupplierCreateWithoutSupplierUnitInput, Prisma.FabricSupplierUncheckedCreateWithoutSupplierUnitInput> | Prisma.FabricSupplierCreateWithoutSupplierUnitInput[] | Prisma.FabricSupplierUncheckedCreateWithoutSupplierUnitInput[]
+  connectOrCreate?: Prisma.FabricSupplierCreateOrConnectWithoutSupplierUnitInput | Prisma.FabricSupplierCreateOrConnectWithoutSupplierUnitInput[]
+  createMany?: Prisma.FabricSupplierCreateManySupplierUnitInputEnvelope
+  connect?: Prisma.FabricSupplierWhereUniqueInput | Prisma.FabricSupplierWhereUniqueInput[]
+}
+
+export type FabricSupplierUpdateManyWithoutSupplierUnitNestedInput = {
+  create?: Prisma.XOR<Prisma.FabricSupplierCreateWithoutSupplierUnitInput, Prisma.FabricSupplierUncheckedCreateWithoutSupplierUnitInput> | Prisma.FabricSupplierCreateWithoutSupplierUnitInput[] | Prisma.FabricSupplierUncheckedCreateWithoutSupplierUnitInput[]
+  connectOrCreate?: Prisma.FabricSupplierCreateOrConnectWithoutSupplierUnitInput | Prisma.FabricSupplierCreateOrConnectWithoutSupplierUnitInput[]
+  upsert?: Prisma.FabricSupplierUpsertWithWhereUniqueWithoutSupplierUnitInput | Prisma.FabricSupplierUpsertWithWhereUniqueWithoutSupplierUnitInput[]
+  createMany?: Prisma.FabricSupplierCreateManySupplierUnitInputEnvelope
+  set?: Prisma.FabricSupplierWhereUniqueInput | Prisma.FabricSupplierWhereUniqueInput[]
+  disconnect?: Prisma.FabricSupplierWhereUniqueInput | Prisma.FabricSupplierWhereUniqueInput[]
+  delete?: Prisma.FabricSupplierWhereUniqueInput | Prisma.FabricSupplierWhereUniqueInput[]
+  connect?: Prisma.FabricSupplierWhereUniqueInput | Prisma.FabricSupplierWhereUniqueInput[]
+  update?: Prisma.FabricSupplierUpdateWithWhereUniqueWithoutSupplierUnitInput | Prisma.FabricSupplierUpdateWithWhereUniqueWithoutSupplierUnitInput[]
+  updateMany?: Prisma.FabricSupplierUpdateManyWithWhereWithoutSupplierUnitInput | Prisma.FabricSupplierUpdateManyWithWhereWithoutSupplierUnitInput[]
+  deleteMany?: Prisma.FabricSupplierScalarWhereInput | Prisma.FabricSupplierScalarWhereInput[]
+}
+
+export type FabricSupplierUncheckedUpdateManyWithoutSupplierUnitNestedInput = {
+  create?: Prisma.XOR<Prisma.FabricSupplierCreateWithoutSupplierUnitInput, Prisma.FabricSupplierUncheckedCreateWithoutSupplierUnitInput> | Prisma.FabricSupplierCreateWithoutSupplierUnitInput[] | Prisma.FabricSupplierUncheckedCreateWithoutSupplierUnitInput[]
+  connectOrCreate?: Prisma.FabricSupplierCreateOrConnectWithoutSupplierUnitInput | Prisma.FabricSupplierCreateOrConnectWithoutSupplierUnitInput[]
+  upsert?: Prisma.FabricSupplierUpsertWithWhereUniqueWithoutSupplierUnitInput | Prisma.FabricSupplierUpsertWithWhereUniqueWithoutSupplierUnitInput[]
+  createMany?: Prisma.FabricSupplierCreateManySupplierUnitInputEnvelope
+  set?: Prisma.FabricSupplierWhereUniqueInput | Prisma.FabricSupplierWhereUniqueInput[]
+  disconnect?: Prisma.FabricSupplierWhereUniqueInput | Prisma.FabricSupplierWhereUniqueInput[]
+  delete?: Prisma.FabricSupplierWhereUniqueInput | Prisma.FabricSupplierWhereUniqueInput[]
+  connect?: Prisma.FabricSupplierWhereUniqueInput | Prisma.FabricSupplierWhereUniqueInput[]
+  update?: Prisma.FabricSupplierUpdateWithWhereUniqueWithoutSupplierUnitInput | Prisma.FabricSupplierUpdateWithWhereUniqueWithoutSupplierUnitInput[]
+  updateMany?: Prisma.FabricSupplierUpdateManyWithWhereWithoutSupplierUnitInput | Prisma.FabricSupplierUpdateManyWithWhereWithoutSupplierUnitInput[]
+  deleteMany?: Prisma.FabricSupplierScalarWhereInput | Prisma.FabricSupplierScalarWhereInput[]
+}
+
 export type FabricSupplierCreateNestedManyWithoutFabricInput = {
   create?: Prisma.XOR<Prisma.FabricSupplierCreateWithoutFabricInput, Prisma.FabricSupplierUncheckedCreateWithoutFabricInput> | Prisma.FabricSupplierCreateWithoutFabricInput[] | Prisma.FabricSupplierUncheckedCreateWithoutFabricInput[]
   connectOrCreate?: Prisma.FabricSupplierCreateOrConnectWithoutFabricInput | Prisma.FabricSupplierCreateOrConnectWithoutFabricInput[]
@@ -623,6 +689,7 @@ export type FabricSupplierCreateWithoutTenantInput = {
   updatedAt?: Date | string
   fabric: Prisma.FabricCreateNestedOneWithoutSupplierSourcesInput
   supplier: Prisma.SupplierCreateNestedOneWithoutFabricSuppliersInput
+  supplierUnit?: Prisma.SupplierUnitCreateNestedOneWithoutFabricSuppliersInput
   quotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutFabricSupplierInput
 }
 
@@ -630,6 +697,7 @@ export type FabricSupplierUncheckedCreateWithoutTenantInput = {
   id?: string
   fabricId: string
   supplierId: string
+  supplierUnitId?: string | null
   supplierFabricCode?: string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
@@ -674,6 +742,7 @@ export type FabricSupplierScalarWhereInput = {
   tenantId?: Prisma.StringFilter<"FabricSupplier"> | string
   fabricId?: Prisma.StringFilter<"FabricSupplier"> | string
   supplierId?: Prisma.StringFilter<"FabricSupplier"> | string
+  supplierUnitId?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   supplierFabricCode?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   sampleStatus?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
   qualityDifferences?: Prisma.StringNullableFilter<"FabricSupplier"> | string | null
@@ -694,6 +763,7 @@ export type FabricSupplierCreateWithoutSupplierInput = {
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutFabricSuppliersInput
   fabric: Prisma.FabricCreateNestedOneWithoutSupplierSourcesInput
+  supplierUnit?: Prisma.SupplierUnitCreateNestedOneWithoutFabricSuppliersInput
   quotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutFabricSupplierInput
 }
 
@@ -701,6 +771,7 @@ export type FabricSupplierUncheckedCreateWithoutSupplierInput = {
   id?: string
   tenantId: string
   fabricId: string
+  supplierUnitId?: string | null
   supplierFabricCode?: string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
@@ -737,6 +808,62 @@ export type FabricSupplierUpdateManyWithWhereWithoutSupplierInput = {
   data: Prisma.XOR<Prisma.FabricSupplierUpdateManyMutationInput, Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierInput>
 }
 
+export type FabricSupplierCreateWithoutSupplierUnitInput = {
+  id?: string
+  supplierFabricCode?: string | null
+  sampleStatus?: string | null
+  qualityDifferences?: string | null
+  isPreferred?: boolean
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutFabricSuppliersInput
+  fabric: Prisma.FabricCreateNestedOneWithoutSupplierSourcesInput
+  supplier: Prisma.SupplierCreateNestedOneWithoutFabricSuppliersInput
+  quotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutFabricSupplierInput
+}
+
+export type FabricSupplierUncheckedCreateWithoutSupplierUnitInput = {
+  id?: string
+  tenantId: string
+  fabricId: string
+  supplierId: string
+  supplierFabricCode?: string | null
+  sampleStatus?: string | null
+  qualityDifferences?: string | null
+  isPreferred?: boolean
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  quotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutFabricSupplierInput
+}
+
+export type FabricSupplierCreateOrConnectWithoutSupplierUnitInput = {
+  where: Prisma.FabricSupplierWhereUniqueInput
+  create: Prisma.XOR<Prisma.FabricSupplierCreateWithoutSupplierUnitInput, Prisma.FabricSupplierUncheckedCreateWithoutSupplierUnitInput>
+}
+
+export type FabricSupplierCreateManySupplierUnitInputEnvelope = {
+  data: Prisma.FabricSupplierCreateManySupplierUnitInput | Prisma.FabricSupplierCreateManySupplierUnitInput[]
+  skipDuplicates?: boolean
+}
+
+export type FabricSupplierUpsertWithWhereUniqueWithoutSupplierUnitInput = {
+  where: Prisma.FabricSupplierWhereUniqueInput
+  update: Prisma.XOR<Prisma.FabricSupplierUpdateWithoutSupplierUnitInput, Prisma.FabricSupplierUncheckedUpdateWithoutSupplierUnitInput>
+  create: Prisma.XOR<Prisma.FabricSupplierCreateWithoutSupplierUnitInput, Prisma.FabricSupplierUncheckedCreateWithoutSupplierUnitInput>
+}
+
+export type FabricSupplierUpdateWithWhereUniqueWithoutSupplierUnitInput = {
+  where: Prisma.FabricSupplierWhereUniqueInput
+  data: Prisma.XOR<Prisma.FabricSupplierUpdateWithoutSupplierUnitInput, Prisma.FabricSupplierUncheckedUpdateWithoutSupplierUnitInput>
+}
+
+export type FabricSupplierUpdateManyWithWhereWithoutSupplierUnitInput = {
+  where: Prisma.FabricSupplierScalarWhereInput
+  data: Prisma.XOR<Prisma.FabricSupplierUpdateManyMutationInput, Prisma.FabricSupplierUncheckedUpdateManyWithoutSupplierUnitInput>
+}
+
 export type FabricSupplierCreateWithoutFabricInput = {
   id?: string
   supplierFabricCode?: string | null
@@ -748,6 +875,7 @@ export type FabricSupplierCreateWithoutFabricInput = {
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutFabricSuppliersInput
   supplier: Prisma.SupplierCreateNestedOneWithoutFabricSuppliersInput
+  supplierUnit?: Prisma.SupplierUnitCreateNestedOneWithoutFabricSuppliersInput
   quotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutFabricSupplierInput
 }
 
@@ -755,6 +883,7 @@ export type FabricSupplierUncheckedCreateWithoutFabricInput = {
   id?: string
   tenantId: string
   supplierId: string
+  supplierUnitId?: string | null
   supplierFabricCode?: string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
@@ -803,6 +932,7 @@ export type FabricSupplierCreateWithoutQuotesInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutFabricSuppliersInput
   fabric: Prisma.FabricCreateNestedOneWithoutSupplierSourcesInput
   supplier: Prisma.SupplierCreateNestedOneWithoutFabricSuppliersInput
+  supplierUnit?: Prisma.SupplierUnitCreateNestedOneWithoutFabricSuppliersInput
 }
 
 export type FabricSupplierUncheckedCreateWithoutQuotesInput = {
@@ -810,6 +940,7 @@ export type FabricSupplierUncheckedCreateWithoutQuotesInput = {
   tenantId: string
   fabricId: string
   supplierId: string
+  supplierUnitId?: string | null
   supplierFabricCode?: string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
@@ -847,6 +978,7 @@ export type FabricSupplierUpdateWithoutQuotesInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutFabricSuppliersNestedInput
   fabric?: Prisma.FabricUpdateOneRequiredWithoutSupplierSourcesNestedInput
   supplier?: Prisma.SupplierUpdateOneRequiredWithoutFabricSuppliersNestedInput
+  supplierUnit?: Prisma.SupplierUnitUpdateOneWithoutFabricSuppliersNestedInput
 }
 
 export type FabricSupplierUncheckedUpdateWithoutQuotesInput = {
@@ -854,6 +986,7 @@ export type FabricSupplierUncheckedUpdateWithoutQuotesInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -867,6 +1000,7 @@ export type FabricSupplierCreateManyTenantInput = {
   id?: string
   fabricId: string
   supplierId: string
+  supplierUnitId?: string | null
   supplierFabricCode?: string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
@@ -887,6 +1021,7 @@ export type FabricSupplierUpdateWithoutTenantInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   fabric?: Prisma.FabricUpdateOneRequiredWithoutSupplierSourcesNestedInput
   supplier?: Prisma.SupplierUpdateOneRequiredWithoutFabricSuppliersNestedInput
+  supplierUnit?: Prisma.SupplierUnitUpdateOneWithoutFabricSuppliersNestedInput
   quotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutFabricSupplierNestedInput
 }
 
@@ -894,6 +1029,7 @@ export type FabricSupplierUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -908,6 +1044,7 @@ export type FabricSupplierUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -921,6 +1058,7 @@ export type FabricSupplierCreateManySupplierInput = {
   id?: string
   tenantId: string
   fabricId: string
+  supplierUnitId?: string | null
   supplierFabricCode?: string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
@@ -941,6 +1079,7 @@ export type FabricSupplierUpdateWithoutSupplierInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutFabricSuppliersNestedInput
   fabric?: Prisma.FabricUpdateOneRequiredWithoutSupplierSourcesNestedInput
+  supplierUnit?: Prisma.SupplierUnitUpdateOneWithoutFabricSuppliersNestedInput
   quotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutFabricSupplierNestedInput
 }
 
@@ -948,6 +1087,7 @@ export type FabricSupplierUncheckedUpdateWithoutSupplierInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -962,6 +1102,65 @@ export type FabricSupplierUncheckedUpdateManyWithoutSupplierInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FabricSupplierCreateManySupplierUnitInput = {
+  id?: string
+  tenantId: string
+  fabricId: string
+  supplierId: string
+  supplierFabricCode?: string | null
+  sampleStatus?: string | null
+  qualityDifferences?: string | null
+  isPreferred?: boolean
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FabricSupplierUpdateWithoutSupplierUnitInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutFabricSuppliersNestedInput
+  fabric?: Prisma.FabricUpdateOneRequiredWithoutSupplierSourcesNestedInput
+  supplier?: Prisma.SupplierUpdateOneRequiredWithoutFabricSuppliersNestedInput
+  quotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutFabricSupplierNestedInput
+}
+
+export type FabricSupplierUncheckedUpdateWithoutSupplierUnitInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  fabricId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isPreferred?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  quotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutFabricSupplierNestedInput
+}
+
+export type FabricSupplierUncheckedUpdateManyWithoutSupplierUnitInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  fabricId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -975,6 +1174,7 @@ export type FabricSupplierCreateManyFabricInput = {
   id?: string
   tenantId: string
   supplierId: string
+  supplierUnitId?: string | null
   supplierFabricCode?: string | null
   sampleStatus?: string | null
   qualityDifferences?: string | null
@@ -995,6 +1195,7 @@ export type FabricSupplierUpdateWithoutFabricInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutFabricSuppliersNestedInput
   supplier?: Prisma.SupplierUpdateOneRequiredWithoutFabricSuppliersNestedInput
+  supplierUnit?: Prisma.SupplierUnitUpdateOneWithoutFabricSuppliersNestedInput
   quotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutFabricSupplierNestedInput
 }
 
@@ -1002,6 +1203,7 @@ export type FabricSupplierUncheckedUpdateWithoutFabricInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1016,6 +1218,7 @@ export type FabricSupplierUncheckedUpdateManyWithoutFabricInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   supplierId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supplierFabricCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sampleStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1061,6 +1264,7 @@ export type FabricSupplierSelect<ExtArgs extends runtime.Types.Extensions.Intern
   tenantId?: boolean
   fabricId?: boolean
   supplierId?: boolean
+  supplierUnitId?: boolean
   supplierFabricCode?: boolean
   sampleStatus?: boolean
   qualityDifferences?: boolean
@@ -1071,6 +1275,7 @@ export type FabricSupplierSelect<ExtArgs extends runtime.Types.Extensions.Intern
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   fabric?: boolean | Prisma.FabricDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.SupplierDefaultArgs<ExtArgs>
+  supplierUnit?: boolean | Prisma.FabricSupplier$supplierUnitArgs<ExtArgs>
   quotes?: boolean | Prisma.FabricSupplier$quotesArgs<ExtArgs>
   _count?: boolean | Prisma.FabricSupplierCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["fabricSupplier"]>
@@ -1080,6 +1285,7 @@ export type FabricSupplierSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   tenantId?: boolean
   fabricId?: boolean
   supplierId?: boolean
+  supplierUnitId?: boolean
   supplierFabricCode?: boolean
   sampleStatus?: boolean
   qualityDifferences?: boolean
@@ -1090,6 +1296,7 @@ export type FabricSupplierSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   fabric?: boolean | Prisma.FabricDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.SupplierDefaultArgs<ExtArgs>
+  supplierUnit?: boolean | Prisma.FabricSupplier$supplierUnitArgs<ExtArgs>
 }, ExtArgs["result"]["fabricSupplier"]>
 
 export type FabricSupplierSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1097,6 +1304,7 @@ export type FabricSupplierSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   tenantId?: boolean
   fabricId?: boolean
   supplierId?: boolean
+  supplierUnitId?: boolean
   supplierFabricCode?: boolean
   sampleStatus?: boolean
   qualityDifferences?: boolean
@@ -1107,6 +1315,7 @@ export type FabricSupplierSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   fabric?: boolean | Prisma.FabricDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.SupplierDefaultArgs<ExtArgs>
+  supplierUnit?: boolean | Prisma.FabricSupplier$supplierUnitArgs<ExtArgs>
 }, ExtArgs["result"]["fabricSupplier"]>
 
 export type FabricSupplierSelectScalar = {
@@ -1114,6 +1323,7 @@ export type FabricSupplierSelectScalar = {
   tenantId?: boolean
   fabricId?: boolean
   supplierId?: boolean
+  supplierUnitId?: boolean
   supplierFabricCode?: boolean
   sampleStatus?: boolean
   qualityDifferences?: boolean
@@ -1123,11 +1333,12 @@ export type FabricSupplierSelectScalar = {
   updatedAt?: boolean
 }
 
-export type FabricSupplierOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "fabricId" | "supplierId" | "supplierFabricCode" | "sampleStatus" | "qualityDifferences" | "isPreferred" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["fabricSupplier"]>
+export type FabricSupplierOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "fabricId" | "supplierId" | "supplierUnitId" | "supplierFabricCode" | "sampleStatus" | "qualityDifferences" | "isPreferred" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["fabricSupplier"]>
 export type FabricSupplierInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   fabric?: boolean | Prisma.FabricDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.SupplierDefaultArgs<ExtArgs>
+  supplierUnit?: boolean | Prisma.FabricSupplier$supplierUnitArgs<ExtArgs>
   quotes?: boolean | Prisma.FabricSupplier$quotesArgs<ExtArgs>
   _count?: boolean | Prisma.FabricSupplierCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1135,11 +1346,13 @@ export type FabricSupplierIncludeCreateManyAndReturn<ExtArgs extends runtime.Typ
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   fabric?: boolean | Prisma.FabricDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.SupplierDefaultArgs<ExtArgs>
+  supplierUnit?: boolean | Prisma.FabricSupplier$supplierUnitArgs<ExtArgs>
 }
 export type FabricSupplierIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   fabric?: boolean | Prisma.FabricDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.SupplierDefaultArgs<ExtArgs>
+  supplierUnit?: boolean | Prisma.FabricSupplier$supplierUnitArgs<ExtArgs>
 }
 
 export type $FabricSupplierPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1148,6 +1361,7 @@ export type $FabricSupplierPayload<ExtArgs extends runtime.Types.Extensions.Inte
     tenant: Prisma.$TenantPayload<ExtArgs>
     fabric: Prisma.$FabricPayload<ExtArgs>
     supplier: Prisma.$SupplierPayload<ExtArgs>
+    supplierUnit: Prisma.$SupplierUnitPayload<ExtArgs> | null
     quotes: Prisma.$FabricSupplierQuotePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1155,6 +1369,7 @@ export type $FabricSupplierPayload<ExtArgs extends runtime.Types.Extensions.Inte
     tenantId: string
     fabricId: string
     supplierId: string
+    supplierUnitId: string | null
     supplierFabricCode: string | null
     sampleStatus: string | null
     qualityDifferences: string | null
@@ -1559,6 +1774,7 @@ export interface Prisma__FabricSupplierClient<T, Null = never, ExtArgs extends r
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   fabric<T extends Prisma.FabricDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FabricDefaultArgs<ExtArgs>>): Prisma.Prisma__FabricClient<runtime.Types.Result.GetResult<Prisma.$FabricPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   supplier<T extends Prisma.SupplierDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SupplierDefaultArgs<ExtArgs>>): Prisma.Prisma__SupplierClient<runtime.Types.Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  supplierUnit<T extends Prisma.FabricSupplier$supplierUnitArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FabricSupplier$supplierUnitArgs<ExtArgs>>): Prisma.Prisma__SupplierUnitClient<runtime.Types.Result.GetResult<Prisma.$SupplierUnitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   quotes<T extends Prisma.FabricSupplier$quotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FabricSupplier$quotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FabricSupplierQuotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1593,6 +1809,7 @@ export interface FabricSupplierFieldRefs {
   readonly tenantId: Prisma.FieldRef<"FabricSupplier", 'String'>
   readonly fabricId: Prisma.FieldRef<"FabricSupplier", 'String'>
   readonly supplierId: Prisma.FieldRef<"FabricSupplier", 'String'>
+  readonly supplierUnitId: Prisma.FieldRef<"FabricSupplier", 'String'>
   readonly supplierFabricCode: Prisma.FieldRef<"FabricSupplier", 'String'>
   readonly sampleStatus: Prisma.FieldRef<"FabricSupplier", 'String'>
   readonly qualityDifferences: Prisma.FieldRef<"FabricSupplier", 'String'>
@@ -1998,6 +2215,25 @@ export type FabricSupplierDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many FabricSuppliers to delete.
    */
   limit?: number
+}
+
+/**
+ * FabricSupplier.supplierUnit
+ */
+export type FabricSupplier$supplierUnitArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupplierUnit
+   */
+  select?: Prisma.SupplierUnitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupplierUnit
+   */
+  omit?: Prisma.SupplierUnitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupplierUnitInclude<ExtArgs> | null
+  where?: Prisma.SupplierUnitWhereInput
 }
 
 /**

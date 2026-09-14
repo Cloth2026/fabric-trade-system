@@ -755,3 +755,32 @@ Validation:
 - `npm.cmd run lint` passed.
 - `npm.cmd run build` passed with Next.js 16.3.5.
 - Browser checks passed for process-capability search, business-type filtering, multi-select prefill, and the refreshed list/detail/form screenshots.
+
+### 2026-09-14 Add supplier and production unit data model
+
+Goal:
+- Persist the approved supplier and production-unit structure without adding supplier APIs or connecting the static UI.
+
+Completed:
+- Extended `Supplier` with multi-role, location, contact, cooperation, risk, and notes fields while retaining all legacy fields.
+- Added tenant-owned `SupplierUnit` records with supplier cascade deletion and tenant/supplier/name uniqueness.
+- Added optional current production-unit linkage to `FabricSupplier` and an independent historical production-unit snapshot link to `FabricSupplierQuote`.
+- Kept the existing tenant/fabric/supplier uniqueness rule for `FabricSupplier` unchanged.
+- Added database model tests for one-to-many units, name uniqueness scope, cascade deletion, and create-fabric backward compatibility.
+- Added migration `20260914120000_add_supplier_units` without changing prior migrations or existing records.
+
+Pre-migration data check:
+- Development `fabric_trade_dev`: Supplier 0, FabricSupplier 0, FabricSupplierQuote 0; SupplierUnit table absent.
+- Test `fabric_trade_test`: Supplier 0, FabricSupplier 0, FabricSupplierQuote 0; SupplierUnit table absent.
+
+Scope note:
+- No supplier API, static UI binding, fabric page, existing fabric creation API, seed, or unrelated module was changed.
+
+Validation:
+- `npx.cmd prisma validate` passed.
+- `npm.cmd run prisma:generate` generated Prisma Client 7.10.0.
+- Migration deploy and status passed for both `fabric_trade_dev` and `fabric_trade_test`; both report 4 migrations and an up-to-date schema.
+- `npm.cmd test` passed: 50 tests.
+- `npm.cmd run lint` passed.
+- `npm.cmd run build` passed with Next.js 16.3.5.
+- Post-migration checks confirmed both databases still have 0 Supplier, SupplierUnit, FabricSupplier, and FabricSupplierQuote rows.
