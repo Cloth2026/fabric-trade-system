@@ -5,10 +5,10 @@ import { useEffect, useMemo, useState } from "react";
 import { FormPanel, GlassInput, GlassSelect, GlassTextarea, PanelTitle, SegmentedControl } from "@/components/form/glass-form-controls";
 import type { ConfigOption } from "@/lib/api/fabric-client";
 import type { SupplierPrototype } from "./supplier-prototype-data";
-import { createEmptySupplierUnitForm, supplierUnitToForm, supplierUnitTypes } from "./supplier-unit-prototype-data";
-import type { SamplingSupport, SupplierUnitFormState, SupplierUnitPrototype, SupplierUnitStatus } from "./supplier-unit-prototype-data";
+import { createEmptySupplierUnitForm, supplierUnitBusinessTypes, supplierUnitForms, supplierUnitToForm } from "./supplier-unit-prototype-data";
+import type { SamplingSupport, SupplierUnitBusinessType, SupplierUnitFormState, SupplierUnitPrototype, SupplierUnitStatus } from "./supplier-unit-prototype-data";
 
-const supplierUnitTypeOptions: ConfigOption[] = supplierUnitTypes.map((type, sortOrder) => ({ key: type, label: type, group: "supplier_unit_type", sortOrder }));
+const supplierUnitFormOptions: ConfigOption[] = supplierUnitForms.map((unitForm, sortOrder) => ({ key: unitForm, label: unitForm, group: "supplier_unit_form", sortOrder }));
 
 export function SupplierUnitFormDrawer({
   mode,
@@ -24,7 +24,7 @@ export function SupplierUnitFormDrawer({
   onSave: (state: SupplierUnitFormState) => void;
 }) {
   const [state, setState] = useState<SupplierUnitFormState>(() => (unit ? supplierUnitToForm(unit) : createEmptySupplierUnitForm()));
-  const [errors, setErrors] = useState<{ name?: string; type?: string }>({});
+  const [errors, setErrors] = useState<{ name?: string; unitForm?: string }>({});
   const [isClosing, setIsClosing] = useState(false);
   const filledCount = useMemo(() => [state.name, state.primaryBusiness, state.primaryProducts, state.materialScope, state.processCapabilities, state.moq, state.leadTime, state.manager, state.phone, state.qualityFeatures].filter((value) => value.trim()).length, [state]);
 
@@ -39,16 +39,20 @@ export function SupplierUnitFormDrawer({
 
   const update = <K extends keyof SupplierUnitFormState>(field: K, value: SupplierUnitFormState[K]) => {
     setState((current) => ({ ...current, [field]: value }));
-    if (field === "name" || field === "type") setErrors((current) => ({ ...current, [field]: undefined }));
+    if (field === "name" || field === "unitForm") setErrors((current) => ({ ...current, [field]: undefined }));
+  };
+
+  const toggleBusinessType = (businessType: SupplierUnitBusinessType) => {
+    update("businessTypes", state.businessTypes.includes(businessType) ? state.businessTypes.filter((item) => item !== businessType) : [...state.businessTypes, businessType]);
   };
 
   const submitStaticDraft = () => {
     const nextErrors = {
       name: state.name.trim() ? undefined : "请填写生产单元名称",
-      type: state.type ? undefined : "请选择单元类型",
+      unitForm: state.unitForm ? undefined : "请选择单元形式",
     };
     setErrors(nextErrors);
-    if (nextErrors.name || nextErrors.type) return;
+    if (nextErrors.name || nextErrors.unitForm) return;
     onSave({ ...state, name: state.name.trim() });
   };
 
@@ -75,12 +79,21 @@ export function SupplierUnitFormDrawer({
               <PanelTitle icon={Factory} tone="blue" title="基础信息" description="生产单元隶属于当前供应商，不作为独立供应商建档。" />
               <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
                 <GlassInput label="生产单元名称" required value={state.name} onChange={(value) => update("name", value)} placeholder="如 染色一车间" error={errors.name} />
-                <GlassSelect label="单元类型" required options={supplierUnitTypeOptions} value={state.type} onChange={(value) => update("type", value as SupplierUnitFormState["type"])} configurable={false} error={errors.type} />
+                <GlassSelect label="单元形式" required options={supplierUnitFormOptions} value={state.unitForm} onChange={(value) => update("unitForm", value as SupplierUnitFormState["unitForm"])} configurable={false} error={errors.unitForm} />
                 <div><div className="mb-1 text-sm text-stone-600">合作状态</div><SegmentedControl<SupplierUnitStatus> options={[{ value: "启用", label: "启用" }, { value: "暂停合作", label: "暂停合作" }]} value={state.status} onChange={(value) => update("status", value)} /></div>
               </div>
             </section>
 
             <FormPanel icon={BriefcaseBusiness} tone="violet" title="业务能力" description="记录该生产单元真正擅长和明确不承接的业务范围。">
+              <div className="md:col-span-2 xl:col-span-3">
+                <div className="text-sm text-stone-600">业务类型</div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {supplierUnitBusinessTypes.map((businessType) => {
+                    const selected = state.businessTypes.includes(businessType);
+                    return <button aria-pressed={selected} className={`h-8 rounded-xl border px-3 text-sm transition ${selected ? "border-violet-400/50 bg-violet-500/14 text-violet-800 shadow-inner shadow-white/20" : "border-white/30 bg-white/24 text-stone-700 hover:bg-white/42"}`} key={businessType} onClick={() => toggleBusinessType(businessType)} type="button">{businessType}</button>;
+                  })}
+                </div>
+              </div>
               <GlassInput label="主要业务" value={state.primaryBusiness} onChange={(value) => update("primaryBusiness", value)} placeholder="如 涤纶梭织染色" />
               <GlassInput label="主要产品 / 面料" value={state.primaryProducts} onChange={(value) => update("primaryProducts", value)} placeholder="如 春亚纺、四面弹" />
               <GlassInput label="原料范围" value={state.materialScope} onChange={(value) => update("materialScope", value)} placeholder="如 涤纶、锦氨" />
@@ -89,9 +102,9 @@ export function SupplierUnitFormDrawer({
             </FormPanel>
 
             <FormPanel icon={Handshake} tone="emerald" title="合作条件" description="单独维护该车间的起订量、排期和打样能力。">
-              <GlassInput label="MOQ" value={state.moq} onChange={(value) => update("moq", value)} placeholder="如 500kg/色" />
-              <GlassInput label="常规交期" value={state.leadTime} onChange={(value) => update("leadTime", value)} placeholder="如 12-15天" />
-              <GlassInput label="旺季交期" value={state.peakLeadTime} onChange={(value) => update("peakLeadTime", value)} placeholder="如 18-22天" />
+              <GlassInput label="默认 MOQ" value={state.moq} onChange={(value) => update("moq", value)} placeholder="如 500kg/色" />
+              <GlassInput label="参考常规交期" value={state.leadTime} onChange={(value) => update("leadTime", value)} placeholder="如 12-15天" />
+              <GlassInput label="参考旺季交期" value={state.peakLeadTime} onChange={(value) => update("peakLeadTime", value)} placeholder="如 18-22天" />
               <div className="md:col-span-2 xl:col-span-3"><div className="mb-1 text-sm text-stone-600">是否支持打样</div><SegmentedControl<SamplingSupport> options={[{ value: "支持", label: "支持" }, { value: "不支持", label: "不支持" }]} value={state.samplingSupport} onChange={(value) => update("samplingSupport", value)} /></div>
             </FormPanel>
 

@@ -59,21 +59,29 @@ describe("supplier management static prototype", () => {
     assert.equal(initialSupplierUnitPrototypes.filter((unit) => unit.supplierId === "supplier-wujiang-dyeing").length, 2);
     assert.equal(initialSupplierUnitPrototypes.filter((unit) => unit.supplierId === "supplier-keqiao-printing").length, 2);
     assert.equal(initialSupplierUnitPrototypes.filter((unit) => unit.supplierId === "supplier-kq-knit").length, 0);
+    assert.equal(initialSupplierUnitPrototypes[0].unitForm, "车间");
+    assert.deepEqual(initialSupplierUnitPrototypes[0].businessTypes, ["染色", "后整理"]);
+    assert.deepEqual(initialSupplierUnitPrototypes[1].businessTypes, ["染色"]);
+    assert.equal(initialSupplierUnitPrototypes[2].unitForm, "部门");
+    assert.deepEqual(initialSupplierUnitPrototypes[2].businessTypes, ["印花"]);
   });
 
-  test("searches production units by name, business, and products", () => {
-    const filters = { type: "全部类型" as const, status: "全部状态" as const };
+  test("searches production units by name, business, products, and process capabilities", () => {
+    const filters = { unitForm: "全部形式" as const, businessType: "全部业务" as const, status: "全部状态" as const };
 
     assert.equal(filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { ...filters, query: "染色一" })[0].name, "染色一车间");
     assert.equal(filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { ...filters, query: "小批量" })[0].name, "数码印花部");
     assert.equal(filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { ...filters, query: "锦氨" })[0].name, "染色二车间");
+    assert.equal(filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { ...filters, query: "防泼水前处理" })[0].name, "染色一车间");
   });
 
-  test("filters production units by type and status", () => {
-    const rotaryUnits = filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { query: "", type: "圆网印花车间", status: "全部状态" });
-    const pausedUnits = filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { query: "", type: "全部类型", status: "暂停合作" });
+  test("filters production units by form, business type, and status", () => {
+    const departmentUnits = filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { query: "", unitForm: "部门", businessType: "全部业务", status: "全部状态" });
+    const printingUnits = filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { query: "", unitForm: "全部形式", businessType: "印花", status: "全部状态" });
+    const pausedUnits = filterSupplierUnitPrototypes(initialSupplierUnitPrototypes, { query: "", unitForm: "全部形式", businessType: "全部业务", status: "暂停合作" });
 
-    assert.deepEqual(rotaryUnits.map((unit) => unit.name), ["圆网印花车间"]);
+    assert.deepEqual(departmentUnits.map((unit) => unit.name), ["数码印花部"]);
+    assert.deepEqual(printingUnits.map((unit) => unit.name), ["数码印花部", "圆网印花车间"]);
     assert.deepEqual(pausedUnits.map((unit) => unit.name), ["圆网印花车间"]);
   });
 
@@ -82,10 +90,14 @@ describe("supplier management static prototype", () => {
     const editForm = supplierUnitToForm(initialSupplierUnitPrototypes[0]);
 
     assert.equal(emptyForm.status, "启用");
+    assert.equal(emptyForm.unitForm, "其他");
+    assert.deepEqual(emptyForm.businessTypes, []);
     assert.equal(emptyForm.samplingSupport, "支持");
     editForm.name = "未保存的临时名称";
     editForm.qualityFeatures = "未保存的临时质量说明";
+    editForm.businessTypes.push("检验");
     assert.equal(initialSupplierUnitPrototypes[0].name, "染色一车间");
     assert.equal(initialSupplierUnitPrototypes[0].qualityFeatures, "深色稳定，浅色注意缸差");
+    assert.deepEqual(initialSupplierUnitPrototypes[0].businessTypes, ["染色", "后整理"]);
   });
 });

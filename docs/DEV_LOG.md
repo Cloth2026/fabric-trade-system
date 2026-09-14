@@ -731,3 +731,27 @@ Scope note:
 
 Next suggested step:
 - Review whether production-unit types, fields, card density, and second-level drawer interaction match daily supplier management before any database design begins.
+
+### 2026-09-14 Refine supplier production unit classification
+
+Goal:
+- Apply the approved production-unit terminology without expanding the static prototype scope.
+
+Completed:
+- Split the former unit type into a single-select unit form, multi-select business types, and free-text process capabilities.
+- Updated all four production-unit examples with the approved form and business-type combinations.
+- Synchronized cards, detail content, and the create/edit form with the new fields.
+- Expanded unit search to names, business descriptions, products, and process capabilities.
+- Added independent filters for unit form, business type, and cooperation status.
+- Renamed production-unit cooperation labels to default MOQ and reference lead times.
+- Extended tests for multiple business types, search, filters, and edit-draft isolation.
+- Refreshed the three production-unit prototype screenshots in `docs`.
+
+Scope note:
+- This remains a browser-memory static UI prototype. No Prisma, migration, seed, API, database, or fabric feature was changed.
+
+Validation:
+- `npm.cmd test` passed: 44 tests.
+- `npm.cmd run lint` passed.
+- `npm.cmd run build` passed with Next.js 16.3.5.
+- Browser checks passed for process-capability search, business-type filtering, multi-select prefill, and the refreshed list/detail/form screenshots.

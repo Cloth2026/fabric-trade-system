@@ -65,7 +65,8 @@ export function SupplierUnitDetailDrawer({
               <div className="flex items-center gap-2 text-xs font-medium text-violet-700"><Factory className="size-4" />生产单元详情<span className="rounded-full border border-violet-200/54 bg-violet-50/64 px-2 py-0.5 text-[11px]">静态原型</span></div>
               <h2 className="mt-2 truncate text-xl font-semibold text-stone-950">{unit.name}</h2>
               <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                <span className="rounded-full border border-white/44 bg-white/50 px-2 py-1 text-xs text-stone-700">{unit.type}</span>
+                <span className="rounded-full border border-white/44 bg-white/50 px-2 py-1 text-xs text-stone-700">{unit.unitForm}</span>
+                {unit.businessTypes.map((businessType) => <span className="rounded-full border border-violet-200/50 bg-violet-50/56 px-2 py-1 text-xs text-violet-800" key={businessType}>{businessType}</span>)}
                 <span className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs ${unit.status === "启用" ? "bg-emerald-50/82 text-emerald-800" : "bg-amber-50/82 text-amber-800"}`}>{unit.status === "启用" ? <CheckCircle2 className="size-3" /> : <CircleDashed className="size-3" />}{unit.status}</span>
               </div>
             </div>
@@ -78,12 +79,13 @@ export function SupplierUnitDetailDrawer({
 
           <UnitDetailSection icon={Building2} title="基础信息" tone="blue">
             <UnitDetailField label="单元名称" value={unit.name} />
-            <UnitDetailField label="单元类型" value={unit.type} />
+            <UnitDetailField label="单元形式" value={unit.unitForm} />
             <UnitDetailField label="所属供应商" value={supplier.name} wide />
             <UnitDetailField label="合作状态" value={unit.status} />
           </UnitDetailSection>
 
           <UnitDetailSection icon={BriefcaseBusiness} title="业务能力" tone="violet">
+            <UnitDetailField label="业务类型" value={unit.businessTypes.join("、")} wide />
             <UnitDetailField label="主要业务" value={unit.primaryBusiness} wide />
             <UnitDetailField label="主要产品 / 面料" value={unit.primaryProducts} wide />
             <UnitDetailField label="原料范围" value={unit.materialScope} />
@@ -92,9 +94,9 @@ export function SupplierUnitDetailDrawer({
           </UnitDetailSection>
 
           <UnitDetailSection icon={Handshake} title="合作条件" tone="emerald">
-            <UnitDetailField label="MOQ" value={unit.moq} />
-            <UnitDetailField label="常规交期" value={unit.leadTime} />
-            <UnitDetailField label="旺季交期" value={unit.peakLeadTime} />
+            <UnitDetailField label="默认 MOQ" value={unit.moq} />
+            <UnitDetailField label="参考常规交期" value={unit.leadTime} />
+            <UnitDetailField label="参考旺季交期" value={unit.peakLeadTime} />
             <UnitDetailField label="打样能力" value={unit.samplingSupport} />
           </UnitDetailSection>
 

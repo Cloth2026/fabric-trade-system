@@ -1,17 +1,27 @@
-export const supplierUnitTypes = [
+export const supplierUnitForms = [
   "分厂",
   "事业部",
-  "染色车间",
-  "印花车间",
-  "数码印花部",
-  "平网印花车间",
-  "圆网印花车间",
-  "后整理车间",
-  "涂层车间",
+  "车间",
+  "部门",
+  "生产线",
+  "外协点",
   "其他",
 ] as const;
 
-export type SupplierUnitType = (typeof supplierUnitTypes)[number];
+export const supplierUnitBusinessTypes = [
+  "坯布",
+  "织造",
+  "染色",
+  "印花",
+  "后整理",
+  "涂层",
+  "复合",
+  "检验",
+  "其他",
+] as const;
+
+export type SupplierUnitForm = (typeof supplierUnitForms)[number];
+export type SupplierUnitBusinessType = (typeof supplierUnitBusinessTypes)[number];
 export type SupplierUnitStatus = "启用" | "暂停合作";
 export type SamplingSupport = "支持" | "不支持";
 
@@ -19,7 +29,8 @@ export type SupplierUnitPrototype = {
   id: string;
   supplierId: string;
   name: string;
-  type: SupplierUnitType;
+  unitForm: SupplierUnitForm;
+  businessTypes: SupplierUnitBusinessType[];
   status: SupplierUnitStatus;
   primaryBusiness: string;
   primaryProducts: string;
@@ -45,7 +56,8 @@ export const initialSupplierUnitPrototypes: SupplierUnitPrototype[] = [
     id: "unit-xincai-dyeing-1",
     supplierId: "supplier-wujiang-dyeing",
     name: "染色一车间",
-    type: "染色车间",
+    unitForm: "车间",
+    businessTypes: ["染色", "后整理"],
     status: "启用",
     primaryBusiness: "涤纶梭织染色",
     primaryProducts: "75D四面弹、春亚纺、涤塔夫",
@@ -67,7 +79,8 @@ export const initialSupplierUnitPrototypes: SupplierUnitPrototype[] = [
     id: "unit-xincai-dyeing-2",
     supplierId: "supplier-wujiang-dyeing",
     name: "染色二车间",
-    type: "染色车间",
+    unitForm: "车间",
+    businessTypes: ["染色"],
     status: "启用",
     primaryBusiness: "尼龙及弹力面料染色",
     primaryProducts: "尼龙四面弹、锦氨面料",
@@ -89,7 +102,8 @@ export const initialSupplierUnitPrototypes: SupplierUnitPrototype[] = [
     id: "unit-jincheng-digital",
     supplierId: "supplier-keqiao-printing",
     name: "数码印花部",
-    type: "数码印花部",
+    unitForm: "部门",
+    businessTypes: ["印花"],
     status: "启用",
     primaryBusiness: "小批量数码印花",
     primaryProducts: "涤纶印花布",
@@ -111,7 +125,8 @@ export const initialSupplierUnitPrototypes: SupplierUnitPrototype[] = [
     id: "unit-jincheng-rotary",
     supplierId: "supplier-keqiao-printing",
     name: "圆网印花车间",
-    type: "圆网印花车间",
+    unitForm: "车间",
+    businessTypes: ["印花"],
     status: "暂停合作",
     primaryBusiness: "大货连续印花",
     primaryProducts: "涤纶梭织印花布",
@@ -134,7 +149,8 @@ export const initialSupplierUnitPrototypes: SupplierUnitPrototype[] = [
 export function createEmptySupplierUnitForm(): SupplierUnitFormState {
   return {
     name: "",
-    type: "其他",
+    unitForm: "其他",
+    businessTypes: [],
     status: "启用",
     primaryBusiness: "",
     primaryProducts: "",
@@ -157,7 +173,8 @@ export function createEmptySupplierUnitForm(): SupplierUnitFormState {
 export function supplierUnitToForm(unit: SupplierUnitPrototype): SupplierUnitFormState {
   return {
     name: unit.name,
-    type: unit.type,
+    unitForm: unit.unitForm,
+    businessTypes: [...unit.businessTypes],
     status: unit.status,
     primaryBusiness: unit.primaryBusiness,
     primaryProducts: unit.primaryProducts,
@@ -179,13 +196,19 @@ export function supplierUnitToForm(unit: SupplierUnitPrototype): SupplierUnitFor
 
 export function filterSupplierUnitPrototypes(
   units: SupplierUnitPrototype[],
-  filters: { query: string; type: "全部类型" | SupplierUnitType; status: "全部状态" | SupplierUnitStatus },
+  filters: {
+    query: string;
+    unitForm: "全部形式" | SupplierUnitForm;
+    businessType: "全部业务" | SupplierUnitBusinessType;
+    status: "全部状态" | SupplierUnitStatus;
+  },
 ) {
   const keyword = filters.query.trim().toLowerCase();
   return units.filter((unit) => {
-    const matchesKeyword = !keyword || [unit.name, unit.primaryBusiness, unit.primaryProducts].join(" ").toLowerCase().includes(keyword);
-    const matchesType = filters.type === "全部类型" || unit.type === filters.type;
+    const matchesKeyword = !keyword || [unit.name, unit.primaryBusiness, unit.primaryProducts, unit.processCapabilities].join(" ").toLowerCase().includes(keyword);
+    const matchesForm = filters.unitForm === "全部形式" || unit.unitForm === filters.unitForm;
+    const matchesBusinessType = filters.businessType === "全部业务" || unit.businessTypes.includes(filters.businessType);
     const matchesStatus = filters.status === "全部状态" || unit.status === filters.status;
-    return matchesKeyword && matchesType && matchesStatus;
+    return matchesKeyword && matchesForm && matchesBusinessType && matchesStatus;
   });
 }

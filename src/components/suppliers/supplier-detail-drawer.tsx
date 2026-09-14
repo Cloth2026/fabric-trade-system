@@ -4,8 +4,8 @@ import { Building2, CalendarClock, CheckCircle2, ChevronDown, CircleDashed, Cont
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import type { SupplierPrototype } from "./supplier-prototype-data";
-import { filterSupplierUnitPrototypes, supplierUnitTypes } from "./supplier-unit-prototype-data";
-import type { SupplierUnitPrototype, SupplierUnitStatus, SupplierUnitType } from "./supplier-unit-prototype-data";
+import { filterSupplierUnitPrototypes, supplierUnitBusinessTypes, supplierUnitForms } from "./supplier-unit-prototype-data";
+import type { SupplierUnitBusinessType, SupplierUnitForm, SupplierUnitPrototype, SupplierUnitStatus } from "./supplier-unit-prototype-data";
 
 function DetailSection({ icon: Icon, title, children, tone = "blue" }: { icon: typeof Building2; title: string; children: ReactNode; tone?: "blue" | "emerald" | "amber" | "violet" }) {
   const tones = {
@@ -46,9 +46,13 @@ function UnitFilterSelect<T extends string>({ label, value, options, onChange }:
 
 function SupplierUnitsSection({ units, onSelectUnit, onCreateUnit }: { units: SupplierUnitPrototype[]; onSelectUnit: (unit: SupplierUnitPrototype) => void; onCreateUnit: () => void }) {
   const [query, setQuery] = useState("");
-  const [typeFilter, setTypeFilter] = useState<"全部类型" | SupplierUnitType>("全部类型");
+  const [formFilter, setFormFilter] = useState<"全部形式" | SupplierUnitForm>("全部形式");
+  const [businessTypeFilter, setBusinessTypeFilter] = useState<"全部业务" | SupplierUnitBusinessType>("全部业务");
   const [statusFilter, setStatusFilter] = useState<"全部状态" | SupplierUnitStatus>("全部状态");
-  const filteredUnits = useMemo(() => filterSupplierUnitPrototypes(units, { query, type: typeFilter, status: statusFilter }), [query, statusFilter, typeFilter, units]);
+  const filteredUnits = useMemo(
+    () => filterSupplierUnitPrototypes(units, { query, unitForm: formFilter, businessType: businessTypeFilter, status: statusFilter }),
+    [businessTypeFilter, formFilter, query, statusFilter, units],
+  );
 
   return (
     <section aria-label="生产单元" className="border-t border-white/30 py-5">
@@ -61,15 +65,16 @@ function SupplierUnitsSection({ units, onSelectUnit, onCreateUnit }: { units: Su
         <div className="mt-4 rounded-2xl border border-dashed border-white/46 bg-white/18 px-4 py-6 text-center"><Factory className="mx-auto size-6 text-stone-400" /><p className="mt-3 text-sm font-medium text-stone-700">尚未建立生产单元</p><p className="mx-auto mt-2 max-w-sm text-xs leading-5 text-stone-500">对于分车间经营的染厂、印花厂，可以在这里记录不同车间的业务能力。</p><button className="mt-4 inline-flex h-9 items-center gap-1.5 rounded-xl bg-stone-950 px-3 text-xs font-medium text-white transition hover:bg-stone-800" onClick={onCreateUnit} type="button"><Plus className="size-3.5" />新增生产单元</button></div>
       ) : (
         <>
-          <label className="mt-4 flex h-9 items-center gap-2 rounded-xl border border-white/32 bg-white/28 px-3 text-xs"><Search className="size-3.5 text-stone-500" /><input className="min-w-0 flex-1 bg-transparent text-stone-900 outline-none placeholder:text-stone-500/70" onChange={(event) => setQuery(event.target.value)} placeholder="搜索单元名称、业务或产品" value={query} /></label>
-          <div className="mt-2 grid grid-cols-2 gap-2"><UnitFilterSelect label="单元类型" options={["全部类型", ...supplierUnitTypes]} value={typeFilter} onChange={setTypeFilter} /><UnitFilterSelect label="状态" options={["全部状态", "启用", "暂停合作"]} value={statusFilter} onChange={setStatusFilter} /></div>
+          <label className="mt-4 flex h-9 items-center gap-2 rounded-xl border border-white/32 bg-white/28 px-3 text-xs"><Search className="size-3.5 text-stone-500" /><input className="min-w-0 flex-1 bg-transparent text-stone-900 outline-none placeholder:text-stone-500/70" onChange={(event) => setQuery(event.target.value)} placeholder="搜索名称、业务、产品或工艺能力" value={query} /></label>
+          <div className="mt-2 grid grid-cols-2 gap-2"><UnitFilterSelect label="单元形式" options={["全部形式", ...supplierUnitForms]} value={formFilter} onChange={setFormFilter} /><UnitFilterSelect label="状态" options={["全部状态", "启用", "暂停合作"]} value={statusFilter} onChange={setStatusFilter} /><div className="col-span-2"><UnitFilterSelect label="业务类型" options={["全部业务", ...supplierUnitBusinessTypes]} value={businessTypeFilter} onChange={setBusinessTypeFilter} /></div></div>
           <div className="mt-3 flex items-center justify-between text-[11px] text-stone-500"><span>点击查看能力与合作条件</span><span className="flex items-center gap-1"><Filter className="size-3" />{filteredUnits.length} / {units.length}</span></div>
           <div className="mt-2 space-y-2">
             {filteredUnits.map((unit) => (
               <button aria-label={`查看生产单元${unit.name}`} className="w-full rounded-2xl border border-white/30 bg-white/22 p-3 text-left shadow-inner shadow-white/10 transition hover:-translate-y-0.5 hover:border-white/48 hover:bg-white/38" key={unit.id} onClick={() => onSelectUnit(unit)} type="button">
-                <div className="flex items-start justify-between gap-3"><div className="min-w-0"><div className="flex items-center gap-2"><span className="truncate text-sm font-semibold text-stone-950">{unit.name}</span><span className="shrink-0 rounded-full border border-white/44 bg-white/48 px-2 py-0.5 text-[11px] text-stone-600">{unit.type}</span></div><div className="mt-1 text-xs text-stone-700">{unit.primaryBusiness}</div></div><span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-[11px] ${unit.status === "启用" ? "bg-emerald-50/82 text-emerald-800" : "bg-amber-50/82 text-amber-800"}`}>{unit.status === "启用" ? <CheckCircle2 className="size-3" /> : <CircleDashed className="size-3" />}{unit.status}</span></div>
+                <div className="flex items-start justify-between gap-3"><div className="min-w-0"><div className="flex items-center gap-2"><span className="truncate text-sm font-semibold text-stone-950">{unit.name}</span><span className="shrink-0 rounded-full border border-white/44 bg-white/48 px-2 py-0.5 text-[11px] text-stone-600">{unit.unitForm}</span></div><div className="mt-1 text-xs text-stone-700">{unit.primaryBusiness}</div></div><span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-[11px] ${unit.status === "启用" ? "bg-emerald-50/82 text-emerald-800" : "bg-amber-50/82 text-amber-800"}`}>{unit.status === "启用" ? <CheckCircle2 className="size-3" /> : <CircleDashed className="size-3" />}{unit.status}</span></div>
+                <div className="mt-2 flex flex-wrap gap-1.5">{unit.businessTypes.map((businessType) => <span className="rounded-full border border-violet-200/42 bg-violet-50/48 px-2 py-0.5 text-[11px] text-violet-800" key={businessType}>{businessType}</span>)}</div>
                 <div className="mt-2 line-clamp-2 text-xs leading-5 text-stone-600">主要产品：{unit.primaryProducts}</div>
-                <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 border-t border-white/32 pt-2 text-[11px] text-stone-500"><span>负责人 {unit.manager || "未填写"}</span><span>常规交期 {unit.leadTime || "未填写"}</span></div>
+                <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 border-t border-white/32 pt-2 text-[11px] text-stone-500"><span>负责人 {unit.manager || "未填写"}</span><span>参考常规交期 {unit.leadTime || "未填写"}</span></div>
                 <div className={`mt-2 flex items-start gap-1.5 rounded-xl px-2.5 py-2 text-[11px] leading-4 ${unit.status === "启用" ? "bg-stone-950/6 text-stone-600" : "bg-amber-50/64 text-amber-900"}`}><ShieldAlert className={`mt-0.5 size-3 shrink-0 ${unit.status === "启用" ? "text-stone-500" : "text-amber-700"}`} />{unit.status === "启用" ? unit.qualityFeatures : unit.riskNote}</div>
               </button>
             ))}
