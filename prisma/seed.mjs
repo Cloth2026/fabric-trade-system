@@ -172,6 +172,16 @@ const optionGroups = [
       ["bluesign", "BLUESIGN"],
     ],
   },
+  {
+    group: "sample_status",
+    options: [
+      ["not_requested", "未取样"],
+      ["requested", "已申请"],
+      ["received", "已有样品"],
+      ["tested", "已测试"],
+      ["expired", "样品失效"],
+    ],
+  },
 ];
 
 async function upsertSystemOption(client, group, key, label, sortOrder) {

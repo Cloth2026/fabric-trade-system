@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
-import { isAppError } from "../../../server/errors";
+import { isAppError, isUniqueConstraintError } from "../../../server/errors";
 import { createFabric } from "../../../server/fabrics/create-fabric";
 
 export const runtime = "nodejs";
 
-function errorResponse(error: unknown) {
+export function errorResponse(error: unknown) {
   if (isAppError(error)) {
     return NextResponse.json({ error: error.message, details: error.details }, { status: error.status });
+  }
+
+  if (isUniqueConstraintError(error)) {
+    return NextResponse.json({ error: "Resource already exists." }, { status: 409 });
   }
 
   if (error instanceof ZodError) {
@@ -20,7 +24,14 @@ function errorResponse(error: unknown) {
 
 export async function POST(request: Request) {
   try {
-    const payload = await request.json();
+    let payload: unknown;
+
+    try {
+      payload = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON payload." }, { status: 400 });
+    }
+
     const fabric = await createFabric(payload);
 
     return NextResponse.json({ fabric }, { status: 201 });

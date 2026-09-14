@@ -171,3 +171,13 @@ npm run dev
 4. Read fabric list from the database instead of static data.
 5. Add fabric detail read API and edit API.
 6. Keep customer quotation, samples, orders, and inventory for later dedicated phases.
+## Backend Hardening - 2026-09-13
+
+- `sample_status` is now part of repeatable seed data.
+- Automated tests require `TEST_DATABASE_URL` and refuse non-test database names.
+- Supplier search limit handling is fixed: default 20, invalid 20, min 1, max 50.
+- Create-fabric validation now enforces process status/detail consistency.
+- Create-fabric validation now rejects duplicate supplier IDs and multiple preferred suppliers.
+- When suppliers are provided without an explicit preferred supplier, the first supplier is saved as preferred.
+- `GET /api/config-options?groups=...` returns enabled system and current-tenant config options for whitelisted groups only.
+- API error handling maps invalid JSON to 400 and unique conflicts to 409 without leaking database internals.

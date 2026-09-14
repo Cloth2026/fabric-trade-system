@@ -1,4 +1,6 @@
 import { AppError } from "./errors";
+import { prisma } from "../lib/prisma";
+import { getServerTenant } from "./tenant";
 
 const SYSTEM_OWNER_KEY = "system";
 
@@ -34,6 +36,8 @@ export const configGroups = {
 
 export type ConfigGroup = (typeof configGroups)[keyof typeof configGroups];
 
+export const readableConfigGroups = new Set<ConfigGroup>(Object.values(configGroups));
+
 export async function assertEnabledConfigKeys(
   client: ConfigClient,
   tenantId: string,
@@ -63,4 +67,34 @@ export async function assertEnabledConfigKeys(
   if (invalid.length > 0) {
     throw new AppError(400, "Invalid or disabled config option key.", invalid);
   }
+}
+
+export async function listEnabledConfigOptions(groups: string[]) {
+  const requestedGroups = [...new Set(groups.map((group) => group.trim()).filter(Boolean))];
+
+  if (requestedGroups.length === 0) {
+    throw new AppError(400, "At least one config group is required.");
+  }
+
+  const forbiddenGroups = requestedGroups.filter((group) => !readableConfigGroups.has(group as ConfigGroup));
+  if (forbiddenGroups.length > 0) {
+    throw new AppError(400, "Config group is not allowed.", { groups: forbiddenGroups });
+  }
+
+  const tenant = await getServerTenant();
+
+  return prisma.configOption.findMany({
+    where: {
+      enabled: true,
+      group: { in: requestedGroups },
+      OR: [{ ownerKey: SYSTEM_OWNER_KEY }, { tenantId: tenant.id }],
+    },
+    select: {
+      group: true,
+      key: true,
+      label: true,
+      sortOrder: true,
+    },
+    orderBy: [{ group: "asc" }, { sortOrder: "asc" }, { label: "asc" }],
+  });
 }

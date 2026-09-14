@@ -609,3 +609,42 @@ Notes:
 Next suggested step:
 - Bind the existing create-fabric drawer to `POST /api/fabrics` in a small UI pass, including field-level errors and save success feedback.
 - Add a config-options read API before building the future enum management screens.
+### 2026-09-13 Harden fabric backend validation
+
+Goal:
+- Fix backend review findings after commit `0af2fade`.
+- Keep scope limited to backend foundation, validation, config reads, test isolation, and documentation.
+
+Completed:
+- Added repeatable `sample_status` seed options: `not_requested`, `requested`, `received`, `tested`, `expired`.
+- Fixed supplier search limit parsing so missing/invalid limit defaults to 20, with min 1 and max 50.
+- Added test database safety setup. Automated tests now require `TEST_DATABASE_URL` and refuse database names that do not contain `test`.
+- Added process status/detail consistency checks for greige, dyeing/finishing, and post-process data.
+- Added supplier relation checks for duplicate supplier IDs and multiple preferred suppliers.
+- Added auto-preferred behavior: if suppliers exist and none is explicitly preferred, the first supplier is saved as preferred.
+- Added config options read service and `GET /api/config-options`.
+- Added config group whitelist to prevent arbitrary database group queries.
+- Hardened API error handling:
+  - invalid JSON returns 400
+  - Prisma unique constraint conflicts return 409
+  - database internals are not returned to the client
+
+Validation added:
+- `sample_status` exists and can validate supplier sample status.
+- Supplier search default, invalid, and over-limit behavior.
+- Test database safety protection.
+- Process status/detail conflict cases.
+- Duplicate supplier ID rejection.
+- Multiple preferred supplier rejection.
+- Auto-preferred supplier persistence.
+- Unique conflict API mapping.
+- Invalid JSON API mapping.
+- Config option whitelist and tenant isolation.
+
+Notes:
+- Tests now run against `fabric_trade_test` locally through `.env.test`, which is ignored and must not be committed.
+- The test suite still emits a pg/Prisma adapter deprecation warning, but all assertions pass.
+
+Next suggested step:
+- Bind the create-fabric drawer to `POST /api/fabrics` after this backend foundation is reviewed.
+- Add a lightweight UI-side config options loader for enum fields.

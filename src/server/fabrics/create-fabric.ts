@@ -4,7 +4,7 @@ import { assertEnabledConfigKeys, configGroups } from "../config-options";
 import { AppError } from "../errors";
 import { getServerTenant } from "../tenant";
 import { calculateFabricCompleteness } from "./completeness";
-import { createFabricInputSchema, type CreateFabricInput } from "./schema";
+import { createFabricInputSchema } from "./schema";
 
 type DbClient = typeof prisma;
 
@@ -73,7 +73,7 @@ function collectConfigChecks(data: Awaited<ReturnType<typeof createFabricInputSc
   ].filter((item) => item.keys.length > 0);
 }
 
-export async function createFabric(input: CreateFabricInput, options: CreateFabricOptions = {}) {
+export async function createFabric(input: unknown, options: CreateFabricOptions = {}) {
   const client = options.client ?? prisma;
   const parsed = createFabricInputSchema.safeParse(input);
 

@@ -21,6 +21,17 @@ function derivePricingUnit(fabricType: "knitted" | "woven"): "kg" | "meter" {
   return fabricType === "knitted" ? "kg" : "meter";
 }
 
+function requireDetail(
+  condition: boolean,
+  context: z.RefinementCtx,
+  path: Array<string | number>,
+  message: string,
+) {
+  if (condition) {
+    context.addIssue({ code: "custom", path, message });
+  }
+}
+
 export const supplierQuoteInputSchema = z.object({
   purchasePrice: nonNegativeMoney,
   currency: z
@@ -133,10 +144,59 @@ export const createFabricInputSchema = z
         message: `pricingUnit must be ${derivedPricingUnit} for ${value.fabricType} fabrics.`,
       });
     }
+
+    requireDetail(value.greigeStatus === "none" && value.greige != null, context, ["greige"], "greige must be empty when greigeStatus is none.");
+    requireDetail(value.greigeStatus === "available" && value.greige == null, context, ["greige"], "greige is required when greigeStatus is available.");
+    requireDetail(
+      value.dyeingStatus === "none" && value.dyeingFinishing != null,
+      context,
+      ["dyeingFinishing"],
+      "dyeingFinishing must be empty when dyeingStatus is none.",
+    );
+    requireDetail(
+      value.dyeingStatus === "available" && value.dyeingFinishing == null,
+      context,
+      ["dyeingFinishing"],
+      "dyeingFinishing is required when dyeingStatus is available.",
+    );
+    requireDetail(
+      value.postProcessStatus === "none" && value.postProcesses.length > 0,
+      context,
+      ["postProcesses"],
+      "postProcesses must be empty when postProcessStatus is none.",
+    );
+    requireDetail(
+      value.postProcessStatus === "available" && value.postProcesses.length === 0,
+      context,
+      ["postProcesses"],
+      "postProcesses is required when postProcessStatus is available.",
+    );
+
+    const supplierIds = value.suppliers.map((supplier) => supplier.supplierId);
+    const duplicateSupplierIds = supplierIds.filter((supplierId, index) => supplierIds.indexOf(supplierId) !== index);
+    if (duplicateSupplierIds.length > 0) {
+      context.addIssue({
+        code: "custom",
+        path: ["suppliers"],
+        message: "supplierId cannot be duplicated in one fabric creation request.",
+      });
+    }
+
+    if (value.suppliers.filter((supplier) => supplier.isPreferred).length > 1) {
+      context.addIssue({
+        code: "custom",
+        path: ["suppliers"],
+        message: "Only one supplier can be preferred.",
+      });
+    }
   })
   .transform((value) => ({
     ...value,
     pricingUnit: derivePricingUnit(value.fabricType),
+    suppliers:
+      value.suppliers.length > 0 && !value.suppliers.some((supplier) => supplier.isPreferred)
+        ? value.suppliers.map((supplier, index) => ({ ...supplier, isPreferred: index === 0 }))
+        : value.suppliers,
   }));
 
 export type CreateFabricInput = z.input<typeof createFabricInputSchema>;

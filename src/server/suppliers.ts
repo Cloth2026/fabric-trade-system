@@ -3,15 +3,21 @@ import { getServerTenant } from "./tenant";
 
 type SupplierSearchOptions = {
   q?: string | null;
-  limit?: number | null;
+  limit?: number | string | null;
 };
 
-function clampLimit(limit: number | null | undefined) {
-  if (!Number.isFinite(limit ?? Number.NaN)) {
+export function normalizeSupplierLimit(limit: number | string | null | undefined) {
+  if (limit === null || limit === undefined || limit === "") {
     return 20;
   }
 
-  return Math.min(Math.max(Math.trunc(limit as number), 1), 50);
+  const numericLimit = typeof limit === "number" ? limit : Number(limit);
+
+  if (!Number.isFinite(numericLimit)) {
+    return 20;
+  }
+
+  return Math.min(Math.max(Math.trunc(numericLimit), 1), 50);
 }
 
 export async function searchSuppliers(options: SupplierSearchOptions = {}) {
@@ -39,6 +45,6 @@ export async function searchSuppliers(options: SupplierSearchOptions = {}) {
       phone: true,
     },
     orderBy: [{ name: "asc" }],
-    take: clampLimit(options.limit),
+    take: normalizeSupplierLimit(options.limit),
   });
 }
