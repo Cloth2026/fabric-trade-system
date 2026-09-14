@@ -12,6 +12,11 @@ import {
   initialSupplierUnitPrototypes,
   supplierUnitToForm,
 } from "../src/components/suppliers/supplier-unit-prototype-data";
+import {
+  canSubmitSupplierUnitForm,
+  clearSupplierUnitFormError,
+  validateSupplierUnitForm,
+} from "../src/components/suppliers/supplier-unit-form-drawer";
 
 describe("supplier management static prototype", () => {
   test("includes six suppliers with multi-role examples", () => {
@@ -99,5 +104,19 @@ describe("supplier management static prototype", () => {
     assert.equal(initialSupplierUnitPrototypes[0].name, "染色一车间");
     assert.equal(initialSupplierUnitPrototypes[0].qualityFeatures, "深色稳定，浅色注意缸差");
     assert.deepEqual(initialSupplierUnitPrototypes[0].businessTypes, ["染色", "后整理"]);
+  });
+
+  test("requires a business type and clears its error after selection", () => {
+    const form = createEmptySupplierUnitForm();
+    form.name = "测试生产单元";
+
+    const errors = validateSupplierUnitForm(form);
+    assert.equal(errors.businessTypes, "请至少选择一个业务类型");
+    assert.equal(canSubmitSupplierUnitForm(errors), false);
+
+    form.businessTypes = ["染色"];
+    const clearedErrors = clearSupplierUnitFormError(errors, "businessTypes");
+    assert.equal(clearedErrors.businessTypes, undefined);
+    assert.equal(canSubmitSupplierUnitForm(validateSupplierUnitForm(form)), true);
   });
 });

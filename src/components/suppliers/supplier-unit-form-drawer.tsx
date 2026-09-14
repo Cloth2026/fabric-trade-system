@@ -10,6 +10,28 @@ import type { SamplingSupport, SupplierUnitBusinessType, SupplierUnitFormState, 
 
 const supplierUnitFormOptions: ConfigOption[] = supplierUnitForms.map((unitForm, sortOrder) => ({ key: unitForm, label: unitForm, group: "supplier_unit_form", sortOrder }));
 
+export type SupplierUnitFormErrors = {
+  name?: string;
+  unitForm?: string;
+  businessTypes?: string;
+};
+
+export function validateSupplierUnitForm(state: SupplierUnitFormState): SupplierUnitFormErrors {
+  return {
+    name: state.name.trim() ? undefined : "请填写生产单元名称",
+    unitForm: state.unitForm ? undefined : "请选择单元形式",
+    businessTypes: state.businessTypes.length > 0 ? undefined : "请至少选择一个业务类型",
+  };
+}
+
+export function clearSupplierUnitFormError(errors: SupplierUnitFormErrors, field: keyof SupplierUnitFormErrors) {
+  return errors[field] ? { ...errors, [field]: undefined } : errors;
+}
+
+export function canSubmitSupplierUnitForm(errors: SupplierUnitFormErrors) {
+  return !Object.values(errors).some(Boolean);
+}
+
 export function SupplierUnitFormDrawer({
   mode,
   supplier,
@@ -24,7 +46,7 @@ export function SupplierUnitFormDrawer({
   onSave: (state: SupplierUnitFormState) => void;
 }) {
   const [state, setState] = useState<SupplierUnitFormState>(() => (unit ? supplierUnitToForm(unit) : createEmptySupplierUnitForm()));
-  const [errors, setErrors] = useState<{ name?: string; unitForm?: string }>({});
+  const [errors, setErrors] = useState<SupplierUnitFormErrors>({});
   const [isClosing, setIsClosing] = useState(false);
   const filledCount = useMemo(() => [state.name, state.primaryBusiness, state.primaryProducts, state.materialScope, state.processCapabilities, state.moq, state.leadTime, state.manager, state.phone, state.qualityFeatures].filter((value) => value.trim()).length, [state]);
 
@@ -39,7 +61,9 @@ export function SupplierUnitFormDrawer({
 
   const update = <K extends keyof SupplierUnitFormState>(field: K, value: SupplierUnitFormState[K]) => {
     setState((current) => ({ ...current, [field]: value }));
-    if (field === "name" || field === "unitForm") setErrors((current) => ({ ...current, [field]: undefined }));
+    if (field === "name" || field === "unitForm" || field === "businessTypes") {
+      setErrors((current) => clearSupplierUnitFormError(current, field));
+    }
   };
 
   const toggleBusinessType = (businessType: SupplierUnitBusinessType) => {
@@ -47,12 +71,9 @@ export function SupplierUnitFormDrawer({
   };
 
   const submitStaticDraft = () => {
-    const nextErrors = {
-      name: state.name.trim() ? undefined : "请填写生产单元名称",
-      unitForm: state.unitForm ? undefined : "请选择单元形式",
-    };
+    const nextErrors = validateSupplierUnitForm(state);
     setErrors(nextErrors);
-    if (nextErrors.name || nextErrors.unitForm) return;
+    if (!canSubmitSupplierUnitForm(nextErrors)) return;
     onSave({ ...state, name: state.name.trim() });
   };
 
@@ -85,14 +106,15 @@ export function SupplierUnitFormDrawer({
             </section>
 
             <FormPanel icon={BriefcaseBusiness} tone="violet" title="业务能力" description="记录该生产单元真正擅长和明确不承接的业务范围。">
-              <div className="md:col-span-2 xl:col-span-3">
-                <div className="text-sm text-stone-600">业务类型</div>
+              <div aria-describedby={errors.businessTypes ? "supplier-unit-business-types-error" : undefined} aria-labelledby="supplier-unit-business-types-label" className="md:col-span-2 xl:col-span-3" role="group">
+                <div className="text-sm text-stone-600" id="supplier-unit-business-types-label">业务类型<span className="ml-1 text-rose-600">*</span></div>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {supplierUnitBusinessTypes.map((businessType) => {
                     const selected = state.businessTypes.includes(businessType);
                     return <button aria-pressed={selected} className={`h-8 rounded-xl border px-3 text-sm transition ${selected ? "border-violet-400/50 bg-violet-500/14 text-violet-800 shadow-inner shadow-white/20" : "border-white/30 bg-white/24 text-stone-700 hover:bg-white/42"}`} key={businessType} onClick={() => toggleBusinessType(businessType)} type="button">{businessType}</button>;
                   })}
                 </div>
+                {errors.businessTypes ? <p className="mt-2 text-xs text-rose-700" id="supplier-unit-business-types-error">{errors.businessTypes}</p> : null}
               </div>
               <GlassInput label="主要业务" value={state.primaryBusiness} onChange={(value) => update("primaryBusiness", value)} placeholder="如 涤纶梭织染色" />
               <GlassInput label="主要产品 / 面料" value={state.primaryProducts} onChange={(value) => update("primaryProducts", value)} placeholder="如 春亚纺、四面弹" />
@@ -101,7 +123,7 @@ export function SupplierUnitFormDrawer({
               <GlassTextarea label="不承接范围" value={state.restrictions} onChange={(value) => update("restrictions", value)} placeholder="不承接产品、原料或订单限制" />
             </FormPanel>
 
-            <FormPanel icon={Handshake} tone="emerald" title="合作条件" description="单独维护该车间的起订量、排期和打样能力。">
+            <FormPanel icon={Handshake} tone="emerald" title="合作条件" description="这里记录生产单元的一般合作条件，具体面料的价格、MOQ和交期以供应商报价记录为准。">
               <GlassInput label="默认 MOQ" value={state.moq} onChange={(value) => update("moq", value)} placeholder="如 500kg/色" />
               <GlassInput label="参考常规交期" value={state.leadTime} onChange={(value) => update("leadTime", value)} placeholder="如 12-15天" />
               <GlassInput label="参考旺季交期" value={state.peakLeadTime} onChange={(value) => update("peakLeadTime", value)} placeholder="如 18-22天" />
