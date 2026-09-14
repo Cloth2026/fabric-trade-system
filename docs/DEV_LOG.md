@@ -706,3 +706,28 @@ Scope note:
 
 Next suggested step:
 - Review and approve the supplier list, detail, and form information architecture before designing the supplier data model or real API.
+
+### 2026-09-14 Prototype supplier production units
+
+Goal:
+- Extend the approved supplier static UI with production units for factories that operate multiple workshops, branches, or departments.
+- Keep `Supplier` as the company or factory master and model workshop differences only in browser-memory prototype data.
+
+Completed:
+- Added four representative production units under the existing dyeing and printing supplier examples.
+- Covered dyeing workshops, a digital printing department, and a rotary-screen printing workshop with both active and paused cooperation states.
+- Added a production-unit area inside supplier details with search, type/status filters, compact capability cards, and an empty state for suppliers without units.
+- Added a second-level read-only detail drawer for business capabilities, restrictions, MOQ, regular/peak lead time, sampling, contacts, quality, risk, and notes.
+- Added one controlled create/edit production-unit form split into five sections.
+- Added browser-memory-only create, edit, enable/pause, cancel, and refresh-reset behavior.
+- Added focused tests for hierarchy, search, filters, create defaults, and edit-draft isolation.
+- Saved product-review screenshots:
+  - `docs/supplier-units-area-prototype.png`
+  - `docs/supplier-unit-detail-prototype.png`
+  - `docs/supplier-unit-form-prototype.png`
+
+Scope note:
+- This remains a static UI prototype. No Prisma schema, migration, seed, supplier API, production-unit API, or database write was added or changed.
+
+Next suggested step:
+- Review whether production-unit types, fields, card density, and second-level drawer interaction match daily supplier management before any database design begins.

@@ -21,16 +21,21 @@ import type { LucideIcon } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { SupplierDetailDrawer } from "./supplier-detail-drawer";
 import { SupplierFormDrawer } from "./supplier-form-drawer";
+import { SupplierUnitDetailDrawer } from "./supplier-unit-detail-drawer";
+import { SupplierUnitFormDrawer } from "./supplier-unit-form-drawer";
 import {
   filterSupplierPrototypes,
   initialSupplierPrototypes,
   supplierRoles,
 } from "./supplier-prototype-data";
 import type { SupplierFormState, SupplierPrototype, SupplierRole, SupplierStatus } from "./supplier-prototype-data";
+import { initialSupplierUnitPrototypes } from "./supplier-unit-prototype-data";
+import type { SupplierUnitFormState, SupplierUnitPrototype, SupplierUnitStatus } from "./supplier-unit-prototype-data";
 
 type SupplierFilterValue = "全部角色" | SupplierRole;
 type StatusFilterValue = "全部状态" | SupplierStatus;
 type FormMode = { kind: "create" } | { kind: "edit"; supplierId: string } | null;
+type UnitFormMode = { kind: "create"; supplierId: string } | { kind: "edit"; unitId: string } | null;
 
 function StaticFilterSelect<T extends string>({ label, options, value, onChange }: { label: string; options: T[]; value: T; onChange: (value: T) => void }) {
   const [open, setOpen] = useState(false);
@@ -84,15 +89,20 @@ function calculatePrototypeCompleteness(state: SupplierFormState) {
 
 export function SupplierManagementPage() {
   const [suppliers, setSuppliers] = useState(initialSupplierPrototypes);
+  const [supplierUnits, setSupplierUnits] = useState(initialSupplierUnitPrototypes);
   const [query, setQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState<SupplierFilterValue>("全部角色");
   const [statusFilter, setStatusFilter] = useState<StatusFilterValue>("全部状态");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [formMode, setFormMode] = useState<FormMode>(null);
+  const [selectedUnitId, setSelectedUnitId] = useState<string | null>(null);
+  const [unitFormMode, setUnitFormMode] = useState<UnitFormMode>(null);
   const [toast, setToast] = useState("");
   const toastTimer = useRef<number | null>(null);
 
   const selectedSupplier = suppliers.find((supplier) => supplier.id === selectedId) ?? null;
+  const selectedUnit = supplierUnits.find((unit) => unit.id === selectedUnitId) ?? null;
+  const selectedUnitSupplier = selectedUnit ? suppliers.find((supplier) => supplier.id === selectedUnit.supplierId) ?? null : null;
   const filteredSuppliers = useMemo(
     () => filterSupplierPrototypes(suppliers, { query, role: roleFilter, status: statusFilter }),
     [query, roleFilter, statusFilter, suppliers],
@@ -137,7 +147,31 @@ export function SupplierManagementPage() {
     showToast(`${supplier.name} 已在静态原型中${nextStatus === "启用" ? "重新启用" : "停用"}`);
   };
 
+  const saveStaticUnit = (form: SupplierUnitFormState) => {
+    if (unitFormMode?.kind === "edit") {
+      setSupplierUnits((current) => current.map((unit) => unit.id === unitFormMode.unitId ? { ...unit, ...form } : unit));
+      setSelectedUnitId(unitFormMode.unitId);
+      showToast(`已更新 ${form.name} 的静态草稿`);
+    } else if (unitFormMode?.kind === "create") {
+      const id = `supplier-unit-prototype-${Date.now()}`;
+      const created: SupplierUnitPrototype = { id, supplierId: unitFormMode.supplierId, ...form };
+      setSupplierUnits((current) => [...current, created]);
+      setSelectedUnitId(id);
+      showToast(`已创建 ${form.name} 的静态草稿`);
+    }
+    setUnitFormMode(null);
+  };
+
+  const toggleStaticUnitStatus = (unit: SupplierUnitPrototype) => {
+    const nextStatus: SupplierUnitStatus = unit.status === "启用" ? "暂停合作" : "启用";
+    setSupplierUnits((current) => current.map((item) => item.id === unit.id ? { ...item, status: nextStatus } : item));
+    showToast(`${unit.name} 已在静态原型中${nextStatus === "启用" ? "重新启用" : "暂停合作"}`);
+  };
+
   const editingSupplier = formMode?.kind === "edit" ? suppliers.find((supplier) => supplier.id === formMode.supplierId) : undefined;
+  const editingUnit = unitFormMode?.kind === "edit" ? supplierUnits.find((unit) => unit.id === unitFormMode.unitId) : undefined;
+  const unitFormSupplierId = unitFormMode?.kind === "create" ? unitFormMode.supplierId : editingUnit?.supplierId;
+  const unitFormSupplier = suppliers.find((supplier) => supplier.id === unitFormSupplierId);
 
   return (
     <section className="flex min-w-0 flex-1 flex-col overflow-hidden bg-white/10">
@@ -224,10 +258,20 @@ export function SupplierManagementPage() {
 
       <SupplierDetailDrawer
         supplier={selectedSupplier}
-        onClose={() => setSelectedId(null)}
+        units={selectedSupplier ? supplierUnits.filter((unit) => unit.supplierId === selectedSupplier.id) : []}
+        onClose={() => { setSelectedId(null); setSelectedUnitId(null); }}
         onEdit={(supplier) => setFormMode({ kind: "edit", supplierId: supplier.id })}
         onToggleStatus={toggleStaticStatus}
         onViewFabrics={(supplier) => showToast(`${supplier.name} 的关联面料为静态占位，本轮不读取数据库`)}
+        onSelectUnit={(unit) => setSelectedUnitId(unit.id)}
+        onCreateUnit={(supplier) => setUnitFormMode({ kind: "create", supplierId: supplier.id })}
+      />
+      <SupplierUnitDetailDrawer
+        unit={selectedUnit}
+        supplier={selectedUnitSupplier}
+        onClose={() => setSelectedUnitId(null)}
+        onEdit={(unit) => setUnitFormMode({ kind: "edit", unitId: unit.id })}
+        onToggleStatus={toggleStaticUnitStatus}
       />
       {formMode ? (
         <SupplierFormDrawer
@@ -236,6 +280,16 @@ export function SupplierManagementPage() {
           supplier={editingSupplier}
           onClose={() => setFormMode(null)}
           onSave={saveStaticSupplier}
+        />
+      ) : null}
+      {unitFormMode && unitFormSupplier ? (
+        <SupplierUnitFormDrawer
+          key={`${unitFormMode.kind}-${editingUnit?.id ?? unitFormSupplier.id}`}
+          mode={unitFormMode.kind}
+          supplier={unitFormSupplier}
+          unit={editingUnit}
+          onClose={() => setUnitFormMode(null)}
+          onSave={saveStaticUnit}
         />
       ) : null}
     </section>
