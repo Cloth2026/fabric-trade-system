@@ -24,6 +24,15 @@ function unitData(supplierId: string, name: string) {
   };
 }
 
+function isForeignKeyConstraintError(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    (error as { code?: unknown }).code === "P2003"
+  );
+}
+
 before(async () => {
   const tenant = await prisma.tenant.create({
     data: {
@@ -164,5 +173,52 @@ describe("supplier production unit data model", () => {
 
     const historicalQuote = await prisma.fabricSupplierQuote.findUniqueOrThrow({ where: { id: quoteId } });
     assert.equal(historicalQuote.supplierUnitId, unit.id);
+  });
+
+  test("production units referenced by quote history cannot be deleted", async () => {
+    const fabric = await createFabric({
+      code: `${fabricCode}-RESTRICT`,
+      name: `Supplier Unit Restrict Fabric ${testId}`,
+      fabricType: "woven",
+      developmentSource: "market_purchase",
+      composition: "100% polyester",
+      weight: "220g",
+      width: "150cm",
+      warpWeftDensity: "210T",
+      greigeStatus: "none",
+      dyeingStatus: "none",
+      postProcessStatus: "none",
+      suppliers: [
+        {
+          supplierId: legacyFlowSupplierId,
+          initialQuote: { purchasePrice: 21.25, currency: "CNY" },
+        },
+      ],
+    });
+
+    const unit = await prisma.supplierUnit.create({
+      data: {
+        tenantId: defaultTenantId,
+        supplierId: legacyFlowSupplierId,
+        name: "History Protected Workshop",
+        unitForm: "workshop",
+        businessTypes: ["printing"],
+      },
+    });
+    const quoteId = fabric.supplierSources[0]?.quotes[0]?.id;
+    assert.ok(quoteId);
+
+    await prisma.fabricSupplierQuote.update({ where: { id: quoteId }, data: { supplierUnitId: unit.id } });
+
+    await assert.rejects(
+      () => prisma.supplierUnit.delete({ where: { id: unit.id } }),
+      (error: unknown) => isForeignKeyConstraintError(error),
+    );
+
+    const quoteAfterDeleteFailure = await prisma.fabricSupplierQuote.findUniqueOrThrow({ where: { id: quoteId } });
+    assert.equal(quoteAfterDeleteFailure.supplierUnitId, unit.id);
+
+    await prisma.operationLog.deleteMany({ where: { tenantId: defaultTenantId, targetId: fabric.id } });
+    await prisma.fabric.delete({ where: { id: fabric.id } });
   });
 });

@@ -784,3 +784,18 @@ Validation:
 - `npm.cmd run lint` passed.
 - `npm.cmd run build` passed with Next.js 16.3.5.
 - Post-migration checks confirmed both databases still have 0 Supplier, SupplierUnit, FabricSupplier, and FabricSupplierQuote rows.
+
+### 2026-09-14 Preserve quote production unit history
+
+Goal:
+- Prevent historical supplier quotes from silently losing their production-unit reference when a production unit is removed.
+
+Completed:
+- Kept `FabricSupplier.supplierUnit` as `onDelete: SetNull` for the current/default production-unit pointer.
+- Changed `FabricSupplierQuote.supplierUnit` to `onDelete: Restrict` so quote history blocks deletion of referenced production units.
+- Added migration `20260914132000_restrict_quote_supplier_unit_delete` without modifying earlier migrations.
+- Added data-model coverage that a production unit referenced by quote history cannot be deleted and the quote keeps its `supplierUnitId` after the failed delete.
+
+Product rule:
+- Production units should be enabled or disabled in normal business use; business deletion is not offered once production units can be referenced by quote history.
+- Future supplier-unit write APIs must verify that the selected production unit belongs to the current tenant and the same supplier as the source or quote being written.

@@ -260,7 +260,7 @@ model FabricSupplierQuote {
   tenantId           String
   fabricSupplier     FabricSupplier @relation(fields: [fabricSupplierId], references: [id], onDelete: Cascade)
   fabricSupplierId   String
-  supplierUnit       SupplierUnit?  @relation("FabricSupplierQuoteProductionUnit", fields: [supplierUnitId], references: [id], onDelete: SetNull)
+  supplierUnit       SupplierUnit?  @relation("FabricSupplierQuoteProductionUnit", fields: [supplierUnitId], references: [id], onDelete: Restrict)
   supplierUnitId     String?
   purchasePrice      Decimal        @db.Decimal(12, 2)
   currency           String         @default("CNY") @db.VarChar(3)
