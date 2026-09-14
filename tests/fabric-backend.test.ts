@@ -126,6 +126,28 @@ describe("create fabric schema", () => {
     );
   });
 
+  test("empty required quote price is rejected instead of coerced to zero", () => {
+    for (const purchasePrice of ["", "   ", null]) {
+      const parsed = createFabricInputSchema.safeParse({
+        ...basePayload(`EMPTY-PRICE-${String(purchasePrice).length}`),
+        suppliers: [{ supplierId: "supplier-id", initialQuote: { purchasePrice } }],
+      });
+
+      assert.equal(parsed.success, false);
+      assert.equal(
+        parsed.error.issues.some((issue) => issue.path.join(".") === "suppliers.0.initialQuote.purchasePrice"),
+        true,
+      );
+    }
+
+    const zeroPrice = createFabricInputSchema.parse({
+      ...basePayload("ZERO-PRICE"),
+      suppliers: [{ supplierId: "supplier-id", initialQuote: { purchasePrice: 0 } }],
+    });
+
+    assert.equal(zeroPrice.suppliers[0]?.initialQuote?.purchasePrice, 0);
+  });
+
   test("process status rejects conflicting greige, dyeing, and post-process details", () => {
     const cases: Array<{ payload: CreateFabricInput; path: string }> = [
       { payload: { ...basePayload("GREIGE-NONE"), greige: {} }, path: "greige" },
@@ -346,6 +368,31 @@ describe("config options API", () => {
     assert.equal(keys.has(currentTenantOption.key), true);
     assert.equal(keys.has(otherTenantOption.key), false);
     assert.equal(keys.has("tshirt"), true);
+  });
+
+  test("deduplicates system and tenant options by group and key with tenant priority", async () => {
+    await prisma.configOption.deleteMany({
+      where: { tenantId, group: "fabric_usage", key: "tshirt" },
+    });
+
+    const tenantOverride = await prisma.configOption.create({
+      data: {
+        tenantId,
+        ownerKey: `tenant:${tenantId}`,
+        scope: "tenant",
+        group: "fabric_usage",
+        key: "tshirt",
+        label: "租户T恤",
+        sortOrder: 1,
+      },
+    });
+    tenantConfigOptionId = tenantOverride.id;
+
+    const options = await listEnabledConfigOptions(["fabric_usage"]);
+    const tshirtOptions = options.filter((option) => option.group === "fabric_usage" && option.key === "tshirt");
+
+    assert.equal(tshirtOptions.length, 1);
+    assert.equal(tshirtOptions[0]?.label, "租户T恤");
   });
 
   test("rejects config groups outside the whitelist", async () => {

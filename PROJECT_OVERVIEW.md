@@ -22,7 +22,10 @@
 
 ## 项目结构
 
-- `src/app/page.tsx`：当前主页面和新增面料抽屉静态原型。
+- `src/app/page.tsx`：当前面料库主页面与新增面料入口。
+- `src/components/fabrics/`：新增面料统一状态、基础字段、工艺字段、多供应商字段和真实提交抽屉。
+- `src/components/form/`：Spatial Glass 风格的通用表单控件。
+- `src/lib/api/fabric-client.ts`：配置、供应商搜索和新增面料的前端 API 封装。
 - `src/app/globals.css`：全局样式、空间玻璃 UI、抽屉动效等。
 - `src/lib/prisma.ts`：Prisma Client 初始化。
 - `prisma/schema.prisma`：数据库模型。
@@ -78,7 +81,7 @@
   - 入库批次入口
   - 搜索、类型筛选、来源筛选
   - 右侧详情抽屉
-- 完成“新增面料”页面静态原型：
+- 完成“新增面料”页面真实表单：
   - 基础信息
   - 分类结构
   - 来源与价格
@@ -98,40 +101,38 @@
 - 已执行 Prisma migration。
 - 已执行默认枚举 seed。
 - 已新增并修正面料多供应商货源和报价历史数据模型。
+- 已接入枚举配置读取、当前租户供应商搜索和 `POST /api/fabrics`。
+- 已实现多供应商增删、首选唯一、可选首次报价、字段级错误和保存成功反馈。
+- 已实现坯布、染整、后工艺状态与明细清理/展开联动。
+- 已实现服务器控制租户和计价单位，前端 payload 不包含 `tenantId` 或 `pricingUnit`。
 
 ## 正在开发的功能
 
-当前阶段正在从静态 UI 原型进入真实后端闭环：
+当前阶段已经完成新增面料的前后端闭环，正在准备面料库读取阶段：
 
-- 新增面料 API
-- 新增面料表单状态绑定
-- Zod 字段校验
-- 枚举配置读取
-- 供应商可搜索下拉
-- 面料供应商关系与供应商报价历史管理
-- 保存成功后刷新面料列表
+- 从数据库读取面料列表
+- 新增成功后刷新真实列表
+- 面料详情读取
+- 后续独立开发面料编辑
 
 ## 已知问题
 
-- 当前新增面料页面仍是静态原型，尚未提交到真实 API。
 - 面料库列表仍使用静态数据，尚未从数据库读取。
-- `README.md` 仍是 Next.js 默认模板，需要后续改成项目专用说明。
+- 开发数据库当前没有供应商记录，供应商搜索在录入供应商前会显示空结果。
 - PostgreSQL 安装过程中曾误装到 C 盘，后来已将运行服务路径和注册表调整到 `D:\PostgreSQLServer`；C 盘保留过备份目录，后续可人工清理。
 - 当前 UI 中部分旧静态数据存在编码显示异常，需要在后续真实数据接入时清理。
-- 权限、登录、租户上下文、操作日志写入尚未真正接入业务流程。
+- 权限和登录尚未实现；当前使用集中管理的临时服务端单租户上下文。
 - 入库批次、图片/色卡/样品模块暂时不作为当前优先级。
 - 旧的 `Fabric` 单供应商字段尚未迁移到 `FabricSupplier` / `FabricSupplierQuote`，当前不删除旧字段。
 
 ## 下一步原计划
 
-1. 实现枚举配置读取 API。
-2. 实现面料供应商关系和供应商报价历史的 Zod schema。
-3. 实现新增面料 Zod schema。
-4. 实现 `POST /api/fabrics`，但 V1 先聚焦面料库和供应商价格管理。
-5. 将新增面料页面从静态输入改为真实表单状态。
-6. 保存时校验面料编号唯一性、必填项、枚举 key 是否有效。
-7. 保存成功后从数据库读取面料列表并刷新页面。
-8. 增加基础错误提示、保存成功反馈和操作日志。
+1. 实现面料列表读取 API。
+2. 用真实数据库数据替换首页静态面料卡片。
+3. 新增成功后刷新面料列表。
+4. 实现面料详情读取 API。
+5. 单独评审并实现面料编辑。
+6. 继续暂缓寄样、客户报价、订单和库存。
 
 ## 运行提示
 
@@ -159,18 +160,17 @@ npm run dev
 - Temporary single-tenant context is centralized in `src/server/tenant.ts`.
 - Create-fabric validation is centralized in `src/server/fabrics/schema.ts`.
 - Completeness calculation is centralized in `src/server/fabrics/completeness.ts`.
-- The UI drawer is still not bound to the API.
+- The create-fabric drawer is bound to the API with config loading, supplier search, validation errors, and success feedback.
 - Fabric list reading/editing is still not implemented.
 - No new migration was needed in this backend foundation round.
 
 ## Next Plan - Updated 2026-09-13
 
-1. Implement config-options read API.
-2. Bind the create-fabric drawer to `POST /api/fabrics`.
-3. Add UI field-level validation display and save success feedback.
-4. Read fabric list from the database instead of static data.
-5. Add fabric detail read API and edit API.
-6. Keep customer quotation, samples, orders, and inventory for later dedicated phases.
+1. Read the fabric list from the database instead of static data.
+2. Refresh the real list after successful creation.
+3. Add a fabric detail read API.
+4. Review editing requirements before implementing the edit flow.
+5. Keep customer quotation, samples, orders, and inventory for later dedicated phases.
 ## Backend Hardening - 2026-09-13
 
 - `sample_status` is now part of repeatable seed data.
@@ -181,3 +181,14 @@ npm run dev
 - When suppliers are provided without an explicit preferred supplier, the first supplier is saved as preferred.
 - `GET /api/config-options?groups=...` returns enabled system and current-tenant config options for whitelisted groups only.
 - API error handling maps invalid JSON to 400 and unique conflicts to 409 without leaking database internals.
+
+## Create Fabric UI Connection - 2026-09-14
+
+- The approved Spatial Glass create drawer now uses one controlled form state and real APIs.
+- Config-backed fields display Chinese labels and submit stable keys.
+- Supplier and factory selectors use current-tenant fuzzy search.
+- Multiple suppliers, one preferred supplier, and optional initial quote snapshots are supported.
+- Empty quote prices are never converted to zero.
+- Process status changes clear or omit hidden detail data according to backend rules.
+- The client payload contains neither `tenantId` nor `pricingUnit`.
+- Automated coverage is 36 passing tests; Prisma validation/generation/status, lint, build, and browser checks pass.

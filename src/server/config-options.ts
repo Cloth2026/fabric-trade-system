@@ -83,13 +83,14 @@ export async function listEnabledConfigOptions(groups: string[]) {
 
   const tenant = await getServerTenant();
 
-  return prisma.configOption.findMany({
+  const options = await prisma.configOption.findMany({
     where: {
       enabled: true,
       group: { in: requestedGroups },
       OR: [{ ownerKey: SYSTEM_OWNER_KEY }, { tenantId: tenant.id }],
     },
     select: {
+      tenantId: true,
       group: true,
       key: true,
       label: true,
@@ -97,4 +98,19 @@ export async function listEnabledConfigOptions(groups: string[]) {
     },
     orderBy: [{ group: "asc" }, { sortOrder: "asc" }, { label: "asc" }],
   });
+
+  const dedupedOptions = new Map<string, (typeof options)[number]>();
+
+  for (const option of options) {
+    const optionKey = `${option.group}:${option.key}`;
+    const existingOption = dedupedOptions.get(optionKey);
+
+    if (!existingOption || (existingOption.tenantId == null && option.tenantId === tenant.id)) {
+      dedupedOptions.set(optionKey, option);
+    }
+  }
+
+  return [...dedupedOptions.values()]
+    .map(({ group, key, label, sortOrder }) => ({ group, key, label, sortOrder }))
+    .sort((left, right) => left.group.localeCompare(right.group) || left.sortOrder - right.sortOrder || left.label.localeCompare(right.label));
 }

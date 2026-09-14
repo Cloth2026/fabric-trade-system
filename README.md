@@ -51,4 +51,14 @@ On macOS/Linux, set the same variables with your shell's `export` syntax.
 - `GET /api/suppliers`
 - `GET /api/config-options?groups=fabric_usage,fabric_season`
 
-The create-fabric UI is still a static prototype and is not yet bound to the backend API.
+## Create Fabric Flow
+
+The create-fabric drawer is connected to the backend APIs:
+
+- Config-backed fields load enabled Chinese labels from `GET /api/config-options` and submit stable keys.
+- Supplier and factory selectors search the current tenant through `GET /api/suppliers`.
+- A fabric can include multiple supplier relations and an optional first quote for each supplier.
+- `POST /api/fabrics` creates the fabric, optional process details, supplier relations, quote history, and operation log in one transaction.
+- `tenantId` and `pricingUnit` are server-controlled and are not accepted from the form payload.
+
+The fabric list and detail drawer still use static example data. Reading and refreshing the real list is planned as a separate phase.

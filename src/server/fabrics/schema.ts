@@ -12,6 +12,14 @@ const emptyStringToNull = (value: unknown) => {
 const optionalText = z.preprocess(emptyStringToNull, z.string().nullable().optional());
 const requiredText = z.string().trim().min(1);
 const nonNegativeMoney = z.coerce.number().nonnegative();
+const requiredMoney = z.preprocess((value) => {
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    return trimmed.length === 0 ? undefined : trimmed;
+  }
+
+  return value === null ? undefined : value;
+}, nonNegativeMoney);
 const processStatus = z.enum(["none", "pending", "available"]);
 
 const optionalDate = z.preprocess(emptyStringToNull, z.coerce.date().nullable().optional());
@@ -33,7 +41,7 @@ function requireDetail(
 }
 
 export const supplierQuoteInputSchema = z.object({
-  purchasePrice: nonNegativeMoney,
+  purchasePrice: requiredMoney,
   currency: z
     .preprocess(emptyStringToNull, z.string().regex(/^[A-Z]{3}$/).default("CNY"))
     .optional(),

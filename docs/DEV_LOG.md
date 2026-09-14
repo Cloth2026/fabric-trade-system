@@ -648,3 +648,40 @@ Notes:
 Next suggested step:
 - Bind the create-fabric drawer to `POST /api/fabrics` after this backend foundation is reviewed.
 - Add a lightweight UI-side config options loader for enum fields.
+
+### 2026-09-14 Connect create fabric form to backend
+
+Goal:
+- Connect only the approved create-fabric drawer to the real backend while preserving the Spatial Glass Fabric OS style.
+- Keep fabric list reading, editing, deletion, samples, customer quotations, orders, and inventory out of scope.
+
+Completed:
+- Split the connected drawer into focused fabric components and reusable glass form controls.
+- Added one controlled form state for basic data, process data, usage/season/certification, and multiple supplier sources.
+- Added client wrappers for config reads, supplier search, and fabric creation.
+- Loaded all form enumerations from `GET /api/config-options`; labels are displayed in Chinese and keys are submitted.
+- Added loading, retry, field error, duplicate-code, saving, and success states.
+- Added current-tenant supplier search, duplicate prevention, one preferred supplier, removal, and optional first quote fields.
+- Added process status linkage. `none` clears and hides details, `pending` submits no details, and `available` expands details.
+- Removed client authority over `tenantId` and `pricingUnit`; the UI only displays the derived kilogram/meter unit.
+- Replaced hardcoded create-drawer completeness values with a live basic-required-field progress indicator; the server remains authoritative for saved completeness.
+- Fixed required quote price parsing so empty strings, whitespace, and null are rejected instead of becoming zero.
+- Deduplicated config read results by group and key with tenant options taking priority.
+- Added browser verification and saved `docs/create-fabric-connected.png`.
+
+Validation:
+- `npm.cmd test` passed: 36 tests.
+- `npx.cmd prisma validate` passed.
+- `npx.cmd prisma generate` passed.
+- `npx.cmd prisma migrate status` passed: 3 migrations, database up to date.
+- `npm.cmd run lint` passed.
+- `npm.cmd run build` passed with Next.js 16.3.5.
+- Browser checks passed for Chinese config labels, knitted/woven unit switching, woven density visibility, required errors, and process detail clearing.
+
+Known note:
+- The development database currently has no supplier records, so the live supplier search correctly returns an empty result until suppliers are added.
+- The test suite still prints the existing pg adapter deprecation warning; all assertions pass.
+
+Next suggested step:
+- Implement real fabric list reading and refresh the list after creation.
+- Then add fabric detail reading and editing as a separate reviewed phase.
