@@ -1,23 +1,33 @@
-import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { isAppError } from "../../../server/errors";
-import { searchSuppliers } from "../../../server/suppliers";
+import { apiErrorResponse, invalidJsonResponse, readJsonPayload } from "../../../server/api";
+import { createSupplier, searchSuppliers } from "../../../server/suppliers";
 
 export const runtime = "nodejs";
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
-    const q = request.nextUrl.searchParams.get("q");
-    const limit = request.nextUrl.searchParams.get("limit");
-    const suppliers = await searchSuppliers({ q, limit });
+    const searchParams = new URL(request.url).searchParams;
+    const suppliers = await searchSuppliers({
+      q: searchParams.get("q"),
+      role: searchParams.get("role"),
+      status: searchParams.get("status"),
+      limit: searchParams.get("limit"),
+    });
 
     return NextResponse.json({ suppliers });
   } catch (error) {
-    if (isAppError(error)) {
-      return NextResponse.json({ error: error.message, details: error.details }, { status: error.status });
-    }
+    return apiErrorResponse(error);
+  }
+}
 
-    console.error(error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+export async function POST(request: Request) {
+  const payload = await readJsonPayload(request);
+  if (payload === null) return invalidJsonResponse();
+
+  try {
+    const supplier = await createSupplier(payload);
+    return NextResponse.json({ supplier }, { status: 201 });
+  } catch (error) {
+    return apiErrorResponse(error);
   }
 }

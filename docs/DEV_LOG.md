@@ -799,3 +799,29 @@ Completed:
 Product rule:
 - Production units should be enabled or disabled in normal business use; business deletion is not offered once production units can be referenced by quote history.
 - Future supplier-unit write APIs must verify that the selected production unit belongs to the current tenant and the same supplier as the source or quote being written.
+
+### 2026-09-14 Add supplier management backend APIs
+
+Goal:
+- Add tenant-isolated supplier and production-unit APIs without connecting the approved static UI.
+
+Completed:
+- Added shared stable keys and Zod validation for supplier roles, supplier statuses, production-unit forms, business types, and statuses.
+- Added supplier create, list/search/filter, detail, update, activation, and deactivation endpoints.
+- Added production-unit create, list/search/filter, detail, update, activation, and pause endpoints.
+- Added operation logs in the same transaction as every supplier and production-unit write.
+- Added 404 isolation for cross-tenant resource access, 400 payload handling, and 409 uniqueness handling without exposing database details.
+- Kept the existing active-supplier search behavior used by the create-fabric form.
+
+Data-integrity rule for later fabric source and quote APIs:
+- `SupplierUnit.tenantId` must equal the server-resolved current tenant.
+- `SupplierUnit.supplierId` must equal the related `FabricSupplier.supplierId`.
+- Production units are activated or paused through updates; no delete API is provided.
+
+Scope note:
+- No Prisma schema, migration, seed, static supplier UI, or fabric feature was changed.
+
+Validation:
+- `npm.cmd test` passed: 63 tests, including existing fabric creation coverage.
+- `npm.cmd run lint` passed.
+- `npm.cmd run build` passed with Next.js 16.3.5 and all eight API routes recognized.

@@ -182,6 +182,16 @@ npm run dev
 3. Add a fabric detail read API.
 4. Review editing requirements before implementing the edit flow.
 5. Keep customer quotation, samples, orders, and inventory for later dedicated phases.
+
+## Supplier Backend APIs - 2026-09-14
+
+- Supplier and production-unit persistence is available through tenant-isolated REST route handlers.
+- Supplier roles, supplier statuses, production-unit forms, business types, and statuses use validated stable English keys.
+- Supplier and production-unit create/update/status operations write `OperationLog` records transactionally.
+- Cross-tenant detail and update requests return 404; invalid payloads return 400; name uniqueness conflicts return 409.
+- Production units do not expose DELETE endpoints. Normal business lifecycle uses active/inactive suppliers and active/paused units.
+- Future fabric-source and quote APIs must verify both production-unit tenant ownership and that the unit belongs to the same supplier as `FabricSupplier`.
+- The existing supplier and production-unit UI remains a browser-memory static prototype and is not connected in this phase.
 ## Backend Hardening - 2026-09-13
 
 - `sample_status` is now part of repeatable seed data.
