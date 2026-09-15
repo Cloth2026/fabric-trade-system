@@ -20,8 +20,8 @@ import {
   X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useMemo, useState } from "react";
-import { FabricDetailDrawer } from "./fabric-detail-drawer";
+import { useCallback, useMemo, useState } from "react";
+import { FabricDetailDrawer, getFabricDetailDrawerKey } from "./fabric-detail-drawer";
 import {
   defaultFabricLibraryView,
   developmentSourceLabels,
@@ -177,6 +177,7 @@ export function FabricLibraryPrototype({ onCreateFabric }: { onCreateFabric: () 
   const [selectedFabric, setSelectedFabric] = useState<FabricLibraryPrototype | null>(null);
   const filteredFabrics = useMemo(() => filterFabricLibrary(fabricLibraryPrototypes, filters), [filters]);
   const metrics = getFabricLibraryMetrics(fabricLibraryPrototypes);
+  const closeFabricDetail = useCallback(() => setSelectedFabric(null), []);
 
   return (
     <section className="flex min-w-0 flex-1 flex-col overflow-hidden bg-white/10">
@@ -218,7 +219,7 @@ export function FabricLibraryPrototype({ onCreateFabric }: { onCreateFabric: () 
         </div>
       </section>
 
-      <FabricDetailDrawer fabric={selectedFabric} onClose={() => setSelectedFabric(null)} />
+      <FabricDetailDrawer fabric={selectedFabric} key={getFabricDetailDrawerKey(selectedFabric)} onClose={closeFabricDetail} />
     </section>
   );
 }

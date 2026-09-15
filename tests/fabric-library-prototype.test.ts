@@ -8,8 +8,31 @@ import {
   getPreferredFabricSource,
   initialFabricLibraryFilters,
 } from "../src/components/fabrics/fabric-library-prototype-data";
+import {
+  createInitialFabricDetailDrawerState,
+  getFabricDetailDrawerKey,
+  startFabricDetailDrawerClose,
+} from "../src/components/fabrics/fabric-detail-drawer";
 
 describe("fabric library static redesign prototype", () => {
+  test("resets drawer lifecycle state after a completed close", () => {
+    const openState = { ...createInitialFabricDetailDrawerState(), activeTab: "suppliers" as const, notice: "静态操作提示" };
+    const closingState = startFabricDetailDrawerClose(openState);
+    const reopenedState = createInitialFabricDetailDrawerState();
+
+    assert.equal(closingState.isClosing, true);
+    assert.deepEqual(reopenedState, { activeTab: "basic", isClosing: false, notice: "" });
+  });
+
+  test("uses a fresh drawer instance after closing or selecting another fabric", () => {
+    const [fabricA, fabricB] = fabricLibraryPrototypes;
+
+    assert.equal(getFabricDetailDrawerKey(fabricA), fabricA.code);
+    assert.equal(getFabricDetailDrawerKey(null), "closed");
+    assert.equal(getFabricDetailDrawerKey(fabricB), fabricB.code);
+    assert.notEqual(getFabricDetailDrawerKey(fabricA), getFabricDetailDrawerKey(fabricB));
+  });
+
   test("defaults to the professional table without an initial selected fabric", () => {
     assert.equal(defaultFabricLibraryView, "table");
     assert.equal("selectedFabric" in initialFabricLibraryFilters, false);

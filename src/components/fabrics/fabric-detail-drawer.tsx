@@ -18,7 +18,7 @@ import {
   Tag,
   X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import {
   developmentSourceLabels,
@@ -29,7 +29,25 @@ import {
 } from "./fabric-library-prototype-data";
 import type { FabricLibraryPrototype } from "./fabric-library-prototype-data";
 
-type FabricDetailTab = "basic" | "suppliers" | "process";
+export type FabricDetailTab = "basic" | "suppliers" | "process";
+
+export type FabricDetailDrawerState = {
+  activeTab: FabricDetailTab;
+  isClosing: boolean;
+  notice: string;
+};
+
+export function createInitialFabricDetailDrawerState(): FabricDetailDrawerState {
+  return { activeTab: "basic", isClosing: false, notice: "" };
+}
+
+export function startFabricDetailDrawerClose(state: FabricDetailDrawerState): FabricDetailDrawerState {
+  return { ...state, isClosing: true };
+}
+
+export function getFabricDetailDrawerKey(fabric: FabricLibraryPrototype | null) {
+  return fabric?.code ?? "closed";
+}
 
 const tabs: Array<{ id: FabricDetailTab; label: string }> = [
   { id: "basic", label: "基础资料" },
@@ -160,27 +178,41 @@ function ProcessTab({ fabric }: { fabric: FabricLibraryPrototype }) {
 }
 
 export function FabricDetailDrawer({ fabric, onClose }: { fabric: FabricLibraryPrototype | null; onClose: () => void }) {
-  const [activeTab, setActiveTab] = useState<FabricDetailTab>("basic");
-  const [isClosing, setIsClosing] = useState(false);
-  const [notice, setNotice] = useState("");
+  const [drawerState, setDrawerState] = useState<FabricDetailDrawerState>(createInitialFabricDetailDrawerState);
+  const noticeTimer = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!isClosing) return;
-    const timer = window.setTimeout(onClose, 200);
+    if (!drawerState.isClosing) return;
+    const timer = window.setTimeout(() => {
+      if (noticeTimer.current) window.clearTimeout(noticeTimer.current);
+      noticeTimer.current = null;
+      setDrawerState(createInitialFabricDetailDrawerState());
+      onClose();
+    }, 200);
     return () => window.clearTimeout(timer);
-  }, [isClosing, onClose]);
+  }, [drawerState.isClosing, onClose]);
+
+  useEffect(() => () => {
+    if (noticeTimer.current) window.clearTimeout(noticeTimer.current);
+  }, []);
 
   if (!fabric) return null;
 
+  const beginClose = () => setDrawerState(startFabricDetailDrawerClose);
+
   const staticAction = (message: string) => {
-    setNotice(`${message}：静态原型，本轮不会写入数据库`);
-    window.setTimeout(() => setNotice(""), 2600);
+    if (noticeTimer.current) window.clearTimeout(noticeTimer.current);
+    setDrawerState((current) => ({ ...current, notice: `${message}：静态原型，本轮不会写入数据库` }));
+    noticeTimer.current = window.setTimeout(() => {
+      setDrawerState((current) => ({ ...current, notice: "" }));
+      noticeTimer.current = null;
+    }, 2600);
   };
 
   return (
     <>
-      <button aria-label="关闭面料详情遮罩" className={`fixed inset-0 z-30 bg-stone-950/10 backdrop-blur-[2px] ${isClosing ? "fabric-create-backdrop-exit" : "fabric-create-backdrop-enter"}`} onClick={() => setIsClosing(true)} type="button" />
-      <aside className={`fixed bottom-2 right-2 top-2 z-40 flex w-[calc(100%-1rem)] flex-col overflow-hidden rounded-[22px] border border-white/40 bg-white/54 shadow-[0_34px_110px_rgba(20,18,15,0.34),inset_0_1px_0_rgba(255,255,255,0.30)] backdrop-blur-3xl sm:w-[560px] ${isClosing ? "fabric-create-drawer-exit" : "fabric-create-drawer-enter"}`} data-testid="fabric-detail-drawer">
+      <button aria-label="关闭面料详情遮罩" className={`fixed inset-0 z-30 bg-stone-950/10 backdrop-blur-[2px] ${drawerState.isClosing ? "fabric-create-backdrop-exit" : "fabric-create-backdrop-enter"}`} onClick={beginClose} type="button" />
+      <aside className={`fixed bottom-2 right-2 top-2 z-40 flex w-[calc(100%-1rem)] flex-col overflow-hidden rounded-[22px] border border-white/40 bg-white/54 shadow-[0_34px_110px_rgba(20,18,15,0.34),inset_0_1px_0_rgba(255,255,255,0.30)] backdrop-blur-3xl sm:w-[560px] ${drawerState.isClosing ? "fabric-create-drawer-exit" : "fabric-create-drawer-enter"}`} data-testid="fabric-detail-drawer">
         <header className="shrink-0 border-b border-white/30 px-5 pb-4 pt-5">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
@@ -188,7 +220,7 @@ export function FabricDetailDrawer({ fabric, onClose }: { fabric: FabricLibraryP
               <h2 className="mt-2 text-xl font-semibold text-stone-950">{fabric.name}</h2>
               <p className="mt-1 truncate text-sm text-stone-600">{fabric.englishName}</p>
             </div>
-            <button aria-label="关闭面料详情" className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-white/34 bg-white/28 text-stone-700 transition hover:bg-white/52" onClick={() => setIsClosing(true)} type="button"><X className="size-4" /></button>
+            <button aria-label="关闭面料详情" className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-white/34 bg-white/28 text-stone-700 transition hover:bg-white/52" onClick={beginClose} type="button"><X className="size-4" /></button>
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <span className="rounded-full border border-blue-200/60 bg-blue-50/68 px-2.5 py-1 text-xs text-blue-800">{fabricTypeLabels[fabric.type]} / {pricingUnitLabels[fabric.pricingUnit]}</span>
@@ -200,18 +232,18 @@ export function FabricDetailDrawer({ fabric, onClose }: { fabric: FabricLibraryP
 
         <div className="shrink-0 border-b border-white/30 bg-white/16 px-4 py-2">
           <div className="grid grid-cols-3 rounded-xl border border-white/38 bg-white/28 p-1">
-            {tabs.map((tab) => <button aria-selected={activeTab === tab.id} className={`h-9 rounded-lg text-xs font-medium transition ${activeTab === tab.id ? "bg-white/88 text-stone-950 shadow-sm" : "text-stone-600 hover:text-stone-950"}`} key={tab.id} onClick={() => setActiveTab(tab.id)} role="tab" type="button">{tab.label}</button>)}
+            {tabs.map((tab) => <button aria-selected={drawerState.activeTab === tab.id} className={`h-9 rounded-lg text-xs font-medium transition ${drawerState.activeTab === tab.id ? "bg-white/88 text-stone-950 shadow-sm" : "text-stone-600 hover:text-stone-950"}`} key={tab.id} onClick={() => setDrawerState((current) => ({ ...current, activeTab: tab.id }))} role="tab" type="button">{tab.label}</button>)}
           </div>
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto px-5">
-          {activeTab === "basic" ? <BasicTab fabric={fabric} /> : null}
-          {activeTab === "suppliers" ? <SupplierTab fabric={fabric} /> : null}
-          {activeTab === "process" ? <ProcessTab fabric={fabric} /> : null}
+          {drawerState.activeTab === "basic" ? <BasicTab fabric={fabric} /> : null}
+          {drawerState.activeTab === "suppliers" ? <SupplierTab fabric={fabric} /> : null}
+          {drawerState.activeTab === "process" ? <ProcessTab fabric={fabric} /> : null}
         </div>
 
         <footer className="shrink-0 border-t border-white/30 bg-white/26 p-4 backdrop-blur-2xl">
-          {notice ? <div className="mb-3 rounded-xl border border-blue-200/60 bg-blue-50/70 px-3 py-2 text-xs text-blue-800">{notice}</div> : null}
+          {drawerState.notice ? <div className="mb-3 rounded-xl border border-blue-200/60 bg-blue-50/70 px-3 py-2 text-xs text-blue-800">{drawerState.notice}</div> : null}
           <div className="grid grid-cols-3 gap-2">
             <button className="flex h-10 items-center justify-center gap-1.5 rounded-xl border border-white/38 bg-white/34 px-2 text-xs text-stone-800 transition hover:bg-white/58" onClick={() => staticAction("编辑面料")} type="button"><FilePenLine className="size-4" />编辑面料</button>
             <button className="flex h-10 items-center justify-center gap-1.5 rounded-xl border border-white/38 bg-white/34 px-2 text-xs text-stone-800 transition hover:bg-white/58" onClick={() => staticAction("添加供应商货源")} type="button"><Plus className="size-4" />添加货源</button>
