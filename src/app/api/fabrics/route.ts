@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { isAppError, isUniqueConstraintError } from "../../../server/errors";
 import { createFabric } from "../../../server/fabrics/create-fabric";
+import { listFabrics } from "../../../server/fabrics/read-fabrics";
 
 export const runtime = "nodejs";
 
@@ -20,6 +21,25 @@ export function errorResponse(error: unknown) {
 
   console.error(error);
   return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+}
+
+export async function GET(request: Request) {
+  try {
+    const searchParams = new URL(request.url).searchParams;
+    const result = await listFabrics({
+      q: searchParams.get("q"),
+      fabricType: searchParams.get("fabricType"),
+      status: searchParams.get("status"),
+      developmentSource: searchParams.get("developmentSource"),
+      completeness: searchParams.get("completeness"),
+      page: searchParams.get("page"),
+      pageSize: searchParams.get("pageSize"),
+    });
+
+    return NextResponse.json(result);
+  } catch (error) {
+    return errorResponse(error);
+  }
 }
 
 export async function POST(request: Request) {
