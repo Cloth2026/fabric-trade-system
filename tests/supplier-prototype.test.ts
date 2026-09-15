@@ -28,6 +28,12 @@ import {
   clearSupplierUnitFormError,
   validateSupplierUnitForm,
 } from "../src/components/suppliers/supplier-unit-form-drawer";
+import {
+  canCreateSupplierUnit,
+  createSupplierSelectionState,
+  isCurrentSupplierRequest,
+  isSupplierSelectionKey,
+} from "../src/components/suppliers/supplier-management-state";
 
 const supplier: SupplierRecord = {
   id: "supplier-real-1",
@@ -82,6 +88,35 @@ const unit: SupplierUnitRecord = {
 };
 
 describe("supplier UI API mapping", () => {
+  test("resets supplier-scoped state before loading another supplier", () => {
+    const secondSupplier = { ...supplier, id: "supplier-real-2", name: "第二家供应商" };
+    const firstSelection = createSupplierSelectionState(supplier);
+    const secondSelection = createSupplierSelectionState(secondSupplier);
+
+    assert.equal(firstSelection.selectedId, supplier.id);
+    assert.equal(secondSelection.selectedId, secondSupplier.id);
+    assert.deepEqual(secondSelection.supplierUnits, []);
+    assert.equal(secondSelection.selectedUnitId, null);
+    assert.equal(secondSelection.detailUnit, null);
+    assert.equal(secondSelection.detailError, "");
+    assert.equal(secondSelection.unitsError, "");
+    assert.equal(secondSelection.detailLoading, true);
+    assert.equal(secondSelection.unitsLoading, true);
+  });
+
+  test("uses the same selection path for Enter and Space and ignores stale requests", () => {
+    assert.equal(isSupplierSelectionKey("Enter"), true);
+    assert.equal(isSupplierSelectionKey(" "), true);
+    assert.equal(isSupplierSelectionKey("Escape"), false);
+    assert.equal(isCurrentSupplierRequest(2, 2), true);
+    assert.equal(isCurrentSupplierRequest(1, 2), false);
+  });
+
+  test("prevents creating production units for inactive suppliers", () => {
+    assert.equal(canCreateSupplierUnit(supplier), true);
+    assert.equal(canCreateSupplierUnit({ ...supplier, status: "inactive" }), false);
+  });
+
   test("shows Chinese labels while retaining stable backend keys", () => {
     assert.equal(supplierRoleLabels.fabric_supplier, "面料供应商");
     assert.equal(supplierStatusLabels.active, "启用");

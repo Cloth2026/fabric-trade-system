@@ -10,6 +10,7 @@ import type { SupplierUnitFilters } from "./supplier-detail-drawer";
 import { SupplierFormDrawer } from "./supplier-form-drawer";
 import { SupplierUnitDetailDrawer } from "./supplier-unit-detail-drawer";
 import { SupplierUnitFormDrawer } from "./supplier-unit-form-drawer";
+import { canCreateSupplierUnit, createSupplierSelectionState, initialSupplierUnitFilters, isCurrentSupplierRequest, isSupplierSelectionKey } from "./supplier-management-state";
 import { calculateSupplierCompleteness, formatSupplierDate, supplierFormToPayload, supplierRoleLabels, supplierRoles, supplierStatusLabels } from "./supplier-prototype-data";
 import type { SupplierFormState, SupplierRole, SupplierStatus } from "./supplier-prototype-data";
 import { supplierUnitFormToPayload } from "./supplier-unit-prototype-data";
@@ -19,8 +20,6 @@ type SupplierFilterValue = "all" | SupplierRole;
 type StatusFilterValue = "all" | SupplierStatus;
 type FormMode = { kind: "create" } | { kind: "edit"; supplierId: string } | null;
 type UnitFormMode = { kind: "create"; supplierId: string } | { kind: "edit"; unitId: string } | null;
-
-const initialUnitFilters: SupplierUnitFilters = { query: "", unitForm: "all", businessType: "all", status: "all" };
 
 function requestErrorMessage(error: unknown, fallback: string) {
   if (error instanceof SupplierApiError) {
@@ -64,7 +63,7 @@ export function SupplierManagementPage() {
   const [detailRefresh, setDetailRefresh] = useState(0);
   const [formMode, setFormMode] = useState<FormMode>(null);
   const [supplierUnits, setSupplierUnits] = useState<SupplierUnitRecord[]>([]);
-  const [unitFilters, setUnitFilters] = useState<SupplierUnitFilters>(initialUnitFilters);
+  const [unitFilters, setUnitFilters] = useState<SupplierUnitFilters>(initialSupplierUnitFilters);
   const [unitsLoading, setUnitsLoading] = useState(false);
   const [unitsError, setUnitsError] = useState("");
   const [unitsRefresh, setUnitsRefresh] = useState(0);
@@ -73,6 +72,9 @@ export function SupplierManagementPage() {
   const [unitFormMode, setUnitFormMode] = useState<UnitFormMode>(null);
   const [toast, setToast] = useState("");
   const toastTimer = useRef<number | null>(null);
+  const detailRequestId = useRef(0);
+  const unitsRequestId = useRef(0);
+  const unitDetailRequestId = useRef(0);
 
   const selectedSupplier = detailSupplier ?? suppliers.find((supplier) => supplier.id === selectedId) ?? null;
   const selectedUnit = detailUnit ?? supplierUnits.find((unit) => unit.id === selectedUnitId) ?? null;
@@ -97,23 +99,40 @@ export function SupplierManagementPage() {
   useEffect(() => {
     if (!selectedId) return;
     const controller = new AbortController();
+    const requestId = ++detailRequestId.current;
     fetchSupplier(selectedId, controller.signal)
-      .then(setDetailSupplier)
-      .catch((error) => { if (!controller.signal.aborted) setDetailError(requestErrorMessage(error, "供应商详情读取失败")); })
-      .finally(() => { if (!controller.signal.aborted) setDetailLoading(false); });
+      .then((supplier) => {
+        if (!controller.signal.aborted && isCurrentSupplierRequest(requestId, detailRequestId.current)) setDetailSupplier(supplier);
+      })
+      .catch((error) => {
+        if (!controller.signal.aborted && isCurrentSupplierRequest(requestId, detailRequestId.current)) setDetailError(requestErrorMessage(error, "供应商详情读取失败"));
+      })
+      .finally(() => {
+        if (!controller.signal.aborted && isCurrentSupplierRequest(requestId, detailRequestId.current)) setDetailLoading(false);
+      });
     return () => controller.abort();
   }, [detailRefresh, selectedId]);
 
   useEffect(() => {
     if (!selectedId) return;
     const controller = new AbortController();
+    const requestId = ++unitsRequestId.current;
     const timer = window.setTimeout(() => {
       setUnitsLoading(true);
       setUnitsError("");
       fetchSupplierUnits(selectedId, { q: unitFilters.query, unitForm: unitFilters.unitForm, businessType: unitFilters.businessType, status: unitFilters.status, limit: 50 }, controller.signal)
-        .then(setSupplierUnits)
-        .catch((error) => { if (!controller.signal.aborted) setUnitsError(requestErrorMessage(error, "生产单元读取失败，请重试")); })
-        .finally(() => { if (!controller.signal.aborted) setUnitsLoading(false); });
+        .then((units) => {
+          if (!controller.signal.aborted && isCurrentSupplierRequest(requestId, unitsRequestId.current)) setSupplierUnits(units);
+        })
+        .catch((error) => {
+          if (!controller.signal.aborted && isCurrentSupplierRequest(requestId, unitsRequestId.current)) {
+            setSupplierUnits([]);
+            setUnitsError(requestErrorMessage(error, "生产单元读取失败，请重试"));
+          }
+        })
+        .finally(() => {
+          if (!controller.signal.aborted && isCurrentSupplierRequest(requestId, unitsRequestId.current)) setUnitsLoading(false);
+        });
     }, 220);
     return () => { window.clearTimeout(timer); controller.abort(); };
   }, [selectedId, unitFilters, unitsRefresh]);
@@ -121,7 +140,14 @@ export function SupplierManagementPage() {
   useEffect(() => {
     if (!selectedUnitId) return;
     const controller = new AbortController();
-    fetchSupplierUnit(selectedUnitId, controller.signal).then(setDetailUnit).catch(() => { if (!controller.signal.aborted) setToast("生产单元详情读取失败，请重试"); });
+    const requestId = ++unitDetailRequestId.current;
+    fetchSupplierUnit(selectedUnitId, controller.signal)
+      .then((unit) => {
+        if (!controller.signal.aborted && isCurrentSupplierRequest(requestId, unitDetailRequestId.current)) setDetailUnit(unit);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted && isCurrentSupplierRequest(requestId, unitDetailRequestId.current)) setToast("生产单元详情读取失败，请重试");
+      });
     return () => controller.abort();
   }, [selectedUnitId, unitsRefresh]);
 
@@ -138,15 +164,68 @@ export function SupplierManagementPage() {
     toastTimer.current = window.setTimeout(() => setToast(""), 2800);
   };
 
+  const selectSupplier = (supplier: SupplierRecord) => {
+    detailRequestId.current += 1;
+    unitsRequestId.current += 1;
+    unitDetailRequestId.current += 1;
+    const next = createSupplierSelectionState(supplier);
+    setSelectedId(next.selectedId);
+    setDetailSupplier(next.detailSupplier);
+    setSupplierUnits(next.supplierUnits);
+    setSelectedUnitId(next.selectedUnitId);
+    setDetailUnit(next.detailUnit);
+    setDetailError(next.detailError);
+    setUnitsError(next.unitsError);
+    setDetailLoading(next.detailLoading);
+    setUnitsLoading(next.unitsLoading);
+    setUnitFilters(initialSupplierUnitFilters);
+    setUnitFormMode(null);
+    setToast("");
+  };
+
+  const retrySupplierDetail = () => {
+    detailRequestId.current += 1;
+    setDetailLoading(true);
+    setDetailError("");
+    setDetailRefresh((value) => value + 1);
+  };
+
+  const retrySupplierUnits = () => {
+    unitsRequestId.current += 1;
+    setSupplierUnits([]);
+    setUnitsLoading(true);
+    setUnitsError("");
+    setUnitsRefresh((value) => value + 1);
+  };
+
+  const closeSupplierDetail = () => {
+    detailRequestId.current += 1;
+    unitsRequestId.current += 1;
+    unitDetailRequestId.current += 1;
+    setSelectedId(null);
+    setDetailSupplier(null);
+    setSupplierUnits([]);
+    setSelectedUnitId(null);
+    setDetailUnit(null);
+    setDetailError("");
+    setUnitsError("");
+    setDetailLoading(false);
+    setUnitsLoading(false);
+  };
+
+  const openCreateUnit = (supplier: SupplierRecord) => {
+    if (!canCreateSupplierUnit(supplier)) return;
+    setUnitFormMode({ kind: "create", supplierId: supplier.id });
+  };
+
   const saveSupplier = async (form: SupplierFormState) => {
     const saved = formMode?.kind === "edit"
       ? await patchSupplier(formMode.supplierId, supplierFormToPayload(form))
       : await createSupplier(supplierFormToPayload(form));
     setFormMode(null);
-    setSelectedId(saved.id);
-    setDetailSupplier(saved);
+    selectSupplier(saved);
     setListRefresh((value) => value + 1);
-    setDetailRefresh((value) => value + 1);
+    retrySupplierDetail();
     showToast(`${saved.name} 已保存`);
   };
 
@@ -163,6 +242,9 @@ export function SupplierManagementPage() {
 
   const saveUnit = async (form: SupplierUnitFormState) => {
     if (!unitFormMode) return;
+    if (unitFormMode.kind === "create" && (!selectedSupplier || selectedSupplier.id !== unitFormMode.supplierId || !canCreateSupplierUnit(selectedSupplier))) {
+      throw new SupplierApiError(409, "供应商已停用");
+    }
     const saved = unitFormMode.kind === "edit"
       ? await patchSupplierUnit(unitFormMode.unitId, supplierUnitFormToPayload(form))
       : await createSupplierUnit(unitFormMode.supplierId, supplierUnitFormToPayload(form));
@@ -170,7 +252,7 @@ export function SupplierManagementPage() {
     setSelectedUnitId(saved.id);
     setDetailUnit(saved);
     setUnitsRefresh((value) => value + 1);
-    setDetailRefresh((value) => value + 1);
+    retrySupplierDetail();
     showToast(`${saved.name} 已保存`);
   };
 
@@ -191,10 +273,10 @@ export function SupplierManagementPage() {
     <section className="flex min-h-0 flex-1 flex-col border-t border-white/14 bg-white/22 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-3xl"><div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between"><div><div className="flex items-center gap-2 text-sm font-medium text-stone-700"><Sparkles className="size-4 text-blue-600" />合作方名录<span className="rounded-full border border-emerald-200/60 bg-emerald-50/58 px-2 py-0.5 text-xs text-emerald-800">实时数据</span></div><h1 className="mt-2 text-2xl font-semibold text-stone-950">管理面料来源与加工合作方</h1><p className="mt-1 text-sm text-stone-600">管理面料来源、坯布、织造、染整、印花及后整理合作方</p></div><div className="flex flex-col gap-2 md:flex-row"><label className="flex h-9 min-w-72 items-center gap-2 rounded-xl border border-white/30 bg-white/24 px-3 text-sm shadow-inner shadow-white/12"><Search className="size-4 text-stone-500" /><input className="min-w-0 flex-1 bg-transparent text-stone-950 outline-none placeholder:text-stone-500/70" onChange={(event) => setQuery(event.target.value)} placeholder="搜索名称、联系人或电话" value={query} />{query ? <button aria-label="清空供应商搜索" className="rounded-lg p-1 text-stone-500 hover:bg-white/44" onClick={() => setQuery("")} type="button"><X className="size-3.5" /></button> : null}</label><FilterSelect label="角色" options={roleOptions} value={roleFilter} onChange={setRoleFilter} /><FilterSelect label="状态" options={statusOptions} value={statusFilter} onChange={setStatusFilter} /></div></div>
       <div className="mt-4 flex items-center justify-between border-t border-white/44 pt-3 text-xs text-stone-600"><span>主要联系人仅展示一位，点击供应商查看分区详情</span><span className="flex items-center gap-1.5"><Filter className="size-3.5" />{listLoading ? "正在读取" : `已读取 ${suppliers.length} 家`}</span></div>
       {listError ? <div className="mt-3 flex items-center justify-between rounded-2xl border border-rose-200/60 bg-rose-50/66 px-4 py-3 text-sm text-rose-800"><span>{listError}</span><button className="flex items-center gap-1.5 rounded-xl border border-rose-200 bg-white/60 px-3 py-2" onClick={() => setListRefresh((value) => value + 1)} type="button"><RefreshCw className="size-4" />重试</button></div> : null}
-      <div className="relative mt-3 min-h-0 flex-1 overflow-auto rounded-[18px] border border-white/26 bg-white/18 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl">{listLoading && suppliers.length > 0 ? <div className="absolute right-3 top-3 z-20 flex items-center gap-2 rounded-xl bg-white/72 px-3 py-2 text-xs text-stone-600 shadow-sm"><LoaderCircle className="size-3.5 animate-spin" />更新中</div> : null}<table className="w-full min-w-[1000px] table-fixed border-collapse text-left text-sm"><colgroup><col className="w-[18%]" /><col className="w-[15%]" /><col className="w-[9%]" /><col className="w-[13%]" /><col className="w-[11%]" /><col className="w-[9%]" /><col className="w-[13%]" /><col className="w-[12%]" /></colgroup><thead className="sticky top-0 z-10 bg-white/60 text-xs text-stone-700 backdrop-blur-2xl"><tr>{["供应商名称", "角色", "主要联系人", "电话", "所在地", "合作状态", "资料完整度", "最近更新"].map((header) => <th className="px-4 py-3 font-medium" key={header}>{header}</th>)}</tr></thead><tbody className="divide-y divide-white/24">{suppliers.map((supplier) => { const completeness = calculateSupplierCompleteness(supplier); return <tr aria-label={`查看${supplier.name}详情`} className={`cursor-pointer transition hover:bg-white/34 focus:bg-white/38 focus:outline-none ${selectedId === supplier.id ? "bg-white/30" : ""}`} key={supplier.id} onClick={() => { setSelectedId(supplier.id); setDetailSupplier(supplier); setUnitFilters(initialUnitFilters); setSelectedUnitId(null); }} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { setSelectedId(supplier.id); setDetailSupplier(supplier); setUnitFilters(initialUnitFilters); } }} tabIndex={0}><td className="px-4 py-3"><div className="flex items-center gap-2"><span className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-blue-200/40 bg-blue-50/42 text-blue-700"><Building2 className="size-4" /></span><div className="flex min-w-0 items-center gap-1.5"><div className="font-medium text-stone-950">{supplier.name}</div>{supplier.riskNote ? <span aria-label="有风险提醒" className="shrink-0 text-amber-700" title={`风险提醒：${supplier.riskNote}`}><ShieldAlert className="size-3.5" /></span> : null}</div></div></td><td className="px-4 py-3"><RoleTags roles={supplier.roles} /></td><td className="px-4 py-3"><div className="flex items-center gap-1.5 text-stone-800"><Contact className="size-3.5 text-stone-500" />{supplier.contactName || "未填写"}</div></td><td className="px-4 py-3"><div className="flex items-center gap-1.5 whitespace-nowrap text-stone-700"><Phone className="size-3.5 text-stone-500" />{supplier.phone || "未填写"}</div></td><td className="px-4 py-3"><div className="flex items-center gap-1.5 text-stone-700"><MapPin className="size-3.5 shrink-0 text-stone-500" />{supplier.city || "未填写"}</div></td><td className="px-4 py-3"><StatusPill status={supplier.status} /></td><td className="px-4 py-3"><div className="flex w-28 items-center gap-2"><div className="h-1.5 flex-1 rounded-full bg-white/54"><div className={`h-1.5 rounded-full ${completeness < 80 ? "bg-amber-600/78" : "bg-stone-800/82"}`} style={{ width: `${completeness}%` }} /></div><span className="text-xs text-stone-600">{completeness}%</span></div></td><td className="whitespace-nowrap px-4 py-3 text-xs text-stone-600">{formatSupplierDate(supplier.updatedAt)}</td></tr>; })}</tbody></table>{!listLoading && !listError && suppliers.length === 0 ? <div className="flex h-48 flex-col items-center justify-center text-sm text-stone-500"><Building2 className="mb-3 size-7 text-stone-400" /><span>暂无符合当前条件的供应商</span><button className="mt-4 rounded-xl bg-stone-950 px-4 py-2 text-xs text-white" onClick={() => setFormMode({ kind: "create" })} type="button">新增第一家供应商</button></div> : null}{listLoading && suppliers.length === 0 ? <div className="flex h-48 items-center justify-center gap-2 text-sm text-stone-500"><LoaderCircle className="size-4 animate-spin" />正在读取供应商...</div> : null}</div>
+      <div className="relative mt-3 min-h-0 flex-1 overflow-auto rounded-[18px] border border-white/26 bg-white/18 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl">{listLoading && suppliers.length > 0 ? <div className="absolute right-3 top-3 z-20 flex items-center gap-2 rounded-xl bg-white/72 px-3 py-2 text-xs text-stone-600 shadow-sm"><LoaderCircle className="size-3.5 animate-spin" />更新中</div> : null}<table className="w-full min-w-[1000px] table-fixed border-collapse text-left text-sm"><colgroup><col className="w-[18%]" /><col className="w-[15%]" /><col className="w-[9%]" /><col className="w-[13%]" /><col className="w-[11%]" /><col className="w-[9%]" /><col className="w-[13%]" /><col className="w-[12%]" /></colgroup><thead className="sticky top-0 z-10 bg-white/60 text-xs text-stone-700 backdrop-blur-2xl"><tr>{["供应商名称", "角色", "主要联系人", "电话", "所在地", "合作状态", "资料完整度", "最近更新"].map((header) => <th className="px-4 py-3 font-medium" key={header}>{header}</th>)}</tr></thead><tbody className="divide-y divide-white/24">{suppliers.map((supplier) => { const completeness = calculateSupplierCompleteness(supplier); return <tr aria-label={`查看${supplier.name}详情`} className={`cursor-pointer transition hover:bg-white/34 focus:bg-white/38 focus:outline-none ${selectedId === supplier.id ? "bg-white/30" : ""}`} key={supplier.id} onClick={() => selectSupplier(supplier)} onKeyDown={(event) => { if (isSupplierSelectionKey(event.key)) { event.preventDefault(); selectSupplier(supplier); } }} tabIndex={0}><td className="px-4 py-3"><div className="flex items-center gap-2"><span className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-blue-200/40 bg-blue-50/42 text-blue-700"><Building2 className="size-4" /></span><div className="flex min-w-0 items-center gap-1.5"><div className="font-medium text-stone-950">{supplier.name}</div>{supplier.riskNote ? <span aria-label="有风险提醒" className="shrink-0 text-amber-700" title={`风险提醒：${supplier.riskNote}`}><ShieldAlert className="size-3.5" /></span> : null}</div></div></td><td className="px-4 py-3"><RoleTags roles={supplier.roles} /></td><td className="px-4 py-3"><div className="flex items-center gap-1.5 text-stone-800"><Contact className="size-3.5 text-stone-500" />{supplier.contactName || "未填写"}</div></td><td className="px-4 py-3"><div className="flex items-center gap-1.5 whitespace-nowrap text-stone-700"><Phone className="size-3.5 text-stone-500" />{supplier.phone || "未填写"}</div></td><td className="px-4 py-3"><div className="flex items-center gap-1.5 text-stone-700"><MapPin className="size-3.5 shrink-0 text-stone-500" />{supplier.city || "未填写"}</div></td><td className="px-4 py-3"><StatusPill status={supplier.status} /></td><td className="px-4 py-3"><div className="flex w-28 items-center gap-2"><div className="h-1.5 flex-1 rounded-full bg-white/54"><div className={`h-1.5 rounded-full ${completeness < 80 ? "bg-amber-600/78" : "bg-stone-800/82"}`} style={{ width: `${completeness}%` }} /></div><span className="text-xs text-stone-600">{completeness}%</span></div></td><td className="whitespace-nowrap px-4 py-3 text-xs text-stone-600">{formatSupplierDate(supplier.updatedAt)}</td></tr>; })}</tbody></table>{!listLoading && !listError && suppliers.length === 0 ? <div className="flex h-48 flex-col items-center justify-center text-sm text-stone-500"><Building2 className="mb-3 size-7 text-stone-400" /><span>暂无符合当前条件的供应商</span><button className="mt-4 rounded-xl bg-stone-950 px-4 py-2 text-xs text-white" onClick={() => setFormMode({ kind: "create" })} type="button">新增第一家供应商</button></div> : null}{listLoading && suppliers.length === 0 ? <div className="flex h-48 items-center justify-center gap-2 text-sm text-stone-500"><LoaderCircle className="size-4 animate-spin" />正在读取供应商...</div> : null}</div>
     </section>
     {toast ? <div className="fixed right-5 top-20 z-[60] flex items-center gap-2 rounded-2xl border border-emerald-200/60 bg-emerald-50/82 px-4 py-3 text-sm text-emerald-900 shadow-xl backdrop-blur-2xl"><CheckCircle2 className="size-4" />{toast}</div> : null}
-    <SupplierDetailDrawer supplier={selectedSupplier} loading={detailLoading} error={detailError} units={supplierUnits} unitsLoading={unitsLoading} unitsError={unitsError} unitFilters={unitFilters} onUnitFiltersChange={setUnitFilters} onRetry={() => setDetailRefresh((value) => value + 1)} onRetryUnits={() => setUnitsRefresh((value) => value + 1)} onClose={() => { setSelectedId(null); setDetailSupplier(null); setSelectedUnitId(null); setDetailUnit(null); }} onEdit={(supplier) => setFormMode({ kind: "edit", supplierId: supplier.id })} onToggleStatus={toggleSupplierStatus} onViewFabrics={() => showToast("关联面料功能后续开放")} onSelectUnit={(unit) => { setSelectedUnitId(unit.id); setDetailUnit(unit); }} onCreateUnit={(supplier) => setUnitFormMode({ kind: "create", supplierId: supplier.id })} />
+    <SupplierDetailDrawer supplier={selectedSupplier} loading={detailLoading} error={detailError} units={supplierUnits} unitsLoading={unitsLoading} unitsError={unitsError} unitFilters={unitFilters} onUnitFiltersChange={setUnitFilters} onRetry={retrySupplierDetail} onRetryUnits={retrySupplierUnits} onClose={closeSupplierDetail} onEdit={(supplier) => setFormMode({ kind: "edit", supplierId: supplier.id })} onToggleStatus={toggleSupplierStatus} onViewFabrics={() => showToast("关联面料功能后续开放")} onSelectUnit={(unit) => { unitDetailRequestId.current += 1; setSelectedUnitId(unit.id); setDetailUnit(unit); }} onCreateUnit={openCreateUnit} />
     <SupplierUnitDetailDrawer unit={selectedUnit} supplier={selectedUnitSupplier} onClose={() => { setSelectedUnitId(null); setDetailUnit(null); }} onEdit={(unit) => setUnitFormMode({ kind: "edit", unitId: unit.id })} onToggleStatus={toggleUnitStatus} />
     {formMode ? <SupplierFormDrawer key={`${formMode.kind}-${editingSupplier?.id ?? "new"}`} mode={formMode.kind} supplier={editingSupplier} onClose={() => setFormMode(null)} onSave={saveSupplier} /> : null}
     {unitFormMode && unitFormSupplier ? <SupplierUnitFormDrawer key={`${unitFormMode.kind}-${editingUnit?.id ?? unitFormSupplier.id}`} mode={unitFormMode.kind} supplier={unitFormSupplier} unit={editingUnit} onClose={() => setUnitFormMode(null)} onSave={saveUnit} /> : null}
