@@ -19,6 +19,19 @@ const quoteSelect = {
   createdAt: true,
 } as const;
 
+const supplierUnitSummarySelect = {
+  id: true,
+  name: true,
+  unitForm: true,
+  status: true,
+} as const;
+
+const detailQuoteSelect = {
+  ...quoteSelect,
+  supplierUnitId: true,
+  supplierUnit: { select: supplierUnitSummarySelect },
+} as const;
+
 const supplierSummarySelect = {
   id: true,
   name: true,
@@ -269,12 +282,12 @@ export async function getFabricDetail(id: string) {
           updatedAt: true,
           supplier: { select: supplierSummarySelect },
           supplierUnit: {
-            select: { id: true, name: true, unitForm: true, status: true },
+            select: supplierUnitSummarySelect,
           },
           quotes: {
             where: { tenantId: tenant.id },
             orderBy: [{ quoteDate: "desc" }, { createdAt: "desc" }, { id: "desc" }],
-            select: quoteSelect,
+            select: detailQuoteSelect,
           },
         },
       },

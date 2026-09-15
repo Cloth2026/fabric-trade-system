@@ -18,6 +18,7 @@ let fabricDId = "";
 let otherFabricId = "";
 let preferredSupplierId = "";
 let preferredUnitId = "";
+let historicalUnitId = "";
 let fallbackSupplierId = "";
 
 function routeContext(id: string) {
@@ -135,7 +136,7 @@ before(async () => {
   preferredSupplierId = supplierB.id;
   fallbackSupplierId = supplierC.id;
 
-  const [preferredUnit] = await Promise.all([
+  const [preferredUnit, historicalUnit] = await Promise.all([
     prisma.supplierUnit.create({
       data: {
         tenantId,
@@ -143,6 +144,15 @@ before(async () => {
         name: "染色一车间",
         unitForm: "workshop",
         businessTypes: ["dyeing", "finishing"],
+      },
+    }),
+    prisma.supplierUnit.create({
+      data: {
+        tenantId,
+        supplierId: supplierB.id,
+        name: "染色二车间",
+        unitForm: "workshop",
+        businessTypes: ["dyeing"],
       },
     }),
     prisma.supplierUnit.create({
@@ -156,6 +166,7 @@ before(async () => {
     }),
   ]);
   preferredUnitId = preferredUnit.id;
+  historicalUnitId = historicalUnit.id;
 
   const [fabricA, fabricB, fabricC, fabricD, otherFabric] = await Promise.all([
     prisma.fabric.create({
@@ -276,7 +287,7 @@ before(async () => {
       data: {
         tenantId,
         fabricSupplierId: sourceAPreferred.id,
-        supplierUnitId: preferredUnit.id,
+        supplierUnitId: historicalUnit.id,
         purchasePrice: "23.10",
         currency: "CNY",
         pricingUnit: "kg",
@@ -302,6 +313,18 @@ before(async () => {
         createdAt: new Date("2026-09-01T01:00:00.000Z"),
         qualityDifferences: "Improved color consistency",
         remarks: "Latest quote",
+      },
+    }),
+    prisma.fabricSupplierQuote.create({
+      data: {
+        tenantId,
+        fabricSupplierId: sourceAPreferred.id,
+        purchasePrice: "22.00",
+        currency: "CNY",
+        pricingUnit: "kg",
+        quoteDate: new Date("2026-07-01T00:00:00.000Z"),
+        createdAt: new Date("2026-07-01T01:00:00.000Z"),
+        remarks: "Quote without production unit",
       },
     }),
   ]);
@@ -477,9 +500,28 @@ describe("GET /api/fabrics/[id]", () => {
     assert.equal(preferred.supplierUnit.unitForm, "workshop");
     assert.deepEqual(
       preferred.quotes.map((quote: { purchasePrice: string }) => quote.purchasePrice),
-      ["24.8", "23.1"],
+      ["24.8", "23.1", "22"],
     );
     assert.equal(preferred.quotes.every((quote: { purchasePrice: unknown }) => typeof quote.purchasePrice === "string"), true);
+
+    const [currentUnitQuote, historicalUnitQuote, noUnitQuote] = preferred.quotes;
+    assert.equal(currentUnitQuote.supplierUnitId, preferredUnitId);
+    assert.deepEqual(currentUnitQuote.supplierUnit, {
+      id: preferredUnitId,
+      name: "染色一车间",
+      unitForm: "workshop",
+      status: "active",
+    });
+    assert.equal(historicalUnitQuote.supplierUnitId, historicalUnitId);
+    assert.deepEqual(historicalUnitQuote.supplierUnit, {
+      id: historicalUnitId,
+      name: "染色二车间",
+      unitForm: "workshop",
+      status: "active",
+    });
+    assert.notEqual(historicalUnitQuote.supplierUnitId, preferred.supplierUnit.id);
+    assert.equal(noUnitQuote.supplierUnitId, null);
+    assert.equal(noUnitQuote.supplierUnit, null);
   });
 
   test("returns structured greige, dyeing, and post-process data", async () => {
