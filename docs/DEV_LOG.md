@@ -156,7 +156,7 @@ Prisma 模型口径：
 
 - Next.js dev server 阻止了来自 `127.0.0.1` 的开发资源请求，导致页面可以显示但 React 没有完整 hydration。
 - 日志中出现 `Blocked cross-origin request to Next.js dev resource`。
-- 另外，Codex 工作区存在 `C:\Users\Administrator\Documents\...` 和 `D:\Codex\projects\...` 两套路径映射。启动 Next dev server 时应优先使用真实路径 `D:\Codex\projects\2026-07-27\http-localhost-3001\fabric-trade-system`，否则 `.next/dev` 路径可能被拼坏。
+- 另外，部分本地工具可能同时暴露工作区别名路径和物理路径。启动 Next dev server 时应使用解析后的物理仓库路径，否则 `.next/dev` 路径可能被重复拼接。
 
 修复：
 
@@ -850,3 +850,27 @@ Validation:
 - `npm.cmd run build` passed with Next.js 16.3.5 and all supplier routes recognized.
 - Browser regression passed for supplier create/edit/status/search/filter, production-unit create/edit/status/search, and create-fabric drawer open/close.
 - Browser screenshots: `supplier-list-live.png`, `supplier-detail-live.png`, `supplier-form-live.png`, and `supplier-unit-live.png`.
+
+### 2026-09-19 Recent fabric and supplier milestones
+
+本节只补充此前日志尚未覆盖的已审核提交，不改写历史记录。
+
+- `c3e04e564debe318de6216f58bbd1cf9d9ad50da`：供应商详情加入生产单元静态原型，包括列表、详情、表单、搜索筛选和浏览器内交互。
+- `269641de568cf0d2e131a2c262892f9586dbc8b5`：将生产单元拆为 `unitForm`、多选 `businessTypes` 和文本 `processCapabilities`。
+- `4ea5edc3d2125f6f7101ed418efa18e87b8ef67a`：生产单元表单要求至少一个业务类型，并补充合作条件说明。
+- `c41e3cb109d3beb2868a34c7f56776abfd18c255`：新增 `SupplierUnit` 数据模型，扩展 `Supplier`，并关联 `FabricSupplier` 和 `FabricSupplierQuote`。
+- `423430c621658c378ac63556ff835c1c866a1286`：报价生产单元改为 `onDelete: Restrict`，避免删除生产单元后丢失历史报价归属。
+- `b9f959f53849bed832585004b3305cdb8af92ba9`：实现供应商和生产单元真实 API、Zod 稳定 key 校验、租户隔离和操作日志。
+- `e2be1cc7d0b8892c95e942ae935636d620d45d1e`：供应商和生产单元 UI 接入真实 API，移除浏览器内静态业务数据。
+- `2f7d5d41eac214a429b02e5f873d55cb0d2d5977`：修复切换供应商时详情和生产单元状态串页，并限制停用供应商新增生产单元。
+- `d49204a2d6a5c486b5431840882de0831fcb28ea`：完成面料库专业表格、卡片辅助视图和独立三标签详情抽屉的静态重设计。
+- `cf392e308ba19d7934629298efd23368a44ac9e1`：修复面料详情抽屉关闭后再次打开闪退，重开时恢复基础资料标签并清理旧提示。
+- `2acc932902e8d4558b984e97e1578b9eab7d829c`：实现 `GET /api/fabrics` 和 `GET /api/fabrics/[id]`，支持租户隔离、分页筛选、首选货源和 Decimal 字符串序列化。
+- `5906a5c8ac5193907ba4140ac1c0ed491808941e`：详情报价历史补充报价自身的 `supplierUnitId` 和 `supplierUnit`，不再混用货源当前生产单元。
+- `05ef48ca7596dba39a5069c4291216ef17a2fff3`：面料列表和详情接入真实只读 API，加入请求竞态保护、真实分页筛选及新增成功后刷新列表。
+
+Current phase:
+
+- 面料新增、读取和供应商管理已形成真实基础闭环。
+- 面料详情中的编辑、添加货源和新增报价仍为静态提示。
+- 下一项推荐任务是“面料货源与采购报价维护”的静态 UI 原型，确认后再开发写 API。

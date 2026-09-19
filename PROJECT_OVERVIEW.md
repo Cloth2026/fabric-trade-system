@@ -1,158 +1,52 @@
-# Fabric ERP Project Overview
+# Fabric Trade System 项目总览
 
-## 项目定位
+## 产品定位
 
-这是一个面向面料贸易业务的 Web 后台管理系统，当前处于从静态原型进入真实业务闭环的早期开发阶段。系统优先服务局域网多人使用，同时按未来云端 SaaS 和公司内部私有化部署的方向设计。
+Fabric Trade System 是面向小型面料贸易公司和面料管理团队的 Web ERP。系统首先服务局域网多人协作，同时保留未来云端 SaaS 和公司内部私有化部署的架构空间。
 
-第一阶段核心模块是“面料库”，目标不是简单商品列表，而是围绕面料档案、结构分类、坯布、染整、后工艺、来源价格、质量备注、用途季节认证、资料完整度等信息建立可补全的面料档案体系。
+当前核心不是传统库存 ERP，而是建立可持续补全的面料档案，并管理供应商、生产单元、采购货源和报价历史。主要用户包括面料开发、采购、业务、跟单和管理人员，他们的日常工作包括：
+
+- 快速查找面料编号、规格、结构、工艺和来源资料。
+- 记录一款面料对应的多家供应商、供应商货号及品质差异。
+- 区分供应商公司与其分厂、车间、部门等生产单元。
+- 保存采购报价快照，比较 MOQ、交期和历史价格。
+- 持续补全坯布、染整、后工艺、质量、用途和认证信息。
 
 ## 当前技术栈
 
-- Next.js 16 App Router
-- React 19
-- TypeScript
-- Tailwind CSS
-- Prisma 7
+- Next.js 16.3.5 App Router
+- React 19.2
+- TypeScript 5
+- Tailwind CSS 4
 - PostgreSQL
-- `@prisma/adapter-pg`
-- Zod
-- lucide-react
-- Framer Motion
-- TanStack Table 依赖已安装，后续表格视图可使用
+- Prisma 7.10，使用 PostgreSQL driver adapter
+- Zod 4
+- lucide-react、Framer Motion
+- Node.js 内置 test runner + tsx
+- TanStack Table 已安装，当前页面仍以项目自有表格组件为主
 
-## 项目结构
+UI 采用 Spatial Glass Fabric OS 方向：专业、克制、分层、带轻量动效，避免传统 ERP 的拥挤和沉闷。桌面端面料库默认使用专业表格，卡片作为辅助浏览方式。
 
-- `src/app/page.tsx`：当前面料库主页面与新增面料入口。
-- `src/components/fabrics/`：新增面料统一状态、基础字段、工艺字段、多供应商字段和真实提交抽屉。
-- `src/components/suppliers/`：供应商与下属生产单元的真实管理页面、详情抽屉和新增/编辑表单。
-- `src/components/form/`：Spatial Glass 风格的通用表单控件。
-- `src/lib/api/fabric-client.ts`：配置、供应商搜索和新增面料的前端 API 封装。
-- `src/lib/api/supplier-client.ts`：供应商与生产单元查询、创建和更新的前端 API 封装。
-- `src/app/globals.css`：全局样式、空间玻璃 UI、抽屉动效等。
-- `src/lib/prisma.ts`：Prisma Client 初始化。
-- `prisma/schema.prisma`：数据库模型。
-- `prisma/migrations/`：数据库 migration。
-- `prisma/seed.mjs`：默认枚举配置 seed。
-- `docs/PROJECT_CONTEXT.md`：项目背景与技术方向。
-- `docs/FABRIC_LIBRARY_FIELDS.md`：面料库字段和表单结构设计。
-- `docs/DEV_LOG.md`：开发日志和上下文记录。
+## 项目目录
 
-## 数据库结构
+| 路径 | 职责 |
+| --- | --- |
+| `src/app/` | Next.js 页面、全局样式和 Route Handlers |
+| `src/components/fabrics/` | 面料列表、详情、新增表单和面料展示辅助组件 |
+| `src/components/suppliers/` | 供应商与生产单元真实管理 UI |
+| `src/components/form/` | Spatial Glass 通用表单控件 |
+| `src/lib/api/` | 前端 API Client、响应类型和请求竞态辅助逻辑 |
+| `src/server/` | 租户上下文、Zod 校验、业务服务和错误映射 |
+| `src/generated/prisma/` | Prisma 生成代码，不手工编辑 |
+| `prisma/schema.prisma` | 当前数据库模型事实来源 |
+| `prisma/migrations/` | 已执行的增量 migration，不删除或改写历史文件 |
+| `prisma/seed.mjs` | 系统级枚举配置的可重复执行 seed |
+| `tests/` | API、服务、数据模型和前端辅助逻辑测试 |
+| `docs/` | 产品、数据、API、路线和开发交接文档 |
 
-当前 Prisma schema 已包含以下核心模型：
+## 本地运行
 
-- `Tenant`：租户。为未来 SaaS 和私有化部署预留多租户能力。
-- `User`：用户。当前仅有基础字段，权限细分后续实现。
-- `ConfigOption`：可维护枚举配置。支持系统级和未来租户级配置。
-- `Supplier`：供应商主体。保留 legacy `type`，新增多角色及基础、联系、合作和风险字段。
-- `SupplierUnit`：供应商下属生产单元，记录单元形式、业务类型、工艺能力、合作条件、联系人和质量风险。
-- `Fabric`：面料主档案。
-- `FabricSupplier`：面料与供应商的长期供货关系。一个面料可以对应多个供应商，只保存稳定关系字段。
-- `FabricSupplierQuote`：面料供应商报价历史。每次报价新增快照记录，避免覆盖旧价格。
-- `GreigeFabric`：坯布信息。
-- `DyeingFinishing`：染整信息。
-- `PostProcess`：后工艺信息。
-- `FabricStockInBatch`：入库批次，当前 schema 已保留但页面暂未优先实现。
-- `OperationLog`：操作日志，后续用于审计。
-
-关键规则：
-
-- `Fabric.code` 在租户内唯一，页面规则为 `SDD-` 固定前缀。
-- `Fabric.fabricType` 区分针织与梭织。
-- `Fabric.pricingUnit` 由面料类型派生：针织默认 `kg`，梭织默认 `meter`。
-- V1 暂不管理面料颜色。
-- 不再用 `Fabric.supplierId`、`Fabric.supplierQuote` 等单一字段表示唯一供应商；这些旧字段暂时保留用于安全迁移。
-- 供应商价格管理采用 `FabricSupplier` 长期关系 + `FabricSupplierQuote` 报价历史。
-- `FabricSupplier` 不保存价格、币种、计价单位、MOQ、交期、联系人和报价日期。
-- `FabricSupplierQuote` 的 `purchasePrice` 和 `quoteDate` 必填；面料、供应商和供应商货号统一通过 `FabricSupplier` 读取。
-- 同一租户、同一供应商下的生产单元名称唯一；删除供应商时，其生产单元级联删除。
-- `FabricSupplier.supplierUnitId` 表示当前常用生产单元，`FabricSupplierQuote.supplierUnitId` 独立保存报价当时的生产单元；两者均可为空以兼容旧流程。
-- 用途、适用季节、认证标准不是自由文本，保存为配置项 key 数组：
-  - `usageOptionKeys`
-  - `seasonOptionKeys`
-  - `certificationOptionKeys`
-- 对应配置分组：
-  - `fabric_usage`
-  - `fabric_season`
-  - `fabric_certification`
-
-## 已完成的功能
-
-- 创建了新的 Next.js 项目脚手架。
-- 确定了整体 UI 方向：Spatial Glass Fabric OS，偏 Apple 风格的空间玻璃后台系统。
-- 完成面料库主页面静态原型：
-  - 面料卡片视图
-  - 专业表格入口
-  - 入库批次入口
-  - 搜索、类型筛选、来源筛选
-  - 右侧详情抽屉
-- 完成“新增面料”页面真实表单：
-  - 基础信息
-  - 分类结构
-  - 来源与价格
-  - 坯布信息
-  - 染整信息
-  - 后工艺信息
-  - 质量与备注
-  - 用途 / 季节 / 认证
-- 新增面料抽屉已加入打开/关闭动效。
-- 小模块标题已加入语义彩色图标。
-- 完成面料库字段设计文档。
-- 完成 Prisma schema 设计。
-- 完成首个 migration 文件。
-- 完成默认枚举配置 seed 脚本。
-- 本地已安装 PostgreSQL 17，并将服务运行路径调整到 `D:\PostgreSQLServer`。
-- 已创建开发数据库 `fabric_trade_dev`。
-- 已执行 Prisma migration。
-- 已执行默认枚举 seed。
-- 已新增并修正面料多供应商货源和报价历史数据模型。
-- 已接入枚举配置读取、当前租户供应商搜索和 `POST /api/fabrics`。
-- 已实现多供应商增删、首选唯一、可选首次报价、字段级错误和保存成功反馈。
-- 已实现坯布、染整、后工艺状态与明细清理/展开联动。
-- 已实现服务器控制租户和计价单位，前端 payload 不包含 `tenantId` 或 `pricingUnit`。
-- 已完成供应商基础管理真实 UI：专业表格、服务端搜索/筛选、详情读取、新增/编辑、多角色与启用/停用。
-- 已完成供应商下属“生产单元”真实 UI：服务端搜索筛选、能力卡片、空状态、二级详情、新增/编辑和启用/暂停合作。
-- 已完成供应商与生产单元 Prisma 数据模型，并为面料货源及报价历史增加可选生产单元关联。
-
-## 正在开发的功能
-
-当前阶段已经完成新增面料的前后端闭环，正在准备面料库读取阶段：
-
-- 从数据库读取面料列表
-- 新增成功后刷新真实列表
-- 面料详情读取
-- 后续独立开发面料编辑
-- 供应商与生产单元已完成数据模型、后端 API 和真实 UI 接入。
-
-## 已知问题
-
-- 面料库列表仍使用静态数据，尚未从数据库读取。
-- 开发数据库当前没有供应商记录，供应商搜索在录入供应商前会显示空结果。
-- 供应商“关联面料”尚未接入，目前明确显示“后续开放”，不展示虚假报价或合作记录。
-- PostgreSQL 安装过程中曾误装到 C 盘，后来已将运行服务路径和注册表调整到 `D:\PostgreSQLServer`；C 盘保留过备份目录，后续可人工清理。
-- 当前 UI 中部分旧静态数据存在编码显示异常，需要在后续真实数据接入时清理。
-- 权限和登录尚未实现；当前使用集中管理的临时服务端单租户上下文。
-- 入库批次、图片/色卡/样品模块暂时不作为当前优先级。
-- 旧的 `Fabric` 单供应商字段尚未迁移到 `FabricSupplier` / `FabricSupplierQuote`，当前不删除旧字段。
-
-## 下一步原计划
-
-1. 实现面料列表读取 API。
-2. 用真实数据库数据替换首页静态面料卡片。
-3. 新增成功后刷新面料列表。
-4. 实现面料详情读取 API。
-5. 单独评审并实现面料编辑。
-6. 继续暂缓寄样、客户报价、订单和库存。
-
-## 运行提示
-
-开发环境需要：
-
-- Node.js
-- PostgreSQL 15+
-- npm
-
-常用命令：
+前置条件：Node.js、npm、PostgreSQL 15 或更高版本。环境变量模板见 `.env.example`、`.env.development.example` 和 `.env.test.example`，不得提交真实 `.env`。
 
 ```bash
 npm install
@@ -162,55 +56,117 @@ npm run prisma:seed
 npm run dev
 ```
 
-环境变量请参考 `.env.example`，不要提交真实 `.env`。
-## Backend Status - 2026-09-13
+自动测试必须使用独立的 `TEST_DATABASE_URL`，数据库名称必须明显包含 `test`。测试环境准备和命令见 `README.md`。
 
-- `POST /api/fabrics` exists and creates a fabric plus optional greige, dyeing/finishing, post-processes, supplier relations, initial supplier quote snapshots, and operation log in one transaction.
-- `GET /api/suppliers` exists and searches active suppliers within the current server-side tenant only.
-- Temporary single-tenant context is centralized in `src/server/tenant.ts`.
-- Create-fabric validation is centralized in `src/server/fabrics/schema.ts`.
-- Completeness calculation is centralized in `src/server/fabrics/completeness.ts`.
-- The create-fabric drawer is bound to the API with config loading, supplier search, validation errors, and success feedback.
-- Fabric list reading/editing is still not implemented.
-- No new migration was needed in this backend foundation round.
+## 数据库与租户隔离
 
-## Next Plan - Updated 2026-09-13
+- 业务核心表通过 `tenantId` 隔离；没有直接 `tenantId` 的工艺子表必须通过所属 `Fabric` 间接隔离。
+- 当前尚未实现登录和完整权限系统，`src/server/tenant.ts` 使用集中管理的临时单租户上下文，并在租户不存在时安全 upsert。
+- API 不接受客户端覆盖 `tenantId`。详情和更新查询同时限定资源 ID 与服务端租户；跨租户资源按不存在处理。
+- 金额使用 Prisma `Decimal`。只读 API 将金额序列化为字符串，前端不得先转为浮点数再修改精度。
+- 稳定英文 key 由数据库和 API 保存；中文标签由配置数据或前端映射负责。
 
-1. Read the fabric list from the database instead of static data.
-2. Refresh the real list after successful creation.
-3. Add a fabric detail read API.
-4. Review editing requirements before implementing the edit flow.
-5. Keep customer quotation, samples, orders, and inventory for later dedicated phases.
+核心数据关系和删除规则见 `docs/DATA_MODEL.md`。
 
-## Supplier Backend APIs - 2026-09-14
+## 已真实实现
 
-- Supplier and production-unit persistence is available through tenant-isolated REST route handlers.
-- Supplier roles, supplier statuses, production-unit forms, business types, and statuses use validated stable English keys.
-- Supplier and production-unit create/update/status operations write `OperationLog` records transactionally.
-- Cross-tenant detail and update requests return 404; invalid payloads return 400; name uniqueness conflicts return 409.
-- Production units do not expose DELETE endpoints. Normal business lifecycle uses active/inactive suppliers and active/paused units.
-- Future fabric-source and quote APIs must verify both production-unit tenant ownership and that the unit belongs to the same supplier as `FabricSupplier`.
-- The supplier and production-unit UI now reads and writes these APIs. Browser-memory example records were removed; only stable-key Chinese label maps remain on the client.
-- Supplier management explicitly sends `status=all`, while create-fabric supplier search omits status and therefore remains active-only.
-- Related fabric, quote, and cooperation previews are intentionally marked `后续开放` until those modules are implemented.
-## Backend Hardening - 2026-09-13
+### 面料库
 
-- `sample_status` is now part of repeatable seed data.
-- Automated tests require `TEST_DATABASE_URL` and refuse non-test database names.
-- Supplier search limit handling is fixed: default 20, invalid 20, min 1, max 50.
-- Create-fabric validation now enforces process status/detail consistency.
-- Create-fabric validation now rejects duplicate supplier IDs and multiple preferred suppliers.
-- When suppliers are provided without an explicit preferred supplier, the first supplier is saved as preferred.
-- `GET /api/config-options?groups=...` returns enabled system and current-tenant config options for whitelisted groups only.
-- API error handling maps invalid JSON to 400 and unique conflicts to 409 without leaking database internals.
+- 新增面料真实保存：`POST /api/fabrics` 在事务中创建面料、可选工艺资料、多供应商货源、可选首次报价和操作日志。
+- 服务器校验固定 `SDD-` 编号、必填字段、配置 key、工艺状态一致性、供应商租户归属、首选供应商唯一和金额规则。
+- 针织自动使用 `kg`，梭织自动使用 `meter`，客户端不能决定计价单位。
+- 面料真实列表支持搜索、类型/状态/来源/完整度筛选和分页。
+- 面料真实详情包含基础资料、全部供应商货源、完整报价历史和结构化工艺资料。
+- 列表与详情具有请求取消和竞态保护；快速切换不会被旧响应覆盖。
+- 新增面料成功并完成关闭动效后会刷新当前列表。
+- 详情抽屉支持遮罩和关闭按钮关闭，重复打开不会继承退出状态。
 
-## Create Fabric UI Connection - 2026-09-14
+### 供应商
 
-- The approved Spatial Glass create drawer now uses one controlled form state and real APIs.
-- Config-backed fields display Chinese labels and submit stable keys.
-- Supplier and factory selectors use current-tenant fuzzy search.
-- Multiple suppliers, one preferred supplier, and optional initial quote snapshots are supported.
-- Empty quote prices are never converted to zero.
-- Process status changes clear or omit hidden detail data according to backend rules.
-- The client payload contains neither `tenantId` nor `pricingUnit`.
-- Automated coverage is 36 passing tests; Prisma validation/generation/status, lint, build, and browser checks pass.
+- 供应商基础管理真实 API 和 UI：列表、搜索、角色/状态筛选、详情、新增、编辑、启用和停用。
+- 供应商生产单元真实 API 和 UI：列表、搜索、单元形式/业务类型/状态筛选、详情、新增、编辑、启用和暂停。
+- 供应商和生产单元写操作事务性记录 `OperationLog`。
+- 页面保存稳定英文 key，中文界面使用标签映射。
+- 不提供生产单元 DELETE；业务生命周期使用启用、停用或暂停。
+
+### 数据模型
+
+- 一款面料可关联多家供应商。
+- `FabricSupplier` 保存长期货源关系，`FabricSupplierQuote` 保存不可覆盖的报价历史。
+- `FabricSupplier.supplierUnitId` 表示当前常用生产单元。
+- `FabricSupplierQuote.supplierUnitId` 独立保存报价当时的生产单元；详情 API 返回报价自身的 `supplierUnitId` 和 `supplierUnit`。
+
+## 尚未实现或仅为提示
+
+- 面料编辑 API 和真实 UI 尚未实现。
+- 面料详情底部“编辑面料”“添加货源”“新增报价”目前仅显示后续开放提示。
+- 独立的面料货源新增、采购报价新增和首选货源维护 API 尚未实现。
+- 寄样与客户反馈、客户管理、客户报价单、订单和真实库存尚未开发。
+- `FabricStockInBatch` 仅有预留模型，入库批次 UI 暂缓。
+- 登录、权限和复杂审批尚未实现。
+- V1 暂不管理颜色、色卡和色号。
+
+## 当前真实 API
+
+面料：
+
+- `GET /api/fabrics`
+- `POST /api/fabrics`
+- `GET /api/fabrics/[id]`
+
+配置：
+
+- `GET /api/config-options`
+
+供应商与生产单元：
+
+- `GET /api/suppliers`
+- `POST /api/suppliers`
+- `GET /api/suppliers/[id]`
+- `PATCH /api/suppliers/[id]`
+- `GET /api/suppliers/[id]/units`
+- `POST /api/suppliers/[id]/units`
+- `GET /api/supplier-units/[id]`
+- `PATCH /api/supplier-units/[id]`
+
+请求参数、响应摘要和错误约定见 `docs/API_CONTRACTS.md`。
+
+## 测试与验证
+
+```bash
+npm test
+npm run lint
+npm run build
+npm run prisma:generate
+npm run prisma:migrate:status
+```
+
+涉及 schema 的任务还应执行 Prisma validate 和对应 migration 验证。纯文档任务不需要运行代码测试或构建。
+
+## 已知限制
+
+- 面料库顶部“可销售、待完善、本月新增”统计当前页数据，不是全库聚合；只有“面料总数”使用分页总数。
+- 本地开发库可能存在浏览器回归记录 `SDD-UI-REG-20260919-1645`。它不是 seed 或 Git 内容，需由使用者确认后单独清理。
+- 当前仍是临时单租户上下文。
+- 部分文件保留 `prototype` 命名，但面料列表和详情已经读取真实 API。
+- `Fabric` 上旧单供应商字段仍为安全迁移保留，新功能不得继续依赖。
+
+## 分支与交接基准
+
+- GitHub：`https://github.com/Cloth2026/fabric-trade-system.git`
+- 默认分支：`main`
+- 本轮文档整理前基准：`05ef48ca7596dba39a5069c4291216ef17a2fff3`
+- 该基准已完成面料库真实读取和新增后刷新。文档整理提交会在此基准上新增一个独立 commit。
+
+## 核心文档索引
+
+建议按以下顺序阅读：
+
+1. `PROJECT_OVERVIEW.md`：项目现状和边界。
+2. `docs/PRODUCT_REQUIREMENTS.md`：已确认产品规则。
+3. `docs/DATA_MODEL.md`：数据库关系、约束和迁移风险。
+4. `docs/API_CONTRACTS.md`：当前真实 API 合同。
+5. `docs/PRODUCT_ROADMAP.md`：下一阶段路线与暂缓范围。
+6. `docs/FABRIC_LIBRARY_FIELDS.md`：面料字段详细定义。
+7. `docs/DEV_LOG.md`：历史实施记录。
+8. `docs/HANDOFF_WORKBUDDY.md`：WorkBuddy 快速接管入口。
