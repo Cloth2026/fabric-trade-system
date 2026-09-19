@@ -93,6 +93,59 @@
 
 错误：不存在或其他租户的面料返回 404。
 
+### `POST /api/fabrics/[id]/sources`
+
+用途：在既有面料下新增一个供应商货源（可携带首条报价），事务内写 `OperationLog` 并重算面料完整度。
+
+请求体（严格模式）：
+
+- `supplierId` 必填；供应商必须属于当前租户且为启用状态。
+- `supplierUnitId` 选填；必须属于该供应商且为启用生产单元。
+- `supplierFabricCode`、`sampleStatus`（须为启用的 `sample_status` 配置 key）、`qualityDifferences`、`remarks` 选填。
+- `isPreferred` 选填。面料尚无货源时首个货源自动成为首选；指定 `isPreferred: true` 时自动取消其他货源的首选。
+- `initialQuote` 选填，字段同新增面料时的报价（`purchasePrice` 必填）。
+
+服务器规则：
+
+- `pricingUnit` 沿用面料主档，报价快照单元默认取货源当前生产单元。
+- 同一面料同一供应商只能有一条货源关系（409）。
+
+成功：201，返回 `{ data }` 为该面料完整详情（结构与 `GET /api/fabrics/[id]` 一致）。
+
+错误：非法 JSON/字段/供应商/生产单元/配置 key 为 400，面料不存在或跨租户为 404，货源重复为 409。
+
+### `PATCH /api/fabrics/[id]/sources/[sourceId]`
+
+用途：维护货源资料或切换首选，事务内写 `OperationLog` 并重算完整度。
+
+请求体（严格模式，字段任意子集）：`supplierUnitId`（`null` 表示清除当前单元）、`supplierFabricCode`、`sampleStatus`、`qualityDifferences`、`remarks`、`isPreferred`。
+
+服务器规则：
+
+- 生产单元必须属于该货源的供应商且为启用状态。
+- `isPreferred: true` 自动取消其他货源首选；取消唯一首选后若仍有货源，自动提升第一个货源为首选（面料始终保留恰好一个首选货源）。
+- 修改货源当前生产单元不改写历史报价的快照单元。
+
+成功：200，返回 `{ data }` 为该面料完整详情。
+
+错误：非法/空 payload 为 400，面料或货源不存在（含跨面料 sourceId）为 404。
+
+### `POST /api/fabrics/[id]/sources/[sourceId]/quotes`
+
+用途：为货源新增一条采购报价快照，事务内写 `OperationLog` 并重算完整度。
+
+请求体（严格模式）：
+
+- `purchasePrice` 必填且非负；`currency` 3 位大写代码默认 `CNY`。
+- `minimumOrderQty`、`leadTime`、`contactName`、`quoteDate`、`qualityDifferences`、`remarks` 选填。
+- `supplierUnitId` 选填；未提供或为 `null` 时沿用货源当前生产单元作为快照；提供时必须属于该货源的供应商且为启用状态。
+
+`pricingUnit` 由服务器按面料主档派生，不接受客户端指定。
+
+成功：201，返回 `{ data }` 为该面料完整详情。
+
+错误：非法 JSON/字段/生产单元为 400，面料或货源不存在为 404。
+
 ## 配置 API
 
 ### `GET /api/config-options`

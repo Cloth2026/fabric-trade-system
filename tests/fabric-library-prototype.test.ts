@@ -193,7 +193,7 @@ describe("fabric detail drawer lifecycle", () => {
   test("resets closing state, active tab, and notice before reopening", () => {
     const openState = { ...createInitialFabricDetailDrawerState(), activeTab: "suppliers" as const, notice: "后续开放" };
     assert.equal(startFabricDetailDrawerClose(openState).isClosing, true);
-    assert.deepEqual(createInitialFabricDetailDrawerState(), { activeTab: "basic", isClosing: false, notice: "" });
+    assert.deepEqual(createInitialFabricDetailDrawerState(), { activeTab: "basic", isClosing: false, notice: "", noticeTone: "success" });
   });
 
   test("uses a fresh drawer key for close and different selected IDs", () => {

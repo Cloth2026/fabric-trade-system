@@ -5,7 +5,6 @@ import {
   Building2,
   CircleDollarSign,
   Factory,
-  FlaskConical,
   LoaderCircle,
   RotateCw,
   Save,
@@ -29,18 +28,16 @@ import {
   type QuoteDraft,
   type SourceDraft,
   type SourceMaintenanceErrors,
-} from "./fabric-source-prototype-state";
-import type {
-  ConfigOption,
-  FabricDetail,
-  FabricSupplierSource,
-  SupplierSearchItem,
-  SupplierUnitSummary,
+} from "./fabric-source-maintenance-state";
+import {
+  getFabricSourceWriteErrorMessage,
+  type ConfigOption,
+  type FabricDetail,
+  type FabricSupplierSource,
+  type SupplierSearchItem,
+  type SupplierUnitSummary,
 } from "@/lib/api/fabric-client";
 import { fetchSupplierUnits } from "@/lib/api/supplier-client";
-
-export const prototypeNotice =
-  "原型演示：当前修改只保留在本次详情会话中，不会写入数据库，关闭详情后自动消失。";
 
 function optionsFromLabels(labels: ConfigLabelMap, group: string): ConfigOption[] {
   return Object.entries(labels[group] ?? {}).map(([key, label], index) => ({
@@ -132,7 +129,7 @@ export function SupplierUnitPicker({
   );
 }
 
-function PrototypeDialogShell({
+function MaintenanceDialogShell({
   icon: Icon,
   title,
   subtitle,
@@ -162,7 +159,7 @@ function PrototypeDialogShell({
         if (event.target === event.currentTarget) onClose();
       }}
     >
-      <section aria-label={title} className="flex max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-[22px] border border-white/40 bg-white/56 shadow-[0_36px_120px_rgba(26,22,18,0.36),inset_0_1px_0_rgba(255,255,255,0.30)] backdrop-blur-3xl fabric-create-drawer-enter" data-testid="fabric-source-prototype-dialog">
+      <section aria-label={title} className="flex max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-[22px] border border-white/40 bg-white/56 shadow-[0_36px_120px_rgba(26,22,18,0.36),inset_0_1px_0_rgba(255,255,255,0.30)] backdrop-blur-3xl fabric-create-drawer-enter" data-testid="fabric-source-maintenance-dialog">
         <header className="flex shrink-0 items-start justify-between gap-4 border-b border-white/30 px-5 py-4">
           <div className="flex items-center gap-3">
             <span className="flex size-10 items-center justify-center rounded-2xl border border-emerald-300/46 bg-emerald-500/12 text-emerald-700"><Icon className="size-5" /></span>
@@ -177,12 +174,39 @@ function PrototypeDialogShell({
         <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">{children}</div>
 
         <footer className="shrink-0 border-t border-white/30 bg-white/26 p-4 backdrop-blur-2xl">
-          <div className="mb-3 flex items-start gap-2 rounded-xl border border-amber-200/52 bg-amber-50/56 px-3 py-2 text-xs leading-5 text-amber-900"><FlaskConical className="mt-0.5 size-3.5 shrink-0" /><span>{prototypeNotice}</span></div>
           {footer}
         </footer>
       </section>
     </div>
   );
+}
+
+function SubmitError({ message }: { message: string | null }) {
+  if (!message) return null;
+  return (
+    <div className="mb-3 flex items-start gap-2 rounded-xl border border-red-200/60 bg-red-50/52 px-3 py-2 text-xs leading-5 text-red-800">
+      <AlertCircle className="mt-0.5 size-3.5 shrink-0" />
+      <span>{message}</span>
+    </div>
+  );
+}
+
+function useSubmitState() {
+  const [submitting, setSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  const run = async (action: () => Promise<void>) => {
+    setServerError(null);
+    setSubmitting(true);
+    try {
+      await action();
+    } catch (error) {
+      setServerError(getFabricSourceWriteErrorMessage(error));
+      setSubmitting(false);
+    }
+  };
+
+  return { submitting, serverError, run };
 }
 
 export function SourceMaintenanceDrawer({
@@ -200,12 +224,13 @@ export function SourceMaintenanceDrawer({
   existingSources: FabricSupplierSource[];
   labels: ConfigLabelMap;
   onClose: () => void;
-  onSubmit: (draft: SourceDraft) => void;
+  onSubmit: (draft: SourceDraft) => Promise<void>;
 }) {
   const [draft, setDraft] = useState<SourceDraft>(() =>
     mode === "edit" && source ? createSourceDraftFromSource(source) : createEmptySourceDraft(),
   );
   const [errors, setErrors] = useState<SourceMaintenanceErrors>({});
+  const { submitting, serverError, run } = useSubmitState();
 
   const update = (patch: Partial<SourceDraft>) => {
     setDraft((current) => ({ ...current, ...patch }));
@@ -216,21 +241,24 @@ export function SourceMaintenanceDrawer({
     const validation = mode === "create" ? validateSourceDraft(draft, existingSources) : {};
     setErrors(validation);
     if (Object.keys(validation).length > 0) return;
-    onSubmit(draft);
+    void run(() => onSubmit(draft));
   };
 
   const canSetPreferred = mode === "edit" || existingSources.length > 0;
 
   return (
-    <PrototypeDialogShell
+    <MaintenanceDialogShell
       icon={Building2}
       onClose={onClose}
       subtitle={`SDD 面料货源维护 · ${fabric.code}`}
       title={mode === "create" ? "添加供应商货源" : `维护货源 · ${draft.supplierName}`}
       footer={
-        <div className="flex items-center justify-end gap-2">
-          <button className="h-10 rounded-2xl border border-white/28 bg-white/24 px-4 text-sm text-stone-700 transition hover:bg-white/38" onClick={onClose} type="button">取消</button>
-          <button className="flex h-10 items-center gap-2 rounded-2xl bg-stone-950 px-5 text-sm font-medium text-white shadow-lg transition hover:bg-stone-800" onClick={handleSubmit} type="button"><Save className="size-4" />{mode === "create" ? "保存货源（原型）" : "保存修改（原型）"}</button>
+        <div>
+          <SubmitError message={serverError} />
+          <div className="flex items-center justify-end gap-2">
+            <button className="h-10 rounded-2xl border border-white/28 bg-white/24 px-4 text-sm text-stone-700 transition hover:bg-white/38" onClick={onClose} type="button">取消</button>
+            <button className="flex h-10 items-center gap-2 rounded-2xl bg-stone-950 px-5 text-sm font-medium text-white shadow-lg transition hover:bg-stone-800 disabled:cursor-not-allowed disabled:opacity-60" disabled={submitting} onClick={handleSubmit} type="button">{submitting ? <LoaderCircle className="size-4 animate-spin" /> : <Save className="size-4" />}{submitting ? "正在保存…" : mode === "create" ? "保存货源" : "保存修改"}</button>
+          </div>
         </div>
       }
     >
@@ -277,7 +305,7 @@ export function SourceMaintenanceDrawer({
         </button>
         {canSetPreferred && draft.isPreferred ? <p className="-mt-2 text-xs text-amber-800">保存后原有首选货源将自动取消首选。</p> : null}
       </div>
-    </PrototypeDialogShell>
+    </MaintenanceDialogShell>
   );
 }
 
@@ -290,10 +318,11 @@ export function QuoteDrawer({
   fabric: FabricDetail;
   source: FabricSupplierSource;
   onClose: () => void;
-  onSubmit: (draft: QuoteDraft) => void;
+  onSubmit: (draft: QuoteDraft) => Promise<void>;
 }) {
   const [draft, setDraft] = useState<QuoteDraft>(() => createEmptyQuoteDraft());
   const [errors, setErrors] = useState<SourceMaintenanceErrors>({});
+  const { submitting, serverError, run } = useSubmitState();
 
   const update = (patch: Partial<QuoteDraft>) => {
     setDraft((current) => ({ ...current, ...patch }));
@@ -304,19 +333,22 @@ export function QuoteDrawer({
     const validation = validateQuoteDraft(draft);
     setErrors(validation);
     if (Object.keys(validation).length > 0) return;
-    onSubmit(draft);
+    void run(() => onSubmit(draft));
   };
 
   return (
-    <PrototypeDialogShell
+    <MaintenanceDialogShell
       icon={CircleDollarSign}
       onClose={onClose}
       subtitle={`采购报价快照 · ${fabric.code}`}
       title={`新增报价 · ${source.supplier.name}`}
       footer={
-        <div className="flex items-center justify-end gap-2">
-          <button className="h-10 rounded-2xl border border-white/28 bg-white/24 px-4 text-sm text-stone-700 transition hover:bg-white/38" onClick={onClose} type="button">取消</button>
-          <button className="flex h-10 items-center gap-2 rounded-2xl bg-stone-950 px-5 text-sm font-medium text-white shadow-lg transition hover:bg-stone-800" onClick={handleSubmit} type="button"><Save className="size-4" />保存报价（原型）</button>
+        <div>
+          <SubmitError message={serverError} />
+          <div className="flex items-center justify-end gap-2">
+            <button className="h-10 rounded-2xl border border-white/28 bg-white/24 px-4 text-sm text-stone-700 transition hover:bg-white/38" onClick={onClose} type="button">取消</button>
+            <button className="flex h-10 items-center gap-2 rounded-2xl bg-stone-950 px-5 text-sm font-medium text-white shadow-lg transition hover:bg-stone-800 disabled:cursor-not-allowed disabled:opacity-60" disabled={submitting} onClick={handleSubmit} type="button">{submitting ? <LoaderCircle className="size-4 animate-spin" /> : <Save className="size-4" />}{submitting ? "正在保存…" : "保存报价"}</button>
+          </div>
         </div>
       }
     >
@@ -345,6 +377,6 @@ export function QuoteDrawer({
         <GlassTextarea label="质量差异" onChange={(value) => update({ qualityDifferences: value })} placeholder="本批报价相关的品质差异" value={draft.qualityDifferences} />
         <GlassTextarea label="报价备注" onChange={(value) => update({ remarks: value })} placeholder="税费、运费、价格有效期等" value={draft.remarks} />
       </div>
-    </PrototypeDialogShell>
+    </MaintenanceDialogShell>
   );
 }

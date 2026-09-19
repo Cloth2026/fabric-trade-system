@@ -52,6 +52,41 @@ UI 方向：
 
 ## 已完成
 
+### 2026-09-19（第二批）
+
+本轮目标：
+
+- 将“面料货源与采购报价维护”从静态原型升级为真实写 API + 真实 UI 闭环。
+
+已完成内容：
+
+- 新增 `src/server/fabrics/source-quotes.ts`：
+  - `POST /api/fabrics/[id]/sources`：新增货源（供应商启用校验、生产单元归属校验、sampleStatus 配置校验、唯一货源自动首选、可选 initialQuote、完整度重算、OperationLog `create_source`）。
+  - `PATCH /api/fabrics/[id]/sources/[sourceId]`：维护货源（严格子集更新、切换首选互斥、取消唯一首选自动提升第一个货源、改当前单元不改写历史报价快照、OperationLog `update_source`）。
+  - `POST /api/fabrics/[id]/sources/[sourceId]/quotes`：新增报价快照（pricingUnit 服务器按面料主档派生、未指定单元沿用货源当前单元、单元归属校验、完整度重算、OperationLog `create_quote`）。
+  - 三个端点均在事务内执行并返回与 `GET /api/fabrics/[id]` 一致的完整详情。
+- `src/lib/api/fabric-client.ts`：新增 `postFabricSource`、`patchFabricSource`、`postFabricSourceQuote` 与统一错误文案。
+- 前端：
+  - `fabric-source-prototype-state.ts` 重命名为 `fabric-source-maintenance-state.ts`，删除原型本地状态函数，保留草稿校验与 payload 构建纯函数。
+  - 抽屉组件接真实 API：提交中禁用按钮、服务器错误红条提示、成功后关闭并刷新详情。
+  - 详情抽屉：写操作成功后用返回详情整体刷新（完整度、缺失项、货源、报价同步更新）；移除全部“原型”标识；通知条区分成功/失败。
+- 集成测试 `tests/fabric-source-write.test.ts`（16 用例）与纯函数测试 `tests/fabric-source-maintenance-state.test.ts`（13 用例）。
+
+验证结果：
+
+- `npm test`：115 pass / 0 fail。
+- `npm run lint`、`npm run build`：通过。
+- 浏览器回归（dev 库）：添加货源（搜索供应商→选单元→保存）真实入库、OperationLog 记录、卡片首选徽章；新增报价 ¥18.5/kg 入库、单元快照正确；维护货源抽屉回显正常；无 migration（模型未变更）。
+
+边界说明：
+
+- 面料主档编辑（`PATCH /api/fabrics/[id]`）仍未提供。
+- 报价不可修改或删除（按产品规则为不可覆盖历史）。
+
+下一步建议：
+
+- 面料主档编辑 API 与 UI，或按路线图进入寄样/客户反馈模块。
+
 ### 2026-09-19
 
 本轮目标：

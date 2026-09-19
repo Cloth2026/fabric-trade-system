@@ -264,6 +264,107 @@ export async function postCreateFabric(payload: unknown) {
   });
 }
 
+export type FabricSourcePayload = {
+  supplierId: string;
+  supplierUnitId?: string | null;
+  supplierFabricCode?: string | null;
+  sampleStatus?: string | null;
+  qualityDifferences?: string | null;
+  remarks?: string | null;
+  isPreferred?: boolean;
+  initialQuote?: {
+    purchasePrice: string | number;
+    currency?: string | null;
+    minimumOrderQty?: string | null;
+    leadTime?: string | null;
+    contactName?: string | null;
+    quoteDate?: string | null;
+    qualityDifferences?: string | null;
+    remarks?: string | null;
+  } | null;
+};
+
+export type FabricSourceUpdatePayload = {
+  supplierUnitId?: string | null;
+  supplierFabricCode?: string | null;
+  sampleStatus?: string | null;
+  qualityDifferences?: string | null;
+  remarks?: string | null;
+  isPreferred?: boolean;
+};
+
+export type FabricQuotePayload = {
+  purchasePrice: string | number;
+  currency?: string | null;
+  minimumOrderQty?: string | null;
+  leadTime?: string | null;
+  contactName?: string | null;
+  quoteDate?: string | null;
+  supplierUnitId?: string | null;
+  qualityDifferences?: string | null;
+  remarks?: string | null;
+};
+
+export async function postFabricSource(fabricId: string, payload: FabricSourcePayload) {
+  const result = await requestJson<{ data: FabricDetail }>(
+    `/api/fabrics/${encodeURIComponent(fabricId)}/sources`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+  );
+  return result.data;
+}
+
+export async function patchFabricSource(
+  fabricId: string,
+  sourceId: string,
+  payload: FabricSourceUpdatePayload,
+) {
+  const result = await requestJson<{ data: FabricDetail }>(
+    `/api/fabrics/${encodeURIComponent(fabricId)}/sources/${encodeURIComponent(sourceId)}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+  );
+  return result.data;
+}
+
+export async function postFabricSourceQuote(
+  fabricId: string,
+  sourceId: string,
+  payload: FabricQuotePayload,
+) {
+  const result = await requestJson<{ data: FabricDetail }>(
+    `/api/fabrics/${encodeURIComponent(fabricId)}/sources/${encodeURIComponent(sourceId)}/quotes`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+  );
+  return result.data;
+}
+
+export function getFabricSourceWriteErrorMessage(error: unknown) {
+  if (error instanceof ApiClientError && error.status === 409) {
+    return "该供应商已是这款面料的货源";
+  }
+
+  if (error instanceof ApiClientError && error.status === 404) {
+    return "面料或货源不存在，可能已被删除或无权访问";
+  }
+
+  if (error instanceof ApiClientError && error.status === 400) {
+    return "请检查填写内容，修正标记字段后再保存";
+  }
+
+  return "保存失败，请稍后重试";
+}
+
 export function createSingleFlightSubmitter<TPayload, TResult>(request: (payload: TPayload) => Promise<TResult>) {
   let activeRequest: Promise<TResult> | null = null;
 
