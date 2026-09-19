@@ -1,10 +1,11 @@
 "use client";
 
 import { ChevronRight, Command, Layers3 } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { CreateFabricDrawer } from "@/components/fabrics/create-fabric-drawer";
 import { FabricLibraryPrototype } from "@/components/fabrics/fabric-library-prototype";
 import { SupplierManagementPage } from "@/components/suppliers/supplier-management-page";
+import { nextFabricRefreshToken } from "@/components/fabrics/fabric-library-prototype-data";
 
 type ActiveModule = "面料库" | "供应商";
 
@@ -13,11 +14,17 @@ const navItems = ["工作台", "面料库", "供应商", "客户", "报价", "�
 export default function Home() {
   const [activeModule, setActiveModule] = useState<ActiveModule>("面料库");
   const [showCreate, setShowCreate] = useState(false);
+  const [fabricRefreshToken, setFabricRefreshToken] = useState(0);
 
   const openModule = (module: ActiveModule) => {
     setActiveModule(module);
     if (module === "供应商") setShowCreate(false);
   };
+  const openCreateFabric = useCallback(() => setShowCreate(true), []);
+  const closeCreateFabric = useCallback(() => setShowCreate(false), []);
+  const refreshFabricLibrary = useCallback(() => {
+    setFabricRefreshToken(nextFabricRefreshToken);
+  }, []);
 
   return (
     <main className="relative h-screen w-screen overflow-hidden bg-[#d8d3c8] text-stone-950">
@@ -50,8 +57,8 @@ export default function Home() {
           </div>
         </aside>
 
-        {activeModule === "供应商" ? <SupplierManagementPage /> : <FabricLibraryPrototype onCreateFabric={() => setShowCreate(true)} />}
-        {activeModule === "面料库" ? <CreateFabricDrawer open={showCreate} onClose={() => setShowCreate(false)} /> : null}
+        {activeModule === "供应商" ? <SupplierManagementPage /> : <FabricLibraryPrototype onCreateFabric={openCreateFabric} refreshToken={fabricRefreshToken} />}
+        {activeModule === "面料库" ? <CreateFabricDrawer open={showCreate} onClose={closeCreateFabric} onCreated={refreshFabricLibrary} /> : null}
       </div>
     </main>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertCircle, CheckCircle2, LoaderCircle, Plus, RotateCw, Save, Sparkles, X } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FabricBasicFields } from "./fabric-basic-fields";
 import { FabricProcessFields } from "./fabric-process-fields";
 import { FabricSupplierFields } from "./fabric-supplier-fields";
@@ -44,7 +44,9 @@ function requiredProgress(state: FabricFormState) {
   return Math.round((values.filter((value) => value.trim()).length / values.length) * 100);
 }
 
-export function CreateFabricDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+type CreatedFabric = { id: string; code: string; name: string };
+
+export function CreateFabricDrawer({ open, onClose, onCreated }: { open: boolean; onClose: () => void; onCreated?: (fabric: CreatedFabric) => void }) {
   const [state, setState] = useState(createInitialFabricFormState);
   const [optionsByGroup, setOptionsByGroup] = useState<Record<string, ConfigOption[]>>({});
   const [configStatus, setConfigStatus] = useState<"loading" | "ready" | "error">("loading");
@@ -54,6 +56,7 @@ export function CreateFabricDrawer({ open, onClose }: { open: boolean; onClose: 
   const [successMessage, setSuccessMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const pendingCreatedFabric = useRef<CreatedFabric | null>(null);
   const submitFabric = useMemo(() => createSingleFlightSubmitter(postCreateFabric), []);
 
   useEffect(() => {
@@ -100,9 +103,13 @@ export function CreateFabricDrawer({ open, onClose }: { open: boolean; onClose: 
     const timer = window.setTimeout(() => {
       setIsClosing(false);
       onClose();
+      if (pendingCreatedFabric.current) {
+        onCreated?.(pendingCreatedFabric.current);
+        pendingCreatedFabric.current = null;
+      }
     }, 220);
     return () => window.clearTimeout(timer);
-  }, [isClosing, onClose]);
+  }, [isClosing, onClose, onCreated]);
 
   const requestClose = useCallback(() => {
     if (!isClosing && !isSubmitting) setIsClosing(true);
@@ -151,6 +158,7 @@ export function CreateFabricDrawer({ open, onClose }: { open: boolean; onClose: 
 
     try {
       const result = await submitFabric(buildCreateFabricPayload(state));
+      pendingCreatedFabric.current = result.fabric;
       setSuccessMessage(`已创建 ${result.fabric.code} · ${result.fabric.name}`);
       window.setTimeout(() => {
         setState(createInitialFabricFormState());
