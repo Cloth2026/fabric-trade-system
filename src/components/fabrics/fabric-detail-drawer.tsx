@@ -17,8 +17,10 @@ import {
   Plus,
   RotateCw,
   Ruler,
+  Settings2,
   ShieldAlert,
   Sparkles,
+  Star,
   Tag,
   X,
 } from "lucide-react";
@@ -44,6 +46,17 @@ import {
   supplierUnitFormLabels,
   type ConfigLabelMap,
 } from "./fabric-library-prototype-data";
+import {
+  addPrototypeQuoteToSource,
+  addPrototypeSource,
+  hasPrototypeEntries,
+  isPrototypeEntry,
+  setPrototypePreferredSource,
+  updatePrototypeSource,
+  type QuoteDraft,
+  type SourceDraft,
+} from "./fabric-source-prototype-state";
+import { QuoteDrawer, SourceMaintenanceDrawer } from "./fabric-source-maintenance-drawers";
 
 export type FabricDetailTab = "basic" | "suppliers" | "process";
 
@@ -143,7 +156,13 @@ function BasicTab({ fabric, labels }: { fabric: FabricDetail; labels: ConfigLabe
 function QuoteCard({ quote, latest }: { quote: FabricQuote; latest: boolean }) {
   return (
     <div className={`rounded-xl border px-3 py-3 ${latest ? "border-blue-200/70 bg-blue-50/48" : "border-white/36 bg-white/24"}`}>
-      <div className="flex items-center justify-between gap-3"><span className="text-[11px] font-medium text-stone-500">{latest ? "最新报价" : formatDate(quote.quoteDate)}</span><span className="text-sm font-semibold text-stone-950">{formatPrice(quote.purchasePrice, quote.currency, quote.pricingUnit)}</span></div>
+      <div className="flex items-center justify-between gap-3">
+        <span className="flex items-center gap-2 text-[11px] font-medium text-stone-500">
+          {latest ? "最新报价" : formatDate(quote.quoteDate)}
+          {isPrototypeEntry(quote.id) ? <span className="rounded-full border border-amber-200/60 bg-amber-50/70 px-1.5 py-0.5 text-[10px] text-amber-800">原型</span> : null}
+        </span>
+        <span className="text-sm font-semibold text-stone-950">{formatPrice(quote.purchasePrice, quote.currency, quote.pricingUnit)}</span>
+      </div>
       <div className="mt-3 grid gap-x-4 gap-y-3 sm:grid-cols-2">
         <DetailField label="报价日期" value={formatDate(quote.quoteDate)} />
         <DetailField label="报价对应生产单元" value={getQuoteSupplierUnitLabel(quote)} />
@@ -157,13 +176,29 @@ function QuoteCard({ quote, latest }: { quote: FabricQuote; latest: boolean }) {
   );
 }
 
-function SupplierSourceCard({ source, labels, expanded, onToggle }: { source: FabricSupplierSource; labels: ConfigLabelMap; expanded: boolean; onToggle: () => void }) {
+function SupplierSourceCard({
+  source,
+  labels,
+  expanded,
+  onToggle,
+  onAddQuote,
+  onEditSource,
+  onSetPreferred,
+}: {
+  source: FabricSupplierSource;
+  labels: ConfigLabelMap;
+  expanded: boolean;
+  onToggle: () => void;
+  onAddQuote: () => void;
+  onEditSource: () => void;
+  onSetPreferred: () => void;
+}) {
   const latestQuote = source.quotes[0];
   const historicalQuotes = source.quotes.slice(1);
   return (
-    <article className="rounded-[18px] border border-white/34 bg-white/24 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
+    <article className={`rounded-[18px] border p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] ${isPrototypeEntry(source.id) ? "border-amber-200/56 bg-amber-50/24" : "border-white/34 bg-white/24"}`}>
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0"><div className="flex items-center gap-2"><Building2 className="size-4 shrink-0 text-blue-700" /><h3 className="truncate text-sm font-semibold text-stone-950">{source.supplier.name}</h3></div><div className="mt-2 flex items-center gap-1.5 text-xs text-stone-600"><Factory className="size-3.5" />{source.supplierUnit ? `${source.supplierUnit.name} · ${supplierUnitFormLabels[source.supplierUnit.unitForm] ?? source.supplierUnit.unitForm}` : "当前未指定生产单元"}</div></div>
+        <div className="min-w-0"><div className="flex items-center gap-2"><Building2 className="size-4 shrink-0 text-blue-700" /><h3 className="truncate text-sm font-semibold text-stone-950">{source.supplier.name}</h3>{isPrototypeEntry(source.id) ? <span className="shrink-0 rounded-full border border-amber-200/60 bg-amber-50/70 px-1.5 py-0.5 text-[10px] text-amber-800">原型</span> : null}</div><div className="mt-2 flex items-center gap-1.5 text-xs text-stone-600"><Factory className="size-3.5" />{source.supplierUnit ? `${source.supplierUnit.name} · ${supplierUnitFormLabels[source.supplierUnit.unitForm] ?? source.supplierUnit.unitForm}` : "当前未指定生产单元"}</div></div>
         {source.isPreferred ? <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-emerald-200/70 bg-emerald-50/76 px-2 py-1 text-[11px] text-emerald-800"><BadgeCheck className="size-3" />首选货源</span> : null}
       </div>
       <div className="mt-4 grid gap-x-4 gap-y-3 border-t border-white/36 pt-4 sm:grid-cols-2">
@@ -178,16 +213,42 @@ function SupplierSourceCard({ source, labels, expanded, onToggle }: { source: Fa
         {historicalQuotes.length > 0 ? <button aria-expanded={expanded} className="flex h-9 w-full items-center justify-center gap-1.5 rounded-xl border border-white/36 bg-white/26 text-xs text-stone-700 transition hover:bg-white/48" onClick={onToggle} type="button"><ChevronDown className={`size-3.5 transition ${expanded ? "rotate-180" : ""}`} />{expanded ? "收起历史报价" : `展开其余 ${historicalQuotes.length} 条历史报价`}</button> : null}
         {expanded ? historicalQuotes.map((quote) => <QuoteCard key={quote.id} quote={quote} latest={false} />) : null}
       </div>
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        <button className="flex h-9 items-center justify-center gap-1.5 rounded-xl bg-stone-950 px-2 text-xs text-white transition hover:bg-stone-800" onClick={onAddQuote} type="button"><CircleDollarSign className="size-3.5" />新增报价</button>
+        <button className="flex h-9 items-center justify-center gap-1.5 rounded-xl border border-white/38 bg-white/34 px-2 text-xs text-stone-800 transition hover:bg-white/58" onClick={onEditSource} type="button"><Settings2 className="size-3.5" />维护货源</button>
+        {source.isPreferred ? <span className="flex h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-200/56 bg-emerald-50/56 px-2 text-xs text-emerald-800"><BadgeCheck className="size-3.5" />首选货源</span> : <button className="flex h-9 items-center justify-center gap-1.5 rounded-xl border border-white/38 bg-white/34 px-2 text-xs text-stone-800 transition hover:bg-white/58" onClick={onSetPreferred} type="button"><Star className="size-3.5" />设为首选</button>}
+      </div>
     </article>
   );
 }
 
-function SupplierTab({ fabric, labels, expandedSourceIds, onToggleSource }: { fabric: FabricDetail; labels: ConfigLabelMap; expandedSourceIds: Set<string>; onToggleSource: (id: string) => void }) {
+function SupplierTab({
+  sources,
+  labels,
+  expandedSourceIds,
+  onToggleSource,
+  onAddQuote,
+  onEditSource,
+  onSetPreferred,
+}: {
+  sources: FabricSupplierSource[];
+  labels: ConfigLabelMap;
+  expandedSourceIds: Set<string>;
+  onToggleSource: (id: string) => void;
+  onAddQuote: (id: string) => void;
+  onEditSource: (id: string) => void;
+  onSetPreferred: (id: string) => void;
+}) {
   return (
     <div className="space-y-3 py-5" data-testid="fabric-detail-suppliers">
-      <div className="flex items-center justify-between text-xs text-stone-500"><span>全部供应商货源与独立报价历史</span><span>{fabric.supplierSources.length} 个货源</span></div>
-      {fabric.supplierSources.map((source) => <SupplierSourceCard key={source.id} source={source} labels={labels} expanded={expandedSourceIds.has(source.id)} onToggle={() => onToggleSource(source.id)} />)}
-      {fabric.supplierSources.length === 0 ? <div className="rounded-[18px] border border-dashed border-white/46 bg-white/18 px-4 py-10 text-center text-sm text-stone-500">尚未建立供应商货源</div> : null}
+      <div className="flex items-center justify-between text-xs text-stone-500"><span>全部供应商货源与独立报价历史</span><span>{sources.length} 个货源</span></div>
+      {hasPrototypeEntries(sources) ? (
+        <div className="flex items-start gap-2 rounded-xl border border-amber-200/52 bg-amber-50/56 px-3 py-2 text-xs leading-5 text-amber-900"><FlaskConical className="mt-0.5 size-3.5 shrink-0" /><span>当前包含原型演示数据（标记“原型”）：仅存在于本次会话，未写入数据库，关闭详情或刷新后消失。</span></div>
+      ) : (
+        <div className="flex items-start gap-2 rounded-xl border border-blue-200/50 bg-blue-50/44 px-3 py-2 text-xs leading-5 text-blue-900"><Sparkles className="mt-0.5 size-3.5 shrink-0" /><span>货源与报价维护当前为静态原型阶段：可以体验添加货源、维护货源、新增报价和首选设置，但保存不会写入数据库。</span></div>
+      )}
+      {sources.map((source) => <SupplierSourceCard key={source.id} source={source} labels={labels} expanded={expandedSourceIds.has(source.id)} onToggle={() => onToggleSource(source.id)} onAddQuote={() => onAddQuote(source.id)} onEditSource={() => onEditSource(source.id)} onSetPreferred={() => onSetPreferred(source.id)} />)}
+      {sources.length === 0 ? <div className="rounded-[18px] border border-dashed border-white/46 bg-white/18 px-4 py-10 text-center text-sm text-stone-500">尚未建立供应商货源，可点击底部“添加货源”体验原型流程。</div> : null}
     </div>
   );
 }
@@ -232,9 +293,16 @@ function ProcessTab({ fabric, labels }: { fabric: FabricDetail; labels: ConfigLa
   );
 }
 
+type SourceMaintenanceDialog =
+  | { type: "add-source" }
+  | { type: "edit-source"; sourceId: string }
+  | { type: "add-quote"; sourceId: string };
+
 export function FabricDetailDrawer({ fabricId, labels, onClose }: { fabricId: string | null; labels: ConfigLabelMap; onClose: () => void }) {
   const [drawerState, setDrawerState] = useState<FabricDetailDrawerState>(createInitialFabricDetailDrawerState);
   const [fabric, setFabric] = useState<FabricDetail | null>(null);
+  const [sources, setSources] = useState<FabricSupplierSource[]>([]);
+  const [dialog, setDialog] = useState<SourceMaintenanceDialog | null>(null);
   const [loadState, setLoadState] = useState<"loading" | "ready" | "error" | "not-found">("loading");
   const [retryToken, setRetryToken] = useState(0);
   const [expandedSourceIds, setExpandedSourceIds] = useState<Set<string>>(new Set());
@@ -251,6 +319,7 @@ export function FabricDetailDrawer({ fabricId, labels, onClose }: { fabricId: st
       .then((detail) => {
         if (!guard.isLatest(requestId)) return;
         setFabric(detail);
+        setSources(detail.supplierSources);
         setLoadState("ready");
       })
       .catch((error) => {
@@ -290,6 +359,14 @@ export function FabricDetailDrawer({ fabricId, labels, onClose }: { fabricId: st
       noticeTimer.current = null;
     }, 2600);
   };
+  const prototypeNotice = (message: string) => {
+    if (noticeTimer.current) window.clearTimeout(noticeTimer.current);
+    setDrawerState((current) => ({ ...current, notice: `${message}（原型演示，未写入数据库）` }));
+    noticeTimer.current = window.setTimeout(() => {
+      setDrawerState((current) => ({ ...current, notice: "" }));
+      noticeTimer.current = null;
+    }, 2600);
+  };
   const toggleSource = (sourceId: string) => setExpandedSourceIds((current) => {
     const next = new Set(current);
     if (next.has(sourceId)) next.delete(sourceId); else next.add(sourceId);
@@ -299,8 +376,46 @@ export function FabricDetailDrawer({ fabricId, labels, onClose }: { fabricId: st
     setDrawerState(createInitialFabricDetailDrawerState());
     setExpandedSourceIds(new Set());
     setFabric(null);
+    setSources([]);
+    setDialog(null);
     setLoadState("loading");
     setRetryToken((current) => current + 1);
+  };
+
+  const submitAddSource = (draft: SourceDraft) => {
+    const result = addPrototypeSource(sources, draft);
+    if (result.error) {
+      setDrawerState((current) => ({ ...current, notice: result.error ?? "" }));
+      return;
+    }
+    setSources(result.sources);
+    setDialog(null);
+    prototypeNotice(`已添加货源「${draft.supplierName}」`);
+  };
+
+  const submitEditSource = (sourceId: string, draft: SourceDraft) => {
+    setSources(updatePrototypeSource(sources, sourceId, draft));
+    setDialog(null);
+    prototypeNotice(`已更新货源「${draft.supplierName}」`);
+  };
+
+  const submitAddQuote = (sourceId: string, draft: QuoteDraft) => {
+    if (!fabric) return;
+    const target = sources.find((source) => source.id === sourceId);
+    const result = addPrototypeQuoteToSource(sources, sourceId, draft, fabric.pricingUnit);
+    if (result.error) {
+      setDrawerState((current) => ({ ...current, notice: result.error ?? "" }));
+      return;
+    }
+    setSources(result.sources);
+    setDialog(null);
+    prototypeNotice(`已新增报价至「${target?.supplier.name ?? "货源"}」`);
+  };
+
+  const handleSetPreferred = (sourceId: string) => {
+    const target = sources.find((source) => source.id === sourceId);
+    setSources(setPrototypePreferredSource(sources, sourceId));
+    prototypeNotice(`已将「${target?.supplier.name ?? "该货源"}」设为首选`);
   };
 
   return (
@@ -318,12 +433,28 @@ export function FabricDetailDrawer({ fabricId, labels, onClose }: { fabricId: st
           {loadState === "loading" ? <div className="flex h-full min-h-56 flex-col items-center justify-center text-sm text-stone-600"><LoaderCircle className="mb-3 size-7 animate-spin text-blue-700" />正在加载真实面料详情…</div> : null}
           {loadState === "error" || loadState === "not-found" ? <div className="flex h-full min-h-56 flex-col items-center justify-center text-center text-sm text-stone-600"><AlertCircle className="mb-3 size-7 text-amber-700" /><div className="font-medium text-stone-900">{loadState === "not-found" ? "该面料不存在或已不可访问" : "面料详情加载失败"}</div><button className="mt-4 flex h-9 items-center gap-2 rounded-xl border border-white/42 bg-white/40 px-3 text-xs" onClick={retryDetail} type="button"><RotateCw className="size-3.5" />重试</button></div> : null}
           {fabric && drawerState.activeTab === "basic" ? <BasicTab fabric={fabric} labels={labels} /> : null}
-          {fabric && drawerState.activeTab === "suppliers" ? <SupplierTab fabric={fabric} labels={labels} expandedSourceIds={expandedSourceIds} onToggleSource={toggleSource} /> : null}
+          {fabric && drawerState.activeTab === "suppliers" ? <SupplierTab sources={sources} labels={labels} expandedSourceIds={expandedSourceIds} onToggleSource={toggleSource} onAddQuote={(sourceId) => setDialog({ type: "add-quote", sourceId })} onEditSource={(sourceId) => setDialog({ type: "edit-source", sourceId })} onSetPreferred={handleSetPreferred} /> : null}
           {fabric && drawerState.activeTab === "process" ? <ProcessTab fabric={fabric} labels={labels} /> : null}
         </div>
 
-        {fabric ? <footer className="shrink-0 border-t border-white/30 bg-white/26 p-4 backdrop-blur-2xl">{drawerState.notice ? <div className="mb-3 rounded-xl border border-blue-200/60 bg-blue-50/70 px-3 py-2 text-xs text-blue-800">{drawerState.notice}</div> : null}<div className="grid grid-cols-3 gap-2"><button className="flex h-10 items-center justify-center gap-1.5 rounded-xl border border-white/38 bg-white/34 px-2 text-xs text-stone-800 transition hover:bg-white/58" onClick={() => futureAction("编辑面料")} type="button"><FilePenLine className="size-4" />编辑面料</button><button className="flex h-10 items-center justify-center gap-1.5 rounded-xl border border-white/38 bg-white/34 px-2 text-xs text-stone-800 transition hover:bg-white/58" onClick={() => futureAction("添加供应商货源")} type="button"><Plus className="size-4" />添加货源</button><button className="flex h-10 items-center justify-center gap-1.5 rounded-xl bg-stone-950 px-2 text-xs text-white transition hover:bg-stone-800" onClick={() => futureAction("新增采购报价")} type="button"><CircleDollarSign className="size-4" />新增报价</button></div></footer> : null}
+        {fabric ? <footer className="shrink-0 border-t border-white/30 bg-white/26 p-4 backdrop-blur-2xl">{drawerState.notice ? <div className="mb-3 rounded-xl border border-blue-200/60 bg-blue-50/70 px-3 py-2 text-xs text-blue-800">{drawerState.notice}</div> : null}<div className="grid grid-cols-2 gap-2"><button className="flex h-10 items-center justify-center gap-1.5 rounded-xl border border-white/38 bg-white/34 px-2 text-xs text-stone-800 transition hover:bg-white/58" onClick={() => futureAction("编辑面料")} type="button"><FilePenLine className="size-4" />编辑面料</button><button className="flex h-10 items-center justify-center gap-1.5 rounded-xl bg-stone-950 px-2 text-xs text-white transition hover:bg-stone-800" onClick={() => setDialog({ type: "add-source" })} type="button"><Plus className="size-4" />添加货源<span className="rounded-full border border-white/30 px-1.5 py-0.5 text-[10px] text-white/80">原型</span></button></div></footer> : null}
       </aside>
+
+      {fabric && dialog?.type === "add-source" ? (
+        <SourceMaintenanceDrawer mode="create" fabric={fabric} existingSources={sources} labels={labels} onClose={() => setDialog(null)} onSubmit={submitAddSource} />
+      ) : null}
+      {fabric && dialog?.type === "edit-source" ? (() => {
+        const target = sources.find((source) => source.id === dialog.sourceId);
+        return target ? (
+          <SourceMaintenanceDrawer mode="edit" fabric={fabric} source={target} existingSources={sources} labels={labels} onClose={() => setDialog(null)} onSubmit={(draft) => submitEditSource(target.id, draft)} />
+        ) : null;
+      })() : null}
+      {fabric && dialog?.type === "add-quote" ? (() => {
+        const target = sources.find((source) => source.id === dialog.sourceId);
+        return target ? (
+          <QuoteDrawer fabric={fabric} source={target} onClose={() => setDialog(null)} onSubmit={(draft) => submitAddQuote(target.id, draft)} />
+        ) : null;
+      })() : null}
     </>
   );
 }
