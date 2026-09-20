@@ -349,6 +349,45 @@ export async function postFabricSourceQuote(
   return result.data;
 }
 
+export type FabricUpdatePayload = {
+  englishName?: string | null;
+  name?: string;
+  developmentSource?: string;
+  status?: string | null;
+  composition?: string;
+  weight?: string;
+  width?: string;
+  yarnCount?: string | null;
+  warpWeftDensity?: string | null;
+  category?: string | null;
+  structure?: string | null;
+  tags?: string[];
+  usageOptionKeys?: string[];
+  seasonOptionKeys?: string[];
+  certificationOptionKeys?: string[];
+  elasticity?: string | null;
+  sourceContact?: string | null;
+  sourceDate?: string | null;
+  finishedReferencePrice?: number | null;
+  repurchaseStatus?: string | null;
+  tubeWeight?: string | null;
+  tolerance?: string | null;
+  colorFastness?: string | null;
+  pilling?: string | null;
+  inspectionConclusion?: string | null;
+  handFeel?: string | null;
+  remarks?: string | null;
+};
+
+export async function patchFabric(fabricId: string, payload: FabricUpdatePayload) {
+  const result = await requestJson<{ data: FabricDetail }>(`/api/fabrics/${encodeURIComponent(fabricId)}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return result.data;
+}
+
 export function getFabricSourceWriteErrorMessage(error: unknown) {
   if (error instanceof ApiClientError && error.status === 409) {
     return "该供应商已是这款面料的货源";

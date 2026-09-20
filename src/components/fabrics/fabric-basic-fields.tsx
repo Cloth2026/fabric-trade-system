@@ -20,31 +20,44 @@ type Props = {
   optionsByGroup: Record<string, ConfigOption[]>;
   onFieldChange: (field: keyof FabricFormState, value: string | string[]) => void;
   onFabricTypeChange: (fabricType: FabricType) => void;
+  lockIdentity?: { code: string; fabricType: FabricType; pricingUnitLabel: "公斤" | "米" };
 };
 
-export function FabricBasicFields({ state, errors, optionsByGroup, onFieldChange, onFabricTypeChange }: Props) {
+export function FabricBasicFields({ state, errors, optionsByGroup, onFieldChange, onFabricTypeChange, lockIdentity }: Props) {
   const options = (group: string) => optionsByGroup[group] ?? [];
   const categoryGroup = state.fabricType === "knitted" ? "knitted_category" : "woven_category";
   const unitLabel = getPricingUnitLabel(state.fabricType);
+  const fabricTypeLabel = state.fabricType === "knitted" ? "针织" : "梭织";
 
   return (
     <>
       <section className="rounded-2xl border border-white/28 bg-white/18 p-4 shadow-inner shadow-white/12">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <PanelTitle icon={Info} title="基础信息" description="编号、名称、来源和成品规格构成面料档案的最小信息集。" tone="blue" />
-          <SegmentedControl
-            options={[
-              { value: "knitted", label: "针织" },
-              { value: "woven", label: "梭织" },
-            ]}
-            value={state.fabricType}
-            onChange={onFabricTypeChange}
-          />
+          {lockIdentity ? (
+            <div className="flex h-10 items-center gap-2 rounded-2xl border border-white/28 bg-white/24 px-3 text-sm text-stone-700">
+              <span className="font-medium">{fabricTypeLabel}</span>
+              <span className="text-xs text-stone-500">创建后不可修改</span>
+            </div>
+          ) : (
+            <SegmentedControl
+              options={[
+                { value: "knitted", label: "针织" },
+                { value: "woven", label: "梭织" },
+              ]}
+              value={state.fabricType}
+              onChange={onFabricTypeChange}
+            />
+          )}
         </div>
         <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           <GlassInput label="面料英文名称" value={state.englishName} onChange={(value) => onFieldChange("englishName", value)} placeholder="如 Cotton Spandex Jersey" />
           <GlassInput label="面料名称" required value={state.name} onChange={(value) => onFieldChange("name", value)} placeholder="如 精梳棉氨纶汗布" error={errors.name} />
-          <FabricCodeInput value={state.codeSuffix} onChange={(value) => onFieldChange("codeSuffix", value)} error={errors.codeSuffix ?? errors.code} />
+          {lockIdentity ? (
+            <ReadonlyField label="面料编号" value={lockIdentity.code} hint="创建后不可修改" />
+          ) : (
+            <FabricCodeInput value={state.codeSuffix} onChange={(value) => onFieldChange("codeSuffix", value)} error={errors.codeSuffix ?? errors.code} />
+          )}
           <ReadonlyField label="计价单位（系统自动确定）" value={unitLabel} />
           <GlassSelect label="开发来源" required options={options("development_source")} value={state.developmentSource} onChange={(value) => onFieldChange("developmentSource", value)} error={errors.developmentSource} />
           <GlassSelect label="面料状态" options={options("fabric_status")} value={state.status} onChange={(value) => onFieldChange("status", value)} />

@@ -146,7 +146,7 @@ async function assertSampleStatusConfig(tx: Transaction, tenantId: string, sampl
   ]);
 }
 
-async function recalcFabricCompleteness(tx: Transaction, tenantId: string, fabricId: string) {
+export async function recalcFabricCompleteness(tx: Transaction, tenantId: string, fabricId: string) {
   const fabric = await loadFabricCore(tx, tenantId, fabricId);
   const sources = await tx.fabricSupplier.findMany({
     where: { tenantId, fabricId },

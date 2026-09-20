@@ -58,6 +58,7 @@ import {
   type SourceDraft,
 } from "./fabric-source-maintenance-state";
 import { QuoteDrawer, SourceMaintenanceDrawer } from "./fabric-source-maintenance-drawers";
+import { EditFabricDrawer } from "./edit-fabric-drawer";
 
 export type FabricDetailTab = "basic" | "suppliers" | "process";
 
@@ -292,7 +293,8 @@ function ProcessTab({ fabric, labels }: { fabric: FabricDetail; labels: ConfigLa
 type SourceMaintenanceDialog =
   | { type: "add-source" }
   | { type: "edit-source"; sourceId: string }
-  | { type: "add-quote"; sourceId: string };
+  | { type: "add-quote"; sourceId: string }
+  | { type: "edit-fabric" };
 
 export function FabricDetailDrawer({ fabricId, labels, onClose }: { fabricId: string | null; labels: ConfigLabelMap; onClose: () => void }) {
   const [drawerState, setDrawerState] = useState<FabricDetailDrawerState>(createInitialFabricDetailDrawerState);
@@ -346,16 +348,8 @@ export function FabricDetailDrawer({ fabricId, labels, onClose }: { fabricId: st
 
   if (!fabricId) return null;
 
-  const beginClose = () => setDrawerState(startFabricDetailDrawerClose);
-  const futureAction = (message: string) => {
-    if (noticeTimer.current) window.clearTimeout(noticeTimer.current);
-    setDrawerState((current) => ({ ...current, notice: `${message}后续开放，本轮仅支持查看` }));
-    noticeTimer.current = window.setTimeout(() => {
-      setDrawerState((current) => ({ ...current, notice: "" }));
-      noticeTimer.current = null;
-    }, 2600);
-  };
-  const showNotice = (message: string, tone: "success" | "error") => {
+const beginClose = () => setDrawerState(startFabricDetailDrawerClose);
+const showNotice = (message: string, tone: "success" | "error") => {
     if (noticeTimer.current) window.clearTimeout(noticeTimer.current);
     setDrawerState((current) => ({ ...current, notice: message, noticeTone: tone }));
     noticeTimer.current = window.setTimeout(() => {
@@ -439,7 +433,7 @@ export function FabricDetailDrawer({ fabricId, labels, onClose }: { fabricId: st
           {fabric && drawerState.activeTab === "process" ? <ProcessTab fabric={fabric} labels={labels} /> : null}
         </div>
 
-        {fabric ? <footer className="shrink-0 border-t border-white/30 bg-white/26 p-4 backdrop-blur-2xl">{drawerState.notice ? <div className={`mb-3 rounded-xl border px-3 py-2 text-xs ${drawerState.noticeTone === "error" ? "border-red-200/60 bg-red-50/60 text-red-800" : "border-blue-200/60 bg-blue-50/70 text-blue-800"}`}>{drawerState.notice}</div> : null}<div className="grid grid-cols-2 gap-2"><button className="flex h-10 items-center justify-center gap-1.5 rounded-xl border border-white/38 bg-white/34 px-2 text-xs text-stone-800 transition hover:bg-white/58" onClick={() => futureAction("编辑面料")} type="button"><FilePenLine className="size-4" />编辑面料</button><button className="flex h-10 items-center justify-center gap-1.5 rounded-xl bg-stone-950 px-2 text-xs text-white transition hover:bg-stone-800" onClick={() => setDialog({ type: "add-source" })} type="button"><Plus className="size-4" />添加货源</button></div></footer> : null}
+        {fabric ? <footer className="shrink-0 border-t border-white/30 bg-white/26 p-4 backdrop-blur-2xl">{drawerState.notice ? <div className={`mb-3 rounded-xl border px-3 py-2 text-xs ${drawerState.noticeTone === "error" ? "border-red-200/60 bg-red-50/60 text-red-800" : "border-blue-200/60 bg-blue-50/70 text-blue-800"}`}>{drawerState.notice}</div> : null}<div className="grid grid-cols-2 gap-2"><button className="flex h-10 items-center justify-center gap-1.5 rounded-xl border border-white/38 bg-white/34 px-2 text-xs text-stone-800 transition hover:bg-white/58" onClick={() => setDialog({ type: "edit-fabric" })} type="button"><FilePenLine className="size-4" />编辑面料</button><button className="flex h-10 items-center justify-center gap-1.5 rounded-xl bg-stone-950 px-2 text-xs text-white transition hover:bg-stone-800" onClick={() => setDialog({ type: "add-source" })} type="button"><Plus className="size-4" />添加货源</button></div></footer> : null}
       </aside>
 
       {fabric && dialog?.type === "add-source" ? (
@@ -457,6 +451,18 @@ export function FabricDetailDrawer({ fabricId, labels, onClose }: { fabricId: st
           <QuoteDrawer fabric={fabric} source={target} onClose={() => setDialog(null)} onSubmit={(draft) => submitAddQuote(target.id, draft)} />
         ) : null;
       })() : null}
+      {fabric && dialog?.type === "edit-fabric" ? (
+        <EditFabricDrawer
+          fabric={fabric}
+          key={fabric.id}
+          onClose={() => setDialog(null)}
+          onSaved={(updated) => {
+            setFabric(updated);
+            setDialog(null);
+            showNotice(`已保存 ${updated.code} · ${updated.name}`, "success");
+          }}
+        />
+      ) : null}
     </>
   );
 }
