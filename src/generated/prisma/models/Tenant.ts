@@ -198,6 +198,8 @@ export type TenantWhereInput = {
   fabricSuppliers?: Prisma.FabricSupplierListRelationFilter
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteListRelationFilter
   batches?: Prisma.FabricStockInBatchListRelationFilter
+  customers?: Prisma.CustomerListRelationFilter
+  customerContacts?: Prisma.CustomerContactListRelationFilter
   logs?: Prisma.OperationLogListRelationFilter
 }
 
@@ -216,6 +218,8 @@ export type TenantOrderByWithRelationInput = {
   fabricSuppliers?: Prisma.FabricSupplierOrderByRelationAggregateInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteOrderByRelationAggregateInput
   batches?: Prisma.FabricStockInBatchOrderByRelationAggregateInput
+  customers?: Prisma.CustomerOrderByRelationAggregateInput
+  customerContacts?: Prisma.CustomerContactOrderByRelationAggregateInput
   logs?: Prisma.OperationLogOrderByRelationAggregateInput
 }
 
@@ -237,6 +241,8 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   fabricSuppliers?: Prisma.FabricSupplierListRelationFilter
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteListRelationFilter
   batches?: Prisma.FabricStockInBatchListRelationFilter
+  customers?: Prisma.CustomerListRelationFilter
+  customerContacts?: Prisma.CustomerContactListRelationFilter
   logs?: Prisma.OperationLogListRelationFilter
 }, "id" | "code">
 
@@ -279,6 +285,8 @@ export type TenantCreateInput = {
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -297,6 +305,8 @@ export type TenantUncheckedCreateInput = {
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -315,6 +325,8 @@ export type TenantUpdateInput = {
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -333,6 +345,8 @@ export type TenantUncheckedUpdateInput = {
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -540,6 +554,34 @@ export type TenantUpdateOneRequiredWithoutLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutLogsInput, Prisma.TenantUpdateWithoutLogsInput>, Prisma.TenantUncheckedUpdateWithoutLogsInput>
 }
 
+export type TenantCreateNestedOneWithoutCustomersInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCustomersInput, Prisma.TenantUncheckedCreateWithoutCustomersInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCustomersInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutCustomersNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCustomersInput, Prisma.TenantUncheckedCreateWithoutCustomersInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCustomersInput
+  upsert?: Prisma.TenantUpsertWithoutCustomersInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutCustomersInput, Prisma.TenantUpdateWithoutCustomersInput>, Prisma.TenantUncheckedUpdateWithoutCustomersInput>
+}
+
+export type TenantCreateNestedOneWithoutCustomerContactsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCustomerContactsInput, Prisma.TenantUncheckedCreateWithoutCustomerContactsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCustomerContactsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutCustomerContactsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCustomerContactsInput, Prisma.TenantUncheckedCreateWithoutCustomerContactsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCustomerContactsInput
+  upsert?: Prisma.TenantUpsertWithoutCustomerContactsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutCustomerContactsInput, Prisma.TenantUpdateWithoutCustomerContactsInput>, Prisma.TenantUncheckedUpdateWithoutCustomerContactsInput>
+}
+
 export type TenantCreateWithoutUsersInput = {
   id?: string
   name: string
@@ -554,6 +596,8 @@ export type TenantCreateWithoutUsersInput = {
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -571,6 +615,8 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -604,6 +650,8 @@ export type TenantUpdateWithoutUsersInput = {
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -621,6 +669,8 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -638,6 +688,8 @@ export type TenantCreateWithoutConfigOptionsInput = {
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -655,6 +707,8 @@ export type TenantUncheckedCreateWithoutConfigOptionsInput = {
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -688,6 +742,8 @@ export type TenantUpdateWithoutConfigOptionsInput = {
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -705,6 +761,8 @@ export type TenantUncheckedUpdateWithoutConfigOptionsInput = {
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -722,6 +780,8 @@ export type TenantCreateWithoutSuppliersInput = {
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -739,6 +799,8 @@ export type TenantUncheckedCreateWithoutSuppliersInput = {
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -772,6 +834,8 @@ export type TenantUpdateWithoutSuppliersInput = {
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -789,6 +853,8 @@ export type TenantUncheckedUpdateWithoutSuppliersInput = {
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -806,6 +872,8 @@ export type TenantCreateWithoutSupplierUnitsInput = {
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -823,6 +891,8 @@ export type TenantUncheckedCreateWithoutSupplierUnitsInput = {
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -856,6 +926,8 @@ export type TenantUpdateWithoutSupplierUnitsInput = {
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -873,6 +945,8 @@ export type TenantUncheckedUpdateWithoutSupplierUnitsInput = {
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -890,6 +964,8 @@ export type TenantCreateWithoutFabricsInput = {
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -907,6 +983,8 @@ export type TenantUncheckedCreateWithoutFabricsInput = {
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -940,6 +1018,8 @@ export type TenantUpdateWithoutFabricsInput = {
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -957,6 +1037,8 @@ export type TenantUncheckedUpdateWithoutFabricsInput = {
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -974,6 +1056,8 @@ export type TenantCreateWithoutFabricSuppliersInput = {
   fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -991,6 +1075,8 @@ export type TenantUncheckedCreateWithoutFabricSuppliersInput = {
   fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1024,6 +1110,8 @@ export type TenantUpdateWithoutFabricSuppliersInput = {
   fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -1041,6 +1129,8 @@ export type TenantUncheckedUpdateWithoutFabricSuppliersInput = {
   fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1058,6 +1148,8 @@ export type TenantCreateWithoutFabricSupplierQuotesInput = {
   fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -1075,6 +1167,8 @@ export type TenantUncheckedCreateWithoutFabricSupplierQuotesInput = {
   fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1108,6 +1202,8 @@ export type TenantUpdateWithoutFabricSupplierQuotesInput = {
   fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -1125,6 +1221,8 @@ export type TenantUncheckedUpdateWithoutFabricSupplierQuotesInput = {
   fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1142,6 +1240,8 @@ export type TenantCreateWithoutBatchesInput = {
   fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -1159,6 +1259,8 @@ export type TenantUncheckedCreateWithoutBatchesInput = {
   fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1192,6 +1294,8 @@ export type TenantUpdateWithoutBatchesInput = {
   fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -1209,6 +1313,8 @@ export type TenantUncheckedUpdateWithoutBatchesInput = {
   fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1227,6 +1333,8 @@ export type TenantCreateWithoutLogsInput = {
   fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutLogsInput = {
@@ -1244,6 +1352,8 @@ export type TenantUncheckedCreateWithoutLogsInput = {
   fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
   batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutLogsInput = {
@@ -1277,6 +1387,8 @@ export type TenantUpdateWithoutLogsInput = {
   fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutLogsInput = {
@@ -1294,6 +1406,192 @@ export type TenantUncheckedUpdateWithoutLogsInput = {
   fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
   fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
   batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutCustomersInput = {
+  id?: string
+  name: string
+  code: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitCreateNestedManyWithoutTenantInput
+  configOptions?: Prisma.ConfigOptionCreateNestedManyWithoutTenantInput
+  fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
+  fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
+  batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
+  logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutCustomersInput = {
+  id?: string
+  name: string
+  code: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutTenantInput
+  configOptions?: Prisma.ConfigOptionUncheckedCreateNestedManyWithoutTenantInput
+  fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
+  fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
+  batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
+  logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutCustomersInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCustomersInput, Prisma.TenantUncheckedCreateWithoutCustomersInput>
+}
+
+export type TenantUpsertWithoutCustomersInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutCustomersInput, Prisma.TenantUncheckedUpdateWithoutCustomersInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCustomersInput, Prisma.TenantUncheckedCreateWithoutCustomersInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutCustomersInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutCustomersInput, Prisma.TenantUncheckedUpdateWithoutCustomersInput>
+}
+
+export type TenantUpdateWithoutCustomersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUpdateManyWithoutTenantNestedInput
+  configOptions?: Prisma.ConfigOptionUpdateManyWithoutTenantNestedInput
+  fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
+  fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
+  batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
+  logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutCustomersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
+  configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
+  fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
+  fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
+  logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutCustomerContactsInput = {
+  id?: string
+  name: string
+  code: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitCreateNestedManyWithoutTenantInput
+  configOptions?: Prisma.ConfigOptionCreateNestedManyWithoutTenantInput
+  fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
+  fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
+  batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutCustomerContactsInput = {
+  id?: string
+  name: string
+  code: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutTenantInput
+  configOptions?: Prisma.ConfigOptionUncheckedCreateNestedManyWithoutTenantInput
+  fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
+  fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
+  batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutCustomerContactsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCustomerContactsInput, Prisma.TenantUncheckedCreateWithoutCustomerContactsInput>
+}
+
+export type TenantUpsertWithoutCustomerContactsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutCustomerContactsInput, Prisma.TenantUncheckedUpdateWithoutCustomerContactsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCustomerContactsInput, Prisma.TenantUncheckedCreateWithoutCustomerContactsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutCustomerContactsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutCustomerContactsInput, Prisma.TenantUncheckedUpdateWithoutCustomerContactsInput>
+}
+
+export type TenantUpdateWithoutCustomerContactsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUpdateManyWithoutTenantNestedInput
+  configOptions?: Prisma.ConfigOptionUpdateManyWithoutTenantNestedInput
+  fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
+  fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
+  batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutCustomerContactsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
+  configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
+  fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
+  fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -1310,6 +1608,8 @@ export type TenantCountOutputType = {
   fabricSuppliers: number
   fabricSupplierQuotes: number
   batches: number
+  customers: number
+  customerContacts: number
   logs: number
 }
 
@@ -1322,6 +1622,8 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   fabricSuppliers?: boolean | TenantCountOutputTypeCountFabricSuppliersArgs
   fabricSupplierQuotes?: boolean | TenantCountOutputTypeCountFabricSupplierQuotesArgs
   batches?: boolean | TenantCountOutputTypeCountBatchesArgs
+  customers?: boolean | TenantCountOutputTypeCountCustomersArgs
+  customerContacts?: boolean | TenantCountOutputTypeCountCustomerContactsArgs
   logs?: boolean | TenantCountOutputTypeCountLogsArgs
 }
 
@@ -1394,6 +1696,20 @@ export type TenantCountOutputTypeCountBatchesArgs<ExtArgs extends runtime.Types.
 /**
  * TenantCountOutputType without action
  */
+export type TenantCountOutputTypeCountCustomersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CustomerWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountCustomerContactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CustomerContactWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
 export type TenantCountOutputTypeCountLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OperationLogWhereInput
 }
@@ -1414,6 +1730,8 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   fabricSuppliers?: boolean | Prisma.Tenant$fabricSuppliersArgs<ExtArgs>
   fabricSupplierQuotes?: boolean | Prisma.Tenant$fabricSupplierQuotesArgs<ExtArgs>
   batches?: boolean | Prisma.Tenant$batchesArgs<ExtArgs>
+  customers?: boolean | Prisma.Tenant$customersArgs<ExtArgs>
+  customerContacts?: boolean | Prisma.Tenant$customerContactsArgs<ExtArgs>
   logs?: boolean | Prisma.Tenant$logsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
@@ -1455,6 +1773,8 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   fabricSuppliers?: boolean | Prisma.Tenant$fabricSuppliersArgs<ExtArgs>
   fabricSupplierQuotes?: boolean | Prisma.Tenant$fabricSupplierQuotesArgs<ExtArgs>
   batches?: boolean | Prisma.Tenant$batchesArgs<ExtArgs>
+  customers?: boolean | Prisma.Tenant$customersArgs<ExtArgs>
+  customerContacts?: boolean | Prisma.Tenant$customerContactsArgs<ExtArgs>
   logs?: boolean | Prisma.Tenant$logsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1472,6 +1792,8 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     fabricSuppliers: Prisma.$FabricSupplierPayload<ExtArgs>[]
     fabricSupplierQuotes: Prisma.$FabricSupplierQuotePayload<ExtArgs>[]
     batches: Prisma.$FabricStockInBatchPayload<ExtArgs>[]
+    customers: Prisma.$CustomerPayload<ExtArgs>[]
+    customerContacts: Prisma.$CustomerContactPayload<ExtArgs>[]
     logs: Prisma.$OperationLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1883,6 +2205,8 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   fabricSuppliers<T extends Prisma.Tenant$fabricSuppliersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$fabricSuppliersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FabricSupplierPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   fabricSupplierQuotes<T extends Prisma.Tenant$fabricSupplierQuotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$fabricSupplierQuotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FabricSupplierQuotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   batches<T extends Prisma.Tenant$batchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FabricStockInBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  customers<T extends Prisma.Tenant$customersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$customersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  customerContacts<T extends Prisma.Tenant$customerContactsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$customerContactsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   logs<T extends Prisma.Tenant$logsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$logsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2501,6 +2825,54 @@ export type Tenant$batchesArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.FabricStockInBatchScalarFieldEnum | Prisma.FabricStockInBatchScalarFieldEnum[]
+}
+
+/**
+ * Tenant.customers
+ */
+export type Tenant$customersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Customer
+   */
+  select?: Prisma.CustomerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Customer
+   */
+  omit?: Prisma.CustomerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerInclude<ExtArgs> | null
+  where?: Prisma.CustomerWhereInput
+  orderBy?: Prisma.CustomerOrderByWithRelationInput | Prisma.CustomerOrderByWithRelationInput[]
+  cursor?: Prisma.CustomerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CustomerScalarFieldEnum | Prisma.CustomerScalarFieldEnum[]
+}
+
+/**
+ * Tenant.customerContacts
+ */
+export type Tenant$customerContactsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CustomerContact
+   */
+  select?: Prisma.CustomerContactSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CustomerContact
+   */
+  omit?: Prisma.CustomerContactOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerContactInclude<ExtArgs> | null
+  where?: Prisma.CustomerContactWhereInput
+  orderBy?: Prisma.CustomerContactOrderByWithRelationInput | Prisma.CustomerContactOrderByWithRelationInput[]
+  cursor?: Prisma.CustomerContactWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CustomerContactScalarFieldEnum | Prisma.CustomerContactScalarFieldEnum[]
 }
 
 /**

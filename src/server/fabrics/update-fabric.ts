@@ -1,7 +1,7 @@
 import { z } from "zod";
 import type { Prisma } from "../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
-import { assertEnabledConfigKeys, configGroups } from "../config-options";
+import { assertEnabledConfigKeys, configGroups, type ConfigGroup } from "../config-options";
 import { AppError } from "../errors";
 import { getServerTenant } from "../tenant";
 import { getFabricDetail } from "./read-fabrics";
@@ -19,7 +19,18 @@ const emptyStringToNull = (value: unknown) => {
   return trimmed.length === 0 ? null : trimmed;
 };
 
+// Fabric.status is NOT NULL in the database, so an empty value must be dropped
+// from the update payload instead of being coerced to null.
+const emptyStringToUndefined = (value: unknown) => {
+  if (typeof value !== "string") {
+    return value;
+  }
+
+  return value.trim().length === 0 ? undefined : value;
+};
+
 const optionalText = z.preprocess(emptyStringToNull, z.string().nullable().optional());
+const optionalNonEmptyText = z.preprocess(emptyStringToUndefined, z.string().trim().min(1).optional());
 const requiredText = z.string().trim().min(1);
 const nonNegativeMoney = z.coerce.number().nonnegative();
 const optionalMoney = z.preprocess(emptyStringToNull, nonNegativeMoney.nullable().optional());
@@ -36,7 +47,7 @@ export const updateFabricSchema = z
     englishName: optionalText,
     name: requiredText,
     developmentSource: requiredText,
-    status: optionalText,
+    status: optionalNonEmptyText,
     composition: requiredText,
     weight: requiredText,
     width: requiredText,
@@ -70,7 +81,7 @@ export type UpdateFabricInput = z.infer<typeof updateFabricSchema>;
 function collectConfigChecks(
   fabricType: "knitted" | "woven",
   data: UpdateFabricInput,
-): Array<{ group: string; keys: string[]; label: string }> {
+): Array<{ group: ConfigGroup; keys: string[]; label: string }> {
   return [
     { group: configGroups.developmentSource, keys: data.developmentSource ? [data.developmentSource] : [], label: "developmentSource" },
     { group: configGroups.fabricStatus, keys: data.status ? [data.status] : [], label: "status" },

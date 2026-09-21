@@ -106,3 +106,13 @@ export type FabricStockInBatch = Prisma.FabricStockInBatchModel
  * 
  */
 export type OperationLog = Prisma.OperationLogModel
+/**
+ * Model Customer
+ * 
+ */
+export type Customer = Prisma.CustomerModel
+/**
+ * Model CustomerContact
+ * 
+ */
+export type CustomerContact = Prisma.CustomerContactModel

@@ -63,7 +63,9 @@ export const ModelName = {
   DyeingFinishing: 'DyeingFinishing',
   PostProcess: 'PostProcess',
   FabricStockInBatch: 'FabricStockInBatch',
-  OperationLog: 'OperationLog'
+  OperationLog: 'OperationLog',
+  Customer: 'Customer',
+  CustomerContact: 'CustomerContact'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -366,6 +368,52 @@ export const OperationLogScalarFieldEnum = {
 } as const
 
 export type OperationLogScalarFieldEnum = (typeof OperationLogScalarFieldEnum)[keyof typeof OperationLogScalarFieldEnum]
+
+
+export const CustomerScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  type: 'type',
+  level: 'level',
+  status: 'status',
+  country: 'country',
+  city: 'city',
+  address: 'address',
+  contactName: 'contactName',
+  phone: 'phone',
+  email: 'email',
+  socialContact: 'socialContact',
+  mainProducts: 'mainProducts',
+  cooperationBrands: 'cooperationBrands',
+  paymentTerms: 'paymentTerms',
+  defaultCurrency: 'defaultCurrency',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomerScalarFieldEnum = (typeof CustomerScalarFieldEnum)[keyof typeof CustomerScalarFieldEnum]
+
+
+export const CustomerContactScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  customerId: 'customerId',
+  name: 'name',
+  title: 'title',
+  department: 'department',
+  phone: 'phone',
+  email: 'email',
+  socialContact: 'socialContact',
+  isPrimary: 'isPrimary',
+  status: 'status',
+  remarks: 'remarks',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomerContactScalarFieldEnum = (typeof CustomerContactScalarFieldEnum)[keyof typeof CustomerContactScalarFieldEnum]
 
 
 export const SortOrder = {

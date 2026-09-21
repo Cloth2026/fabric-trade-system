@@ -51,6 +51,8 @@ model Tenant {
   fabricSuppliers      FabricSupplier[]
   fabricSupplierQuotes FabricSupplierQuote[]
   batches              FabricStockInBatch[]
+  customers            Customer[]
+  customerContacts     CustomerContact[]
   logs                 OperationLog[]
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
@@ -385,4 +387,59 @@ model OperationLog {
   @@index([tenantId])
   @@index([tenantId, module])
   @@index([tenantId, createdAt])
+}
+
+model Customer {
+  id                String             @id @default(cuid())
+  tenant            Tenant             @relation(fields: [tenantId], references: [id])
+  tenantId          String
+  name              String
+  type              String?
+  level             String?
+  status            String             @default("active")
+  country           String?
+  city              String?
+  address           String?
+  contactName       String?
+  phone             String?
+  email             String?
+  socialContact     String?
+  mainProducts      String?
+  cooperationBrands String?
+  paymentTerms      String?
+  defaultCurrency   String?
+  remarks           String?
+  contacts          CustomerContact[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  @@index([tenantId])
+  @@index([tenantId, name])
+  @@index([tenantId, type])
+  @@index([tenantId, level])
+  @@index([tenantId, status])
+}
+
+model CustomerContact {
+  id           String   @id @default(cuid())
+  tenant       Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId     String
+  customer     Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId   String
+  name         String
+  title        String?
+  department   String?
+  phone        String?
+  email        String?
+  socialContact String?
+  isPrimary    Boolean  @default(false)
+  status       String   @default("active")
+  remarks      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([tenantId, customerId, name])
+  @@index([tenantId])
+  @@index([tenantId, customerId])
+  @@index([tenantId, status])
 }

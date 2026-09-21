@@ -167,11 +167,12 @@ export function FabricCodeInput({ value, onChange, error }: { value: string; onC
   );
 }
 
-export function ReadonlyField({ label, value }: { label: string; value: string }) {
+export function ReadonlyField({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="text-sm">
       <span className="text-stone-600">{label}</span>
       <div className="mt-1 flex h-10 items-center rounded-xl border border-white/24 bg-stone-950/8 px-3 font-medium text-stone-950">{value}</div>
+      {hint ? <span className="mt-1 block text-xs text-stone-500">{hint}</span> : null}
     </div>
   );
 }
