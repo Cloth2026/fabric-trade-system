@@ -116,3 +116,13 @@ export type Customer = Prisma.CustomerModel
  * 
  */
 export type CustomerContact = Prisma.CustomerContactModel
+/**
+ * Model SampleRequest
+ * 
+ */
+export type SampleRequest = Prisma.SampleRequestModel
+/**
+ * Model SampleRequestItem
+ * 
+ */
+export type SampleRequestItem = Prisma.SampleRequestItemModel

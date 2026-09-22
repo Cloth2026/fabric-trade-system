@@ -507,6 +507,7 @@ export type FabricWhereInput = {
   postProcesses?: Prisma.PostProcessListRelationFilter
   supplierSources?: Prisma.FabricSupplierListRelationFilter
   stockInBatches?: Prisma.FabricStockInBatchListRelationFilter
+  sampleRequestItems?: Prisma.SampleRequestItemListRelationFilter
 }
 
 export type FabricOrderByWithRelationInput = {
@@ -559,6 +560,7 @@ export type FabricOrderByWithRelationInput = {
   postProcesses?: Prisma.PostProcessOrderByRelationAggregateInput
   supplierSources?: Prisma.FabricSupplierOrderByRelationAggregateInput
   stockInBatches?: Prisma.FabricStockInBatchOrderByRelationAggregateInput
+  sampleRequestItems?: Prisma.SampleRequestItemOrderByRelationAggregateInput
 }
 
 export type FabricWhereUniqueInput = Prisma.AtLeast<{
@@ -615,6 +617,7 @@ export type FabricWhereUniqueInput = Prisma.AtLeast<{
   postProcesses?: Prisma.PostProcessListRelationFilter
   supplierSources?: Prisma.FabricSupplierListRelationFilter
   stockInBatches?: Prisma.FabricStockInBatchListRelationFilter
+  sampleRequestItems?: Prisma.SampleRequestItemListRelationFilter
 }, "id" | "tenantId_code">
 
 export type FabricOrderByWithAggregationInput = {
@@ -763,6 +766,7 @@ export type FabricCreateInput = {
   postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFabricInput
   supplierSources?: Prisma.FabricSupplierCreateNestedManyWithoutFabricInput
   stockInBatches?: Prisma.FabricStockInBatchCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutFabricInput
 }
 
 export type FabricUncheckedCreateInput = {
@@ -813,6 +817,7 @@ export type FabricUncheckedCreateInput = {
   postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFabricInput
   supplierSources?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutFabricInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutFabricInput
 }
 
 export type FabricUpdateInput = {
@@ -863,6 +868,7 @@ export type FabricUpdateInput = {
   postProcesses?: Prisma.PostProcessUpdateManyWithoutFabricNestedInput
   supplierSources?: Prisma.FabricSupplierUpdateManyWithoutFabricNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricUncheckedUpdateInput = {
@@ -913,6 +919,7 @@ export type FabricUncheckedUpdateInput = {
   postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFabricNestedInput
   supplierSources?: Prisma.FabricSupplierUncheckedUpdateManyWithoutFabricNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricCreateManyInput = {
@@ -1428,6 +1435,20 @@ export type FabricUpdateOneRequiredWithoutStockInBatchesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FabricUpdateToOneWithWhereWithoutStockInBatchesInput, Prisma.FabricUpdateWithoutStockInBatchesInput>, Prisma.FabricUncheckedUpdateWithoutStockInBatchesInput>
 }
 
+export type FabricCreateNestedOneWithoutSampleRequestItemsInput = {
+  create?: Prisma.XOR<Prisma.FabricCreateWithoutSampleRequestItemsInput, Prisma.FabricUncheckedCreateWithoutSampleRequestItemsInput>
+  connectOrCreate?: Prisma.FabricCreateOrConnectWithoutSampleRequestItemsInput
+  connect?: Prisma.FabricWhereUniqueInput
+}
+
+export type FabricUpdateOneRequiredWithoutSampleRequestItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.FabricCreateWithoutSampleRequestItemsInput, Prisma.FabricUncheckedCreateWithoutSampleRequestItemsInput>
+  connectOrCreate?: Prisma.FabricCreateOrConnectWithoutSampleRequestItemsInput
+  upsert?: Prisma.FabricUpsertWithoutSampleRequestItemsInput
+  connect?: Prisma.FabricWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FabricUpdateToOneWithWhereWithoutSampleRequestItemsInput, Prisma.FabricUpdateWithoutSampleRequestItemsInput>, Prisma.FabricUncheckedUpdateWithoutSampleRequestItemsInput>
+}
+
 export type FabricCreateWithoutTenantInput = {
   id?: string
   code: string
@@ -1475,6 +1496,7 @@ export type FabricCreateWithoutTenantInput = {
   postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFabricInput
   supplierSources?: Prisma.FabricSupplierCreateNestedManyWithoutFabricInput
   stockInBatches?: Prisma.FabricStockInBatchCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutFabricInput
 }
 
 export type FabricUncheckedCreateWithoutTenantInput = {
@@ -1524,6 +1546,7 @@ export type FabricUncheckedCreateWithoutTenantInput = {
   postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFabricInput
   supplierSources?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutFabricInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutFabricInput
 }
 
 export type FabricCreateOrConnectWithoutTenantInput = {
@@ -1647,6 +1670,7 @@ export type FabricCreateWithoutSupplierInput = {
   postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFabricInput
   supplierSources?: Prisma.FabricSupplierCreateNestedManyWithoutFabricInput
   stockInBatches?: Prisma.FabricStockInBatchCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutFabricInput
 }
 
 export type FabricUncheckedCreateWithoutSupplierInput = {
@@ -1696,6 +1720,7 @@ export type FabricUncheckedCreateWithoutSupplierInput = {
   postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFabricInput
   supplierSources?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutFabricInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutFabricInput
 }
 
 export type FabricCreateOrConnectWithoutSupplierInput = {
@@ -1771,6 +1796,7 @@ export type FabricCreateWithoutSupplierSourcesInput = {
   dyeingFinishing?: Prisma.DyeingFinishingCreateNestedOneWithoutFabricInput
   postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFabricInput
   stockInBatches?: Prisma.FabricStockInBatchCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutFabricInput
 }
 
 export type FabricUncheckedCreateWithoutSupplierSourcesInput = {
@@ -1820,6 +1846,7 @@ export type FabricUncheckedCreateWithoutSupplierSourcesInput = {
   dyeingFinishing?: Prisma.DyeingFinishingUncheckedCreateNestedOneWithoutFabricInput
   postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFabricInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutFabricInput
 }
 
 export type FabricCreateOrConnectWithoutSupplierSourcesInput = {
@@ -1885,6 +1912,7 @@ export type FabricUpdateWithoutSupplierSourcesInput = {
   dyeingFinishing?: Prisma.DyeingFinishingUpdateOneWithoutFabricNestedInput
   postProcesses?: Prisma.PostProcessUpdateManyWithoutFabricNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricUncheckedUpdateWithoutSupplierSourcesInput = {
@@ -1934,6 +1962,7 @@ export type FabricUncheckedUpdateWithoutSupplierSourcesInput = {
   dyeingFinishing?: Prisma.DyeingFinishingUncheckedUpdateOneWithoutFabricNestedInput
   postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFabricNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricCreateWithoutGreigeInput = {
@@ -1983,6 +2012,7 @@ export type FabricCreateWithoutGreigeInput = {
   postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFabricInput
   supplierSources?: Prisma.FabricSupplierCreateNestedManyWithoutFabricInput
   stockInBatches?: Prisma.FabricStockInBatchCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutFabricInput
 }
 
 export type FabricUncheckedCreateWithoutGreigeInput = {
@@ -2032,6 +2062,7 @@ export type FabricUncheckedCreateWithoutGreigeInput = {
   postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFabricInput
   supplierSources?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutFabricInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutFabricInput
 }
 
 export type FabricCreateOrConnectWithoutGreigeInput = {
@@ -2097,6 +2128,7 @@ export type FabricUpdateWithoutGreigeInput = {
   postProcesses?: Prisma.PostProcessUpdateManyWithoutFabricNestedInput
   supplierSources?: Prisma.FabricSupplierUpdateManyWithoutFabricNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricUncheckedUpdateWithoutGreigeInput = {
@@ -2146,6 +2178,7 @@ export type FabricUncheckedUpdateWithoutGreigeInput = {
   postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFabricNestedInput
   supplierSources?: Prisma.FabricSupplierUncheckedUpdateManyWithoutFabricNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricCreateWithoutDyeingFinishingInput = {
@@ -2195,6 +2228,7 @@ export type FabricCreateWithoutDyeingFinishingInput = {
   postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFabricInput
   supplierSources?: Prisma.FabricSupplierCreateNestedManyWithoutFabricInput
   stockInBatches?: Prisma.FabricStockInBatchCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutFabricInput
 }
 
 export type FabricUncheckedCreateWithoutDyeingFinishingInput = {
@@ -2244,6 +2278,7 @@ export type FabricUncheckedCreateWithoutDyeingFinishingInput = {
   postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFabricInput
   supplierSources?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutFabricInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutFabricInput
 }
 
 export type FabricCreateOrConnectWithoutDyeingFinishingInput = {
@@ -2309,6 +2344,7 @@ export type FabricUpdateWithoutDyeingFinishingInput = {
   postProcesses?: Prisma.PostProcessUpdateManyWithoutFabricNestedInput
   supplierSources?: Prisma.FabricSupplierUpdateManyWithoutFabricNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricUncheckedUpdateWithoutDyeingFinishingInput = {
@@ -2358,6 +2394,7 @@ export type FabricUncheckedUpdateWithoutDyeingFinishingInput = {
   postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFabricNestedInput
   supplierSources?: Prisma.FabricSupplierUncheckedUpdateManyWithoutFabricNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricCreateWithoutPostProcessesInput = {
@@ -2407,6 +2444,7 @@ export type FabricCreateWithoutPostProcessesInput = {
   dyeingFinishing?: Prisma.DyeingFinishingCreateNestedOneWithoutFabricInput
   supplierSources?: Prisma.FabricSupplierCreateNestedManyWithoutFabricInput
   stockInBatches?: Prisma.FabricStockInBatchCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutFabricInput
 }
 
 export type FabricUncheckedCreateWithoutPostProcessesInput = {
@@ -2456,6 +2494,7 @@ export type FabricUncheckedCreateWithoutPostProcessesInput = {
   dyeingFinishing?: Prisma.DyeingFinishingUncheckedCreateNestedOneWithoutFabricInput
   supplierSources?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutFabricInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutFabricInput
 }
 
 export type FabricCreateOrConnectWithoutPostProcessesInput = {
@@ -2521,6 +2560,7 @@ export type FabricUpdateWithoutPostProcessesInput = {
   dyeingFinishing?: Prisma.DyeingFinishingUpdateOneWithoutFabricNestedInput
   supplierSources?: Prisma.FabricSupplierUpdateManyWithoutFabricNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricUncheckedUpdateWithoutPostProcessesInput = {
@@ -2570,6 +2610,7 @@ export type FabricUncheckedUpdateWithoutPostProcessesInput = {
   dyeingFinishing?: Prisma.DyeingFinishingUncheckedUpdateOneWithoutFabricNestedInput
   supplierSources?: Prisma.FabricSupplierUncheckedUpdateManyWithoutFabricNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricCreateWithoutStockInBatchesInput = {
@@ -2619,6 +2660,7 @@ export type FabricCreateWithoutStockInBatchesInput = {
   dyeingFinishing?: Prisma.DyeingFinishingCreateNestedOneWithoutFabricInput
   postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFabricInput
   supplierSources?: Prisma.FabricSupplierCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutFabricInput
 }
 
 export type FabricUncheckedCreateWithoutStockInBatchesInput = {
@@ -2668,6 +2710,7 @@ export type FabricUncheckedCreateWithoutStockInBatchesInput = {
   dyeingFinishing?: Prisma.DyeingFinishingUncheckedCreateNestedOneWithoutFabricInput
   postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFabricInput
   supplierSources?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutFabricInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutFabricInput
 }
 
 export type FabricCreateOrConnectWithoutStockInBatchesInput = {
@@ -2733,6 +2776,7 @@ export type FabricUpdateWithoutStockInBatchesInput = {
   dyeingFinishing?: Prisma.DyeingFinishingUpdateOneWithoutFabricNestedInput
   postProcesses?: Prisma.PostProcessUpdateManyWithoutFabricNestedInput
   supplierSources?: Prisma.FabricSupplierUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricUncheckedUpdateWithoutStockInBatchesInput = {
@@ -2782,6 +2826,223 @@ export type FabricUncheckedUpdateWithoutStockInBatchesInput = {
   dyeingFinishing?: Prisma.DyeingFinishingUncheckedUpdateOneWithoutFabricNestedInput
   postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFabricNestedInput
   supplierSources?: Prisma.FabricSupplierUncheckedUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutFabricNestedInput
+}
+
+export type FabricCreateWithoutSampleRequestItemsInput = {
+  id?: string
+  code: string
+  englishName?: string | null
+  name: string
+  fabricType: $Enums.FabricType
+  pricingUnit: $Enums.PricingUnit
+  developmentSource: string
+  status?: string
+  composition: string
+  weight: string
+  width: string
+  yarnCount?: string | null
+  warpWeftDensity?: string | null
+  category?: string | null
+  structure?: string | null
+  tags?: Prisma.FabricCreatetagsInput | string[]
+  usageOptionKeys?: Prisma.FabricCreateusageOptionKeysInput | string[]
+  seasonOptionKeys?: Prisma.FabricCreateseasonOptionKeysInput | string[]
+  certificationOptionKeys?: Prisma.FabricCreatecertificationOptionKeysInput | string[]
+  elasticity?: string | null
+  sourceContact?: string | null
+  sourceDate?: Date | string | null
+  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  minimumOrderQty?: string | null
+  repurchaseStatus?: string | null
+  tubeWeight?: string | null
+  tolerance?: string | null
+  greigeStatus?: $Enums.ProcessInfoStatus
+  dyeingStatus?: $Enums.ProcessInfoStatus
+  postProcessStatus?: $Enums.ProcessInfoStatus
+  colorFastness?: string | null
+  pilling?: string | null
+  inspectionConclusion?: string | null
+  handFeel?: string | null
+  remarks?: string | null
+  completenessPercent?: number
+  missingInfoFlags?: Prisma.FabricCreatemissingInfoFlagsInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutFabricsInput
+  supplier?: Prisma.SupplierCreateNestedOneWithoutSourceFabricsInput
+  greige?: Prisma.GreigeFabricCreateNestedOneWithoutFabricInput
+  dyeingFinishing?: Prisma.DyeingFinishingCreateNestedOneWithoutFabricInput
+  postProcesses?: Prisma.PostProcessCreateNestedManyWithoutFabricInput
+  supplierSources?: Prisma.FabricSupplierCreateNestedManyWithoutFabricInput
+  stockInBatches?: Prisma.FabricStockInBatchCreateNestedManyWithoutFabricInput
+}
+
+export type FabricUncheckedCreateWithoutSampleRequestItemsInput = {
+  id?: string
+  tenantId: string
+  code: string
+  englishName?: string | null
+  name: string
+  fabricType: $Enums.FabricType
+  pricingUnit: $Enums.PricingUnit
+  developmentSource: string
+  status?: string
+  composition: string
+  weight: string
+  width: string
+  yarnCount?: string | null
+  warpWeftDensity?: string | null
+  category?: string | null
+  structure?: string | null
+  tags?: Prisma.FabricCreatetagsInput | string[]
+  usageOptionKeys?: Prisma.FabricCreateusageOptionKeysInput | string[]
+  seasonOptionKeys?: Prisma.FabricCreateseasonOptionKeysInput | string[]
+  certificationOptionKeys?: Prisma.FabricCreatecertificationOptionKeysInput | string[]
+  elasticity?: string | null
+  supplierId?: string | null
+  sourceContact?: string | null
+  sourceDate?: Date | string | null
+  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  minimumOrderQty?: string | null
+  repurchaseStatus?: string | null
+  tubeWeight?: string | null
+  tolerance?: string | null
+  greigeStatus?: $Enums.ProcessInfoStatus
+  dyeingStatus?: $Enums.ProcessInfoStatus
+  postProcessStatus?: $Enums.ProcessInfoStatus
+  colorFastness?: string | null
+  pilling?: string | null
+  inspectionConclusion?: string | null
+  handFeel?: string | null
+  remarks?: string | null
+  completenessPercent?: number
+  missingInfoFlags?: Prisma.FabricCreatemissingInfoFlagsInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  greige?: Prisma.GreigeFabricUncheckedCreateNestedOneWithoutFabricInput
+  dyeingFinishing?: Prisma.DyeingFinishingUncheckedCreateNestedOneWithoutFabricInput
+  postProcesses?: Prisma.PostProcessUncheckedCreateNestedManyWithoutFabricInput
+  supplierSources?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutFabricInput
+  stockInBatches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutFabricInput
+}
+
+export type FabricCreateOrConnectWithoutSampleRequestItemsInput = {
+  where: Prisma.FabricWhereUniqueInput
+  create: Prisma.XOR<Prisma.FabricCreateWithoutSampleRequestItemsInput, Prisma.FabricUncheckedCreateWithoutSampleRequestItemsInput>
+}
+
+export type FabricUpsertWithoutSampleRequestItemsInput = {
+  update: Prisma.XOR<Prisma.FabricUpdateWithoutSampleRequestItemsInput, Prisma.FabricUncheckedUpdateWithoutSampleRequestItemsInput>
+  create: Prisma.XOR<Prisma.FabricCreateWithoutSampleRequestItemsInput, Prisma.FabricUncheckedCreateWithoutSampleRequestItemsInput>
+  where?: Prisma.FabricWhereInput
+}
+
+export type FabricUpdateToOneWithWhereWithoutSampleRequestItemsInput = {
+  where?: Prisma.FabricWhereInput
+  data: Prisma.XOR<Prisma.FabricUpdateWithoutSampleRequestItemsInput, Prisma.FabricUncheckedUpdateWithoutSampleRequestItemsInput>
+}
+
+export type FabricUpdateWithoutSampleRequestItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  englishName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  fabricType?: Prisma.EnumFabricTypeFieldUpdateOperationsInput | $Enums.FabricType
+  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
+  developmentSource?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  composition?: Prisma.StringFieldUpdateOperationsInput | string
+  weight?: Prisma.StringFieldUpdateOperationsInput | string
+  width?: Prisma.StringFieldUpdateOperationsInput | string
+  yarnCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warpWeftDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  structure?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.FabricUpdatetagsInput | string[]
+  usageOptionKeys?: Prisma.FabricUpdateusageOptionKeysInput | string[]
+  seasonOptionKeys?: Prisma.FabricUpdateseasonOptionKeysInput | string[]
+  certificationOptionKeys?: Prisma.FabricUpdatecertificationOptionKeysInput | string[]
+  elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tubeWeight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tolerance?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  greigeStatus?: Prisma.EnumProcessInfoStatusFieldUpdateOperationsInput | $Enums.ProcessInfoStatus
+  dyeingStatus?: Prisma.EnumProcessInfoStatusFieldUpdateOperationsInput | $Enums.ProcessInfoStatus
+  postProcessStatus?: Prisma.EnumProcessInfoStatusFieldUpdateOperationsInput | $Enums.ProcessInfoStatus
+  colorFastness?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pilling?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inspectionConclusion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  handFeel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completenessPercent?: Prisma.IntFieldUpdateOperationsInput | number
+  missingInfoFlags?: Prisma.FabricUpdatemissingInfoFlagsInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutFabricsNestedInput
+  supplier?: Prisma.SupplierUpdateOneWithoutSourceFabricsNestedInput
+  greige?: Prisma.GreigeFabricUpdateOneWithoutFabricNestedInput
+  dyeingFinishing?: Prisma.DyeingFinishingUpdateOneWithoutFabricNestedInput
+  postProcesses?: Prisma.PostProcessUpdateManyWithoutFabricNestedInput
+  supplierSources?: Prisma.FabricSupplierUpdateManyWithoutFabricNestedInput
+  stockInBatches?: Prisma.FabricStockInBatchUpdateManyWithoutFabricNestedInput
+}
+
+export type FabricUncheckedUpdateWithoutSampleRequestItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  englishName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  fabricType?: Prisma.EnumFabricTypeFieldUpdateOperationsInput | $Enums.FabricType
+  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
+  developmentSource?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  composition?: Prisma.StringFieldUpdateOperationsInput | string
+  weight?: Prisma.StringFieldUpdateOperationsInput | string
+  width?: Prisma.StringFieldUpdateOperationsInput | string
+  yarnCount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warpWeftDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  structure?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.FabricUpdatetagsInput | string[]
+  usageOptionKeys?: Prisma.FabricUpdateusageOptionKeysInput | string[]
+  seasonOptionKeys?: Prisma.FabricUpdateseasonOptionKeysInput | string[]
+  certificationOptionKeys?: Prisma.FabricUpdatecertificationOptionKeysInput | string[]
+  elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tubeWeight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tolerance?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  greigeStatus?: Prisma.EnumProcessInfoStatusFieldUpdateOperationsInput | $Enums.ProcessInfoStatus
+  dyeingStatus?: Prisma.EnumProcessInfoStatusFieldUpdateOperationsInput | $Enums.ProcessInfoStatus
+  postProcessStatus?: Prisma.EnumProcessInfoStatusFieldUpdateOperationsInput | $Enums.ProcessInfoStatus
+  colorFastness?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pilling?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  inspectionConclusion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  handFeel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completenessPercent?: Prisma.IntFieldUpdateOperationsInput | number
+  missingInfoFlags?: Prisma.FabricUpdatemissingInfoFlagsInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  greige?: Prisma.GreigeFabricUncheckedUpdateOneWithoutFabricNestedInput
+  dyeingFinishing?: Prisma.DyeingFinishingUncheckedUpdateOneWithoutFabricNestedInput
+  postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFabricNestedInput
+  supplierSources?: Prisma.FabricSupplierUncheckedUpdateManyWithoutFabricNestedInput
+  stockInBatches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricCreateManyTenantInput = {
@@ -2875,6 +3136,7 @@ export type FabricUpdateWithoutTenantInput = {
   postProcesses?: Prisma.PostProcessUpdateManyWithoutFabricNestedInput
   supplierSources?: Prisma.FabricSupplierUpdateManyWithoutFabricNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricUncheckedUpdateWithoutTenantInput = {
@@ -2924,6 +3186,7 @@ export type FabricUncheckedUpdateWithoutTenantInput = {
   postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFabricNestedInput
   supplierSources?: Prisma.FabricSupplierUncheckedUpdateManyWithoutFabricNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricUncheckedUpdateManyWithoutTenantInput = {
@@ -3061,6 +3324,7 @@ export type FabricUpdateWithoutSupplierInput = {
   postProcesses?: Prisma.PostProcessUpdateManyWithoutFabricNestedInput
   supplierSources?: Prisma.FabricSupplierUpdateManyWithoutFabricNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricUncheckedUpdateWithoutSupplierInput = {
@@ -3110,6 +3374,7 @@ export type FabricUncheckedUpdateWithoutSupplierInput = {
   postProcesses?: Prisma.PostProcessUncheckedUpdateManyWithoutFabricNestedInput
   supplierSources?: Prisma.FabricSupplierUncheckedUpdateManyWithoutFabricNestedInput
   stockInBatches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutFabricNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutFabricNestedInput
 }
 
 export type FabricUncheckedUpdateManyWithoutSupplierInput = {
@@ -3165,12 +3430,14 @@ export type FabricCountOutputType = {
   postProcesses: number
   supplierSources: number
   stockInBatches: number
+  sampleRequestItems: number
 }
 
 export type FabricCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   postProcesses?: boolean | FabricCountOutputTypeCountPostProcessesArgs
   supplierSources?: boolean | FabricCountOutputTypeCountSupplierSourcesArgs
   stockInBatches?: boolean | FabricCountOutputTypeCountStockInBatchesArgs
+  sampleRequestItems?: boolean | FabricCountOutputTypeCountSampleRequestItemsArgs
 }
 
 /**
@@ -3202,6 +3469,13 @@ export type FabricCountOutputTypeCountSupplierSourcesArgs<ExtArgs extends runtim
  */
 export type FabricCountOutputTypeCountStockInBatchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.FabricStockInBatchWhereInput
+}
+
+/**
+ * FabricCountOutputType without action
+ */
+export type FabricCountOutputTypeCountSampleRequestItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SampleRequestItemWhereInput
 }
 
 
@@ -3255,6 +3529,7 @@ export type FabricSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   postProcesses?: boolean | Prisma.Fabric$postProcessesArgs<ExtArgs>
   supplierSources?: boolean | Prisma.Fabric$supplierSourcesArgs<ExtArgs>
   stockInBatches?: boolean | Prisma.Fabric$stockInBatchesArgs<ExtArgs>
+  sampleRequestItems?: boolean | Prisma.Fabric$sampleRequestItemsArgs<ExtArgs>
   _count?: boolean | Prisma.FabricCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["fabric"]>
 
@@ -3406,6 +3681,7 @@ export type FabricInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   postProcesses?: boolean | Prisma.Fabric$postProcessesArgs<ExtArgs>
   supplierSources?: boolean | Prisma.Fabric$supplierSourcesArgs<ExtArgs>
   stockInBatches?: boolean | Prisma.Fabric$stockInBatchesArgs<ExtArgs>
+  sampleRequestItems?: boolean | Prisma.Fabric$sampleRequestItemsArgs<ExtArgs>
   _count?: boolean | Prisma.FabricCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FabricIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -3427,6 +3703,7 @@ export type $FabricPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     postProcesses: Prisma.$PostProcessPayload<ExtArgs>[]
     supplierSources: Prisma.$FabricSupplierPayload<ExtArgs>[]
     stockInBatches: Prisma.$FabricStockInBatchPayload<ExtArgs>[]
+    sampleRequestItems: Prisma.$SampleRequestItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3872,6 +4149,7 @@ export interface Prisma__FabricClient<T, Null = never, ExtArgs extends runtime.T
   postProcesses<T extends Prisma.Fabric$postProcessesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fabric$postProcessesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PostProcessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   supplierSources<T extends Prisma.Fabric$supplierSourcesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fabric$supplierSourcesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FabricSupplierPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stockInBatches<T extends Prisma.Fabric$stockInBatchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fabric$stockInBatchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FabricStockInBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sampleRequestItems<T extends Prisma.Fabric$sampleRequestItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Fabric$sampleRequestItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SampleRequestItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4470,6 +4748,30 @@ export type Fabric$stockInBatchesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.FabricStockInBatchScalarFieldEnum | Prisma.FabricStockInBatchScalarFieldEnum[]
+}
+
+/**
+ * Fabric.sampleRequestItems
+ */
+export type Fabric$sampleRequestItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SampleRequestItem
+   */
+  select?: Prisma.SampleRequestItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SampleRequestItem
+   */
+  omit?: Prisma.SampleRequestItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SampleRequestItemInclude<ExtArgs> | null
+  where?: Prisma.SampleRequestItemWhereInput
+  orderBy?: Prisma.SampleRequestItemOrderByWithRelationInput | Prisma.SampleRequestItemOrderByWithRelationInput[]
+  cursor?: Prisma.SampleRequestItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SampleRequestItemScalarFieldEnum | Prisma.SampleRequestItemScalarFieldEnum[]
 }
 
 /**

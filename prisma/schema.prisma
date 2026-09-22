@@ -53,6 +53,8 @@ model Tenant {
   batches              FabricStockInBatch[]
   customers            Customer[]
   customerContacts     CustomerContact[]
+  sampleRequests       SampleRequest[]
+  sampleRequestItems   SampleRequestItem[]
   logs                 OperationLog[]
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
@@ -218,6 +220,7 @@ model Fabric {
   postProcesses           PostProcess[]
   supplierSources         FabricSupplier[]
   stockInBatches          FabricStockInBatch[]
+  sampleRequestItems      SampleRequestItem[]
   createdAt               DateTime             @default(now())
   updatedAt               DateTime             @updatedAt
 
@@ -410,6 +413,7 @@ model Customer {
   defaultCurrency   String?
   remarks           String?
   contacts          CustomerContact[]
+  sampleRequests    SampleRequest[]
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
 
@@ -435,6 +439,7 @@ model CustomerContact {
   isPrimary    Boolean  @default(false)
   status       String   @default("active")
   remarks      String?
+  sampleRequests SampleRequest[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -442,4 +447,62 @@ model CustomerContact {
   @@index([tenantId])
   @@index([tenantId, customerId])
   @@index([tenantId, status])
+}
+
+// Sample request = fabrics sent from us to a CUSTOMER. It is intentionally
+// separate from FabricSupplier.sampleStatus, which tracks samples we received
+// from suppliers. Status keys come from ConfigOption group
+// "sample_request_status"; feedback results from "sample_feedback_result".
+model SampleRequest {
+  id               String              @id @default(cuid())
+  tenant           Tenant              @relation(fields: [tenantId], references: [id])
+  tenantId         String
+  code             String              @db.VarChar(64)
+  customer         Customer            @relation(fields: [customerId], references: [id])
+  customerId       String
+  contact          CustomerContact?    @relation(fields: [contactId], references: [id])
+  contactId        String?
+  status           String              @default("preparing")
+  sentAt           DateTime?
+  expectedReturnAt DateTime?
+  returnedAt       DateTime?
+  carrier          String?
+  trackingNo       String?
+  receiverName     String?
+  receiverPhone    String?
+  receiverAddress  String?
+  purpose          String?
+  remark           String?
+  items            SampleRequestItem[]
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  @@unique([tenantId, code])
+  @@index([tenantId, status])
+  @@index([tenantId, customerId])
+  @@index([tenantId, contactId])
+  @@index([tenantId, createdAt])
+}
+
+model SampleRequestItem {
+  id             String        @id @default(cuid())
+  tenant         Tenant        @relation(fields: [tenantId], references: [id])
+  tenantId       String
+  request        SampleRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  requestId      String
+  fabric         Fabric        @relation(fields: [fabricId], references: [id])
+  fabricId       String
+  // Snapshot of the fabric pricing unit at send time, so later fabric changes
+  // never rewrite historical sample quantities.
+  unit           String?
+  quantity       Decimal?      @db.Decimal(12, 3)
+  colorOrRemark  String?
+  feedback       String?
+  feedbackResult String?
+  feedbackAt     DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([tenantId, requestId])
+  @@index([tenantId, fabricId])
 }

@@ -182,6 +182,26 @@ const optionGroups = [
       ["expired", "样品失效"],
     ],
   },
+  {
+    group: "sample_request_status",
+    options: [
+      ["preparing", "待寄出"],
+      ["shipped", "已寄出"],
+      ["delivered", "客户已签收"],
+      ["returned", "已退回"],
+      ["closed", "已结束"],
+    ],
+  },
+  {
+    group: "sample_feedback_result",
+    options: [
+      ["pending", "待反馈"],
+      ["interested", "有意向"],
+      ["comparing", "对比中"],
+      ["rejected", "未选中"],
+      ["ordered", "已下单"],
+    ],
+  },
 ];
 
 async function upsertSystemOption(client, group, key, label, sortOrder) {

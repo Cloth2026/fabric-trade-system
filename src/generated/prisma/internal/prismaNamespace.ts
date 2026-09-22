@@ -411,7 +411,9 @@ export const ModelName = {
   FabricStockInBatch: 'FabricStockInBatch',
   OperationLog: 'OperationLog',
   Customer: 'Customer',
-  CustomerContact: 'CustomerContact'
+  CustomerContact: 'CustomerContact',
+  SampleRequest: 'SampleRequest',
+  SampleRequestItem: 'SampleRequestItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -427,7 +429,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "configOption" | "supplier" | "supplierUnit" | "fabric" | "fabricSupplier" | "fabricSupplierQuote" | "greigeFabric" | "dyeingFinishing" | "postProcess" | "fabricStockInBatch" | "operationLog" | "customer" | "customerContact"
+    modelProps: "tenant" | "user" | "configOption" | "supplier" | "supplierUnit" | "fabric" | "fabricSupplier" | "fabricSupplierQuote" | "greigeFabric" | "dyeingFinishing" | "postProcess" | "fabricStockInBatch" | "operationLog" | "customer" | "customerContact" | "sampleRequest" | "sampleRequestItem"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1541,6 +1543,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SampleRequest: {
+      payload: Prisma.$SampleRequestPayload<ExtArgs>
+      fields: Prisma.SampleRequestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SampleRequestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SampleRequestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestPayload>
+        }
+        findFirst: {
+          args: Prisma.SampleRequestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SampleRequestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestPayload>
+        }
+        findMany: {
+          args: Prisma.SampleRequestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestPayload>[]
+        }
+        create: {
+          args: Prisma.SampleRequestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestPayload>
+        }
+        createMany: {
+          args: Prisma.SampleRequestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SampleRequestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestPayload>[]
+        }
+        delete: {
+          args: Prisma.SampleRequestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestPayload>
+        }
+        update: {
+          args: Prisma.SampleRequestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestPayload>
+        }
+        deleteMany: {
+          args: Prisma.SampleRequestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SampleRequestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SampleRequestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestPayload>[]
+        }
+        upsert: {
+          args: Prisma.SampleRequestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestPayload>
+        }
+        aggregate: {
+          args: Prisma.SampleRequestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSampleRequest>
+        }
+        groupBy: {
+          args: Prisma.SampleRequestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SampleRequestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SampleRequestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SampleRequestCountAggregateOutputType> | number
+        }
+      }
+    }
+    SampleRequestItem: {
+      payload: Prisma.$SampleRequestItemPayload<ExtArgs>
+      fields: Prisma.SampleRequestItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SampleRequestItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SampleRequestItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestItemPayload>
+        }
+        findFirst: {
+          args: Prisma.SampleRequestItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SampleRequestItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestItemPayload>
+        }
+        findMany: {
+          args: Prisma.SampleRequestItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestItemPayload>[]
+        }
+        create: {
+          args: Prisma.SampleRequestItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestItemPayload>
+        }
+        createMany: {
+          args: Prisma.SampleRequestItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SampleRequestItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestItemPayload>[]
+        }
+        delete: {
+          args: Prisma.SampleRequestItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestItemPayload>
+        }
+        update: {
+          args: Prisma.SampleRequestItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.SampleRequestItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SampleRequestItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SampleRequestItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.SampleRequestItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SampleRequestItemPayload>
+        }
+        aggregate: {
+          args: Prisma.SampleRequestItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSampleRequestItem>
+        }
+        groupBy: {
+          args: Prisma.SampleRequestItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SampleRequestItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SampleRequestItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SampleRequestItemCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1910,6 +2060,48 @@ export const CustomerContactScalarFieldEnum = {
 } as const
 
 export type CustomerContactScalarFieldEnum = (typeof CustomerContactScalarFieldEnum)[keyof typeof CustomerContactScalarFieldEnum]
+
+
+export const SampleRequestScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  customerId: 'customerId',
+  contactId: 'contactId',
+  status: 'status',
+  sentAt: 'sentAt',
+  expectedReturnAt: 'expectedReturnAt',
+  returnedAt: 'returnedAt',
+  carrier: 'carrier',
+  trackingNo: 'trackingNo',
+  receiverName: 'receiverName',
+  receiverPhone: 'receiverPhone',
+  receiverAddress: 'receiverAddress',
+  purpose: 'purpose',
+  remark: 'remark',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SampleRequestScalarFieldEnum = (typeof SampleRequestScalarFieldEnum)[keyof typeof SampleRequestScalarFieldEnum]
+
+
+export const SampleRequestItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  requestId: 'requestId',
+  fabricId: 'fabricId',
+  unit: 'unit',
+  quantity: 'quantity',
+  colorOrRemark: 'colorOrRemark',
+  feedback: 'feedback',
+  feedbackResult: 'feedbackResult',
+  feedbackAt: 'feedbackAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SampleRequestItemScalarFieldEnum = (typeof SampleRequestItemScalarFieldEnum)[keyof typeof SampleRequestItemScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2299,6 +2491,8 @@ export type GlobalOmitConfig = {
   operationLog?: Prisma.OperationLogOmit
   customer?: Prisma.CustomerOmit
   customerContact?: Prisma.CustomerContactOmit
+  sampleRequest?: Prisma.SampleRequestOmit
+  sampleRequestItem?: Prisma.SampleRequestItemOmit
 }
 
 /* Types for Logging */

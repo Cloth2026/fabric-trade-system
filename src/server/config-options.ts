@@ -32,6 +32,10 @@ export const configGroups = {
   fabricSeason: "fabric_season",
   fabricCertification: "fabric_certification",
   sampleStatus: "sample_status",
+  // Sample requests sent to customers. Deliberately distinct from
+  // sampleStatus, which describes samples received from suppliers.
+  sampleRequestStatus: "sample_request_status",
+  sampleFeedbackResult: "sample_feedback_result",
 } as const;
 
 export type ConfigGroup = (typeof configGroups)[keyof typeof configGroups];

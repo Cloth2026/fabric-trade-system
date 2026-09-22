@@ -65,7 +65,9 @@ export const ModelName = {
   FabricStockInBatch: 'FabricStockInBatch',
   OperationLog: 'OperationLog',
   Customer: 'Customer',
-  CustomerContact: 'CustomerContact'
+  CustomerContact: 'CustomerContact',
+  SampleRequest: 'SampleRequest',
+  SampleRequestItem: 'SampleRequestItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -414,6 +416,48 @@ export const CustomerContactScalarFieldEnum = {
 } as const
 
 export type CustomerContactScalarFieldEnum = (typeof CustomerContactScalarFieldEnum)[keyof typeof CustomerContactScalarFieldEnum]
+
+
+export const SampleRequestScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  customerId: 'customerId',
+  contactId: 'contactId',
+  status: 'status',
+  sentAt: 'sentAt',
+  expectedReturnAt: 'expectedReturnAt',
+  returnedAt: 'returnedAt',
+  carrier: 'carrier',
+  trackingNo: 'trackingNo',
+  receiverName: 'receiverName',
+  receiverPhone: 'receiverPhone',
+  receiverAddress: 'receiverAddress',
+  purpose: 'purpose',
+  remark: 'remark',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SampleRequestScalarFieldEnum = (typeof SampleRequestScalarFieldEnum)[keyof typeof SampleRequestScalarFieldEnum]
+
+
+export const SampleRequestItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  requestId: 'requestId',
+  fabricId: 'fabricId',
+  unit: 'unit',
+  quantity: 'quantity',
+  colorOrRemark: 'colorOrRemark',
+  feedback: 'feedback',
+  feedbackResult: 'feedbackResult',
+  feedbackAt: 'feedbackAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SampleRequestItemScalarFieldEnum = (typeof SampleRequestItemScalarFieldEnum)[keyof typeof SampleRequestItemScalarFieldEnum]
 
 
 export const SortOrder = {
