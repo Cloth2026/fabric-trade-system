@@ -202,6 +202,8 @@ export type TenantWhereInput = {
   customerContacts?: Prisma.CustomerContactListRelationFilter
   sampleRequests?: Prisma.SampleRequestListRelationFilter
   sampleRequestItems?: Prisma.SampleRequestItemListRelationFilter
+  customerQuotes?: Prisma.CustomerQuoteListRelationFilter
+  customerQuoteItems?: Prisma.CustomerQuoteItemListRelationFilter
   logs?: Prisma.OperationLogListRelationFilter
 }
 
@@ -224,6 +226,8 @@ export type TenantOrderByWithRelationInput = {
   customerContacts?: Prisma.CustomerContactOrderByRelationAggregateInput
   sampleRequests?: Prisma.SampleRequestOrderByRelationAggregateInput
   sampleRequestItems?: Prisma.SampleRequestItemOrderByRelationAggregateInput
+  customerQuotes?: Prisma.CustomerQuoteOrderByRelationAggregateInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemOrderByRelationAggregateInput
   logs?: Prisma.OperationLogOrderByRelationAggregateInput
 }
 
@@ -249,6 +253,8 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   customerContacts?: Prisma.CustomerContactListRelationFilter
   sampleRequests?: Prisma.SampleRequestListRelationFilter
   sampleRequestItems?: Prisma.SampleRequestItemListRelationFilter
+  customerQuotes?: Prisma.CustomerQuoteListRelationFilter
+  customerQuoteItems?: Prisma.CustomerQuoteItemListRelationFilter
   logs?: Prisma.OperationLogListRelationFilter
 }, "id" | "code">
 
@@ -295,6 +301,8 @@ export type TenantCreateInput = {
   customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -317,6 +325,8 @@ export type TenantUncheckedCreateInput = {
   customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -339,6 +349,8 @@ export type TenantUpdateInput = {
   customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -361,6 +373,8 @@ export type TenantUncheckedUpdateInput = {
   customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -624,6 +638,34 @@ export type TenantUpdateOneRequiredWithoutSampleRequestItemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutSampleRequestItemsInput, Prisma.TenantUpdateWithoutSampleRequestItemsInput>, Prisma.TenantUncheckedUpdateWithoutSampleRequestItemsInput>
 }
 
+export type TenantCreateNestedOneWithoutCustomerQuotesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCustomerQuotesInput, Prisma.TenantUncheckedCreateWithoutCustomerQuotesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCustomerQuotesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutCustomerQuotesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCustomerQuotesInput, Prisma.TenantUncheckedCreateWithoutCustomerQuotesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCustomerQuotesInput
+  upsert?: Prisma.TenantUpsertWithoutCustomerQuotesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutCustomerQuotesInput, Prisma.TenantUpdateWithoutCustomerQuotesInput>, Prisma.TenantUncheckedUpdateWithoutCustomerQuotesInput>
+}
+
+export type TenantCreateNestedOneWithoutCustomerQuoteItemsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCustomerQuoteItemsInput, Prisma.TenantUncheckedCreateWithoutCustomerQuoteItemsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCustomerQuoteItemsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutCustomerQuoteItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutCustomerQuoteItemsInput, Prisma.TenantUncheckedCreateWithoutCustomerQuoteItemsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutCustomerQuoteItemsInput
+  upsert?: Prisma.TenantUpsertWithoutCustomerQuoteItemsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutCustomerQuoteItemsInput, Prisma.TenantUpdateWithoutCustomerQuoteItemsInput>, Prisma.TenantUncheckedUpdateWithoutCustomerQuoteItemsInput>
+}
+
 export type TenantCreateWithoutUsersInput = {
   id?: string
   name: string
@@ -642,6 +684,8 @@ export type TenantCreateWithoutUsersInput = {
   customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -663,6 +707,8 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -700,6 +746,8 @@ export type TenantUpdateWithoutUsersInput = {
   customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -721,6 +769,8 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -742,6 +792,8 @@ export type TenantCreateWithoutConfigOptionsInput = {
   customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -763,6 +815,8 @@ export type TenantUncheckedCreateWithoutConfigOptionsInput = {
   customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -800,6 +854,8 @@ export type TenantUpdateWithoutConfigOptionsInput = {
   customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -821,6 +877,8 @@ export type TenantUncheckedUpdateWithoutConfigOptionsInput = {
   customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -842,6 +900,8 @@ export type TenantCreateWithoutSuppliersInput = {
   customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -863,6 +923,8 @@ export type TenantUncheckedCreateWithoutSuppliersInput = {
   customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -900,6 +962,8 @@ export type TenantUpdateWithoutSuppliersInput = {
   customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -921,6 +985,8 @@ export type TenantUncheckedUpdateWithoutSuppliersInput = {
   customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -942,6 +1008,8 @@ export type TenantCreateWithoutSupplierUnitsInput = {
   customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -963,6 +1031,8 @@ export type TenantUncheckedCreateWithoutSupplierUnitsInput = {
   customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1000,6 +1070,8 @@ export type TenantUpdateWithoutSupplierUnitsInput = {
   customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -1021,6 +1093,8 @@ export type TenantUncheckedUpdateWithoutSupplierUnitsInput = {
   customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1042,6 +1116,8 @@ export type TenantCreateWithoutFabricsInput = {
   customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -1063,6 +1139,8 @@ export type TenantUncheckedCreateWithoutFabricsInput = {
   customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1100,6 +1178,8 @@ export type TenantUpdateWithoutFabricsInput = {
   customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -1121,6 +1201,8 @@ export type TenantUncheckedUpdateWithoutFabricsInput = {
   customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1142,6 +1224,8 @@ export type TenantCreateWithoutFabricSuppliersInput = {
   customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -1163,6 +1247,8 @@ export type TenantUncheckedCreateWithoutFabricSuppliersInput = {
   customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1200,6 +1286,8 @@ export type TenantUpdateWithoutFabricSuppliersInput = {
   customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -1221,6 +1309,8 @@ export type TenantUncheckedUpdateWithoutFabricSuppliersInput = {
   customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1242,6 +1332,8 @@ export type TenantCreateWithoutFabricSupplierQuotesInput = {
   customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -1263,6 +1355,8 @@ export type TenantUncheckedCreateWithoutFabricSupplierQuotesInput = {
   customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1300,6 +1394,8 @@ export type TenantUpdateWithoutFabricSupplierQuotesInput = {
   customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -1321,6 +1417,8 @@ export type TenantUncheckedUpdateWithoutFabricSupplierQuotesInput = {
   customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1342,6 +1440,8 @@ export type TenantCreateWithoutBatchesInput = {
   customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -1363,6 +1463,8 @@ export type TenantUncheckedCreateWithoutBatchesInput = {
   customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1400,6 +1502,8 @@ export type TenantUpdateWithoutBatchesInput = {
   customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -1421,6 +1525,8 @@ export type TenantUncheckedUpdateWithoutBatchesInput = {
   customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1443,6 +1549,8 @@ export type TenantCreateWithoutLogsInput = {
   customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutLogsInput = {
@@ -1464,6 +1572,8 @@ export type TenantUncheckedCreateWithoutLogsInput = {
   customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutLogsInput = {
@@ -1501,6 +1611,8 @@ export type TenantUpdateWithoutLogsInput = {
   customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutLogsInput = {
@@ -1522,6 +1634,8 @@ export type TenantUncheckedUpdateWithoutLogsInput = {
   customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomersInput = {
@@ -1542,6 +1656,8 @@ export type TenantCreateWithoutCustomersInput = {
   customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -1563,6 +1679,8 @@ export type TenantUncheckedCreateWithoutCustomersInput = {
   customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1600,6 +1718,8 @@ export type TenantUpdateWithoutCustomersInput = {
   customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -1621,6 +1741,8 @@ export type TenantUncheckedUpdateWithoutCustomersInput = {
   customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1642,6 +1764,8 @@ export type TenantCreateWithoutCustomerContactsInput = {
   customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -1663,6 +1787,8 @@ export type TenantUncheckedCreateWithoutCustomerContactsInput = {
   customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1700,6 +1826,8 @@ export type TenantUpdateWithoutCustomerContactsInput = {
   customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -1721,6 +1849,8 @@ export type TenantUncheckedUpdateWithoutCustomerContactsInput = {
   customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1742,6 +1872,8 @@ export type TenantCreateWithoutSampleRequestsInput = {
   customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
   customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -1763,6 +1895,8 @@ export type TenantUncheckedCreateWithoutSampleRequestsInput = {
   customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
   customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1800,6 +1934,8 @@ export type TenantUpdateWithoutSampleRequestsInput = {
   customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
   customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -1821,6 +1957,8 @@ export type TenantUncheckedUpdateWithoutSampleRequestsInput = {
   customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
   customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1842,6 +1980,8 @@ export type TenantCreateWithoutSampleRequestItemsInput = {
   customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
   customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
 }
 
@@ -1863,6 +2003,8 @@ export type TenantUncheckedCreateWithoutSampleRequestItemsInput = {
   customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
   customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
   sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -1900,6 +2042,8 @@ export type TenantUpdateWithoutSampleRequestItemsInput = {
   customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
   customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
 }
 
@@ -1921,6 +2065,224 @@ export type TenantUncheckedUpdateWithoutSampleRequestItemsInput = {
   customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
   customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
   sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
+  logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutCustomerQuotesInput = {
+  id?: string
+  name: string
+  code: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitCreateNestedManyWithoutTenantInput
+  configOptions?: Prisma.ConfigOptionCreateNestedManyWithoutTenantInput
+  fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
+  fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
+  batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
+  sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
+  sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
+  logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutCustomerQuotesInput = {
+  id?: string
+  name: string
+  code: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutTenantInput
+  configOptions?: Prisma.ConfigOptionUncheckedCreateNestedManyWithoutTenantInput
+  fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
+  fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
+  batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
+  sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
+  logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutCustomerQuotesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCustomerQuotesInput, Prisma.TenantUncheckedCreateWithoutCustomerQuotesInput>
+}
+
+export type TenantUpsertWithoutCustomerQuotesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutCustomerQuotesInput, Prisma.TenantUncheckedUpdateWithoutCustomerQuotesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCustomerQuotesInput, Prisma.TenantUncheckedCreateWithoutCustomerQuotesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutCustomerQuotesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutCustomerQuotesInput, Prisma.TenantUncheckedUpdateWithoutCustomerQuotesInput>
+}
+
+export type TenantUpdateWithoutCustomerQuotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUpdateManyWithoutTenantNestedInput
+  configOptions?: Prisma.ConfigOptionUpdateManyWithoutTenantNestedInput
+  fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
+  fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
+  batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
+  sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
+  logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutCustomerQuotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
+  configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
+  fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
+  fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
+  sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
+  logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutCustomerQuoteItemsInput = {
+  id?: string
+  name: string
+  code: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitCreateNestedManyWithoutTenantInput
+  configOptions?: Prisma.ConfigOptionCreateNestedManyWithoutTenantInput
+  fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
+  fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
+  batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
+  sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
+  sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutCustomerQuoteItemsInput = {
+  id?: string
+  name: string
+  code: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutTenantInput
+  configOptions?: Prisma.ConfigOptionUncheckedCreateNestedManyWithoutTenantInput
+  fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
+  fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
+  batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
+  sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutCustomerQuoteItemsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCustomerQuoteItemsInput, Prisma.TenantUncheckedCreateWithoutCustomerQuoteItemsInput>
+}
+
+export type TenantUpsertWithoutCustomerQuoteItemsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutCustomerQuoteItemsInput, Prisma.TenantUncheckedUpdateWithoutCustomerQuoteItemsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutCustomerQuoteItemsInput, Prisma.TenantUncheckedCreateWithoutCustomerQuoteItemsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutCustomerQuoteItemsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutCustomerQuoteItemsInput, Prisma.TenantUncheckedUpdateWithoutCustomerQuoteItemsInput>
+}
+
+export type TenantUpdateWithoutCustomerQuoteItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUpdateManyWithoutTenantNestedInput
+  configOptions?: Prisma.ConfigOptionUpdateManyWithoutTenantNestedInput
+  fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
+  fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
+  batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
+  sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutCustomerQuoteItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
+  configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
+  fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
+  fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
+  sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -1942,6 +2304,8 @@ export type TenantCountOutputType = {
   customerContacts: number
   sampleRequests: number
   sampleRequestItems: number
+  customerQuotes: number
+  customerQuoteItems: number
   logs: number
 }
 
@@ -1958,6 +2322,8 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   customerContacts?: boolean | TenantCountOutputTypeCountCustomerContactsArgs
   sampleRequests?: boolean | TenantCountOutputTypeCountSampleRequestsArgs
   sampleRequestItems?: boolean | TenantCountOutputTypeCountSampleRequestItemsArgs
+  customerQuotes?: boolean | TenantCountOutputTypeCountCustomerQuotesArgs
+  customerQuoteItems?: boolean | TenantCountOutputTypeCountCustomerQuoteItemsArgs
   logs?: boolean | TenantCountOutputTypeCountLogsArgs
 }
 
@@ -2058,6 +2424,20 @@ export type TenantCountOutputTypeCountSampleRequestItemsArgs<ExtArgs extends run
 /**
  * TenantCountOutputType without action
  */
+export type TenantCountOutputTypeCountCustomerQuotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CustomerQuoteWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountCustomerQuoteItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CustomerQuoteItemWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
 export type TenantCountOutputTypeCountLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OperationLogWhereInput
 }
@@ -2082,6 +2462,8 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   customerContacts?: boolean | Prisma.Tenant$customerContactsArgs<ExtArgs>
   sampleRequests?: boolean | Prisma.Tenant$sampleRequestsArgs<ExtArgs>
   sampleRequestItems?: boolean | Prisma.Tenant$sampleRequestItemsArgs<ExtArgs>
+  customerQuotes?: boolean | Prisma.Tenant$customerQuotesArgs<ExtArgs>
+  customerQuoteItems?: boolean | Prisma.Tenant$customerQuoteItemsArgs<ExtArgs>
   logs?: boolean | Prisma.Tenant$logsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
@@ -2127,6 +2509,8 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   customerContacts?: boolean | Prisma.Tenant$customerContactsArgs<ExtArgs>
   sampleRequests?: boolean | Prisma.Tenant$sampleRequestsArgs<ExtArgs>
   sampleRequestItems?: boolean | Prisma.Tenant$sampleRequestItemsArgs<ExtArgs>
+  customerQuotes?: boolean | Prisma.Tenant$customerQuotesArgs<ExtArgs>
+  customerQuoteItems?: boolean | Prisma.Tenant$customerQuoteItemsArgs<ExtArgs>
   logs?: boolean | Prisma.Tenant$logsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -2148,6 +2532,8 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     customerContacts: Prisma.$CustomerContactPayload<ExtArgs>[]
     sampleRequests: Prisma.$SampleRequestPayload<ExtArgs>[]
     sampleRequestItems: Prisma.$SampleRequestItemPayload<ExtArgs>[]
+    customerQuotes: Prisma.$CustomerQuotePayload<ExtArgs>[]
+    customerQuoteItems: Prisma.$CustomerQuoteItemPayload<ExtArgs>[]
     logs: Prisma.$OperationLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -2563,6 +2949,8 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   customerContacts<T extends Prisma.Tenant$customerContactsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$customerContactsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sampleRequests<T extends Prisma.Tenant$sampleRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$sampleRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SampleRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sampleRequestItems<T extends Prisma.Tenant$sampleRequestItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$sampleRequestItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SampleRequestItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  customerQuotes<T extends Prisma.Tenant$customerQuotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$customerQuotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerQuotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  customerQuoteItems<T extends Prisma.Tenant$customerQuoteItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$customerQuoteItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerQuoteItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   logs<T extends Prisma.Tenant$logsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$logsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3277,6 +3665,54 @@ export type Tenant$sampleRequestItemsArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.SampleRequestItemScalarFieldEnum | Prisma.SampleRequestItemScalarFieldEnum[]
+}
+
+/**
+ * Tenant.customerQuotes
+ */
+export type Tenant$customerQuotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CustomerQuote
+   */
+  select?: Prisma.CustomerQuoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CustomerQuote
+   */
+  omit?: Prisma.CustomerQuoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerQuoteInclude<ExtArgs> | null
+  where?: Prisma.CustomerQuoteWhereInput
+  orderBy?: Prisma.CustomerQuoteOrderByWithRelationInput | Prisma.CustomerQuoteOrderByWithRelationInput[]
+  cursor?: Prisma.CustomerQuoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CustomerQuoteScalarFieldEnum | Prisma.CustomerQuoteScalarFieldEnum[]
+}
+
+/**
+ * Tenant.customerQuoteItems
+ */
+export type Tenant$customerQuoteItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CustomerQuoteItem
+   */
+  select?: Prisma.CustomerQuoteItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CustomerQuoteItem
+   */
+  omit?: Prisma.CustomerQuoteItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CustomerQuoteItemInclude<ExtArgs> | null
+  where?: Prisma.CustomerQuoteItemWhereInput
+  orderBy?: Prisma.CustomerQuoteItemOrderByWithRelationInput | Prisma.CustomerQuoteItemOrderByWithRelationInput[]
+  cursor?: Prisma.CustomerQuoteItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CustomerQuoteItemScalarFieldEnum | Prisma.CustomerQuoteItemScalarFieldEnum[]
 }
 
 /**

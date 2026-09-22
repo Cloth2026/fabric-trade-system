@@ -67,7 +67,9 @@ export const ModelName = {
   Customer: 'Customer',
   CustomerContact: 'CustomerContact',
   SampleRequest: 'SampleRequest',
-  SampleRequestItem: 'SampleRequestItem'
+  SampleRequestItem: 'SampleRequestItem',
+  CustomerQuote: 'CustomerQuote',
+  CustomerQuoteItem: 'CustomerQuoteItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -458,6 +460,56 @@ export const SampleRequestItemScalarFieldEnum = {
 } as const
 
 export type SampleRequestItemScalarFieldEnum = (typeof SampleRequestItemScalarFieldEnum)[keyof typeof SampleRequestItemScalarFieldEnum]
+
+
+export const CustomerQuoteScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  customerId: 'customerId',
+  contactId: 'contactId',
+  status: 'status',
+  version: 'version',
+  currency: 'currency',
+  quoteDate: 'quoteDate',
+  validUntil: 'validUntil',
+  priceTerms: 'priceTerms',
+  deliveryTerms: 'deliveryTerms',
+  leadTime: 'leadTime',
+  paymentTerms: 'paymentTerms',
+  taxRate: 'taxRate',
+  remark: 'remark',
+  sentAt: 'sentAt',
+  decidedAt: 'decidedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomerQuoteScalarFieldEnum = (typeof CustomerQuoteScalarFieldEnum)[keyof typeof CustomerQuoteScalarFieldEnum]
+
+
+export const CustomerQuoteItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  quoteId: 'quoteId',
+  fabricId: 'fabricId',
+  fabricSupplierQuoteId: 'fabricSupplierQuoteId',
+  unit: 'unit',
+  quantity: 'quantity',
+  minimumOrderQty: 'minimumOrderQty',
+  unitPrice: 'unitPrice',
+  costPrice: 'costPrice',
+  currency: 'currency',
+  taxRate: 'taxRate',
+  leadTime: 'leadTime',
+  colorOrRemark: 'colorOrRemark',
+  remark: 'remark',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomerQuoteItemScalarFieldEnum = (typeof CustomerQuoteItemScalarFieldEnum)[keyof typeof CustomerQuoteItemScalarFieldEnum]
 
 
 export const SortOrder = {

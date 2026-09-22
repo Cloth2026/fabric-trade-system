@@ -36,6 +36,7 @@ export const configGroups = {
   // sampleStatus, which describes samples received from suppliers.
   sampleRequestStatus: "sample_request_status",
   sampleFeedbackResult: "sample_feedback_result",
+  customerQuoteStatus: "customer_quote_status",
 } as const;
 
 export type ConfigGroup = (typeof configGroups)[keyof typeof configGroups];

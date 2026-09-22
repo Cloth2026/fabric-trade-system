@@ -202,6 +202,16 @@ const optionGroups = [
       ["ordered", "已下单"],
     ],
   },
+  {
+    group: "customer_quote_status",
+    options: [
+      ["draft", "草稿"],
+      ["sent", "已发送"],
+      ["accepted", "客户已接受"],
+      ["rejected", "客户未接受"],
+      ["expired", "已过期"],
+    ],
+  },
 ];
 
 async function upsertSystemOption(client, group, key, label, sortOrder) {

@@ -102,3 +102,13 @@ export type SampleRequest = Prisma.SampleRequestModel
  * 
  */
 export type SampleRequestItem = Prisma.SampleRequestItemModel
+/**
+ * Model CustomerQuote
+ * 
+ */
+export type CustomerQuote = Prisma.CustomerQuoteModel
+/**
+ * Model CustomerQuoteItem
+ * 
+ */
+export type CustomerQuoteItem = Prisma.CustomerQuoteItemModel

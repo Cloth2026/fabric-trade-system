@@ -413,7 +413,9 @@ export const ModelName = {
   Customer: 'Customer',
   CustomerContact: 'CustomerContact',
   SampleRequest: 'SampleRequest',
-  SampleRequestItem: 'SampleRequestItem'
+  SampleRequestItem: 'SampleRequestItem',
+  CustomerQuote: 'CustomerQuote',
+  CustomerQuoteItem: 'CustomerQuoteItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -429,7 +431,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "configOption" | "supplier" | "supplierUnit" | "fabric" | "fabricSupplier" | "fabricSupplierQuote" | "greigeFabric" | "dyeingFinishing" | "postProcess" | "fabricStockInBatch" | "operationLog" | "customer" | "customerContact" | "sampleRequest" | "sampleRequestItem"
+    modelProps: "tenant" | "user" | "configOption" | "supplier" | "supplierUnit" | "fabric" | "fabricSupplier" | "fabricSupplierQuote" | "greigeFabric" | "dyeingFinishing" | "postProcess" | "fabricStockInBatch" | "operationLog" | "customer" | "customerContact" | "sampleRequest" | "sampleRequestItem" | "customerQuote" | "customerQuoteItem"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1691,6 +1693,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CustomerQuote: {
+      payload: Prisma.$CustomerQuotePayload<ExtArgs>
+      fields: Prisma.CustomerQuoteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CustomerQuoteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuotePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CustomerQuoteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuotePayload>
+        }
+        findFirst: {
+          args: Prisma.CustomerQuoteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuotePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CustomerQuoteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuotePayload>
+        }
+        findMany: {
+          args: Prisma.CustomerQuoteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuotePayload>[]
+        }
+        create: {
+          args: Prisma.CustomerQuoteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuotePayload>
+        }
+        createMany: {
+          args: Prisma.CustomerQuoteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CustomerQuoteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuotePayload>[]
+        }
+        delete: {
+          args: Prisma.CustomerQuoteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuotePayload>
+        }
+        update: {
+          args: Prisma.CustomerQuoteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuotePayload>
+        }
+        deleteMany: {
+          args: Prisma.CustomerQuoteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CustomerQuoteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CustomerQuoteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuotePayload>[]
+        }
+        upsert: {
+          args: Prisma.CustomerQuoteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuotePayload>
+        }
+        aggregate: {
+          args: Prisma.CustomerQuoteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCustomerQuote>
+        }
+        groupBy: {
+          args: Prisma.CustomerQuoteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CustomerQuoteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CustomerQuoteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CustomerQuoteCountAggregateOutputType> | number
+        }
+      }
+    }
+    CustomerQuoteItem: {
+      payload: Prisma.$CustomerQuoteItemPayload<ExtArgs>
+      fields: Prisma.CustomerQuoteItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CustomerQuoteItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuoteItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CustomerQuoteItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuoteItemPayload>
+        }
+        findFirst: {
+          args: Prisma.CustomerQuoteItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuoteItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CustomerQuoteItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuoteItemPayload>
+        }
+        findMany: {
+          args: Prisma.CustomerQuoteItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuoteItemPayload>[]
+        }
+        create: {
+          args: Prisma.CustomerQuoteItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuoteItemPayload>
+        }
+        createMany: {
+          args: Prisma.CustomerQuoteItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CustomerQuoteItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuoteItemPayload>[]
+        }
+        delete: {
+          args: Prisma.CustomerQuoteItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuoteItemPayload>
+        }
+        update: {
+          args: Prisma.CustomerQuoteItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuoteItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.CustomerQuoteItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CustomerQuoteItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CustomerQuoteItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuoteItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.CustomerQuoteItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CustomerQuoteItemPayload>
+        }
+        aggregate: {
+          args: Prisma.CustomerQuoteItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCustomerQuoteItem>
+        }
+        groupBy: {
+          args: Prisma.CustomerQuoteItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CustomerQuoteItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CustomerQuoteItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CustomerQuoteItemCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2104,6 +2254,56 @@ export const SampleRequestItemScalarFieldEnum = {
 export type SampleRequestItemScalarFieldEnum = (typeof SampleRequestItemScalarFieldEnum)[keyof typeof SampleRequestItemScalarFieldEnum]
 
 
+export const CustomerQuoteScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  customerId: 'customerId',
+  contactId: 'contactId',
+  status: 'status',
+  version: 'version',
+  currency: 'currency',
+  quoteDate: 'quoteDate',
+  validUntil: 'validUntil',
+  priceTerms: 'priceTerms',
+  deliveryTerms: 'deliveryTerms',
+  leadTime: 'leadTime',
+  paymentTerms: 'paymentTerms',
+  taxRate: 'taxRate',
+  remark: 'remark',
+  sentAt: 'sentAt',
+  decidedAt: 'decidedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomerQuoteScalarFieldEnum = (typeof CustomerQuoteScalarFieldEnum)[keyof typeof CustomerQuoteScalarFieldEnum]
+
+
+export const CustomerQuoteItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  quoteId: 'quoteId',
+  fabricId: 'fabricId',
+  fabricSupplierQuoteId: 'fabricSupplierQuoteId',
+  unit: 'unit',
+  quantity: 'quantity',
+  minimumOrderQty: 'minimumOrderQty',
+  unitPrice: 'unitPrice',
+  costPrice: 'costPrice',
+  currency: 'currency',
+  taxRate: 'taxRate',
+  leadTime: 'leadTime',
+  colorOrRemark: 'colorOrRemark',
+  remark: 'remark',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomerQuoteItemScalarFieldEnum = (typeof CustomerQuoteItemScalarFieldEnum)[keyof typeof CustomerQuoteItemScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2493,6 +2693,8 @@ export type GlobalOmitConfig = {
   customerContact?: Prisma.CustomerContactOmit
   sampleRequest?: Prisma.SampleRequestOmit
   sampleRequestItem?: Prisma.SampleRequestItemOmit
+  customerQuote?: Prisma.CustomerQuoteOmit
+  customerQuoteItem?: Prisma.CustomerQuoteItemOmit
 }
 
 /* Types for Logging */
