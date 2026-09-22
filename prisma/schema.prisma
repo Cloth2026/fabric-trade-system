@@ -529,6 +529,9 @@ model CustomerQuote {
   status        String              @default("draft")
   version       Int                 @default(1)
   currency      String              @default("CNY") @db.VarChar(3)
+  // CNY per one unit of `currency`, pinned to 1 for CNY quotes so a stored
+  // quote always reports the margin it was priced with.
+  exchangeRate  Decimal             @default(1) @db.Decimal(14, 6)
   quoteDate     DateTime            @default(now())
   validUntil    DateTime?
   priceTerms    String?
@@ -567,7 +570,6 @@ model CustomerQuoteItem {
   minimumOrderQty       String?
   unitPrice             Decimal              @db.Decimal(12, 2)
   costPrice             Decimal?             @db.Decimal(12, 2)
-  currency              String               @default("CNY") @db.VarChar(3)
   taxRate               Decimal?             @db.Decimal(6, 3)
   leadTime              String?
   colorOrRemark         String?

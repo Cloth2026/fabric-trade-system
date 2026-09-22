@@ -28,11 +28,13 @@ export type AggregateCustomerQuote = {
 
 export type CustomerQuoteAvgAggregateOutputType = {
   version: number | null
+  exchangeRate: runtime.Decimal | null
   taxRate: runtime.Decimal | null
 }
 
 export type CustomerQuoteSumAggregateOutputType = {
   version: number | null
+  exchangeRate: runtime.Decimal | null
   taxRate: runtime.Decimal | null
 }
 
@@ -45,6 +47,7 @@ export type CustomerQuoteMinAggregateOutputType = {
   status: string | null
   version: number | null
   currency: string | null
+  exchangeRate: runtime.Decimal | null
   quoteDate: Date | null
   validUntil: Date | null
   priceTerms: string | null
@@ -68,6 +71,7 @@ export type CustomerQuoteMaxAggregateOutputType = {
   status: string | null
   version: number | null
   currency: string | null
+  exchangeRate: runtime.Decimal | null
   quoteDate: Date | null
   validUntil: Date | null
   priceTerms: string | null
@@ -91,6 +95,7 @@ export type CustomerQuoteCountAggregateOutputType = {
   status: number
   version: number
   currency: number
+  exchangeRate: number
   quoteDate: number
   validUntil: number
   priceTerms: number
@@ -109,11 +114,13 @@ export type CustomerQuoteCountAggregateOutputType = {
 
 export type CustomerQuoteAvgAggregateInputType = {
   version?: true
+  exchangeRate?: true
   taxRate?: true
 }
 
 export type CustomerQuoteSumAggregateInputType = {
   version?: true
+  exchangeRate?: true
   taxRate?: true
 }
 
@@ -126,6 +133,7 @@ export type CustomerQuoteMinAggregateInputType = {
   status?: true
   version?: true
   currency?: true
+  exchangeRate?: true
   quoteDate?: true
   validUntil?: true
   priceTerms?: true
@@ -149,6 +157,7 @@ export type CustomerQuoteMaxAggregateInputType = {
   status?: true
   version?: true
   currency?: true
+  exchangeRate?: true
   quoteDate?: true
   validUntil?: true
   priceTerms?: true
@@ -172,6 +181,7 @@ export type CustomerQuoteCountAggregateInputType = {
   status?: true
   version?: true
   currency?: true
+  exchangeRate?: true
   quoteDate?: true
   validUntil?: true
   priceTerms?: true
@@ -282,6 +292,7 @@ export type CustomerQuoteGroupByOutputType = {
   status: string
   version: number
   currency: string
+  exchangeRate: runtime.Decimal
   quoteDate: Date
   validUntil: Date | null
   priceTerms: string | null
@@ -328,6 +339,7 @@ export type CustomerQuoteWhereInput = {
   status?: Prisma.StringFilter<"CustomerQuote"> | string
   version?: Prisma.IntFilter<"CustomerQuote"> | number
   currency?: Prisma.StringFilter<"CustomerQuote"> | string
+  exchangeRate?: Prisma.DecimalFilter<"CustomerQuote"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFilter<"CustomerQuote"> | Date | string
   validUntil?: Prisma.DateTimeNullableFilter<"CustomerQuote"> | Date | string | null
   priceTerms?: Prisma.StringNullableFilter<"CustomerQuote"> | string | null
@@ -355,6 +367,7 @@ export type CustomerQuoteOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   version?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  exchangeRate?: Prisma.SortOrder
   quoteDate?: Prisma.SortOrder
   validUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   priceTerms?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -386,6 +399,7 @@ export type CustomerQuoteWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.StringFilter<"CustomerQuote"> | string
   version?: Prisma.IntFilter<"CustomerQuote"> | number
   currency?: Prisma.StringFilter<"CustomerQuote"> | string
+  exchangeRate?: Prisma.DecimalFilter<"CustomerQuote"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFilter<"CustomerQuote"> | Date | string
   validUntil?: Prisma.DateTimeNullableFilter<"CustomerQuote"> | Date | string | null
   priceTerms?: Prisma.StringNullableFilter<"CustomerQuote"> | string | null
@@ -413,6 +427,7 @@ export type CustomerQuoteOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   version?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  exchangeRate?: Prisma.SortOrder
   quoteDate?: Prisma.SortOrder
   validUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   priceTerms?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -444,6 +459,7 @@ export type CustomerQuoteScalarWhereWithAggregatesInput = {
   status?: Prisma.StringWithAggregatesFilter<"CustomerQuote"> | string
   version?: Prisma.IntWithAggregatesFilter<"CustomerQuote"> | number
   currency?: Prisma.StringWithAggregatesFilter<"CustomerQuote"> | string
+  exchangeRate?: Prisma.DecimalWithAggregatesFilter<"CustomerQuote"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeWithAggregatesFilter<"CustomerQuote"> | Date | string
   validUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"CustomerQuote"> | Date | string | null
   priceTerms?: Prisma.StringNullableWithAggregatesFilter<"CustomerQuote"> | string | null
@@ -464,6 +480,7 @@ export type CustomerQuoteCreateInput = {
   status?: string
   version?: number
   currency?: string
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Date | string
   validUntil?: Date | string | null
   priceTerms?: string | null
@@ -491,6 +508,7 @@ export type CustomerQuoteUncheckedCreateInput = {
   status?: string
   version?: number
   currency?: string
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Date | string
   validUntil?: Date | string | null
   priceTerms?: string | null
@@ -512,6 +530,7 @@ export type CustomerQuoteUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -539,6 +558,7 @@ export type CustomerQuoteUncheckedUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -563,6 +583,7 @@ export type CustomerQuoteCreateManyInput = {
   status?: string
   version?: number
   currency?: string
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Date | string
   validUntil?: Date | string | null
   priceTerms?: string | null
@@ -583,6 +604,7 @@ export type CustomerQuoteUpdateManyMutationInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -606,6 +628,7 @@ export type CustomerQuoteUncheckedUpdateManyInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -644,6 +667,7 @@ export type CustomerQuoteCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   version?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  exchangeRate?: Prisma.SortOrder
   quoteDate?: Prisma.SortOrder
   validUntil?: Prisma.SortOrder
   priceTerms?: Prisma.SortOrder
@@ -660,6 +684,7 @@ export type CustomerQuoteCountOrderByAggregateInput = {
 
 export type CustomerQuoteAvgOrderByAggregateInput = {
   version?: Prisma.SortOrder
+  exchangeRate?: Prisma.SortOrder
   taxRate?: Prisma.SortOrder
 }
 
@@ -672,6 +697,7 @@ export type CustomerQuoteMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   version?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  exchangeRate?: Prisma.SortOrder
   quoteDate?: Prisma.SortOrder
   validUntil?: Prisma.SortOrder
   priceTerms?: Prisma.SortOrder
@@ -695,6 +721,7 @@ export type CustomerQuoteMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   version?: Prisma.SortOrder
   currency?: Prisma.SortOrder
+  exchangeRate?: Prisma.SortOrder
   quoteDate?: Prisma.SortOrder
   validUntil?: Prisma.SortOrder
   priceTerms?: Prisma.SortOrder
@@ -711,6 +738,7 @@ export type CustomerQuoteMinOrderByAggregateInput = {
 
 export type CustomerQuoteSumOrderByAggregateInput = {
   version?: Prisma.SortOrder
+  exchangeRate?: Prisma.SortOrder
   taxRate?: Prisma.SortOrder
 }
 
@@ -865,6 +893,7 @@ export type CustomerQuoteCreateWithoutTenantInput = {
   status?: string
   version?: number
   currency?: string
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Date | string
   validUntil?: Date | string | null
   priceTerms?: string | null
@@ -890,6 +919,7 @@ export type CustomerQuoteUncheckedCreateWithoutTenantInput = {
   status?: string
   version?: number
   currency?: string
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Date | string
   validUntil?: Date | string | null
   priceTerms?: string | null
@@ -943,6 +973,7 @@ export type CustomerQuoteScalarWhereInput = {
   status?: Prisma.StringFilter<"CustomerQuote"> | string
   version?: Prisma.IntFilter<"CustomerQuote"> | number
   currency?: Prisma.StringFilter<"CustomerQuote"> | string
+  exchangeRate?: Prisma.DecimalFilter<"CustomerQuote"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFilter<"CustomerQuote"> | Date | string
   validUntil?: Prisma.DateTimeNullableFilter<"CustomerQuote"> | Date | string | null
   priceTerms?: Prisma.StringNullableFilter<"CustomerQuote"> | string | null
@@ -963,6 +994,7 @@ export type CustomerQuoteCreateWithoutCustomerInput = {
   status?: string
   version?: number
   currency?: string
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Date | string
   validUntil?: Date | string | null
   priceTerms?: string | null
@@ -988,6 +1020,7 @@ export type CustomerQuoteUncheckedCreateWithoutCustomerInput = {
   status?: string
   version?: number
   currency?: string
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Date | string
   validUntil?: Date | string | null
   priceTerms?: string | null
@@ -1035,6 +1068,7 @@ export type CustomerQuoteCreateWithoutContactInput = {
   status?: string
   version?: number
   currency?: string
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Date | string
   validUntil?: Date | string | null
   priceTerms?: string | null
@@ -1060,6 +1094,7 @@ export type CustomerQuoteUncheckedCreateWithoutContactInput = {
   status?: string
   version?: number
   currency?: string
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Date | string
   validUntil?: Date | string | null
   priceTerms?: string | null
@@ -1107,6 +1142,7 @@ export type CustomerQuoteCreateWithoutItemsInput = {
   status?: string
   version?: number
   currency?: string
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Date | string
   validUntil?: Date | string | null
   priceTerms?: string | null
@@ -1133,6 +1169,7 @@ export type CustomerQuoteUncheckedCreateWithoutItemsInput = {
   status?: string
   version?: number
   currency?: string
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Date | string
   validUntil?: Date | string | null
   priceTerms?: string | null
@@ -1169,6 +1206,7 @@ export type CustomerQuoteUpdateWithoutItemsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1195,6 +1233,7 @@ export type CustomerQuoteUncheckedUpdateWithoutItemsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1217,6 +1256,7 @@ export type CustomerQuoteCreateManyTenantInput = {
   status?: string
   version?: number
   currency?: string
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Date | string
   validUntil?: Date | string | null
   priceTerms?: string | null
@@ -1237,6 +1277,7 @@ export type CustomerQuoteUpdateWithoutTenantInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1262,6 +1303,7 @@ export type CustomerQuoteUncheckedUpdateWithoutTenantInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1285,6 +1327,7 @@ export type CustomerQuoteUncheckedUpdateManyWithoutTenantInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1307,6 +1350,7 @@ export type CustomerQuoteCreateManyCustomerInput = {
   status?: string
   version?: number
   currency?: string
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Date | string
   validUntil?: Date | string | null
   priceTerms?: string | null
@@ -1327,6 +1371,7 @@ export type CustomerQuoteUpdateWithoutCustomerInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1352,6 +1397,7 @@ export type CustomerQuoteUncheckedUpdateWithoutCustomerInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1375,6 +1421,7 @@ export type CustomerQuoteUncheckedUpdateManyWithoutCustomerInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1397,6 +1444,7 @@ export type CustomerQuoteCreateManyContactInput = {
   status?: string
   version?: number
   currency?: string
+  exchangeRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Date | string
   validUntil?: Date | string | null
   priceTerms?: string | null
@@ -1417,6 +1465,7 @@ export type CustomerQuoteUpdateWithoutContactInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1442,6 +1491,7 @@ export type CustomerQuoteUncheckedUpdateWithoutContactInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1465,6 +1515,7 @@ export type CustomerQuoteUncheckedUpdateManyWithoutContactInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
   currency?: Prisma.StringFieldUpdateOperationsInput | string
+  exchangeRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   priceTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1519,6 +1570,7 @@ export type CustomerQuoteSelect<ExtArgs extends runtime.Types.Extensions.Interna
   status?: boolean
   version?: boolean
   currency?: boolean
+  exchangeRate?: boolean
   quoteDate?: boolean
   validUntil?: boolean
   priceTerms?: boolean
@@ -1547,6 +1599,7 @@ export type CustomerQuoteSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   status?: boolean
   version?: boolean
   currency?: boolean
+  exchangeRate?: boolean
   quoteDate?: boolean
   validUntil?: boolean
   priceTerms?: boolean
@@ -1573,6 +1626,7 @@ export type CustomerQuoteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   status?: boolean
   version?: boolean
   currency?: boolean
+  exchangeRate?: boolean
   quoteDate?: boolean
   validUntil?: boolean
   priceTerms?: boolean
@@ -1599,6 +1653,7 @@ export type CustomerQuoteSelectScalar = {
   status?: boolean
   version?: boolean
   currency?: boolean
+  exchangeRate?: boolean
   quoteDate?: boolean
   validUntil?: boolean
   priceTerms?: boolean
@@ -1613,7 +1668,7 @@ export type CustomerQuoteSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CustomerQuoteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "code" | "customerId" | "contactId" | "status" | "version" | "currency" | "quoteDate" | "validUntil" | "priceTerms" | "deliveryTerms" | "leadTime" | "paymentTerms" | "taxRate" | "remark" | "sentAt" | "decidedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["customerQuote"]>
+export type CustomerQuoteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "code" | "customerId" | "contactId" | "status" | "version" | "currency" | "exchangeRate" | "quoteDate" | "validUntil" | "priceTerms" | "deliveryTerms" | "leadTime" | "paymentTerms" | "taxRate" | "remark" | "sentAt" | "decidedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["customerQuote"]>
 export type CustomerQuoteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
@@ -1649,6 +1704,7 @@ export type $CustomerQuotePayload<ExtArgs extends runtime.Types.Extensions.Inter
     status: string
     version: number
     currency: string
+    exchangeRate: runtime.Decimal
     quoteDate: Date
     validUntil: Date | null
     priceTerms: string | null
@@ -2096,6 +2152,7 @@ export interface CustomerQuoteFieldRefs {
   readonly status: Prisma.FieldRef<"CustomerQuote", 'String'>
   readonly version: Prisma.FieldRef<"CustomerQuote", 'Int'>
   readonly currency: Prisma.FieldRef<"CustomerQuote", 'String'>
+  readonly exchangeRate: Prisma.FieldRef<"CustomerQuote", 'Decimal'>
   readonly quoteDate: Prisma.FieldRef<"CustomerQuote", 'DateTime'>
   readonly validUntil: Prisma.FieldRef<"CustomerQuote", 'DateTime'>
   readonly priceTerms: Prisma.FieldRef<"CustomerQuote", 'String'>

@@ -53,7 +53,6 @@ export type CustomerQuoteItemMinAggregateOutputType = {
   minimumOrderQty: string | null
   unitPrice: runtime.Decimal | null
   costPrice: runtime.Decimal | null
-  currency: string | null
   taxRate: runtime.Decimal | null
   leadTime: string | null
   colorOrRemark: string | null
@@ -74,7 +73,6 @@ export type CustomerQuoteItemMaxAggregateOutputType = {
   minimumOrderQty: string | null
   unitPrice: runtime.Decimal | null
   costPrice: runtime.Decimal | null
-  currency: string | null
   taxRate: runtime.Decimal | null
   leadTime: string | null
   colorOrRemark: string | null
@@ -95,7 +93,6 @@ export type CustomerQuoteItemCountAggregateOutputType = {
   minimumOrderQty: number
   unitPrice: number
   costPrice: number
-  currency: number
   taxRate: number
   leadTime: number
   colorOrRemark: number
@@ -134,7 +131,6 @@ export type CustomerQuoteItemMinAggregateInputType = {
   minimumOrderQty?: true
   unitPrice?: true
   costPrice?: true
-  currency?: true
   taxRate?: true
   leadTime?: true
   colorOrRemark?: true
@@ -155,7 +151,6 @@ export type CustomerQuoteItemMaxAggregateInputType = {
   minimumOrderQty?: true
   unitPrice?: true
   costPrice?: true
-  currency?: true
   taxRate?: true
   leadTime?: true
   colorOrRemark?: true
@@ -176,7 +171,6 @@ export type CustomerQuoteItemCountAggregateInputType = {
   minimumOrderQty?: true
   unitPrice?: true
   costPrice?: true
-  currency?: true
   taxRate?: true
   leadTime?: true
   colorOrRemark?: true
@@ -284,7 +278,6 @@ export type CustomerQuoteItemGroupByOutputType = {
   minimumOrderQty: string | null
   unitPrice: runtime.Decimal
   costPrice: runtime.Decimal | null
-  currency: string
   taxRate: runtime.Decimal | null
   leadTime: string | null
   colorOrRemark: string | null
@@ -328,7 +321,6 @@ export type CustomerQuoteItemWhereInput = {
   minimumOrderQty?: Prisma.StringNullableFilter<"CustomerQuoteItem"> | string | null
   unitPrice?: Prisma.DecimalFilter<"CustomerQuoteItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalNullableFilter<"CustomerQuoteItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFilter<"CustomerQuoteItem"> | string
   taxRate?: Prisma.DecimalNullableFilter<"CustomerQuoteItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.StringNullableFilter<"CustomerQuoteItem"> | string | null
   colorOrRemark?: Prisma.StringNullableFilter<"CustomerQuoteItem"> | string | null
@@ -353,7 +345,6 @@ export type CustomerQuoteItemOrderByWithRelationInput = {
   minimumOrderQty?: Prisma.SortOrderInput | Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   costPrice?: Prisma.SortOrderInput | Prisma.SortOrder
-  currency?: Prisma.SortOrder
   taxRate?: Prisma.SortOrderInput | Prisma.SortOrder
   leadTime?: Prisma.SortOrderInput | Prisma.SortOrder
   colorOrRemark?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -381,7 +372,6 @@ export type CustomerQuoteItemWhereUniqueInput = Prisma.AtLeast<{
   minimumOrderQty?: Prisma.StringNullableFilter<"CustomerQuoteItem"> | string | null
   unitPrice?: Prisma.DecimalFilter<"CustomerQuoteItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalNullableFilter<"CustomerQuoteItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFilter<"CustomerQuoteItem"> | string
   taxRate?: Prisma.DecimalNullableFilter<"CustomerQuoteItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.StringNullableFilter<"CustomerQuoteItem"> | string | null
   colorOrRemark?: Prisma.StringNullableFilter<"CustomerQuoteItem"> | string | null
@@ -406,7 +396,6 @@ export type CustomerQuoteItemOrderByWithAggregationInput = {
   minimumOrderQty?: Prisma.SortOrderInput | Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   costPrice?: Prisma.SortOrderInput | Prisma.SortOrder
-  currency?: Prisma.SortOrder
   taxRate?: Prisma.SortOrderInput | Prisma.SortOrder
   leadTime?: Prisma.SortOrderInput | Prisma.SortOrder
   colorOrRemark?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -435,7 +424,6 @@ export type CustomerQuoteItemScalarWhereWithAggregatesInput = {
   minimumOrderQty?: Prisma.StringNullableWithAggregatesFilter<"CustomerQuoteItem"> | string | null
   unitPrice?: Prisma.DecimalWithAggregatesFilter<"CustomerQuoteItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalNullableWithAggregatesFilter<"CustomerQuoteItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringWithAggregatesFilter<"CustomerQuoteItem"> | string
   taxRate?: Prisma.DecimalNullableWithAggregatesFilter<"CustomerQuoteItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.StringNullableWithAggregatesFilter<"CustomerQuoteItem"> | string | null
   colorOrRemark?: Prisma.StringNullableWithAggregatesFilter<"CustomerQuoteItem"> | string | null
@@ -452,7 +440,6 @@ export type CustomerQuoteItemCreateInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -477,7 +464,6 @@ export type CustomerQuoteItemUncheckedCreateInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -494,7 +480,6 @@ export type CustomerQuoteItemUpdateInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -519,7 +504,6 @@ export type CustomerQuoteItemUncheckedUpdateInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -540,7 +524,6 @@ export type CustomerQuoteItemCreateManyInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -557,7 +540,6 @@ export type CustomerQuoteItemUpdateManyMutationInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -578,7 +560,6 @@ export type CustomerQuoteItemUncheckedUpdateManyInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -609,7 +590,6 @@ export type CustomerQuoteItemCountOrderByAggregateInput = {
   minimumOrderQty?: Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
-  currency?: Prisma.SortOrder
   taxRate?: Prisma.SortOrder
   leadTime?: Prisma.SortOrder
   colorOrRemark?: Prisma.SortOrder
@@ -638,7 +618,6 @@ export type CustomerQuoteItemMaxOrderByAggregateInput = {
   minimumOrderQty?: Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
-  currency?: Prisma.SortOrder
   taxRate?: Prisma.SortOrder
   leadTime?: Prisma.SortOrder
   colorOrRemark?: Prisma.SortOrder
@@ -659,7 +638,6 @@ export type CustomerQuoteItemMinOrderByAggregateInput = {
   minimumOrderQty?: Prisma.SortOrder
   unitPrice?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
-  currency?: Prisma.SortOrder
   taxRate?: Prisma.SortOrder
   leadTime?: Prisma.SortOrder
   colorOrRemark?: Prisma.SortOrder
@@ -852,7 +830,6 @@ export type CustomerQuoteItemCreateWithoutTenantInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -875,7 +852,6 @@ export type CustomerQuoteItemUncheckedCreateWithoutTenantInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -925,7 +901,6 @@ export type CustomerQuoteItemScalarWhereInput = {
   minimumOrderQty?: Prisma.StringNullableFilter<"CustomerQuoteItem"> | string | null
   unitPrice?: Prisma.DecimalFilter<"CustomerQuoteItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalNullableFilter<"CustomerQuoteItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFilter<"CustomerQuoteItem"> | string
   taxRate?: Prisma.DecimalNullableFilter<"CustomerQuoteItem"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.StringNullableFilter<"CustomerQuoteItem"> | string | null
   colorOrRemark?: Prisma.StringNullableFilter<"CustomerQuoteItem"> | string | null
@@ -942,7 +917,6 @@ export type CustomerQuoteItemCreateWithoutFabricInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -965,7 +939,6 @@ export type CustomerQuoteItemUncheckedCreateWithoutFabricInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -1008,7 +981,6 @@ export type CustomerQuoteItemCreateWithoutFabricSupplierQuoteInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -1031,7 +1003,6 @@ export type CustomerQuoteItemUncheckedCreateWithoutFabricSupplierQuoteInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -1074,7 +1045,6 @@ export type CustomerQuoteItemCreateWithoutQuoteInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -1097,7 +1067,6 @@ export type CustomerQuoteItemUncheckedCreateWithoutQuoteInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -1143,7 +1112,6 @@ export type CustomerQuoteItemCreateManyTenantInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -1160,7 +1128,6 @@ export type CustomerQuoteItemUpdateWithoutTenantInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1183,7 +1150,6 @@ export type CustomerQuoteItemUncheckedUpdateWithoutTenantInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1203,7 +1169,6 @@ export type CustomerQuoteItemUncheckedUpdateManyWithoutTenantInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1223,7 +1188,6 @@ export type CustomerQuoteItemCreateManyFabricInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -1240,7 +1204,6 @@ export type CustomerQuoteItemUpdateWithoutFabricInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1263,7 +1226,6 @@ export type CustomerQuoteItemUncheckedUpdateWithoutFabricInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1283,7 +1245,6 @@ export type CustomerQuoteItemUncheckedUpdateManyWithoutFabricInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1303,7 +1264,6 @@ export type CustomerQuoteItemCreateManyFabricSupplierQuoteInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -1320,7 +1280,6 @@ export type CustomerQuoteItemUpdateWithoutFabricSupplierQuoteInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1343,7 +1302,6 @@ export type CustomerQuoteItemUncheckedUpdateWithoutFabricSupplierQuoteInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1363,7 +1321,6 @@ export type CustomerQuoteItemUncheckedUpdateManyWithoutFabricSupplierQuoteInput 
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1383,7 +1340,6 @@ export type CustomerQuoteItemCreateManyQuoteInput = {
   minimumOrderQty?: string | null
   unitPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: string
   taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: string | null
   colorOrRemark?: string | null
@@ -1400,7 +1356,6 @@ export type CustomerQuoteItemUpdateWithoutQuoteInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1423,7 +1378,6 @@ export type CustomerQuoteItemUncheckedUpdateWithoutQuoteInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1443,7 +1397,6 @@ export type CustomerQuoteItemUncheckedUpdateManyWithoutQuoteInput = {
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
   taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   colorOrRemark?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1466,7 +1419,6 @@ export type CustomerQuoteItemSelect<ExtArgs extends runtime.Types.Extensions.Int
   minimumOrderQty?: boolean
   unitPrice?: boolean
   costPrice?: boolean
-  currency?: boolean
   taxRate?: boolean
   leadTime?: boolean
   colorOrRemark?: boolean
@@ -1491,7 +1443,6 @@ export type CustomerQuoteItemSelectCreateManyAndReturn<ExtArgs extends runtime.T
   minimumOrderQty?: boolean
   unitPrice?: boolean
   costPrice?: boolean
-  currency?: boolean
   taxRate?: boolean
   leadTime?: boolean
   colorOrRemark?: boolean
@@ -1516,7 +1467,6 @@ export type CustomerQuoteItemSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   minimumOrderQty?: boolean
   unitPrice?: boolean
   costPrice?: boolean
-  currency?: boolean
   taxRate?: boolean
   leadTime?: boolean
   colorOrRemark?: boolean
@@ -1541,7 +1491,6 @@ export type CustomerQuoteItemSelectScalar = {
   minimumOrderQty?: boolean
   unitPrice?: boolean
   costPrice?: boolean
-  currency?: boolean
   taxRate?: boolean
   leadTime?: boolean
   colorOrRemark?: boolean
@@ -1551,7 +1500,7 @@ export type CustomerQuoteItemSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CustomerQuoteItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "quoteId" | "fabricId" | "fabricSupplierQuoteId" | "unit" | "quantity" | "minimumOrderQty" | "unitPrice" | "costPrice" | "currency" | "taxRate" | "leadTime" | "colorOrRemark" | "remark" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["customerQuoteItem"]>
+export type CustomerQuoteItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "quoteId" | "fabricId" | "fabricSupplierQuoteId" | "unit" | "quantity" | "minimumOrderQty" | "unitPrice" | "costPrice" | "taxRate" | "leadTime" | "colorOrRemark" | "remark" | "sortOrder" | "createdAt" | "updatedAt", ExtArgs["result"]["customerQuoteItem"]>
 export type CustomerQuoteItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   quote?: boolean | Prisma.CustomerQuoteDefaultArgs<ExtArgs>
@@ -1590,7 +1539,6 @@ export type $CustomerQuoteItemPayload<ExtArgs extends runtime.Types.Extensions.I
     minimumOrderQty: string | null
     unitPrice: runtime.Decimal
     costPrice: runtime.Decimal | null
-    currency: string
     taxRate: runtime.Decimal | null
     leadTime: string | null
     colorOrRemark: string | null
@@ -2035,7 +1983,6 @@ export interface CustomerQuoteItemFieldRefs {
   readonly minimumOrderQty: Prisma.FieldRef<"CustomerQuoteItem", 'String'>
   readonly unitPrice: Prisma.FieldRef<"CustomerQuoteItem", 'Decimal'>
   readonly costPrice: Prisma.FieldRef<"CustomerQuoteItem", 'Decimal'>
-  readonly currency: Prisma.FieldRef<"CustomerQuoteItem", 'String'>
   readonly taxRate: Prisma.FieldRef<"CustomerQuoteItem", 'Decimal'>
   readonly leadTime: Prisma.FieldRef<"CustomerQuoteItem", 'String'>
   readonly colorOrRemark: Prisma.FieldRef<"CustomerQuoteItem", 'String'>
