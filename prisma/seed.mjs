@@ -212,6 +212,17 @@ const optionGroups = [
       ["expired", "已过期"],
     ],
   },
+  {
+    group: "sales_order_status",
+    options: [
+      ["draft", "草稿"],
+      ["confirmed", "已确认"],
+      ["producing", "备货中"],
+      ["shipped", "已发货"],
+      ["completed", "已完成"],
+      ["cancelled", "已取消"],
+    ],
+  },
 ];
 
 async function upsertSystemOption(client, group, key, label, sortOrder) {

@@ -37,6 +37,9 @@ export const configGroups = {
   sampleRequestStatus: "sample_request_status",
   sampleFeedbackResult: "sample_feedback_result",
   customerQuoteStatus: "customer_quote_status",
+  // Sales orders are separate from quotes: a quote is a proposal, an order is
+  // a commitment, so it needs its own lifecycle.
+  salesOrderStatus: "sales_order_status",
 } as const;
 
 export type ConfigGroup = (typeof configGroups)[keyof typeof configGroups];
