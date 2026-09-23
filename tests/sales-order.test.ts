@@ -328,6 +328,18 @@ describe("sales orders", () => {
     assert.equal(Number(order.items[0].costPrice), 9.5);
   });
 
+  test("leaves cost and margin unknown when no line carries a cost snapshot", async () => {
+    const order = await createSalesOrder({ customerId, items: [buildItem()] });
+
+    assert.equal(order.totals.netAmount, 2000);
+    assert.equal(order.totals.linesWithoutCost, 1);
+    // Revenue must never be reported back as cost: with no cost snapshot the
+    // margin is simply not known yet.
+    assert.equal(order.totals.costCny, null);
+    assert.equal(order.totals.marginCny, null);
+    assert.equal(order.totals.marginRate, null);
+  });
+
   test("keeps a hand-typed cost over the purchase snapshot", async () => {
     const order = await createSalesOrder({
       customerId,

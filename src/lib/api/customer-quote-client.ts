@@ -56,10 +56,11 @@ export type QuoteTotals = {
   netAmount: number;
   taxAmount: number;
   taxInclusiveAmount: number;
-  costCny: number;
-  marginCny: number;
+  costCny: number | null;
+  marginCny: number | null;
   marginRate: number | null;
   linesWithoutQuantity: number;
+  linesWithoutCost: number;
 };
 
 export type CustomerQuoteItemRecord = {

@@ -14,39 +14,47 @@ import {
   Search,
   Sparkles,
   Timer,
+  Truck,
   X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  createCustomerQuote,
-  fetchCustomerQuote,
-  fetchCustomerQuotes,
-  getQuoteErrorMessage,
-  patchCustomerQuote,
-  patchCustomerQuoteStatus,
-  type CustomerQuoteDetailRecord,
-  type CustomerQuoteRecord,
-  type CustomerQuoteUpdatePayload,
-} from "@/lib/api/customer-quote-client";
-import { createSalesOrderFromQuote } from "@/lib/api/sales-order-client";
-import type { CustomerQuoteStatus } from "@/server/customer-quotes/constants";
+  createSalesOrder,
+  fetchSalesOrder,
+  fetchSalesOrders,
+  getDeliveryErrorMessage,
+  getOrderErrorMessage,
+  patchSalesOrder,
+  patchSalesOrderDelivery,
+  patchSalesOrderStatus,
+  type SalesOrderDetailRecord,
+  type SalesOrderRecord,
+  type SalesOrderUpdatePayload,
+} from "@/lib/api/sales-order-client";
+import type {
+  SalesOrderDeliveryStatus,
+  SalesOrderStatus,
+} from "@/server/sales-orders/constants";
 import {
-  customerQuoteStatusLabels,
-  customerQuoteStatusOptions,
-} from "@/server/customer-quotes/constants";
-import { CustomerQuoteDetailDrawer } from "./customer-quote-detail-drawer";
-import { CustomerQuoteFormDrawer } from "./customer-quote-form-drawer";
+  salesOrderDeliveryStatusOptions,
+  salesOrderStatusLabels,
+  salesOrderStatusOptions,
+} from "@/server/sales-orders/constants";
+import { formatQuoteDate } from "@/components/quotes/customer-quote-prototype-data";
+import { SalesOrderDetailDrawer } from "./sales-order-detail-drawer";
+import { SalesOrderFormDrawer } from "./sales-order-form-drawer";
 import {
-  formatQuoteDate,
-  quoteFormStateFromRecord,
-  quoteStatusLabel,
-  quoteStatusTones,
-  type QuoteFormState,
-} from "./customer-quote-prototype-data";
+  orderDeliveryLabel,
+  orderDeliveryTones,
+  orderFormStateFromRecord,
+  orderStatusLabel,
+  orderStatusTones,
+  type OrderFormState,
+} from "./sales-order-form-data";
 
-type StatusFilter = CustomerQuoteStatus | "all";
-type OverdueFilter = "all" | "overdue";
+type StatusFilter = SalesOrderStatus | "all";
+type DeliveryFilter = SalesOrderDeliveryStatus | "all";
 
 function Metric({
   label,
@@ -142,24 +150,20 @@ function DropdownFilter<T extends string>({
   );
 }
 
-export function CustomerQuoteManagementPage({
-  onConvertedToOrder,
-}: {
-  onConvertedToOrder?: () => void;
-} = {}) {
-  const [quotes, setQuotes] = useState<CustomerQuoteRecord[]>([]);
+export function SalesOrderManagementPage() {
+  const [orders, setOrders] = useState<SalesOrderRecord[]>([]);
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
-  const [overdueFilter, setOverdueFilter] = useState<OverdueFilter>("all");
+  const [deliveryFilter, setDeliveryFilter] = useState<DeliveryFilter>("all");
   const [listLoading, setListLoading] = useState(true);
   const [listError, setListError] = useState("");
   const [listRefresh, setListRefresh] = useState(0);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [detail, setDetail] = useState<CustomerQuoteDetailRecord | null>(null);
+  const [detail, setDetail] = useState<SalesOrderDetailRecord | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState("");
   const [formMode, setFormMode] = useState<"create" | "edit" | null>(null);
-  const [editInitialState, setEditInitialState] = useState<QuoteFormState | undefined>(undefined);
+  const [editInitialState, setEditInitialState] = useState<OrderFormState | undefined>(undefined);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [toast, setToast] = useState("");
   const toastTimer = useRef<number | null>(null);
@@ -171,24 +175,26 @@ export function CustomerQuoteManagementPage({
     toastTimer.current = window.setTimeout(() => setToast(""), 2800);
   }, []);
 
+  const refreshList = useCallback(() => setListRefresh((value) => value + 1), []);
+
   useEffect(() => {
     const controller = new AbortController();
     const timer = window.setTimeout(() => {
       setListLoading(true);
       setListError("");
-      fetchCustomerQuotes(
+      fetchSalesOrders(
         {
           q: query,
           status: statusFilter,
-          overdue: overdueFilter === "overdue" ? true : undefined,
+          deliveryStatus: deliveryFilter,
           limit: 50,
         },
         controller.signal,
       )
-        .then(setQuotes)
+        .then(setOrders)
         .catch((error) => {
           if (!controller.signal.aborted) {
-            setListError(getQuoteErrorMessage(error, "报价单读取失败，请重试"));
+            setListError(getOrderErrorMessage(error, "订单读取失败，请重试"));
           }
         })
         .finally(() => {
@@ -199,19 +205,19 @@ export function CustomerQuoteManagementPage({
       window.clearTimeout(timer);
       controller.abort();
     };
-  }, [listRefresh, overdueFilter, query, statusFilter]);
+  }, [deliveryFilter, listRefresh, query, statusFilter]);
 
   useEffect(() => {
     if (!selectedId) return;
     const controller = new AbortController();
     const requestId = ++detailRequestId.current;
-    fetchCustomerQuote(selectedId, controller.signal)
+    fetchSalesOrder(selectedId, controller.signal)
       .then((next) => {
         if (!controller.signal.aborted && requestId === detailRequestId.current) setDetail(next);
       })
       .catch((error) => {
         if (!controller.signal.aborted && requestId === detailRequestId.current) {
-          setDetailError(getQuoteErrorMessage(error, "报价详情读取失败"));
+          setDetailError(getOrderErrorMessage(error, "订单详情读取失败"));
         }
       })
       .finally(() => {
@@ -222,9 +228,9 @@ export function CustomerQuoteManagementPage({
     return () => controller.abort();
   }, [selectedId]);
 
-  const selectQuote = (quote: CustomerQuoteRecord) => {
+  const selectOrder = (order: SalesOrderRecord) => {
     detailRequestId.current += 1;
-    setSelectedId(quote.id);
+    setSelectedId(order.id);
     setDetail(null);
     setDetailError("");
     setDetailLoading(true);
@@ -237,69 +243,69 @@ export function CustomerQuoteManagementPage({
     setDetailError("");
   };
 
-  const saveQuote = async (payload: CustomerQuoteUpdatePayload) => {
+  const saveOrder = async (payload: SalesOrderUpdatePayload) => {
     if (formMode === "edit" && editingId) {
-      const saved = await patchCustomerQuote(editingId, payload);
+      const saved = await patchSalesOrder(editingId, payload);
       setFormMode(null);
       setEditingId(null);
       setEditInitialState(undefined);
       setDetail(saved);
-      setListRefresh((value) => value + 1);
+      refreshList();
       showToast(`${saved.code} 已更新`);
       return;
     }
-    const saved = await createCustomerQuote(payload as never);
+    const saved = await createSalesOrder(payload as never);
     setFormMode(null);
     setSelectedId(saved.id);
     setDetail(saved);
-    setListRefresh((value) => value + 1);
-    showToast(`报价单 ${saved.code} 已创建`);
+    refreshList();
+    showToast(`订单 ${saved.code} 已创建`);
   };
 
-  const openEdit = (quote: CustomerQuoteDetailRecord) => {
-    setEditInitialState(quoteFormStateFromRecord(quote));
-    setEditingId(quote.id);
+  const openEdit = (order: SalesOrderDetailRecord) => {
+    setEditInitialState(orderFormStateFromRecord(order));
+    setEditingId(order.id);
     setFormMode("edit");
   };
 
-  const changeStatus = async (status: CustomerQuoteStatus) => {
+  const changeStatus = async (status: SalesOrderStatus, cancelReason?: string) => {
     if (!detail) return;
     try {
-      const saved = await patchCustomerQuoteStatus(detail.id, { status });
+      const saved = await patchSalesOrderStatus(detail.id, { status, cancelReason: cancelReason ?? null });
       setDetail(saved);
-      setListRefresh((value) => value + 1);
-      showToast(`${saved.code} 已标记为「${customerQuoteStatusLabels[saved.status]}」`);
+      refreshList();
+      showToast(`${saved.code} 已标记为「${salesOrderStatusLabels[saved.status]}」`);
     } catch (error) {
-      showToast(getQuoteErrorMessage(error, "状态更新失败，请重试"));
+      showToast(getOrderErrorMessage(error, "状态更新失败，请重试"));
     }
   };
 
-  const convertToOrder = async () => {
+  const saveDelivery = async (items: Array<{ id: string; deliveredQuantity: string }>) => {
     if (!detail) return;
     try {
-      const salesOrder = await createSalesOrderFromQuote(detail.id);
-      showToast(`已生成订单 ${salesOrder.code}`);
-      onConvertedToOrder?.();
+      const saved = await patchSalesOrderDelivery(detail.id, { items });
+      setDetail(saved);
+      refreshList();
+      showToast(`${saved.code} 交付数量已登记`);
     } catch (error) {
-      showToast(getQuoteErrorMessage(error, "转订单失败，请确认报价状态"));
+      showToast(getDeliveryErrorMessage(error, "交付登记失败，请核对数量"));
     }
   };
 
-  const draftCount = quotes.filter((quote) => quote.status === "draft").length;
-  const sentCount = quotes.filter((quote) => quote.status === "sent").length;
-  const acceptedCount = quotes.filter((quote) => quote.status === "accepted").length;
-  const overdueCount = quotes.filter((quote) => quote.isOverdue).length;
+  const draftCount = orders.filter((order) => order.status === "draft").length;
+  const activeCount = orders.filter(
+    (order) => order.status === "confirmed" || order.status === "producing" || order.status === "shipped",
+  ).length;
+  const doneCount = orders.filter((order) => order.status === "completed").length;
+  const overdueCount = orders.filter((order) => order.isOverdue).length;
 
   const statusOptions = useMemo<Array<{ value: StatusFilter; label: string }>>(
-    () => [{ value: "all", label: "全部状态" }, ...customerQuoteStatusOptions],
+    () => [{ value: "all", label: "全部状态" }, ...salesOrderStatusOptions],
     [],
   );
 
-  const overdueOptions = useMemo<Array<{ value: OverdueFilter; label: string }>>(
-    () => [
-      { value: "all", label: "全部有效期" },
-      { value: "overdue", label: "已超期" },
-    ],
+  const deliveryOptions = useMemo<Array<{ value: DeliveryFilter; label: string }>>(
+    () => [{ value: "all", label: "全部交付" }, ...salesOrderDeliveryStatusOptions],
     [],
   );
 
@@ -315,8 +321,8 @@ export function CustomerQuoteManagementPage({
             <Menu className="size-4" />
           </button>
           <div>
-            <div className="text-sm font-semibold text-stone-950">客户报价</div>
-            <div className="text-xs text-stone-700/72">按客户报价并记录毛利</div>
+            <div className="text-sm font-semibold text-stone-950">销售订单</div>
+            <div className="text-xs text-stone-700/72">下单、跟进状态与交付进度</div>
           </div>
         </div>
         <button
@@ -328,29 +334,35 @@ export function CustomerQuoteManagementPage({
           }}
           type="button"
         >
-          <FilePlus2 className="size-4" />新增报价单
+          <FilePlus2 className="size-4" />新增订单
         </button>
       </header>
 
       <section className="grid shrink-0 gap-2 px-4 py-3 sm:grid-cols-2 xl:grid-cols-4">
-        <Metric label="当前结果" value={quotes.length} note="最多显示 50 张" icon={PackageSearch} tone="violet" />
-        <Metric label="草稿" value={draftCount} note="尚未发给客户" icon={FileText} tone="blue" />
-        <Metric label="等待客户答复" value={sentCount} note="已发送未结案" icon={Timer} tone="amber" />
-        <Metric label="客户已接受" value={acceptedCount} note={overdueCount > 0 ? `其中 ${overdueCount} 张已超期` : "无超期报价"} icon={CheckCircle2} tone="emerald" />
+        <Metric label="当前结果" value={orders.length} note="最多显示 50 张" icon={PackageSearch} tone="violet" />
+        <Metric label="草稿" value={draftCount} note="尚未确认" icon={FileText} tone="blue" />
+        <Metric label="执行中" value={activeCount} note="已确认到已发货" icon={Truck} tone="amber" />
+        <Metric
+          label="已完成"
+          value={doneCount}
+          note={overdueCount > 0 ? `其中 ${overdueCount} 张已超交期` : "无超交期订单"}
+          icon={CheckCircle2}
+          tone="emerald"
+        />
       </section>
 
       <section className="flex min-h-0 flex-1 flex-col border-t border-white/14 bg-white/22 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-3xl">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <div className="flex items-center gap-2 text-sm font-medium text-stone-700">
-              <Sparkles className="size-4 text-emerald-600" />报价台账
+              <Sparkles className="size-4 text-emerald-600" />订单台账
               <span className="rounded-full border border-emerald-200/60 bg-emerald-50/58 px-2 py-0.5 text-xs text-emerald-800">
                 实时数据
               </span>
             </div>
-            <h1 className="mt-2 text-2xl font-semibold text-stone-950">给客户的报价与毛利测算</h1>
+            <h1 className="mt-2 text-2xl font-semibold text-stone-950">客户订单与交付进度</h1>
             <p className="mt-1 text-sm text-stone-600">
-              成本恒为人民币并按单头汇率折算，客户报价不会回写采购报价历史
+              成本恒为人民币并按单头汇率折算；超交期只做红字提示，不会自动改单
             </p>
           </div>
           <div className="flex flex-col gap-2 md:flex-row">
@@ -364,7 +376,7 @@ export function CustomerQuoteManagementPage({
               />
               {query ? (
                 <button
-                  aria-label="清空报价搜索"
+                  aria-label="清空订单搜索"
                   className="rounded-lg p-1 text-stone-500 hover:bg-white/44"
                   onClick={() => setQuery("")}
                   type="button"
@@ -374,15 +386,20 @@ export function CustomerQuoteManagementPage({
               ) : null}
             </label>
             <DropdownFilter label="状态" onChange={setStatusFilter} options={statusOptions} value={statusFilter} />
-            <DropdownFilter label="有效期" onChange={setOverdueFilter} options={overdueOptions} value={overdueFilter} />
+            <DropdownFilter
+              label="交付"
+              onChange={setDeliveryFilter}
+              options={deliveryOptions}
+              value={deliveryFilter}
+            />
           </div>
         </div>
 
         <div className="mt-4 flex items-center justify-between border-t border-white/44 pt-3 text-xs text-stone-600">
-          <span>点击报价单查看明细、金额汇总并推进状态；草稿可编辑</span>
+          <span>点击订单查看明细、金额汇总、推进状态并登记交付</span>
           <span className="flex items-center gap-1.5">
             <Filter className="size-3.5" />
-            {listLoading ? "正在读取" : `已读取 ${quotes.length} 张`}
+            {listLoading ? "正在读取" : `已读取 ${orders.length} 张`}
           </span>
         </div>
 
@@ -391,7 +408,7 @@ export function CustomerQuoteManagementPage({
             <span>{listError}</span>
             <button
               className="flex items-center gap-1.5 rounded-xl border border-rose-200 bg-white/60 px-3 py-2"
-              onClick={() => setListRefresh((value) => value + 1)}
+              onClick={refreshList}
               type="button"
             >
               <RefreshCw className="size-4" />重试
@@ -400,26 +417,27 @@ export function CustomerQuoteManagementPage({
         ) : null}
 
         <div className="relative mt-3 min-h-0 flex-1 overflow-auto rounded-[18px] border border-white/26 bg-white/18 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl">
-          {listLoading && quotes.length > 0 ? (
+          {listLoading && orders.length > 0 ? (
             <div className="absolute right-3 top-3 z-20 flex items-center gap-2 rounded-xl bg-white/72 px-3 py-2 text-xs text-stone-600 shadow-sm">
               <LoaderCircle className="size-3.5 animate-spin" />更新中
             </div>
           ) : null}
-          <table className="w-full min-w-[1040px] table-fixed border-collapse text-left text-sm">
+          <table className="w-full min-w-[1120px] table-fixed border-collapse text-left text-sm">
             <colgroup>
-              <col className="w-[15%]" />
-              <col className="w-[17%]" />
+              <col className="w-[14%]" />
+              <col className="w-[16%]" />
+              <col className="w-[8%]" />
               <col className="w-[9%]" />
-              <col className="w-[7%]" />
-              <col className="w-[11%]" />
-              <col className="w-[9%]" />
+              <col className="w-[6%]" />
               <col className="w-[10%]" />
+              <col className="w-[6%]" />
+              <col className="w-[8%]" />
               <col className="w-[11%]" />
-              <col className="w-[11%]" />
+              <col className="w-[12%]" />
             </colgroup>
             <thead className="sticky top-0 z-10 bg-white/60 text-xs text-stone-700 backdrop-blur-2xl">
               <tr>
-                {["报价单号", "客户", "状态", "行数", "报价日期", "币种", "汇率", "有效期至", "最近更新"].map(
+                {["订单号", "客户", "状态", "交付", "行数", "下单日期", "币种", "要求交期", "来源报价", "最近更新"].map(
                   (header) => (
                     <th className="px-4 py-3 font-medium" key={header}>
                       {header}
@@ -429,61 +447,73 @@ export function CustomerQuoteManagementPage({
               </tr>
             </thead>
             <tbody className="divide-y divide-white/24">
-              {quotes.length === 0 && !listLoading ? (
+              {orders.length === 0 && !listLoading ? (
                 <tr>
-                  <td className="px-4 py-10 text-center text-stone-500" colSpan={9}>
-                    当前筛选条件下没有报价单，点击右上角新增报价单
+                  <td className="px-4 py-10 text-center text-stone-500" colSpan={10}>
+                    当前筛选条件下没有订单，点击右上角新增订单，或在报价模块把已接受的报价转为订单
                   </td>
                 </tr>
               ) : null}
-              {quotes.map((quote) => (
+              {orders.map((order) => (
                 <tr
-                  aria-label={`查看报价单${quote.code}详情`}
+                  aria-label={`查看订单${order.code}详情`}
                   className={`cursor-pointer transition hover:bg-white/34 focus:bg-white/38 focus:outline-none ${
-                    selectedId === quote.id ? "bg-white/30" : ""
+                    selectedId === order.id ? "bg-white/30" : ""
                   }`}
-                  key={quote.id}
-                  onClick={() => selectQuote(quote)}
+                  key={order.id}
+                  onClick={() => selectOrder(order)}
                   onKeyDown={(event) => {
                     if (event.key === "Enter" || event.key === " ") {
                       event.preventDefault();
-                      selectQuote(quote);
+                      selectOrder(order);
                     }
                   }}
                   tabIndex={0}
                 >
-                  <td className="px-4 py-3 font-mono text-stone-950">{quote.code}</td>
+                  <td className="px-4 py-3 font-mono text-stone-950">{order.code}</td>
                   <td className="px-4 py-3 text-stone-700">
-                    <span className="block truncate">{quote.customer.name}</span>
-                    <span className="block truncate text-xs text-stone-500">{quote.customer.city ?? ""}</span>
+                    <span className="block truncate">{order.customer.name}</span>
+                    <span className="block truncate text-xs text-stone-500">{order.customer.city ?? ""}</span>
                   </td>
                   <td className="px-4 py-3">
                     <span
-                      className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs ${quoteStatusTones[quote.status]}`}
+                      className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs ${orderStatusTones[order.status]}`}
                     >
-                      {quoteStatusLabel(quote.status)}
+                      {orderStatusLabel(order.status)}
                     </span>
-                    {quote.isOverdue && quote.status !== "expired" ? (
-                      <span className="ml-1 rounded-full bg-rose-50/82 px-1.5 py-0.5 text-[11px] text-rose-800">
-                        超期 {quote.overdueDays} 天
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs ${orderDeliveryTones[order.delivery.deliveryStatus]}`}
+                    >
+                      {orderDeliveryLabel(order.delivery.deliveryStatus)}
+                    </span>
+                    {order.isOverdue ? (
+                      <span className="ml-1 inline-flex items-center gap-0.5 rounded-full bg-rose-50/82 px-1.5 py-0.5 text-[11px] text-rose-800">
+                        <Timer className="size-3" />
+                        {order.overdueDays} 天
                       </span>
                     ) : null}
                   </td>
-                  <td className="px-4 py-3 text-stone-700">{quote._count.items}</td>
-                  <td className="px-4 py-3 text-stone-600">{formatQuoteDate(quote.quoteDate)}</td>
+                  <td className="px-4 py-3 text-stone-700">{order._count.items}</td>
+                  <td className="px-4 py-3 text-stone-600">{formatQuoteDate(order.orderDate)}</td>
                   <td className="px-4 py-3 text-stone-700">
                     <span className="flex items-center gap-1">
                       <Coins className="size-3.5 text-stone-500" />
-                      {quote.currency}
+                      {order.currency}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-stone-600">
-                    {quote.currency === "CNY" ? "—" : quote.exchangeRate}
+                    {order.requestedDeliveryDate ? formatQuoteDate(order.requestedDeliveryDate) : "未约定"}
                   </td>
                   <td className="px-4 py-3 text-stone-600">
-                    {quote.validUntil ? formatQuoteDate(quote.validUntil) : "长期有效"}
+                    {order.sourceQuote ? (
+                      <span className="font-mono text-xs">{order.sourceQuote.code}</span>
+                    ) : (
+                      <span className="text-stone-400">手工建单</span>
+                    )}
                   </td>
-                  <td className="px-4 py-3 text-stone-600">{formatQuoteDate(quote.updatedAt)}</td>
+                  <td className="px-4 py-3 text-stone-600">{formatQuoteDate(order.updatedAt)}</td>
                 </tr>
               ))}
             </tbody>
@@ -498,18 +528,18 @@ export function CustomerQuoteManagementPage({
         </div>
       ) : null}
 
-      <CustomerQuoteDetailDrawer
+      <SalesOrderDetailDrawer
         error={detailError}
         loading={detailLoading}
         onClose={closeDetail}
-        onConvertToOrder={convertToOrder}
         onEdit={openEdit}
+        onSaveDelivery={saveDelivery}
         onStatusChange={changeStatus}
-        quote={detail}
+        order={detail}
       />
 
       {formMode ? (
-        <CustomerQuoteFormDrawer
+        <SalesOrderFormDrawer
           initialState={editInitialState}
           mode={formMode}
           onClose={() => {
@@ -517,7 +547,7 @@ export function CustomerQuoteManagementPage({
             setEditingId(null);
             setEditInitialState(undefined);
           }}
-          onSave={saveQuote}
+          onSave={saveOrder}
         />
       ) : null}
     </section>

@@ -88,10 +88,13 @@ export type QuoteTotals = {
   netAmount: number;
   taxAmount: number;
   taxInclusiveAmount: number;
-  costCny: number;
-  marginCny: number;
+  // Null when no line carries a cost snapshot: reporting revenue as cost would
+  // quietly read as "zero margin" instead of "margin not known yet".
+  costCny: number | null;
+  marginCny: number | null;
   marginRate: number | null;
   linesWithoutQuantity: number;
+  linesWithoutCost: number;
 };
 
 export function computeQuoteTotals(
@@ -103,7 +106,10 @@ export function computeQuoteTotals(
   let taxAmount = 0;
   let taxInclusiveAmount = 0;
   let marginCny = 0;
+  let costCny = 0;
+  let revenueWithCostCny = 0;
   let linesWithoutQuantity = 0;
+  let linesWithoutCost = 0;
 
   for (const item of items) {
     if (item.netAmount === null) {
@@ -112,9 +118,21 @@ export function computeQuoteTotals(
       netAmount += item.netAmount;
       taxAmount += item.taxAmount ?? 0;
       taxInclusiveAmount += item.taxInclusiveAmount ?? 0;
-      marginCny += item.marginCny ?? 0;
     }
+
+    if (item.netAmount === null) continue;
+    // A line with no cost snapshot is excluded from cost and margin instead of
+    // being treated as if it were sold at cost price.
+    if (item.unitCostCny === null || item.quantity === null) {
+      linesWithoutCost += 1;
+      continue;
+    }
+    costCny += round(item.unitCostCny * item.quantity, 2);
+    marginCny += item.marginCny ?? 0;
+    revenueWithCostCny += round(item.unitPriceCny * item.quantity, 2);
   }
+
+  const hasCost = revenueWithCostCny > 0 || costCny > 0;
 
   return {
     currency: context.currency,
@@ -122,9 +140,10 @@ export function computeQuoteTotals(
     netAmount: round(netAmount, 2),
     taxAmount: round(taxAmount, 2),
     taxInclusiveAmount: round(taxInclusiveAmount, 2),
-    costCny: round(netAmount * rate - marginCny, 2),
-    marginCny: round(marginCny, 2),
-    marginRate: netAmount <= 0 ? null : round(marginCny / (netAmount * rate), 4),
+    costCny: hasCost ? round(costCny, 2) : null,
+    marginCny: hasCost ? round(marginCny, 2) : null,
+    marginRate: hasCost ? round(marginCny / revenueWithCostCny, 4) : null,
     linesWithoutQuantity,
+    linesWithoutCost,
   };
 }

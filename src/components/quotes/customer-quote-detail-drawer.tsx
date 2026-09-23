@@ -5,6 +5,7 @@ import {
   ArrowRight,
   Building2,
   Calculator,
+  ClipboardList,
   FileText,
   LoaderCircle,
   Pencil,
@@ -54,6 +55,7 @@ export function CustomerQuoteDetailDrawer({
   onClose,
   onStatusChange,
   onEdit,
+  onConvertToOrder,
 }: {
   quote: CustomerQuoteDetailRecord | null;
   loading: boolean;
@@ -61,8 +63,10 @@ export function CustomerQuoteDetailDrawer({
   onClose: () => void;
   onStatusChange: (status: CustomerQuoteStatus) => Promise<void>;
   onEdit: (quote: CustomerQuoteDetailRecord) => void;
+  onConvertToOrder?: () => Promise<void>;
 }) {
   const [statusBusy, setStatusBusy] = useState<CustomerQuoteStatus | null>(null);
+  const [converting, setConverting] = useState(false);
 
   if (!quote) return null;
 
@@ -115,6 +119,25 @@ export function CustomerQuoteDetailDrawer({
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {quote.status === "accepted" && onConvertToOrder ? (
+              <button
+                aria-label="转为订单"
+                className="flex h-9 items-center gap-1.5 rounded-xl border border-violet-300/50 bg-violet-500/16 px-3 text-sm text-violet-800 transition hover:bg-violet-500/26 disabled:opacity-60"
+                disabled={converting}
+                onClick={async () => {
+                  setConverting(true);
+                  try {
+                    await onConvertToOrder();
+                  } finally {
+                    setConverting(false);
+                  }
+                }}
+                type="button"
+              >
+                {converting ? <LoaderCircle className="size-3.5 animate-spin" /> : <ClipboardList className="size-3.5" />}
+                转为订单
+              </button>
+            ) : null}
             {quote.status === "draft" ? (
               <button
                 aria-label="编辑报价单"
@@ -216,7 +239,7 @@ export function CustomerQuoteDetailDrawer({
               <Metric label="成本（CNY）" value={formatCny(quote.totals.costCny)} />
               <Metric
                 label="毛利（CNY）"
-                tone={quote.totals.marginCny < 0 ? "warn" : undefined}
+                tone={(quote.totals.marginCny ?? 0) < 0 ? "warn" : undefined}
                 value={formatCny(quote.totals.marginCny)}
               />
               <Metric label="毛利率" value={formatPercent(quote.totals.marginRate)} />
@@ -224,6 +247,11 @@ export function CustomerQuoteDetailDrawer({
             {quote.totals.linesWithoutQuantity > 0 ? (
               <p className="mt-2 text-xs text-stone-600">
                 {quote.totals.linesWithoutQuantity} 行只报单价（未填数量），未计入金额与毛利。
+              </p>
+            ) : null}
+            {quote.totals.linesWithoutCost > 0 ? (
+              <p className="mt-1 text-xs text-stone-600">
+                {quote.totals.linesWithoutCost} 行没有成本快照，未计入成本与毛利合计。
               </p>
             ) : null}
           </section>

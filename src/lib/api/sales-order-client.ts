@@ -80,10 +80,11 @@ export type OrderTotals = {
   netAmount: number;
   taxAmount: number;
   taxInclusiveAmount: number;
-  costCny: number;
-  marginCny: number;
+  costCny: number | null;
+  marginCny: number | null;
   marginRate: number | null;
   linesWithoutQuantity: number;
+  linesWithoutCost: number;
 };
 
 export type OrderDelivery = {
@@ -258,6 +259,23 @@ export function getOrderErrorMessage(error: unknown, fallback: string) {
     if (error.status === 400) return "请检查填写内容，修正标记字段后再保存";
   }
   return error instanceof Error ? error.message : fallback;
+}
+
+// Booking a delivery has only a few ways to fail and all of them are the
+// user's to fix, so the server reason is translated instead of collapsed into
+// the generic "check your input" message.
+const deliveryErrorMessages: Record<string, string> = {
+  "Delivered quantity cannot exceed the ordered quantity.": "已交付数量不能大于订单数量",
+  "Fill in the line quantity before booking a delivery.": "请先补全该行的订单数量，再登记交付",
+  "Deliveries can only be booked while the order is being prepared.": "只有备货中与已发货的订单可以登记交付",
+  "One or more order lines were not found.": "订单明细已变化，请刷新后重试",
+};
+
+export function getDeliveryErrorMessage(error: unknown, fallback: string) {
+  if (error instanceof SalesOrderApiError && deliveryErrorMessages[error.message]) {
+    return deliveryErrorMessages[error.message];
+  }
+  return getOrderErrorMessage(error, fallback);
 }
 
 export async function fetchSalesOrders(

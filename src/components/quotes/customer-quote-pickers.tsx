@@ -16,7 +16,7 @@ function useDebouncedValue(value: string, delay = 260) {
 
 export type PickerOption = { id: string; label: string; note?: string };
 
-function SearchPicker({
+export function SearchPicker({
   label,
   required,
   placeholder,
@@ -140,7 +140,7 @@ function SearchPicker({
   );
 }
 
-function useOptionsLoader(loader: (keyword: string) => Promise<PickerOption[]>, enabled = true) {
+export function useOptionsLoader(loader: (keyword: string) => Promise<PickerOption[]>, enabled = true) {
   const [options, setOptions] = useState<PickerOption[]>([]);
   const [loading, setLoading] = useState(false);
   const requestId = useRef(0);

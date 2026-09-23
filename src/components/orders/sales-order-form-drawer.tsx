@@ -3,46 +3,51 @@
 import {
   AlertCircle,
   Calculator,
+  ClipboardList,
   Coins,
-  FilePlus2,
   LoaderCircle,
+  MapPin,
   PackagePlus,
   Save,
   Sparkles,
   Trash2,
+  Truck,
   X,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { FormPanel, GlassInput, GlassTextarea, ReadonlyField } from "@/components/form/glass-form-controls";
-import { getQuoteFieldErrors } from "@/lib/api/customer-quote-client";
-import type { CustomerQuoteUpdatePayload } from "@/lib/api/customer-quote-client";
-import { computeQuoteItemAmounts, computeQuoteTotals } from "@/lib/customer-quote-math";
-import type { CustomerQuoteCurrency } from "@/server/customer-quotes/constants";
-import { customerQuoteCurrencyOptions } from "@/server/customer-quotes/constants";
+import { getOrderFieldErrors } from "@/lib/api/sales-order-client";
+import type { SalesOrderUpdatePayload } from "@/lib/api/sales-order-client";
+import { computeSalesOrderItemFigures, computeSalesOrderTotals } from "@/lib/sales-order-math";
+import type { SalesOrderCurrency } from "@/server/sales-orders/constants";
+import { salesOrderCurrencyOptions } from "@/server/sales-orders/constants";
 import {
-  createEmptyQuoteFormState,
-  createEmptyQuoteItem,
   formatCny,
   formatMoney,
   formatPercent,
-  quoteFormToPayload,
-  quoteFormToUpdatePayload,
-  validateQuoteForm,
-  type QuoteFormErrors,
-  type QuoteFormState,
-  type QuoteItemDraft,
-} from "./customer-quote-prototype-data";
+} from "@/components/quotes/customer-quote-prototype-data";
 import {
   PurchaseQuotePicker,
   QuoteContactPicker,
   QuoteCustomerPicker,
   QuoteFabricPicker,
   type PurchaseQuoteOption,
-} from "./customer-quote-pickers";
+} from "@/components/quotes/customer-quote-pickers";
+import { FabricSupplierSourcePicker } from "./sales-order-pickers";
+import {
+  createEmptyOrderFormState,
+  createEmptyOrderItem,
+  orderFormToPayload,
+  orderFormToUpdatePayload,
+  validateOrderForm,
+  type OrderFormErrors,
+  type OrderFormState,
+  type OrderItemDraft,
+} from "./sales-order-form-data";
 
-// Mirrors the server rule in src/server/customer-quotes.ts: cost is always
-// stored in CNY, so a purchase quote in the quote currency is converted with
-// this quote's own rate. Anything else has to be typed in by hand.
+// Same rule as the server: cost is always stored in CNY, so a purchase quote
+// quoted in the order currency is converted with this order's own rate and
+// anything else has to be typed in by hand.
 function costFromPurchaseQuote(quote: PurchaseQuoteOption, currency: string, exchangeRate: string) {
   const price = Number(quote.purchasePrice);
   if (!Number.isFinite(price)) return "";
@@ -66,19 +71,19 @@ function ItemRow({
   onPatch,
   onRemove,
 }: {
-  item: QuoteItemDraft;
+  item: OrderItemDraft;
   index: number;
   canRemove: boolean;
-  currency: CustomerQuoteCurrency;
+  currency: SalesOrderCurrency;
   exchangeRate: string;
   defaultTaxRate: string;
   error?: string;
-  onPatch: (changes: Partial<QuoteItemDraft>) => void;
+  onPatch: (changes: Partial<OrderItemDraft>) => void;
   onRemove: () => void;
 }) {
-  const amounts = useMemo(
+  const figures = useMemo(
     () =>
-      computeQuoteItemAmounts(
+      computeSalesOrderItemFigures(
         {
           quantity: item.quantity,
           unitPrice: item.unitPrice,
@@ -99,7 +104,8 @@ function ItemRow({
       <div className="flex items-center justify-between">
         <span className="text-xs text-stone-600">明细行 {index + 1}</span>
         <span className="text-xs text-stone-500">
-          不含税 {formatMoney(amounts.unitPrice, currency)} / 含税 {formatMoney(amounts.taxInclusiveUnitPrice, currency)}
+          不含税 {formatMoney(figures.unitPrice, currency)} / 含税{" "}
+          {formatMoney(figures.taxInclusiveUnitPrice, currency)}
         </span>
       </div>
 
@@ -112,12 +118,20 @@ function ItemRow({
               fabricCode: next.fabric.code ?? "",
               fabricName: next.fabric.name ?? "",
               fabricUnit: next.fabric.pricingUnit ?? "",
+              fabricSupplierId: "",
+              fabricSupplierLabel: "",
               fabricSupplierQuoteId: "",
               purchaseQuoteLabel: "",
               costPrice: "",
             })
           }
           value={{ id: item.fabricId, label: item.fabricId ? `${item.fabricCode} · ${item.fabricName}` : "" }}
+        />
+        <FabricSupplierSourcePicker
+          disabled={!item.fabricId}
+          fabricId={item.fabricId}
+          onChange={(next) => onPatch({ fabricSupplierId: next.id, fabricSupplierLabel: next.label })}
+          value={{ id: item.fabricSupplierId, label: item.fabricSupplierLabel }}
         />
         <PurchaseQuotePicker
           disabled={!item.fabricId}
@@ -128,20 +142,17 @@ function ItemRow({
               fabricSupplierQuoteId: next.id,
               purchaseQuoteLabel: next.label,
               ...(next.quote
-                ? {
-                    costPrice: cost,
-                    leadTime: item.leadTime || next.quote.leadTime || "",
-                    minimumOrderQty: item.minimumOrderQty || next.quote.minimumOrderQty || "",
-                  }
+                ? { costPrice: cost, leadTime: item.leadTime || next.quote.leadTime || "" }
                 : {}),
             });
           }}
           value={{ id: item.fabricSupplierQuoteId, label: item.purchaseQuoteLabel }}
         />
         <GlassInput
-          label="数量（留空只报单价）"
+          label="数量"
           onChange={(value) => onPatch({ quantity: value })}
           placeholder={item.fabricUnit ? `单位 ${item.fabricUnit}` : "如 500"}
+          required
           type="number"
           value={item.quantity}
         />
@@ -168,13 +179,7 @@ function ItemRow({
           value={item.taxRate}
         />
         <GlassInput
-          label="起订量"
-          onChange={(value) => onPatch({ minimumOrderQty: value })}
-          placeholder="如 300kg"
-          value={item.minimumOrderQty}
-        />
-        <GlassInput
-          label="交期"
+          label="行交期"
           onChange={(value) => onPatch({ leadTime: value })}
           placeholder="如 15 天"
           value={item.leadTime}
@@ -182,7 +187,7 @@ function ItemRow({
         <GlassInput
           label="色号 / 备注"
           onChange={(value) => onPatch({ colorOrRemark: value })}
-          placeholder="如 藏青 / 大货价"
+          placeholder="如 藏青 / 大货"
           value={item.colorOrRemark}
         />
         <div className="flex items-end">
@@ -200,54 +205,49 @@ function ItemRow({
 
       <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 border-t border-white/24 pt-2 text-xs text-stone-600">
         <span>
-          行金额{" "}
-          <span className="font-medium text-stone-950">
-            {amounts.netAmount === null ? "只报单价" : formatMoney(amounts.taxInclusiveAmount, currency)}
-          </span>
+          行金额 <span className="font-medium text-stone-950">{formatMoney(figures.taxInclusiveAmount, currency)}</span>
         </span>
         <span>
-          折算单价 <span className="font-medium text-stone-950">{formatCny(amounts.unitPriceCny)}</span>
+          折算单价 <span className="font-medium text-stone-950">{formatCny(figures.unitPriceCny)}</span>
         </span>
         <span>
-          单位毛利 <span className="font-medium text-stone-950">{formatCny(amounts.unitMarginCny)}</span>
+          单位毛利 <span className="font-medium text-stone-950">{formatCny(figures.unitMarginCny)}</span>
         </span>
         <span>
-          毛利率 <span className="font-medium text-stone-950">{formatPercent(amounts.marginRate)}</span>
+          毛利率 <span className="font-medium text-stone-950">{formatPercent(figures.marginRate)}</span>
         </span>
       </div>
     </div>
   );
 }
 
-export function CustomerQuoteFormDrawer({
+export function SalesOrderFormDrawer({
   mode,
   initialState,
   onClose,
   onSave,
 }: {
   mode: "create" | "edit";
-  initialState?: QuoteFormState;
+  initialState?: OrderFormState;
   onClose: () => void;
-  onSave: (payload: CustomerQuoteUpdatePayload) => Promise<void>;
+  onSave: (payload: SalesOrderUpdatePayload) => Promise<void>;
 }) {
-  const [state, setState] = useState<QuoteFormState>(
-    () => initialState ?? createEmptyQuoteFormState(),
-  );
-  const [errors, setErrors] = useState<QuoteFormErrors>({});
+  const [state, setState] = useState<OrderFormState>(() => initialState ?? createEmptyOrderFormState());
+  const [errors, setErrors] = useState<OrderFormErrors>({});
   const [topError, setTopError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const patch = (changes: Partial<QuoteFormState>) =>
+  const patch = (changes: Partial<OrderFormState>) =>
     setState((current) => ({ ...current, ...changes }));
 
-  const patchItem = (key: string, changes: Partial<QuoteItemDraft>) =>
+  const patchItem = (key: string, changes: Partial<OrderItemDraft>) =>
     setState((current) => ({
       ...current,
       items: current.items.map((item) => (item.key === key ? { ...item, ...changes } : item)),
     }));
 
   const addItem = () =>
-    setState((current) => ({ ...current, items: [...current.items, createEmptyQuoteItem()] }));
+    setState((current) => ({ ...current, items: [...current.items, createEmptyOrderItem()] }));
 
   const removeItem = (key: string) =>
     setState((current) => ({
@@ -255,7 +255,7 @@ export function CustomerQuoteFormDrawer({
       items: current.items.length <= 1 ? current.items : current.items.filter((item) => item.key !== key),
     }));
 
-  const changeCurrency = (currency: CustomerQuoteCurrency) =>
+  const changeCurrency = (currency: SalesOrderCurrency) =>
     setState((current) => ({
       ...current,
       currency,
@@ -263,10 +263,10 @@ export function CustomerQuoteFormDrawer({
     }));
 
   const totals = useMemo(() => {
-    const amounts = state.items
+    const figures = state.items
       .filter((item) => item.fabricId.trim())
       .map((item) =>
-        computeQuoteItemAmounts(
+        computeSalesOrderItemFigures(
           {
             quantity: item.quantity,
             unitPrice: item.unitPrice,
@@ -280,7 +280,7 @@ export function CustomerQuoteFormDrawer({
           },
         ),
       );
-    return computeQuoteTotals(amounts, {
+    return computeSalesOrderTotals(figures, {
       currency: state.currency,
       exchangeRate: state.exchangeRate,
     });
@@ -288,10 +288,10 @@ export function CustomerQuoteFormDrawer({
 
   const handleSubmit = async () => {
     if (isSubmitting) return;
-    const clientErrors = validateQuoteForm(state);
+    const clientErrors = validateOrderForm(state);
     if (Object.keys(clientErrors).length > 0) {
       setErrors(clientErrors);
-      setTopError("请先完成标记为必填的字段");
+      setTopError("订单数量必填；请先完成标记为必填的字段");
       return;
     }
 
@@ -300,11 +300,11 @@ export function CustomerQuoteFormDrawer({
     setErrors({});
 
     try {
-      await onSave(mode === "create" ? quoteFormToPayload(state) : quoteFormToUpdatePayload(state));
+      await onSave(mode === "create" ? orderFormToPayload(state) : orderFormToUpdatePayload(state));
     } catch (error) {
-      const fieldErrors = getQuoteFieldErrors(error);
+      const fieldErrors = getOrderFieldErrors(error);
       if (Object.keys(fieldErrors).length > 0) {
-        setErrors(fieldErrors as QuoteFormErrors);
+        setErrors(fieldErrors as OrderFormErrors);
         setTopError("请检查标记字段后重新保存");
       } else {
         setTopError(error instanceof Error ? error.message : "保存失败，请稍后重试");
@@ -316,31 +316,31 @@ export function CustomerQuoteFormDrawer({
   return (
     <div
       className="fixed inset-0 z-50 bg-stone-950/30 backdrop-blur-md fabric-create-backdrop-enter"
-      data-testid="customer-quote-form-dialog"
+      data-testid="sales-order-form-dialog"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget && !isSubmitting) onClose();
       }}
     >
       <aside
-        aria-label={mode === "create" ? "新增客户报价单" : "编辑客户报价单"}
-        className="absolute inset-y-3 right-3 flex w-[calc(100%-1.5rem)] max-w-4xl flex-col overflow-hidden rounded-[22px] border border-white/34 bg-white/42 shadow-[0_36px_120px_rgba(26,22,18,0.36),inset_0_1px_0_rgba(255,255,255,0.22)] backdrop-blur-3xl fabric-create-drawer-enter"
+        aria-label={mode === "create" ? "新增销售订单" : "编辑销售订单"}
+        className="absolute inset-y-3 right-3 flex w-[calc(100%-1.5rem)] max-w-5xl flex-col overflow-hidden rounded-[22px] border border-white/34 bg-white/42 shadow-[0_36px_120px_rgba(26,22,18,0.36),inset_0_1px_0_rgba(255,255,255,0.22)] backdrop-blur-3xl fabric-create-drawer-enter"
       >
         <div className="flex shrink-0 items-center justify-between border-b border-white/24 px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex size-11 items-center justify-center rounded-2xl border border-emerald-300/36 bg-emerald-500/12 text-emerald-700 shadow-inner shadow-white/24">
-              <FilePlus2 className="size-5" />
+            <div className="flex size-11 items-center justify-center rounded-2xl border border-violet-300/36 bg-violet-500/12 text-violet-700 shadow-inner shadow-white/24">
+              <ClipboardList className="size-5" />
             </div>
             <div>
               <div className="flex items-center gap-2 text-sm text-stone-500">
-                <Sparkles className="size-4 text-emerald-600" />客户报价
+                <Sparkles className="size-4 text-violet-600" />销售订单
               </div>
               <h2 className="mt-1 text-2xl font-semibold text-stone-950">
-                {mode === "create" ? "新增客户报价单" : "编辑报价单草稿"}
+                {mode === "create" ? "新增销售订单" : "编辑订单"}
               </h2>
             </div>
           </div>
           <button
-            aria-label="关闭报价表单"
+            aria-label="关闭订单表单"
             className="rounded-xl border border-white/28 bg-white/22 p-2 transition hover:bg-white/42 disabled:opacity-50"
             disabled={isSubmitting}
             onClick={onClose}
@@ -360,9 +360,9 @@ export function CustomerQuoteFormDrawer({
 
           <FormPanel
             icon={Coins}
-            tone="emerald"
-            title="报价抬头"
-            description="报价单号自动生成。币种决定金额单位，成本恒为人民币并按汇率折算毛利。"
+            tone="violet"
+            title="订单抬头"
+            description="订单号自动生成。币种决定金额单位，成本恒为人民币并按汇率折算毛利。"
           >
             <QuoteCustomerPicker
               error={errors.customerId}
@@ -385,7 +385,7 @@ export function CustomerQuoteFormDrawer({
             <div className="text-sm">
               <span className="text-stone-600">计价币种</span>
               <div className="mt-1 flex rounded-xl border border-white/28 bg-white/24 p-1">
-                {customerQuoteCurrencyOptions.map((option) => (
+                {salesOrderCurrencyOptions.map((option) => (
                   <button
                     className={`flex-1 rounded-lg px-3 py-1.5 text-sm transition ${
                       state.currency === option.value
@@ -408,22 +408,22 @@ export function CustomerQuoteFormDrawer({
               onChange={(value) => patch({ exchangeRate: value })}
               placeholder={state.currency === "CNY" ? "人民币固定为 1" : "如 7.2"}
               required={state.currency !== "CNY"}
-                  type="number"
+              type="number"
               value={state.exchangeRate}
             />
             <GlassInput
-              error={errors.quoteDate}
-              label="报价日期"
-              onChange={(value) => patch({ quoteDate: value })}
+              error={errors.orderDate}
+              label="下单日期"
+              onChange={(value) => patch({ orderDate: value })}
               type="date"
-              value={state.quoteDate}
+              value={state.orderDate}
             />
             <GlassInput
-              error={errors.validUntil}
-              label="有效期至"
-              onChange={(value) => patch({ validUntil: value })}
+              error={errors.requestedDeliveryDate}
+              label="客户要求交期"
+              onChange={(value) => patch({ requestedDeliveryDate: value })}
               type="date"
-              value={state.validUntil}
+              value={state.requestedDeliveryDate}
             />
             <GlassInput
               label="贸易条款"
@@ -438,12 +438,6 @@ export function CustomerQuoteFormDrawer({
               value={state.deliveryTerms}
             />
             <GlassInput
-              label="整单交期"
-              onChange={(value) => patch({ leadTime: value })}
-              placeholder="如 20 天"
-              value={state.leadTime}
-            />
-            <GlassInput
               label="付款条款"
               onChange={(value) => patch({ paymentTerms: value })}
               placeholder="如 月结30天"
@@ -454,19 +448,14 @@ export function CustomerQuoteFormDrawer({
               label="默认税率（%）"
               onChange={(value) => patch({ taxRate: value })}
               placeholder="如 13"
-                  type="number"
+              type="number"
               value={state.taxRate}
             />
-            <ReadonlyField label="明细行不含税金额合计" value={formatMoney(totals.netAmount, state.currency)} />
+            <ReadonlyField label="明细行不含税合计" value={formatMoney(totals.netAmount, state.currency)} />
             <ReadonlyField label="含税合计" value={formatMoney(totals.taxInclusiveAmount, state.currency)} />
           </FormPanel>
 
-          <FormPanel
-            icon={PackagePlus}
-            tone="cyan"
-            title="报价明细"
-            description="同一面料可按色号分多行报价；数量留空表示只报单价，不计入合计。"
-          >
+          <FormPanel icon={PackagePlus} tone="cyan" title="订单明细" description="同一面料可按色号分多行下单；数量必填且必须大于 0。">
             {state.items.map((item, index) => (
               <ItemRow
                 canRemove={state.items.length > 1}
@@ -495,18 +484,36 @@ export function CustomerQuoteFormDrawer({
             ) : null}
           </FormPanel>
 
-          <FormPanel icon={Calculator} tone="violet" title="毛利预览" description="按当前汇率将售价折算为人民币后计算，仅供报价参考。">
+          <FormPanel icon={MapPin} tone="blue" title="收货信息" description="发货前可补录，不影响金额计算。">
+            <GlassInput
+              label="收货联系人"
+              onChange={(value) => patch({ receiverName: value })}
+              placeholder="如 王先生"
+              value={state.receiverName}
+            />
+            <GlassInput
+              label="联系电话"
+              onChange={(value) => patch({ receiverPhone: value })}
+              placeholder="如 13800000000"
+              value={state.receiverPhone}
+            />
+            <div className="md:col-span-2 xl:col-span-3">
+              <GlassInput
+                label="收货地址"
+                onChange={(value) => patch({ receiverAddress: value })}
+                placeholder="如 上海市松江区xx路 xx 号仓库"
+                value={state.receiverAddress}
+              />
+            </div>
+          </FormPanel>
+
+          <FormPanel icon={Calculator} tone="emerald" title="毛利预览" description="按当前汇率将售价折算为人民币后计算，仅供内部参考。">
             <ReadonlyField label="不含税金额" value={formatMoney(totals.netAmount, state.currency)} />
             <ReadonlyField label="税额" value={formatMoney(totals.taxAmount, state.currency)} />
             <ReadonlyField label="含税金额" value={formatMoney(totals.taxInclusiveAmount, state.currency)} />
             <ReadonlyField label="成本（CNY）" value={formatCny(totals.costCny)} />
             <ReadonlyField label="毛利（CNY）" value={formatCny(totals.marginCny)} />
             <ReadonlyField label="毛利率" value={formatPercent(totals.marginRate)} />
-            {totals.linesWithoutQuantity > 0 ? (
-              <div className="text-xs text-stone-600 md:col-span-2 xl:col-span-3">
-                有 {totals.linesWithoutQuantity} 行未填数量（只报单价），未计入金额与毛利合计。
-              </div>
-            ) : null}
             {totals.linesWithoutCost > 0 ? (
               <div className="text-xs text-stone-600 md:col-span-2 xl:col-span-3">
                 有 {totals.linesWithoutCost} 行未填成本，未计入成本与毛利合计。
@@ -514,12 +521,12 @@ export function CustomerQuoteFormDrawer({
             ) : null}
           </FormPanel>
 
-          <FormPanel icon={Sparkles} tone="blue" title="备注" description="客户特殊要求、报价背景等说明。">
+          <FormPanel icon={Sparkles} tone="amber" title="备注" description="客户特殊要求、包装要求等说明。">
             <div className="md:col-span-2 xl:col-span-3">
               <GlassTextarea
-                label="报价备注"
+                label="订单备注"
                 onChange={(value) => patch({ remark: value })}
-                placeholder="如 含运费、不含商检"
+                placeholder="如 需船样确认后再投产"
                 value={state.remark}
               />
             </div>
@@ -527,8 +534,9 @@ export function CustomerQuoteFormDrawer({
         </div>
 
         <div className="flex shrink-0 items-center justify-between gap-3 border-t border-white/24 px-6 py-4">
-          <span className="text-xs text-stone-600">
-            {mode === "create" ? "保存后自动生成报价单号，状态为「草稿」" : "仅草稿可以修改，保存后覆盖原有明细"}
+          <span className="flex items-center gap-1.5 text-xs text-stone-600">
+            <Truck className="size-3.5" />
+            {mode === "create" ? "保存后自动生成订单号，状态为「草稿」" : "草稿与已确认可以修改，保存后覆盖原有明细"}
           </span>
           <div className="flex items-center gap-2">
             <button
@@ -546,7 +554,7 @@ export function CustomerQuoteFormDrawer({
               type="button"
             >
               {isSubmitting ? <LoaderCircle className="size-4 animate-spin" /> : <Save className="size-4" />}
-              {mode === "create" ? "创建报价单" : "保存修改"}
+              {mode === "create" ? "创建订单" : "保存修改"}
             </button>
           </div>
         </div>
