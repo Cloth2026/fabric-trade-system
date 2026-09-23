@@ -1,0 +1,1 @@
+ALTER TABLE "SalesOrderItem" ALTER COLUMN "quantity" DROP NOT NULL;
