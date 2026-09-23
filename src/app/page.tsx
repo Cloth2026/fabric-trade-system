@@ -7,9 +7,10 @@ import { FabricLibraryPrototype } from "@/components/fabrics/fabric-library-prot
 import { SupplierManagementPage } from "@/components/suppliers/supplier-management-page";
 import { CustomerManagementPage } from "@/components/customers/customer-management-page";
 import { SampleManagementPage } from "@/components/samples/sample-management-page";
+import { CustomerQuoteManagementPage } from "@/components/quotes/customer-quote-management-page";
 import { nextFabricRefreshToken } from "@/components/fabrics/fabric-library-prototype-data";
 
-type ActiveModule = "面料库" | "供应商" | "客户" | "寄样";
+type ActiveModule = "面料库" | "供应商" | "客户" | "寄样" | "报价";
 
 const navItems = ["工作台", "面料库", "供应商", "客户", "寄样", "报价", "订单"];
 
@@ -47,7 +48,7 @@ export default function Home() {
 
           <nav className="mt-6 space-y-1 text-sm">
             {navItems.map((item) => (
-              <button className={`flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-left transition ${item === activeModule ? "bg-white/72 text-stone-950 shadow-[0_12px_32px_rgba(255,255,255,0.18)]" : "text-white/76 hover:bg-white/18 hover:text-white"}`} key={item} onClick={() => { if (item === "面料库" || item === "供应商" || item === "客户" || item === "寄样") openModule(item); }} type="button">
+              <button className={`flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-left transition ${item === activeModule ? "bg-white/72 text-stone-950 shadow-[0_12px_32px_rgba(255,255,255,0.18)]" : "text-white/76 hover:bg-white/18 hover:text-white"}`} key={item} onClick={() => { if (item === "面料库" || item === "供应商" || item === "客户" || item === "寄样" || item === "报价") openModule(item); }} type="button">
                 {item}{item === activeModule ? <ChevronRight className="size-4" /> : null}
               </button>
             ))}
@@ -62,6 +63,7 @@ export default function Home() {
         {activeModule === "供应商" ? <SupplierManagementPage /> : null}
         {activeModule === "客户" ? <CustomerManagementPage /> : null}
         {activeModule === "寄样" ? <SampleManagementPage /> : null}
+        {activeModule === "报价" ? <CustomerQuoteManagementPage /> : null}
         {activeModule === "面料库" ? <FabricLibraryPrototype onCreateFabric={openCreateFabric} refreshToken={fabricRefreshToken} /> : null}
         {activeModule === "面料库" ? <CreateFabricDrawer open={showCreate} onClose={closeCreateFabric} onCreated={refreshFabricLibrary} /> : null}
       </div>
