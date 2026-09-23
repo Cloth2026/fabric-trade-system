@@ -292,6 +292,7 @@ export type FabricSupplierQuoteWhereInput = {
   fabricSupplier?: Prisma.XOR<Prisma.FabricSupplierScalarRelationFilter, Prisma.FabricSupplierWhereInput>
   supplierUnit?: Prisma.XOR<Prisma.SupplierUnitNullableScalarRelationFilter, Prisma.SupplierUnitWhereInput> | null
   customerQuoteItems?: Prisma.CustomerQuoteItemListRelationFilter
+  salesOrderItems?: Prisma.SalesOrderItemListRelationFilter
 }
 
 export type FabricSupplierQuoteOrderByWithRelationInput = {
@@ -313,6 +314,7 @@ export type FabricSupplierQuoteOrderByWithRelationInput = {
   fabricSupplier?: Prisma.FabricSupplierOrderByWithRelationInput
   supplierUnit?: Prisma.SupplierUnitOrderByWithRelationInput
   customerQuoteItems?: Prisma.CustomerQuoteItemOrderByRelationAggregateInput
+  salesOrderItems?: Prisma.SalesOrderItemOrderByRelationAggregateInput
 }
 
 export type FabricSupplierQuoteWhereUniqueInput = Prisma.AtLeast<{
@@ -337,6 +339,7 @@ export type FabricSupplierQuoteWhereUniqueInput = Prisma.AtLeast<{
   fabricSupplier?: Prisma.XOR<Prisma.FabricSupplierScalarRelationFilter, Prisma.FabricSupplierWhereInput>
   supplierUnit?: Prisma.XOR<Prisma.SupplierUnitNullableScalarRelationFilter, Prisma.SupplierUnitWhereInput> | null
   customerQuoteItems?: Prisma.CustomerQuoteItemListRelationFilter
+  salesOrderItems?: Prisma.SalesOrderItemListRelationFilter
 }, "id">
 
 export type FabricSupplierQuoteOrderByWithAggregationInput = {
@@ -397,6 +400,7 @@ export type FabricSupplierQuoteCreateInput = {
   fabricSupplier: Prisma.FabricSupplierCreateNestedOneWithoutQuotesInput
   supplierUnit?: Prisma.SupplierUnitCreateNestedOneWithoutFabricSupplierQuotesInput
   customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutFabricSupplierQuoteInput
+  salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutFabricSupplierQuoteInput
 }
 
 export type FabricSupplierQuoteUncheckedCreateInput = {
@@ -415,6 +419,7 @@ export type FabricSupplierQuoteUncheckedCreateInput = {
   remarks?: string | null
   createdAt?: Date | string
   customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutFabricSupplierQuoteInput
+  salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutFabricSupplierQuoteInput
 }
 
 export type FabricSupplierQuoteUpdateInput = {
@@ -433,6 +438,7 @@ export type FabricSupplierQuoteUpdateInput = {
   fabricSupplier?: Prisma.FabricSupplierUpdateOneRequiredWithoutQuotesNestedInput
   supplierUnit?: Prisma.SupplierUnitUpdateOneWithoutFabricSupplierQuotesNestedInput
   customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutFabricSupplierQuoteNestedInput
+  salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutFabricSupplierQuoteNestedInput
 }
 
 export type FabricSupplierQuoteUncheckedUpdateInput = {
@@ -451,6 +457,7 @@ export type FabricSupplierQuoteUncheckedUpdateInput = {
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutFabricSupplierQuoteNestedInput
+  salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutFabricSupplierQuoteNestedInput
 }
 
 export type FabricSupplierQuoteCreateManyInput = {
@@ -725,6 +732,22 @@ export type FabricSupplierQuoteUpdateOneWithoutCustomerQuoteItemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FabricSupplierQuoteUpdateToOneWithWhereWithoutCustomerQuoteItemsInput, Prisma.FabricSupplierQuoteUpdateWithoutCustomerQuoteItemsInput>, Prisma.FabricSupplierQuoteUncheckedUpdateWithoutCustomerQuoteItemsInput>
 }
 
+export type FabricSupplierQuoteCreateNestedOneWithoutSalesOrderItemsInput = {
+  create?: Prisma.XOR<Prisma.FabricSupplierQuoteCreateWithoutSalesOrderItemsInput, Prisma.FabricSupplierQuoteUncheckedCreateWithoutSalesOrderItemsInput>
+  connectOrCreate?: Prisma.FabricSupplierQuoteCreateOrConnectWithoutSalesOrderItemsInput
+  connect?: Prisma.FabricSupplierQuoteWhereUniqueInput
+}
+
+export type FabricSupplierQuoteUpdateOneWithoutSalesOrderItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.FabricSupplierQuoteCreateWithoutSalesOrderItemsInput, Prisma.FabricSupplierQuoteUncheckedCreateWithoutSalesOrderItemsInput>
+  connectOrCreate?: Prisma.FabricSupplierQuoteCreateOrConnectWithoutSalesOrderItemsInput
+  upsert?: Prisma.FabricSupplierQuoteUpsertWithoutSalesOrderItemsInput
+  disconnect?: Prisma.FabricSupplierQuoteWhereInput | boolean
+  delete?: Prisma.FabricSupplierQuoteWhereInput | boolean
+  connect?: Prisma.FabricSupplierQuoteWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FabricSupplierQuoteUpdateToOneWithWhereWithoutSalesOrderItemsInput, Prisma.FabricSupplierQuoteUpdateWithoutSalesOrderItemsInput>, Prisma.FabricSupplierQuoteUncheckedUpdateWithoutSalesOrderItemsInput>
+}
+
 export type FabricSupplierQuoteCreateWithoutTenantInput = {
   id?: string
   purchasePrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -740,6 +763,7 @@ export type FabricSupplierQuoteCreateWithoutTenantInput = {
   fabricSupplier: Prisma.FabricSupplierCreateNestedOneWithoutQuotesInput
   supplierUnit?: Prisma.SupplierUnitCreateNestedOneWithoutFabricSupplierQuotesInput
   customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutFabricSupplierQuoteInput
+  salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutFabricSupplierQuoteInput
 }
 
 export type FabricSupplierQuoteUncheckedCreateWithoutTenantInput = {
@@ -757,6 +781,7 @@ export type FabricSupplierQuoteUncheckedCreateWithoutTenantInput = {
   remarks?: string | null
   createdAt?: Date | string
   customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutFabricSupplierQuoteInput
+  salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutFabricSupplierQuoteInput
 }
 
 export type FabricSupplierQuoteCreateOrConnectWithoutTenantInput = {
@@ -820,6 +845,7 @@ export type FabricSupplierQuoteCreateWithoutSupplierUnitInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutFabricSupplierQuotesInput
   fabricSupplier: Prisma.FabricSupplierCreateNestedOneWithoutQuotesInput
   customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutFabricSupplierQuoteInput
+  salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutFabricSupplierQuoteInput
 }
 
 export type FabricSupplierQuoteUncheckedCreateWithoutSupplierUnitInput = {
@@ -837,6 +863,7 @@ export type FabricSupplierQuoteUncheckedCreateWithoutSupplierUnitInput = {
   remarks?: string | null
   createdAt?: Date | string
   customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutFabricSupplierQuoteInput
+  salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutFabricSupplierQuoteInput
 }
 
 export type FabricSupplierQuoteCreateOrConnectWithoutSupplierUnitInput = {
@@ -880,6 +907,7 @@ export type FabricSupplierQuoteCreateWithoutFabricSupplierInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutFabricSupplierQuotesInput
   supplierUnit?: Prisma.SupplierUnitCreateNestedOneWithoutFabricSupplierQuotesInput
   customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutFabricSupplierQuoteInput
+  salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutFabricSupplierQuoteInput
 }
 
 export type FabricSupplierQuoteUncheckedCreateWithoutFabricSupplierInput = {
@@ -897,6 +925,7 @@ export type FabricSupplierQuoteUncheckedCreateWithoutFabricSupplierInput = {
   remarks?: string | null
   createdAt?: Date | string
   customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutFabricSupplierQuoteInput
+  salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutFabricSupplierQuoteInput
 }
 
 export type FabricSupplierQuoteCreateOrConnectWithoutFabricSupplierInput = {
@@ -940,6 +969,7 @@ export type FabricSupplierQuoteCreateWithoutCustomerQuoteItemsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutFabricSupplierQuotesInput
   fabricSupplier: Prisma.FabricSupplierCreateNestedOneWithoutQuotesInput
   supplierUnit?: Prisma.SupplierUnitCreateNestedOneWithoutFabricSupplierQuotesInput
+  salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutFabricSupplierQuoteInput
 }
 
 export type FabricSupplierQuoteUncheckedCreateWithoutCustomerQuoteItemsInput = {
@@ -957,6 +987,7 @@ export type FabricSupplierQuoteUncheckedCreateWithoutCustomerQuoteItemsInput = {
   qualityDifferences?: string | null
   remarks?: string | null
   createdAt?: Date | string
+  salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutFabricSupplierQuoteInput
 }
 
 export type FabricSupplierQuoteCreateOrConnectWithoutCustomerQuoteItemsInput = {
@@ -990,6 +1021,7 @@ export type FabricSupplierQuoteUpdateWithoutCustomerQuoteItemsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutFabricSupplierQuotesNestedInput
   fabricSupplier?: Prisma.FabricSupplierUpdateOneRequiredWithoutQuotesNestedInput
   supplierUnit?: Prisma.SupplierUnitUpdateOneWithoutFabricSupplierQuotesNestedInput
+  salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutFabricSupplierQuoteNestedInput
 }
 
 export type FabricSupplierQuoteUncheckedUpdateWithoutCustomerQuoteItemsInput = {
@@ -1007,6 +1039,95 @@ export type FabricSupplierQuoteUncheckedUpdateWithoutCustomerQuoteItemsInput = {
   qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutFabricSupplierQuoteNestedInput
+}
+
+export type FabricSupplierQuoteCreateWithoutSalesOrderItemsInput = {
+  id?: string
+  purchasePrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  pricingUnit: $Enums.PricingUnit
+  minimumOrderQty?: string | null
+  leadTime?: string | null
+  contactName?: string | null
+  quoteDate?: Date | string
+  qualityDifferences?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutFabricSupplierQuotesInput
+  fabricSupplier: Prisma.FabricSupplierCreateNestedOneWithoutQuotesInput
+  supplierUnit?: Prisma.SupplierUnitCreateNestedOneWithoutFabricSupplierQuotesInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutFabricSupplierQuoteInput
+}
+
+export type FabricSupplierQuoteUncheckedCreateWithoutSalesOrderItemsInput = {
+  id?: string
+  tenantId: string
+  fabricSupplierId: string
+  supplierUnitId?: string | null
+  purchasePrice: runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: string
+  pricingUnit: $Enums.PricingUnit
+  minimumOrderQty?: string | null
+  leadTime?: string | null
+  contactName?: string | null
+  quoteDate?: Date | string
+  qualityDifferences?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutFabricSupplierQuoteInput
+}
+
+export type FabricSupplierQuoteCreateOrConnectWithoutSalesOrderItemsInput = {
+  where: Prisma.FabricSupplierQuoteWhereUniqueInput
+  create: Prisma.XOR<Prisma.FabricSupplierQuoteCreateWithoutSalesOrderItemsInput, Prisma.FabricSupplierQuoteUncheckedCreateWithoutSalesOrderItemsInput>
+}
+
+export type FabricSupplierQuoteUpsertWithoutSalesOrderItemsInput = {
+  update: Prisma.XOR<Prisma.FabricSupplierQuoteUpdateWithoutSalesOrderItemsInput, Prisma.FabricSupplierQuoteUncheckedUpdateWithoutSalesOrderItemsInput>
+  create: Prisma.XOR<Prisma.FabricSupplierQuoteCreateWithoutSalesOrderItemsInput, Prisma.FabricSupplierQuoteUncheckedCreateWithoutSalesOrderItemsInput>
+  where?: Prisma.FabricSupplierQuoteWhereInput
+}
+
+export type FabricSupplierQuoteUpdateToOneWithWhereWithoutSalesOrderItemsInput = {
+  where?: Prisma.FabricSupplierQuoteWhereInput
+  data: Prisma.XOR<Prisma.FabricSupplierQuoteUpdateWithoutSalesOrderItemsInput, Prisma.FabricSupplierQuoteUncheckedUpdateWithoutSalesOrderItemsInput>
+}
+
+export type FabricSupplierQuoteUpdateWithoutSalesOrderItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  purchasePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
+  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutFabricSupplierQuotesNestedInput
+  fabricSupplier?: Prisma.FabricSupplierUpdateOneRequiredWithoutQuotesNestedInput
+  supplierUnit?: Prisma.SupplierUnitUpdateOneWithoutFabricSupplierQuotesNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutFabricSupplierQuoteNestedInput
+}
+
+export type FabricSupplierQuoteUncheckedUpdateWithoutSalesOrderItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  fabricSupplierId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierUnitId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchasePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  pricingUnit?: Prisma.EnumPricingUnitFieldUpdateOperationsInput | $Enums.PricingUnit
+  minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quoteDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qualityDifferences?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutFabricSupplierQuoteNestedInput
 }
 
 export type FabricSupplierQuoteCreateManyTenantInput = {
@@ -1040,6 +1161,7 @@ export type FabricSupplierQuoteUpdateWithoutTenantInput = {
   fabricSupplier?: Prisma.FabricSupplierUpdateOneRequiredWithoutQuotesNestedInput
   supplierUnit?: Prisma.SupplierUnitUpdateOneWithoutFabricSupplierQuotesNestedInput
   customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutFabricSupplierQuoteNestedInput
+  salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutFabricSupplierQuoteNestedInput
 }
 
 export type FabricSupplierQuoteUncheckedUpdateWithoutTenantInput = {
@@ -1057,6 +1179,7 @@ export type FabricSupplierQuoteUncheckedUpdateWithoutTenantInput = {
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutFabricSupplierQuoteNestedInput
+  salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutFabricSupplierQuoteNestedInput
 }
 
 export type FabricSupplierQuoteUncheckedUpdateManyWithoutTenantInput = {
@@ -1106,6 +1229,7 @@ export type FabricSupplierQuoteUpdateWithoutSupplierUnitInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutFabricSupplierQuotesNestedInput
   fabricSupplier?: Prisma.FabricSupplierUpdateOneRequiredWithoutQuotesNestedInput
   customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutFabricSupplierQuoteNestedInput
+  salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutFabricSupplierQuoteNestedInput
 }
 
 export type FabricSupplierQuoteUncheckedUpdateWithoutSupplierUnitInput = {
@@ -1123,6 +1247,7 @@ export type FabricSupplierQuoteUncheckedUpdateWithoutSupplierUnitInput = {
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutFabricSupplierQuoteNestedInput
+  salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutFabricSupplierQuoteNestedInput
 }
 
 export type FabricSupplierQuoteUncheckedUpdateManyWithoutSupplierUnitInput = {
@@ -1172,6 +1297,7 @@ export type FabricSupplierQuoteUpdateWithoutFabricSupplierInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutFabricSupplierQuotesNestedInput
   supplierUnit?: Prisma.SupplierUnitUpdateOneWithoutFabricSupplierQuotesNestedInput
   customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutFabricSupplierQuoteNestedInput
+  salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutFabricSupplierQuoteNestedInput
 }
 
 export type FabricSupplierQuoteUncheckedUpdateWithoutFabricSupplierInput = {
@@ -1189,6 +1315,7 @@ export type FabricSupplierQuoteUncheckedUpdateWithoutFabricSupplierInput = {
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutFabricSupplierQuoteNestedInput
+  salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutFabricSupplierQuoteNestedInput
 }
 
 export type FabricSupplierQuoteUncheckedUpdateManyWithoutFabricSupplierInput = {
@@ -1214,10 +1341,12 @@ export type FabricSupplierQuoteUncheckedUpdateManyWithoutFabricSupplierInput = {
 
 export type FabricSupplierQuoteCountOutputType = {
   customerQuoteItems: number
+  salesOrderItems: number
 }
 
 export type FabricSupplierQuoteCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   customerQuoteItems?: boolean | FabricSupplierQuoteCountOutputTypeCountCustomerQuoteItemsArgs
+  salesOrderItems?: boolean | FabricSupplierQuoteCountOutputTypeCountSalesOrderItemsArgs
 }
 
 /**
@@ -1235,6 +1364,13 @@ export type FabricSupplierQuoteCountOutputTypeDefaultArgs<ExtArgs extends runtim
  */
 export type FabricSupplierQuoteCountOutputTypeCountCustomerQuoteItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CustomerQuoteItemWhereInput
+}
+
+/**
+ * FabricSupplierQuoteCountOutputType without action
+ */
+export type FabricSupplierQuoteCountOutputTypeCountSalesOrderItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SalesOrderItemWhereInput
 }
 
 
@@ -1257,6 +1393,7 @@ export type FabricSupplierQuoteSelect<ExtArgs extends runtime.Types.Extensions.I
   fabricSupplier?: boolean | Prisma.FabricSupplierDefaultArgs<ExtArgs>
   supplierUnit?: boolean | Prisma.FabricSupplierQuote$supplierUnitArgs<ExtArgs>
   customerQuoteItems?: boolean | Prisma.FabricSupplierQuote$customerQuoteItemsArgs<ExtArgs>
+  salesOrderItems?: boolean | Prisma.FabricSupplierQuote$salesOrderItemsArgs<ExtArgs>
   _count?: boolean | Prisma.FabricSupplierQuoteCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["fabricSupplierQuote"]>
 
@@ -1323,6 +1460,7 @@ export type FabricSupplierQuoteInclude<ExtArgs extends runtime.Types.Extensions.
   fabricSupplier?: boolean | Prisma.FabricSupplierDefaultArgs<ExtArgs>
   supplierUnit?: boolean | Prisma.FabricSupplierQuote$supplierUnitArgs<ExtArgs>
   customerQuoteItems?: boolean | Prisma.FabricSupplierQuote$customerQuoteItemsArgs<ExtArgs>
+  salesOrderItems?: boolean | Prisma.FabricSupplierQuote$salesOrderItemsArgs<ExtArgs>
   _count?: boolean | Prisma.FabricSupplierQuoteCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FabricSupplierQuoteIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1343,6 +1481,7 @@ export type $FabricSupplierQuotePayload<ExtArgs extends runtime.Types.Extensions
     fabricSupplier: Prisma.$FabricSupplierPayload<ExtArgs>
     supplierUnit: Prisma.$SupplierUnitPayload<ExtArgs> | null
     customerQuoteItems: Prisma.$CustomerQuoteItemPayload<ExtArgs>[]
+    salesOrderItems: Prisma.$SalesOrderItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1757,6 +1896,7 @@ export interface Prisma__FabricSupplierQuoteClient<T, Null = never, ExtArgs exte
   fabricSupplier<T extends Prisma.FabricSupplierDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FabricSupplierDefaultArgs<ExtArgs>>): Prisma.Prisma__FabricSupplierClient<runtime.Types.Result.GetResult<Prisma.$FabricSupplierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   supplierUnit<T extends Prisma.FabricSupplierQuote$supplierUnitArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FabricSupplierQuote$supplierUnitArgs<ExtArgs>>): Prisma.Prisma__SupplierUnitClient<runtime.Types.Result.GetResult<Prisma.$SupplierUnitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   customerQuoteItems<T extends Prisma.FabricSupplierQuote$customerQuoteItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FabricSupplierQuote$customerQuoteItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerQuoteItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  salesOrderItems<T extends Prisma.FabricSupplierQuote$salesOrderItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FabricSupplierQuote$salesOrderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalesOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2241,6 +2381,30 @@ export type FabricSupplierQuote$customerQuoteItemsArgs<ExtArgs extends runtime.T
   take?: number
   skip?: number
   distinct?: Prisma.CustomerQuoteItemScalarFieldEnum | Prisma.CustomerQuoteItemScalarFieldEnum[]
+}
+
+/**
+ * FabricSupplierQuote.salesOrderItems
+ */
+export type FabricSupplierQuote$salesOrderItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SalesOrderItem
+   */
+  select?: Prisma.SalesOrderItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SalesOrderItem
+   */
+  omit?: Prisma.SalesOrderItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SalesOrderItemInclude<ExtArgs> | null
+  where?: Prisma.SalesOrderItemWhereInput
+  orderBy?: Prisma.SalesOrderItemOrderByWithRelationInput | Prisma.SalesOrderItemOrderByWithRelationInput[]
+  cursor?: Prisma.SalesOrderItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SalesOrderItemScalarFieldEnum | Prisma.SalesOrderItemScalarFieldEnum[]
 }
 
 /**

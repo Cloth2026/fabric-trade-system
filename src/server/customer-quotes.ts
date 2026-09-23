@@ -116,22 +116,7 @@ export function normalizeQuoteLimit(limit: number | string | null | undefined) {
   return Math.min(Math.max(Math.trunc(numericLimit), 1), 50);
 }
 
-function parseShanghaiDateParts(date = new Date()) {
-  const formatter = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Shanghai",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
-  const parts = formatter.formatToParts(date);
-  const read = (type: string) => parts.find((part) => part.type === type)?.value ?? "";
-  return `${read("year")}${read("month")}${read("day")}`;
-}
-
-function startOfBusinessDay(date = new Date()) {
-  const dayPart = parseShanghaiDateParts(date);
-  return new Date(`${dayPart.slice(0, 4)}-${dayPart.slice(4, 6)}-${dayPart.slice(6, 8)}T00:00:00+08:00`);
-}
+import { shanghaiDateStamp, startOfBusinessDay } from "../lib/business-date";
 
 export function deriveOverdue(validUntil: Date | null, status: string, now = new Date()) {
   if (!validUntil || isCustomerQuoteTerminal(status)) {
@@ -147,7 +132,7 @@ export function deriveOverdue(validUntil: Date | null, status: string, now = new
 }
 
 async function generateQuoteCode(tx: Prisma.TransactionClient, tenantId: string) {
-  const prefix = `QT-${parseShanghaiDateParts()}-`;
+  const prefix = `QT-${shanghaiDateStamp()}-`;
   for (let attempt = 0; attempt < 5; attempt += 1) {
     const sameDayCount = await tx.customerQuote.count({
       where: { tenantId, code: { startsWith: prefix } },

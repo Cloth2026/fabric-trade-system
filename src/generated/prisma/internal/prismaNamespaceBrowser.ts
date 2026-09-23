@@ -69,7 +69,9 @@ export const ModelName = {
   SampleRequest: 'SampleRequest',
   SampleRequestItem: 'SampleRequestItem',
   CustomerQuote: 'CustomerQuote',
-  CustomerQuoteItem: 'CustomerQuoteItem'
+  CustomerQuoteItem: 'CustomerQuoteItem',
+  SalesOrder: 'SalesOrder',
+  SalesOrderItem: 'SalesOrderItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -510,6 +512,62 @@ export const CustomerQuoteItemScalarFieldEnum = {
 } as const
 
 export type CustomerQuoteItemScalarFieldEnum = (typeof CustomerQuoteItemScalarFieldEnum)[keyof typeof CustomerQuoteItemScalarFieldEnum]
+
+
+export const SalesOrderScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  code: 'code',
+  customerId: 'customerId',
+  contactId: 'contactId',
+  sourceQuoteId: 'sourceQuoteId',
+  status: 'status',
+  orderDate: 'orderDate',
+  requestedDeliveryDate: 'requestedDeliveryDate',
+  currency: 'currency',
+  exchangeRate: 'exchangeRate',
+  priceTerms: 'priceTerms',
+  deliveryTerms: 'deliveryTerms',
+  paymentTerms: 'paymentTerms',
+  taxRate: 'taxRate',
+  receiverName: 'receiverName',
+  receiverPhone: 'receiverPhone',
+  receiverAddress: 'receiverAddress',
+  remark: 'remark',
+  confirmedAt: 'confirmedAt',
+  completedAt: 'completedAt',
+  cancelledAt: 'cancelledAt',
+  cancelReason: 'cancelReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SalesOrderScalarFieldEnum = (typeof SalesOrderScalarFieldEnum)[keyof typeof SalesOrderScalarFieldEnum]
+
+
+export const SalesOrderItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  orderId: 'orderId',
+  fabricId: 'fabricId',
+  sourceQuoteItemId: 'sourceQuoteItemId',
+  fabricSupplierId: 'fabricSupplierId',
+  fabricSupplierQuoteId: 'fabricSupplierQuoteId',
+  unit: 'unit',
+  quantity: 'quantity',
+  deliveredQuantity: 'deliveredQuantity',
+  unitPrice: 'unitPrice',
+  costPrice: 'costPrice',
+  taxRate: 'taxRate',
+  leadTime: 'leadTime',
+  colorOrRemark: 'colorOrRemark',
+  remark: 'remark',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SalesOrderItemScalarFieldEnum = (typeof SalesOrderItemScalarFieldEnum)[keyof typeof SalesOrderItemScalarFieldEnum]
 
 
 export const SortOrder = {

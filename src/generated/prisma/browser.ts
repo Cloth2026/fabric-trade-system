@@ -112,3 +112,13 @@ export type CustomerQuote = Prisma.CustomerQuoteModel
  * 
  */
 export type CustomerQuoteItem = Prisma.CustomerQuoteItemModel
+/**
+ * Model SalesOrder
+ * 
+ */
+export type SalesOrder = Prisma.SalesOrderModel
+/**
+ * Model SalesOrderItem
+ * 
+ */
+export type SalesOrderItem = Prisma.SalesOrderItemModel
