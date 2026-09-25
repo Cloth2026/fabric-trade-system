@@ -20,7 +20,14 @@ type Props = {
   optionsByGroup: Record<string, ConfigOption[]>;
   onFieldChange: (field: keyof FabricFormState, value: string | string[]) => void;
   onFabricTypeChange: (fabricType: FabricType) => void;
-  lockIdentity?: { code: string; fabricType: FabricType; pricingUnitLabel: "公斤" | "米" };
+  // Editing passes only the fields that must stay read-only. Anything omitted
+  // stays editable.
+  lockIdentity?: {
+    code?: string;
+    codeHint?: string;
+    fabricType?: FabricType;
+    fabricTypeHint?: string;
+  };
 };
 
 export function FabricBasicFields({ state, errors, optionsByGroup, onFieldChange, onFabricTypeChange, lockIdentity }: Props) {
@@ -34,10 +41,10 @@ export function FabricBasicFields({ state, errors, optionsByGroup, onFieldChange
       <section className="rounded-2xl border border-white/28 bg-white/18 p-4 shadow-inner shadow-white/12">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <PanelTitle icon={Info} title="基础信息" description="编号、名称、来源和成品规格构成面料档案的最小信息集。" tone="blue" />
-          {lockIdentity ? (
+          {lockIdentity?.fabricType ? (
             <div className="flex h-10 items-center gap-2 rounded-2xl border border-white/28 bg-white/24 px-3 text-sm text-stone-700">
               <span className="font-medium">{fabricTypeLabel}</span>
-              <span className="text-xs text-stone-500">创建后不可修改</span>
+              <span className="text-xs text-stone-500">{lockIdentity.fabricTypeHint ?? "当前不可修改"}</span>
             </div>
           ) : (
             <SegmentedControl
@@ -53,8 +60,8 @@ export function FabricBasicFields({ state, errors, optionsByGroup, onFieldChange
         <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           <GlassInput label="面料英文名称" value={state.englishName} onChange={(value) => onFieldChange("englishName", value)} placeholder="如 Cotton Spandex Jersey" />
           <GlassInput label="面料名称" required value={state.name} onChange={(value) => onFieldChange("name", value)} placeholder="如 精梳棉氨纶汗布" error={errors.name} />
-          {lockIdentity ? (
-            <ReadonlyField label="面料编号" value={lockIdentity.code} hint="创建后不可修改" />
+          {lockIdentity?.code ? (
+            <ReadonlyField label="面料编号" value={lockIdentity.code} hint={lockIdentity.codeHint ?? "当前不可修改"} />
           ) : (
             <FabricCodeInput value={state.codeSuffix} onChange={(value) => onFieldChange("codeSuffix", value)} error={errors.codeSuffix ?? errors.code} />
           )}

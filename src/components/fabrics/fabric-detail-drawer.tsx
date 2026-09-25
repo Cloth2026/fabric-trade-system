@@ -255,24 +255,41 @@ function ProcessTab({ fabric, labels }: { fabric: FabricDetail; labels: ConfigLa
     <div data-testid="fabric-detail-process">
       <DetailSection icon={Layers3} title="坯布信息" tone="blue">
         <DetailField label="资料状态" value={processStatusLabels[fabric.greigeStatus]} />
-        <DetailField label="坯布供应商" value={fabric.greige?.supplier?.name} />
-        <DetailField label="坯布编号" value={fabric.greige?.code} />
-        <DetailField label="坯布名称" value={fabric.greige?.name} />
-        <DetailField label="成分" value={fabric.greige?.composition} />
-        <DetailField label="克重 / 门幅" value={fabric.greige ? [fabric.greige.weight, fabric.greige.width].filter(Boolean).join(" · ") : null} />
-        <DetailField label="纱支或经纬密" value={fabric.greige?.yarnOrDensity} />
-        <DetailField label="坯布单价" value={fabric.greige?.unitPrice ? `¥${fabric.greige.unitPrice}` : null} />
-        <DetailField label="损耗" value={fabric.greige?.lossRate} />
-        <DetailField label="备注" value={fabric.greige?.remarks} wide />
+        <DetailField label="坯布数量" value={fabric.greigeFabrics.length ? `${fabric.greigeFabrics.length} 条` : null} />
+        {fabric.greigeFabrics.map((greige, index) => (
+          <div className="rounded-xl border border-white/36 bg-white/22 p-3 sm:col-span-2" key={greige.id}>
+            <div className="text-xs font-medium text-stone-900">
+              {index + 1}. {greige.name || greige.code || "未命名坯布"}
+            </div>
+            <div className="mt-2 grid gap-2 text-xs text-stone-600 sm:grid-cols-2">
+              <span>供应商：{greige.supplier?.name || "待补充"}</span>
+              <span>编号：{greige.code || "待补充"}</span>
+              <span>成分：{greige.composition || "待补充"}</span>
+              <span>克重 / 门幅：{[greige.weight, greige.width].filter(Boolean).join(" · ") || "待补充"}</span>
+              <span>纱支或经纬密：{greige.yarnOrDensity || "待补充"}</span>
+              <span>单价：{greige.unitPrice ? `¥${greige.unitPrice}` : "待补充"}</span>
+              <span className="sm:col-span-2">损耗：{greige.lossRate || "暂无"}　备注：{greige.remarks || "暂无"}</span>
+            </div>
+          </div>
+        ))}
       </DetailSection>
       <DetailSection icon={FlaskConical} title="染整信息" tone="violet">
         <DetailField label="资料状态" value={processStatusLabels[fabric.dyeingStatus]} />
-        <DetailField label="工艺类型" value={getConfigLabel(labels, "dyeing_process_type", fabric.dyeingFinishing?.processType)} />
-        <DetailField label="染整厂" value={fabric.dyeingFinishing?.factory?.name} />
-        <DetailField label="加工单价" value={fabric.dyeingFinishing?.unitPrice ? `¥${fabric.dyeingFinishing.unitPrice}` : null} />
-        <DetailField label="损耗" value={fabric.dyeingFinishing?.lossRate} />
-        <DetailField label="交期" value={fabric.dyeingFinishing?.leadTime} />
-        <DetailField label="注意事项" value={fabric.dyeingFinishing?.cautions} wide />
+        <DetailField label="染整数量" value={fabric.dyeingFinishings.length ? `${fabric.dyeingFinishings.length} 条` : null} />
+        {fabric.dyeingFinishings.map((dyeing, index) => (
+          <div className="rounded-xl border border-white/36 bg-white/22 p-3 sm:col-span-2" key={dyeing.id}>
+            <div className="text-xs font-medium text-stone-900">
+              {index + 1}. {getConfigLabel(labels, "dyeing_process_type", dyeing.processType)}
+            </div>
+            <div className="mt-2 grid gap-2 text-xs text-stone-600 sm:grid-cols-2">
+              <span>染整厂：{dyeing.factory?.name || "待补充"}</span>
+              <span>加工单价：{dyeing.unitPrice ? `¥${dyeing.unitPrice}` : "待补充"}</span>
+              <span>损耗：{dyeing.lossRate || "待补充"}</span>
+              <span>交期：{dyeing.leadTime || "待补充"}</span>
+              <span className="sm:col-span-2">注意事项：{dyeing.cautions || "暂无"}</span>
+            </div>
+          </div>
+        ))}
       </DetailSection>
       <DetailSection icon={Sparkles} title="后工艺信息" tone="amber">
         <DetailField label="资料状态" value={processStatusLabels[fabric.postProcessStatus]} />

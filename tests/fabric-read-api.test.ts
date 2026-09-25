@@ -339,6 +339,15 @@ before(async () => {
         unitPrice: "12.30",
       },
     }),
+    prisma.greigeFabric.create({
+      data: {
+        fabricId: fabricA.id,
+        supplierId: supplierB.id,
+        code: "GREIGE-002",
+        composition: "92% polyester 8% spandex",
+        unitPrice: "13.10",
+      },
+    }),
     prisma.dyeingFinishing.create({
       data: {
         fabricId: fabricA.id,
@@ -346,6 +355,14 @@ before(async () => {
         factoryId: supplierB.id,
         unitPrice: "4.20",
         cautions: "Watch shade variation",
+      },
+    }),
+    prisma.dyeingFinishing.create({
+      data: {
+        fabricId: fabricA.id,
+        processType: "heat_setting",
+        factoryId: supplierB.id,
+        unitPrice: "1.80",
       },
     }),
     prisma.postProcess.create({
@@ -531,10 +548,14 @@ describe("GET /api/fabrics/[id]", () => {
     );
     const detail = (await response.json()).data;
 
-    assert.equal(detail.greige.code, "GREIGE-001");
-    assert.equal(detail.greige.unitPrice, "12.3");
-    assert.equal(detail.dyeingFinishing.processType, "solid_dyeing");
-    assert.equal(detail.dyeingFinishing.unitPrice, "4.2");
+    assert.equal(detail.greigeFabrics.length, 2);
+    assert.equal(detail.greigeFabrics[0].code, "GREIGE-001");
+    assert.equal(detail.greigeFabrics[0].unitPrice, "12.3");
+    assert.equal(detail.greigeFabrics[1].code, "GREIGE-002");
+    assert.equal(detail.dyeingFinishings.length, 2);
+    assert.equal(detail.dyeingFinishings[0].processType, "solid_dyeing");
+    assert.equal(detail.dyeingFinishings[0].unitPrice, "4.2");
+    assert.equal(detail.dyeingFinishings[1].processType, "heat_setting");
     assert.equal(detail.postProcesses.length, 1);
     assert.equal(detail.postProcesses[0].effectDescription, "Soft sheen");
     assert.equal(detail.postProcesses[0].unitPrice, "1.5");

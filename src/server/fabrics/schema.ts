@@ -98,32 +98,38 @@ export const createFabricInputSchema = z
     inspectionConclusion: optionalText,
     handFeel: optionalText,
     remarks: optionalText,
-    greige: z
-      .object({
-        supplierId: optionalText,
-        code: optionalText,
-        name: optionalText,
-        composition: optionalText,
-        weight: optionalText,
-        width: optionalText,
-        yarnOrDensity: optionalText,
-        unitPrice: optionalMoney,
-        lossRate: optionalText,
-        remarks: optionalText,
-      })
-      .nullable()
-      .optional(),
-    dyeingFinishing: z
-      .object({
-        processType: optionalText,
-        factoryId: optionalText,
-        unitPrice: optionalMoney,
-        lossRate: optionalText,
-        leadTime: optionalText,
-        cautions: optionalText,
-      })
-      .nullable()
-      .optional(),
+    // A fabric can record several greige fabrics and several dyeing/finishing
+    // routes, so both blocks are arrays exactly like postProcesses.
+    greigeFabrics: z
+      .array(
+        z.object({
+          supplierId: optionalText,
+          code: optionalText,
+          name: optionalText,
+          composition: optionalText,
+          weight: optionalText,
+          width: optionalText,
+          yarnOrDensity: optionalText,
+          unitPrice: optionalMoney,
+          lossRate: optionalText,
+          remarks: optionalText,
+        }),
+      )
+      .optional()
+      .default([]),
+    dyeingFinishings: z
+      .array(
+        z.object({
+          processType: optionalText,
+          factoryId: optionalText,
+          unitPrice: optionalMoney,
+          lossRate: optionalText,
+          leadTime: optionalText,
+          cautions: optionalText,
+        }),
+      )
+      .optional()
+      .default([]),
     postProcesses: z
       .array(
         z.object({
@@ -153,19 +159,29 @@ export const createFabricInputSchema = z
       });
     }
 
-    requireDetail(value.greigeStatus === "none" && value.greige != null, context, ["greige"], "greige must be empty when greigeStatus is none.");
-    requireDetail(value.greigeStatus === "available" && value.greige == null, context, ["greige"], "greige is required when greigeStatus is available.");
     requireDetail(
-      value.dyeingStatus === "none" && value.dyeingFinishing != null,
+      value.greigeStatus === "none" && value.greigeFabrics.length > 0,
       context,
-      ["dyeingFinishing"],
-      "dyeingFinishing must be empty when dyeingStatus is none.",
+      ["greigeFabrics"],
+      "greigeFabrics must be empty when greigeStatus is none.",
     );
     requireDetail(
-      value.dyeingStatus === "available" && value.dyeingFinishing == null,
+      value.greigeStatus === "available" && value.greigeFabrics.length === 0,
       context,
-      ["dyeingFinishing"],
-      "dyeingFinishing is required when dyeingStatus is available.",
+      ["greigeFabrics"],
+      "greigeFabrics is required when greigeStatus is available.",
+    );
+    requireDetail(
+      value.dyeingStatus === "none" && value.dyeingFinishings.length > 0,
+      context,
+      ["dyeingFinishings"],
+      "dyeingFinishings must be empty when dyeingStatus is none.",
+    );
+    requireDetail(
+      value.dyeingStatus === "available" && value.dyeingFinishings.length === 0,
+      context,
+      ["dyeingFinishings"],
+      "dyeingFinishings is required when dyeingStatus is available.",
     );
     requireDetail(
       value.postProcessStatus === "none" && value.postProcesses.length > 0,

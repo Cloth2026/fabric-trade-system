@@ -2,6 +2,7 @@ export type FabricType = "knitted" | "woven";
 export type ProcessStatus = "none" | "pending" | "available";
 
 export type GreigeDraft = {
+  id: string;
   supplierId: string;
   supplierName: string;
   code: string;
@@ -16,6 +17,7 @@ export type GreigeDraft = {
 };
 
 export type DyeingDraft = {
+  id: string;
   processType: string;
   factoryId: string;
   factoryName: string;
@@ -93,15 +95,18 @@ export type FabricFormState = {
   usageOptionKeys: string[];
   seasonOptionKeys: string[];
   certificationOptionKeys: string[];
-  greige: GreigeDraft;
-  dyeingFinishing: DyeingDraft;
+  greigeFabrics: GreigeDraft[];
+  dyeingFinishings: DyeingDraft[];
   postProcesses: PostProcessDraft[];
   suppliers: FabricSupplierDraft[];
 };
 
 export type FieldErrors = Record<string, string>;
 
-const emptyGreige = (): GreigeDraft => ({
+const randomId = () => globalThis.crypto?.randomUUID?.() ?? `row-${Date.now()}-${Math.random()}`;
+
+export const emptyGreige = (id = randomId()): GreigeDraft => ({
+  id,
   supplierId: "",
   supplierName: "",
   code: "",
@@ -115,7 +120,8 @@ const emptyGreige = (): GreigeDraft => ({
   remarks: "",
 });
 
-const emptyDyeing = (): DyeingDraft => ({
+export const emptyDyeing = (id = randomId()): DyeingDraft => ({
+  id,
   processType: "",
   factoryId: "",
   factoryName: "",
@@ -124,6 +130,9 @@ const emptyDyeing = (): DyeingDraft => ({
   leadTime: "",
   cautions: "",
 });
+
+export const createGreigeDraft = emptyGreige;
+export const createDyeingDraft = emptyDyeing;
 
 export function createPostProcessDraft(id = globalThis.crypto?.randomUUID?.() ?? `post-${Date.now()}`): PostProcessDraft {
   return {
@@ -199,8 +208,8 @@ export function createInitialFabricFormState(): FabricFormState {
     usageOptionKeys: [],
     seasonOptionKeys: [],
     certificationOptionKeys: [],
-    greige: emptyGreige(),
-    dyeingFinishing: emptyDyeing(),
+    greigeFabrics: [],
+    dyeingFinishings: [],
     postProcesses: [],
     suppliers: [],
   };
@@ -220,14 +229,28 @@ export function changeProcessStatus(
   status: ProcessStatus,
 ): FabricFormState {
   if (process === "greige") {
-    return { ...state, greigeStatus: status, greige: status === "none" ? emptyGreige() : state.greige };
+    return {
+      ...state,
+      greigeStatus: status,
+      greigeFabrics:
+        status === "none"
+          ? []
+          : status === "available" && state.greigeFabrics.length === 0
+            ? [emptyGreige()]
+            : state.greigeFabrics,
+    };
   }
 
   if (process === "dyeing") {
     return {
       ...state,
       dyeingStatus: status,
-      dyeingFinishing: status === "none" ? emptyDyeing() : state.dyeingFinishing,
+      dyeingFinishings:
+        status === "none"
+          ? []
+          : status === "available" && state.dyeingFinishings.length === 0
+            ? [emptyDyeing()]
+            : state.dyeingFinishings,
     };
   }
 
@@ -342,6 +365,14 @@ export function validateCreateFabricDraft(state: FabricFormState): FieldErrors {
     errors.suppliers = "最多只能设置一家首选供应商";
   }
 
+  if (state.greigeStatus === "available" && state.greigeFabrics.length === 0) {
+    errors.greigeFabrics = "请至少添加一条坯布信息";
+  }
+
+  if (state.dyeingStatus === "available" && state.dyeingFinishings.length === 0) {
+    errors.dyeingFinishings = "请至少添加一条染整信息";
+  }
+
   if (state.postProcessStatus === "available" && state.postProcesses.length === 0) {
     errors.postProcesses = "请至少添加一条后工艺信息";
   }
@@ -382,32 +413,32 @@ export function buildCreateFabricPayload(state: FabricFormState) {
     usageOptionKeys: state.usageOptionKeys,
     seasonOptionKeys: state.seasonOptionKeys,
     certificationOptionKeys: state.certificationOptionKeys,
-    greige:
+    greigeFabrics:
       state.greigeStatus === "available"
-        ? {
-            supplierId: optional(state.greige.supplierId),
-            code: optional(state.greige.code),
-            name: optional(state.greige.name),
-            composition: optional(state.greige.composition),
-            weight: optional(state.greige.weight),
-            width: optional(state.greige.width),
-            yarnOrDensity: optional(state.greige.yarnOrDensity),
-            unitPrice: optionalNumber(state.greige.unitPrice),
-            lossRate: optional(state.greige.lossRate),
-            remarks: optional(state.greige.remarks),
-          }
-        : undefined,
-    dyeingFinishing:
+        ? state.greigeFabrics.map((greige) => ({
+            supplierId: optional(greige.supplierId),
+            code: optional(greige.code),
+            name: optional(greige.name),
+            composition: optional(greige.composition),
+            weight: optional(greige.weight),
+            width: optional(greige.width),
+            yarnOrDensity: optional(greige.yarnOrDensity),
+            unitPrice: optionalNumber(greige.unitPrice),
+            lossRate: optional(greige.lossRate),
+            remarks: optional(greige.remarks),
+          }))
+        : [],
+    dyeingFinishings:
       state.dyeingStatus === "available"
-        ? {
-            processType: optional(state.dyeingFinishing.processType),
-            factoryId: optional(state.dyeingFinishing.factoryId),
-            unitPrice: optionalNumber(state.dyeingFinishing.unitPrice),
-            lossRate: optional(state.dyeingFinishing.lossRate),
-            leadTime: optional(state.dyeingFinishing.leadTime),
-            cautions: optional(state.dyeingFinishing.cautions),
-          }
-        : undefined,
+        ? state.dyeingFinishings.map((dyeing) => ({
+            processType: optional(dyeing.processType),
+            factoryId: optional(dyeing.factoryId),
+            unitPrice: optionalNumber(dyeing.unitPrice),
+            lossRate: optional(dyeing.lossRate),
+            leadTime: optional(dyeing.leadTime),
+            cautions: optional(dyeing.cautions),
+          }))
+        : [],
     postProcesses:
       state.postProcessStatus === "available"
         ? state.postProcesses.map((process) => ({

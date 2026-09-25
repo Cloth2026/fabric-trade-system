@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, CheckCircle2, FilePenLine, LoaderCircle, NotebookTabs, Ribbon, RotateCw, Save, Sparkles, X } from "lucide-react";
+import { AlertCircle, CheckCircle2, FilePenLine, LoaderCircle, RotateCw, Save, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
   createSingleFlightSubmitter,
@@ -9,14 +9,15 @@ import {
   type ConfigOption,
   type FabricDetail,
 } from "@/lib/api/fabric-client";
-import { FormPanel, GlassChipGroup, GlassInput, GlassSelect, GlassTextarea, PanelTitle } from "@/components/form/glass-form-controls";
 import {
   buildEditFabricPayload,
   createEditFabricFormState,
+  fabricHasPurchaseQuotes,
   getEditFabricErrorMessage,
   validateEditFabricDraft,
 } from "./edit-fabric-state";
 import { FabricBasicFields } from "./fabric-basic-fields";
+import { FabricProcessFields } from "./fabric-process-fields";
 import type { FabricFormState, FieldErrors, FabricType } from "./create-fabric-state";
 
 const EDIT_CONFIG_GROUPS = [
@@ -27,6 +28,8 @@ const EDIT_CONFIG_GROUPS = [
   "fabric_structure",
   "elasticity_level",
   "repurchase_status",
+  "dyeing_process_type",
+  "post_process_type",
   "inspection_conclusion",
   "fabric_usage",
   "fabric_season",
@@ -88,8 +91,10 @@ export function EditFabricDrawer({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [isSubmitting, onClose]);
 
-  const options = (group: string) => optionsByGroup[group] ?? [];
   const pricingUnitLabel = state.fabricType === "knitted" ? "公斤" : "米";
+  // fabricType drives pricingUnit. Purchase quotes already snapshot a pricing
+  // unit, so the type is frozen as soon as the first quote exists.
+  const typeLocked = fabricHasPurchaseQuotes(fabric);
 
   const onFieldChange = (field: keyof FabricFormState, value: string | string[]) => {
     setState((current) => ({ ...current, [field]: value }));
@@ -102,6 +107,7 @@ export function EditFabricDrawer({
   };
 
   const onFabricTypeChange = (fabricType: FabricType) => {
+    if (typeLocked) return;
     setState((current) => {
       if (current.fabricType === fabricType) return current;
       return {
@@ -128,7 +134,7 @@ export function EditFabricDrawer({
     setFieldErrors({});
 
     try {
-      const updated = await submitFabric({ fabricId: fabric.id, payload: buildEditFabricPayload(state) });
+      const updated = await submitFabric({ fabricId: fabric.id, payload: buildEditFabricPayload(state, fabric.code) });
       setSuccessMessage(`已保存 ${updated.code} · ${updated.name}`);
       window.setTimeout(() => {
         onSaved(updated);
@@ -199,35 +205,25 @@ export function EditFabricDrawer({
           <div className={configStatus !== "ready" ? "pointer-events-none opacity-55" : ""}>
             <FabricBasicFields
               errors={fieldErrors}
-              lockIdentity={{ code: fabric.code, fabricType: state.fabricType, pricingUnitLabel }}
+              lockIdentity={
+                typeLocked
+                  ? { fabricType: state.fabricType, fabricTypeHint: "已有采购报价，不可修改" }
+                  : undefined
+              }
               onFabricTypeChange={onFabricTypeChange}
               onFieldChange={onFieldChange}
               optionsByGroup={optionsByGroup}
               state={state}
             />
 
-            <FormPanel icon={NotebookTabs} tone="amber" title="质量与备注" description="色牢度、起毛起球和检测结论用于档案检索与提醒。">
-              <GlassInput label="色牢度" value={state.colorFastness} onChange={(value) => onFieldChange("colorFastness", value)} placeholder="如 3-4级" />
-              <GlassInput label="起毛起球" value={state.pilling} onChange={(value) => onFieldChange("pilling", value)} placeholder="等级或备注" />
-              <GlassSelect label="检测结论" options={options("inspection_conclusion")} value={state.inspectionConclusion} onChange={(value) => onFieldChange("inspectionConclusion", value)} />
-              <GlassInput label="手感评价" value={state.handFeel} onChange={(value) => onFieldChange("handFeel", value)} placeholder="软、挺、糯、滑等" />
-              <GlassTextarea label="备注" value={state.remarks} onChange={(value) => onFieldChange("remarks", value)} placeholder="其他业务说明" />
-            </FormPanel>
-
-            <section className="mt-4 rounded-2xl border border-white/28 bg-white/18 p-4 shadow-inner shadow-white/12">
-              <PanelTitle icon={Ribbon} tone="rose" title="用途 / 季节 / 认证" description="用于检索和筛选，选项由配置中心统一维护。" />
-              <div className="mt-4 space-y-4">
-                <GlassChipGroup label="用途（多选）" options={options("fabric_usage")} selected={state.usageOptionKeys} onChange={(keys) => onFieldChange("usageOptionKeys", keys)} />
-                <GlassChipGroup label="适用季节（多选）" options={options("fabric_season")} selected={state.seasonOptionKeys} onChange={(keys) => onFieldChange("seasonOptionKeys", keys)} />
-                <GlassChipGroup label="认证标准（多选）" options={options("fabric_certification")} selected={state.certificationOptionKeys} onChange={(keys) => onFieldChange("certificationOptionKeys", keys)} />
-              </div>
-            </section>
+            <FabricProcessFields errors={fieldErrors} optionsByGroup={optionsByGroup} setState={setState} state={state} />
           </div>
         </div>
 
         <div className="flex shrink-0 flex-col gap-3 border-t border-white/24 bg-white/22 px-6 py-4 backdrop-blur-2xl sm:flex-row sm:items-center sm:justify-between">
           <div className="text-sm text-stone-600">
-            将修改面料主档的基础资料、规格、来源、价格、质量与标签。供应商货源、工艺明细、报价历史请使用对应模块维护。
+            可修改主档、坯布、染整、后工艺、质量与标签，工艺明细按当前填写内容整体保存。
+            {typeLocked ? " 该面料已有采购报价，面料类型不可修改。" : ""}
             <span className="ml-1 text-stone-500">计价单位：{pricingUnitLabel}</span>
           </div>
           <div className="flex gap-2">

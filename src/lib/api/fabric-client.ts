@@ -141,7 +141,7 @@ export type FabricDetail = Omit<FabricListItem, "supplierSourceCount" | "preferr
   handFeel: string | null;
   remarks: string | null;
   supplierSources: FabricSupplierSource[];
-  greige: (ProcessSupplierFields & {
+  greigeFabrics: Array<ProcessSupplierFields & {
     id: string;
     code: string | null;
     name: string | null;
@@ -154,8 +154,8 @@ export type FabricDetail = Omit<FabricListItem, "supplierSourceCount" | "preferr
     remarks: string | null;
     createdAt: string;
     updatedAt: string;
-  }) | null;
-  dyeingFinishing: (ProcessSupplierFields & {
+  }>;
+  dyeingFinishings: Array<ProcessSupplierFields & {
     id: string;
     processType: string | null;
     unitPrice: string | null;
@@ -164,7 +164,7 @@ export type FabricDetail = Omit<FabricListItem, "supplierSourceCount" | "preferr
     cautions: string | null;
     createdAt: string;
     updatedAt: string;
-  }) | null;
+  }>;
   postProcesses: Array<ProcessSupplierFields & {
     id: string;
     processType: string | null;
@@ -349,7 +349,43 @@ export async function postFabricSourceQuote(
   return result.data;
 }
 
+export type FabricGreigePayload = {
+  supplierId?: string | null;
+  code?: string | null;
+  name?: string | null;
+  composition?: string | null;
+  weight?: string | null;
+  width?: string | null;
+  yarnOrDensity?: string | null;
+  unitPrice?: number | null;
+  lossRate?: string | null;
+  remarks?: string | null;
+};
+
+export type FabricDyeingPayload = {
+  processType?: string | null;
+  factoryId?: string | null;
+  unitPrice?: number | null;
+  lossRate?: string | null;
+  leadTime?: string | null;
+  cautions?: string | null;
+};
+
+export type FabricPostProcessPayload = {
+  processType?: string | null;
+  factoryId?: string | null;
+  effectDescription?: string | null;
+  unitPrice?: number | null;
+  lossRate?: string | null;
+  minimumOrderQty?: string | null;
+  leadTime?: string | null;
+  riskNotes?: string | null;
+  remarks?: string | null;
+};
+
 export type FabricUpdatePayload = {
+  code?: string;
+  fabricType?: FabricType;
   englishName?: string | null;
   name?: string;
   developmentSource?: string;
@@ -377,6 +413,12 @@ export type FabricUpdatePayload = {
   inspectionConclusion?: string | null;
   handFeel?: string | null;
   remarks?: string | null;
+  greigeStatus?: "none" | "pending" | "available";
+  dyeingStatus?: "none" | "pending" | "available";
+  postProcessStatus?: "none" | "pending" | "available";
+  greigeFabrics?: FabricGreigePayload[];
+  dyeingFinishings?: FabricDyeingPayload[];
+  postProcesses?: FabricPostProcessPayload[];
 };
 
 export async function patchFabric(fabricId: string, payload: FabricUpdatePayload) {

@@ -23,8 +23,8 @@ function unique(values: string[]) {
 function collectSupplierIds(data: Awaited<ReturnType<typeof createFabricInputSchema.parse>>) {
   return unique(
     compact([
-      data.greige?.supplierId,
-      data.dyeingFinishing?.factoryId,
+      ...data.greigeFabrics.map((greige) => greige.supplierId),
+      ...data.dyeingFinishings.map((dyeing) => dyeing.factoryId),
       ...data.postProcesses.map((process) => process.factoryId),
       ...data.suppliers.map((supplier) => supplier.supplierId),
     ]),
@@ -45,8 +45,8 @@ function collectConfigChecks(data: Awaited<ReturnType<typeof createFabricInputSc
     { group: configGroups.repurchaseStatus, keys: compact([data.repurchaseStatus]), label: "repurchaseStatus" },
     {
       group: configGroups.dyeingProcessType,
-      keys: compact([data.dyeingFinishing?.processType]),
-      label: "dyeingFinishing.processType",
+      keys: data.dyeingFinishings.flatMap((dyeing) => compact([dyeing.processType])),
+      label: "dyeingFinishings.processType",
     },
     {
       group: configGroups.postProcessType,
@@ -172,34 +172,34 @@ export async function createFabric(input: unknown, options: CreateFabricOptions 
       },
     });
 
-    if (data.greige) {
+    for (const greige of data.greigeFabrics) {
       await tx.greigeFabric.create({
         data: {
           fabricId: fabric.id,
-          supplierId: data.greige.supplierId,
-          code: data.greige.code,
-          name: data.greige.name,
-          composition: data.greige.composition,
-          weight: data.greige.weight,
-          width: data.greige.width,
-          yarnOrDensity: data.greige.yarnOrDensity,
-          unitPrice: data.greige.unitPrice,
-          lossRate: data.greige.lossRate,
-          remarks: data.greige.remarks,
+          supplierId: greige.supplierId,
+          code: greige.code,
+          name: greige.name,
+          composition: greige.composition,
+          weight: greige.weight,
+          width: greige.width,
+          yarnOrDensity: greige.yarnOrDensity,
+          unitPrice: greige.unitPrice,
+          lossRate: greige.lossRate,
+          remarks: greige.remarks,
         },
       });
     }
 
-    if (data.dyeingFinishing) {
+    for (const dyeing of data.dyeingFinishings) {
       await tx.dyeingFinishing.create({
         data: {
           fabricId: fabric.id,
-          processType: data.dyeingFinishing.processType,
-          factoryId: data.dyeingFinishing.factoryId,
-          unitPrice: data.dyeingFinishing.unitPrice,
-          lossRate: data.dyeingFinishing.lossRate,
-          leadTime: data.dyeingFinishing.leadTime,
-          cautions: data.dyeingFinishing.cautions,
+          processType: dyeing.processType,
+          factoryId: dyeing.factoryId,
+          unitPrice: dyeing.unitPrice,
+          lossRate: dyeing.lossRate,
+          leadTime: dyeing.leadTime,
+          cautions: dyeing.cautions,
         },
       });
     }
@@ -283,8 +283,8 @@ export async function createFabric(input: unknown, options: CreateFabricOptions 
       where: { id: fabric.id },
       include: {
         supplierSources: { include: { quotes: true, supplier: true } },
-        greige: true,
-        dyeingFinishing: true,
+        greigeFabrics: true,
+        dyeingFinishings: true,
         postProcesses: true,
       },
     });

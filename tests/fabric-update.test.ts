@@ -12,6 +12,9 @@ const codePrefix = `SDD-UPD-${Date.now()}-`;
 
 let tenantId = "";
 let fabricId = "";
+let supplierId = "";
+let quotedFabricId = "";
+let freeFabricId = "";
 
 function basePayload(codeSuffix: string) {
   return {
@@ -43,6 +46,8 @@ async function cleanup() {
     await prisma.operationLog.deleteMany({ where: { tenantId, targetId: { in: fabricIds } } });
     await prisma.fabric.deleteMany({ where: { id: { in: fabricIds } } });
   }
+
+  await prisma.supplier.deleteMany({ where: { tenantId, name: { startsWith: "UPD-SUP-" } } });
 }
 
 before(async () => {
@@ -50,8 +55,28 @@ before(async () => {
   tenantId = tenant.id;
   await cleanup();
 
+  const supplier = await prisma.supplier.create({
+    data: {
+      tenantId,
+      name: `UPD-SUP-${Date.now()}`,
+      roles: ["fabric_supplier"],
+      status: "active",
+    },
+    select: { id: true },
+  });
+  supplierId = supplier.id;
+
   const fabric = await createFabric(basePayload("MAIN"));
   fabricId = fabric.id;
+
+  const quoted = await createFabric({
+    ...basePayload("QUOTED"),
+    suppliers: [{ supplierId, initialQuote: { purchasePrice: "10" } }],
+  });
+  quotedFabricId = quoted.id;
+
+  const free = await createFabric(basePayload("FREE"));
+  freeFabricId = free.id;
 });
 
 after(async () => {
@@ -92,7 +117,7 @@ describe("updateFabric", () => {
 
   test("unknown payload field is rejected", async () => {
     await assert.rejects(
-      () => updateFabric(fabricId, { code: "SDD-HACK", name: "x" }),
+      () => updateFabric(fabricId, { pricingUnit: "kg", name: "x" }),
       /Invalid fabric update payload/,
     );
   });
@@ -146,17 +171,109 @@ describe("updateFabric", () => {
     await assert.rejects(() => updateFabric("missing-fabric-id", { name: "x" }), /not found/i);
   });
 
+  test("fabric code can be changed and stays unique per tenant", async () => {
+    const renamed = await updateFabric(fabricId, { code: `${codePrefix}RENAMED` });
+    assert.equal(renamed.code, `${codePrefix}RENAMED`);
+
+    await assert.rejects(
+      () => updateFabric(fabricId, { code: `${codePrefix}FREE` }),
+      /Fabric code already exists/,
+    );
+
+    await updateFabric(fabricId, { code: `${codePrefix}MAIN` });
+  });
+
+  test("fabric code must keep the SDD- prefix", async () => {
+    await assert.rejects(
+      () => updateFabric(fabricId, { code: "NO-PREFIX" }),
+      /Invalid fabric update payload/,
+    );
+  });
+
+  test("fabricType is editable while no purchase quote exists", async () => {
+    const before = await prisma.fabric.findUniqueOrThrow({
+      where: { id: freeFabricId },
+      select: { fabricType: true, pricingUnit: true },
+    });
+    assert.equal(before.pricingUnit, "meter");
+
+    const detail = await updateFabric(freeFabricId, { fabricType: "knitted" });
+    assert.equal(detail.fabricType, "knitted");
+    assert.equal(detail.pricingUnit, "kg");
+
+    const row = await prisma.fabric.findUniqueOrThrow({
+      where: { id: freeFabricId },
+      select: { fabricType: true, pricingUnit: true },
+    });
+    assert.equal(row.fabricType, "knitted");
+    assert.equal(row.pricingUnit, "kg");
+  });
+
+  test("fabricType is frozen once a purchase quote exists", async () => {
+    await assert.rejects(
+      () => updateFabric(quotedFabricId, { fabricType: "knitted" }),
+      /面料已存在采购报价/,
+    );
+  });
+
+  test("multiple greige, dyeing and post-process rows are saved and replaced", async () => {
+    const detail = await updateFabric(freeFabricId, {
+      greigeStatus: "available",
+      dyeingStatus: "available",
+      postProcessStatus: "available",
+      greigeFabrics: [
+        { code: "G-1", name: "坯布一", unitPrice: 12.5 },
+        { code: "G-2", name: "坯布二", unitPrice: 13.5 },
+      ],
+      dyeingFinishings: [
+        { processType: "dyeing", unitPrice: 4.2 },
+        { processType: "heat_setting", unitPrice: 1.8 },
+      ],
+      postProcesses: [{ processType: "embossing", unitPrice: 1.5 }],
+    });
+
+    assert.equal(detail.greigeFabrics.length, 2);
+    assert.deepEqual(detail.greigeFabrics.map((greige) => greige.code), ["G-1", "G-2"]);
+    assert.equal(detail.greigeFabrics[0].unitPrice, "12.5");
+    assert.equal(detail.dyeingFinishings.length, 2);
+    assert.deepEqual(detail.dyeingFinishings.map((dyeing) => dyeing.processType), [
+      "dyeing",
+      "heat_setting",
+    ]);
+    assert.equal(detail.postProcesses.length, 1);
+
+    const shrunk = await updateFabric(freeFabricId, {
+      greigeFabrics: [{ code: "G-3", name: "坯布三" }],
+      dyeingFinishings: [],
+      dyeingStatus: "none",
+    });
+    assert.equal(shrunk.greigeFabrics.length, 1);
+    assert.equal(shrunk.greigeFabrics[0].code, "G-3");
+    assert.equal(shrunk.dyeingFinishings.length, 0);
+    assert.equal(shrunk.dyeingStatus, "none");
+  });
+
+  test("process status must match the submitted details", async () => {
+    // Rows are on file from the previous test, so flipping the status to "none"
+    // without clearing them must be rejected.
+    await assert.rejects(() => updateFabric(freeFabricId, { greigeStatus: "none" }), /坯布信息/);
+
+    await assert.rejects(
+      () => updateFabric(freeFabricId, { dyeingStatus: "available" }),
+      /染整信息/,
+    );
+  });
+
   test("update is logged in operation log", async () => {
     const logs = await prisma.operationLog.findMany({
       where: { tenantId, targetType: "Fabric", targetId: fabricId, action: "update" },
-      orderBy: { createdAt: "desc" },
-      take: 1,
+      orderBy: { createdAt: "asc" },
       select: { detail: true },
     });
 
     assert.ok(logs.length > 0);
-    const detail = logs[0].detail as { updatedFields?: string[] };
-    assert.ok(Array.isArray(detail.updatedFields));
-    assert.ok(detail.updatedFields!.includes("warpWeftDensity"));
+    const fields = logs.flatMap((log) => (log.detail as { updatedFields?: string[] }).updatedFields ?? []);
+    assert.ok(fields.includes("warpWeftDensity"));
+    assert.ok(fields.includes("code"));
   });
 });

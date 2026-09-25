@@ -4,6 +4,7 @@ import {
   addSupplierToDraft,
   buildCreateFabricPayload,
   changeProcessStatus,
+  createGreigeDraft,
   createInitialFabricFormState,
   getPricingUnit,
   getPricingUnitLabel,
@@ -93,10 +94,10 @@ describe("create fabric form state", () => {
   test("switching a process to none clears its hidden details", () => {
     let state = validDraft();
     state.greigeStatus = "available";
-    state.greige.name = "测试坯布";
+    state.greigeFabrics = [{ ...createGreigeDraft("greige-a"), name: "测试坯布" }];
     state = changeProcessStatus(state, "greige", "none");
-    assert.equal(state.greige.name, "");
-    assert.equal(buildCreateFabricPayload(state).greige, undefined);
+    assert.equal(state.greigeFabrics.length, 0);
+    assert.deepEqual(buildCreateFabricPayload(state).greigeFabrics, []);
 
     state.postProcessStatus = "available";
     state.postProcesses = [{

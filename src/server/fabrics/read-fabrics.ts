@@ -291,7 +291,8 @@ export async function getFabricDetail(id: string) {
           },
         },
       },
-      greige: {
+      greigeFabrics: {
+        orderBy: [{ createdAt: "asc" }, { id: "asc" }],
         select: {
           id: true,
           supplierId: true,
@@ -309,7 +310,8 @@ export async function getFabricDetail(id: string) {
           updatedAt: true,
         },
       },
-      dyeingFinishing: {
+      dyeingFinishings: {
+        orderBy: [{ createdAt: "asc" }, { id: "asc" }],
         select: {
           id: true,
           processType: true,
@@ -358,22 +360,18 @@ export async function getFabricDetail(id: string) {
       updatedAt: source.updatedAt.toISOString(),
       quotes: source.quotes.map(serializeQuote),
     })),
-    greige: fabric.greige
-      ? {
-          ...fabric.greige,
-          unitPrice: serializeDecimal(fabric.greige.unitPrice),
-          createdAt: fabric.greige.createdAt.toISOString(),
-          updatedAt: fabric.greige.updatedAt.toISOString(),
-        }
-      : null,
-    dyeingFinishing: fabric.dyeingFinishing
-      ? {
-          ...fabric.dyeingFinishing,
-          unitPrice: serializeDecimal(fabric.dyeingFinishing.unitPrice),
-          createdAt: fabric.dyeingFinishing.createdAt.toISOString(),
-          updatedAt: fabric.dyeingFinishing.updatedAt.toISOString(),
-        }
-      : null,
+    greigeFabrics: fabric.greigeFabrics.map((greige) => ({
+      ...greige,
+      unitPrice: serializeDecimal(greige.unitPrice),
+      createdAt: greige.createdAt.toISOString(),
+      updatedAt: greige.updatedAt.toISOString(),
+    })),
+    dyeingFinishings: fabric.dyeingFinishings.map((dyeing) => ({
+      ...dyeing,
+      unitPrice: serializeDecimal(dyeing.unitPrice),
+      createdAt: dyeing.createdAt.toISOString(),
+      updatedAt: dyeing.updatedAt.toISOString(),
+    })),
     postProcesses: fabric.postProcesses.map((process) => ({
       ...process,
       unitPrice: serializeDecimal(process.unitPrice),

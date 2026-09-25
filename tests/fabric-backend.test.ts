@@ -150,10 +150,10 @@ describe("create fabric schema", () => {
 
   test("process status rejects conflicting greige, dyeing, and post-process details", () => {
     const cases: Array<{ payload: CreateFabricInput; path: string }> = [
-      { payload: { ...basePayload("GREIGE-NONE"), greige: {} }, path: "greige" },
-      { payload: { ...basePayload("GREIGE-AVAILABLE"), greigeStatus: "available" }, path: "greige" },
-      { payload: { ...basePayload("DYE-NONE"), dyeingFinishing: {} }, path: "dyeingFinishing" },
-      { payload: { ...basePayload("DYE-AVAILABLE"), dyeingStatus: "available" }, path: "dyeingFinishing" },
+      { payload: { ...basePayload("GREIGE-NONE"), greigeFabrics: [{}] }, path: "greigeFabrics" },
+      { payload: { ...basePayload("GREIGE-AVAILABLE"), greigeStatus: "available" }, path: "greigeFabrics" },
+      { payload: { ...basePayload("DYE-NONE"), dyeingFinishings: [{}] }, path: "dyeingFinishings" },
+      { payload: { ...basePayload("DYE-AVAILABLE"), dyeingStatus: "available" }, path: "dyeingFinishings" },
       { payload: { ...basePayload("POST-NONE"), postProcesses: [{}] }, path: "postProcesses" },
       { payload: { ...basePayload("POST-AVAILABLE"), postProcessStatus: "available" }, path: "postProcesses" },
     ];

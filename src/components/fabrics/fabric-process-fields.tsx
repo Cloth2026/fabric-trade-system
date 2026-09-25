@@ -14,7 +14,13 @@ import {
   SegmentedControl,
 } from "@/components/form/glass-form-controls";
 import type { FabricFormState, FieldErrors, ProcessStatus } from "./create-fabric-state";
-import { changeProcessStatus, createPostProcessDraft, getPricingUnitLabel } from "./create-fabric-state";
+import {
+  changeProcessStatus,
+  createDyeingDraft,
+  createGreigeDraft,
+  createPostProcessDraft,
+  getPricingUnitLabel,
+} from "./create-fabric-state";
 import { SupplierPicker } from "./fabric-supplier-fields";
 
 function ProcessPanel({
@@ -70,10 +76,16 @@ export function FabricProcessFields({
 }) {
   const options = (group: string) => optionsByGroup[group] ?? [];
   const unitLabel = getPricingUnitLabel(state.fabricType);
-  const setGreige = (field: keyof FabricFormState["greige"], value: string) =>
-    setState((current) => ({ ...current, greige: { ...current.greige, [field]: value } }));
-  const setDyeing = (field: keyof FabricFormState["dyeingFinishing"], value: string) =>
-    setState((current) => ({ ...current, dyeingFinishing: { ...current.dyeingFinishing, [field]: value } }));
+  const setGreige = (id: string, field: keyof FabricFormState["greigeFabrics"][number], value: string) =>
+    setState((current) => ({
+      ...current,
+      greigeFabrics: current.greigeFabrics.map((greige) => (greige.id === id ? { ...greige, [field]: value } : greige)),
+    }));
+  const setDyeing = (id: string, field: keyof FabricFormState["dyeingFinishings"][number], value: string) =>
+    setState((current) => ({
+      ...current,
+      dyeingFinishings: current.dyeingFinishings.map((dyeing) => (dyeing.id === id ? { ...dyeing, [field]: value } : dyeing)),
+    }));
   const setPostProcess = (id: string, field: keyof FabricFormState["postProcesses"][number], value: string) =>
     setState((current) => ({
       ...current,
@@ -90,29 +102,59 @@ export function FabricProcessFields({
         onStatusChange={(status) => setState((current) => changeProcessStatus(current, "greige", status))}
         error={errors.greige}
       >
-        <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-          <GlassInput label="坯布编号" value={state.greige.code} onChange={(value) => setGreige("code", value)} placeholder="坯布内部编号" />
-          <GlassInput label="坯布名称" value={state.greige.name} onChange={(value) => setGreige("name", value)} placeholder="坯布名称" />
-          <SupplierPicker
-            label="坯布供应商"
-            placeholder="搜索织厂 / 坯布供应商"
-            selectedName={state.greige.supplierName}
-            onSelect={(supplier) => {
-              setGreige("supplierId", supplier.id);
-              setGreige("supplierName", supplier.name);
-            }}
-            onClear={() => {
-              setGreige("supplierId", "");
-              setGreige("supplierName", "");
-            }}
-          />
-          <GlassInput label="坯布成分" value={state.greige.composition} onChange={(value) => setGreige("composition", value)} placeholder="可与成品不同" />
-          <GlassInput label="坯布克重" value={state.greige.weight} onChange={(value) => setGreige("weight", value)} placeholder="如 170g" />
-          <GlassInput label="坯布门幅" value={state.greige.width} onChange={(value) => setGreige("width", value)} placeholder="如 175cm" />
-          <GlassInput label="纱支 / 经纬密" value={state.greige.yarnOrDensity} onChange={(value) => setGreige("yarnOrDensity", value)} />
-          <GlassInput label="坯布单价" type="number" value={state.greige.unitPrice} onChange={(value) => setGreige("unitPrice", value)} placeholder={`¥ / ${unitLabel}`} />
-          <GlassInput label="坯布损耗率" value={state.greige.lossRate} onChange={(value) => setGreige("lossRate", value)} placeholder="如 3%" />
-          <GlassTextarea label="坯布备注" value={state.greige.remarks} onChange={(value) => setGreige("remarks", value)} />
+        <div className="mt-4 space-y-3">
+          {state.greigeFabrics.map((greige, index) => (
+            <div className="rounded-2xl border border-white/30 bg-white/20 p-3" key={greige.id}>
+              <div className="mb-3 flex items-center justify-between">
+                <span className="text-sm font-medium text-stone-800">坯布 #{index + 1}</span>
+                <button
+                  aria-label="移除坯布"
+                  className="flex size-8 items-center justify-center rounded-xl border border-rose-200/50 bg-rose-50/30 text-rose-700 transition hover:bg-rose-100/60"
+                  onClick={() =>
+                    setState((current) => ({
+                      ...current,
+                      greigeFabrics: current.greigeFabrics.filter((item) => item.id !== greige.id),
+                    }))
+                  }
+                  type="button"
+                >
+                  <Trash2 className="size-4" />
+                </button>
+              </div>
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                <GlassInput label="坯布编号" value={greige.code} onChange={(value) => setGreige(greige.id, "code", value)} placeholder="坯布内部编号" />
+                <GlassInput label="坯布名称" value={greige.name} onChange={(value) => setGreige(greige.id, "name", value)} placeholder="坯布名称" />
+                <SupplierPicker
+                  label="坯布供应商"
+                  placeholder="搜索织厂 / 坯布供应商"
+                  selectedName={greige.supplierName}
+                  onSelect={(supplier) => {
+                    setGreige(greige.id, "supplierId", supplier.id);
+                    setGreige(greige.id, "supplierName", supplier.name);
+                  }}
+                  onClear={() => {
+                    setGreige(greige.id, "supplierId", "");
+                    setGreige(greige.id, "supplierName", "");
+                  }}
+                />
+                <GlassInput label="坯布成分" value={greige.composition} onChange={(value) => setGreige(greige.id, "composition", value)} placeholder="可与成品不同" />
+                <GlassInput label="坯布克重" value={greige.weight} onChange={(value) => setGreige(greige.id, "weight", value)} placeholder="如 170g" />
+                <GlassInput label="坯布门幅" value={greige.width} onChange={(value) => setGreige(greige.id, "width", value)} placeholder="如 175cm" />
+                <GlassInput label="纱支 / 经纬密" value={greige.yarnOrDensity} onChange={(value) => setGreige(greige.id, "yarnOrDensity", value)} />
+                <GlassInput label="坯布单价" type="number" value={greige.unitPrice} onChange={(value) => setGreige(greige.id, "unitPrice", value)} placeholder={`¥ / ${unitLabel}`} />
+                <GlassInput label="坯布损耗率" value={greige.lossRate} onChange={(value) => setGreige(greige.id, "lossRate", value)} placeholder="如 3%" />
+                <GlassTextarea label="坯布备注" value={greige.remarks} onChange={(value) => setGreige(greige.id, "remarks", value)} />
+              </div>
+            </div>
+          ))}
+          <button
+            className="flex h-10 items-center gap-2 rounded-xl border border-white/30 bg-white/24 px-4 text-sm text-stone-700 transition hover:bg-white/42"
+            onClick={() => setState((current) => ({ ...current, greigeFabrics: [...current.greigeFabrics, createGreigeDraft()] }))}
+            type="button"
+          >
+            <Plus className="size-4" />
+            增加坯布
+          </button>
         </div>
       </ProcessPanel>
 
@@ -124,25 +166,55 @@ export function FabricProcessFields({
         onStatusChange={(status) => setState((current) => changeProcessStatus(current, "dyeing", status))}
         error={errors.dyeingFinishing}
       >
-        <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-          <GlassSelect label="染整类型" options={options("dyeing_process_type")} value={state.dyeingFinishing.processType} onChange={(value) => setDyeing("processType", value)} />
-          <SupplierPicker
-            label="染整厂"
-            placeholder="搜索染厂 / 印花厂"
-            selectedName={state.dyeingFinishing.factoryName}
-            onSelect={(supplier) => {
-              setDyeing("factoryId", supplier.id);
-              setDyeing("factoryName", supplier.name);
-            }}
-            onClear={() => {
-              setDyeing("factoryId", "");
-              setDyeing("factoryName", "");
-            }}
-          />
-          <GlassInput label="染整单价" type="number" value={state.dyeingFinishing.unitPrice} onChange={(value) => setDyeing("unitPrice", value)} placeholder={`¥ / ${unitLabel}`} />
-          <GlassInput label="损耗率" value={state.dyeingFinishing.lossRate} onChange={(value) => setDyeing("lossRate", value)} placeholder="如 5%" />
-          <GlassInput label="交期" value={state.dyeingFinishing.leadTime} onChange={(value) => setDyeing("leadTime", value)} placeholder="如 7天" />
-          <GlassInput label="注意事项" value={state.dyeingFinishing.cautions} onChange={(value) => setDyeing("cautions", value)} placeholder="色差、手感、批次稳定性等" />
+        <div className="mt-4 space-y-3">
+          {state.dyeingFinishings.map((dyeing, index) => (
+            <div className="rounded-2xl border border-white/30 bg-white/20 p-3" key={dyeing.id}>
+              <div className="mb-3 flex items-center justify-between">
+                <span className="text-sm font-medium text-stone-800">染整 #{index + 1}</span>
+                <button
+                  aria-label="移除染整"
+                  className="flex size-8 items-center justify-center rounded-xl border border-rose-200/50 bg-rose-50/30 text-rose-700 transition hover:bg-rose-100/60"
+                  onClick={() =>
+                    setState((current) => ({
+                      ...current,
+                      dyeingFinishings: current.dyeingFinishings.filter((item) => item.id !== dyeing.id),
+                    }))
+                  }
+                  type="button"
+                >
+                  <Trash2 className="size-4" />
+                </button>
+              </div>
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                <GlassSelect label="染整类型" options={options("dyeing_process_type")} value={dyeing.processType} onChange={(value) => setDyeing(dyeing.id, "processType", value)} />
+                <SupplierPicker
+                  label="染整厂"
+                  placeholder="搜索染厂 / 印花厂"
+                  selectedName={dyeing.factoryName}
+                  onSelect={(supplier) => {
+                    setDyeing(dyeing.id, "factoryId", supplier.id);
+                    setDyeing(dyeing.id, "factoryName", supplier.name);
+                  }}
+                  onClear={() => {
+                    setDyeing(dyeing.id, "factoryId", "");
+                    setDyeing(dyeing.id, "factoryName", "");
+                  }}
+                />
+                <GlassInput label="染整单价" type="number" value={dyeing.unitPrice} onChange={(value) => setDyeing(dyeing.id, "unitPrice", value)} placeholder={`¥ / ${unitLabel}`} />
+                <GlassInput label="损耗率" value={dyeing.lossRate} onChange={(value) => setDyeing(dyeing.id, "lossRate", value)} placeholder="如 5%" />
+                <GlassInput label="交期" value={dyeing.leadTime} onChange={(value) => setDyeing(dyeing.id, "leadTime", value)} placeholder="如 7天" />
+                <GlassInput label="注意事项" value={dyeing.cautions} onChange={(value) => setDyeing(dyeing.id, "cautions", value)} placeholder="色差、手感、批次稳定性等" />
+              </div>
+            </div>
+          ))}
+          <button
+            className="flex h-10 items-center gap-2 rounded-xl border border-white/30 bg-white/24 px-4 text-sm text-stone-700 transition hover:bg-white/42"
+            onClick={() => setState((current) => ({ ...current, dyeingFinishings: [...current.dyeingFinishings, createDyeingDraft()] }))}
+            type="button"
+          >
+            <Plus className="size-4" />
+            增加染整
+          </button>
         </div>
       </ProcessPanel>
 
