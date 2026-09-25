@@ -27,11 +27,15 @@ export type AggregateGreigeFabric = {
 }
 
 export type GreigeFabricAvgAggregateOutputType = {
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
 }
 
 export type GreigeFabricSumAggregateOutputType = {
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
 }
 
 export type GreigeFabricMinAggregateOutputType = {
@@ -44,7 +48,9 @@ export type GreigeFabricMinAggregateOutputType = {
   weight: string | null
   width: string | null
   yarnOrDensity: string | null
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
   lossRate: string | null
   remarks: string | null
   createdAt: Date | null
@@ -61,7 +67,9 @@ export type GreigeFabricMaxAggregateOutputType = {
   weight: string | null
   width: string | null
   yarnOrDensity: string | null
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
   lossRate: string | null
   remarks: string | null
   createdAt: Date | null
@@ -78,7 +86,9 @@ export type GreigeFabricCountAggregateOutputType = {
   weight: number
   width: number
   yarnOrDensity: number
-  unitPrice: number
+  unitPriceExclTax: number
+  unitPriceInclTax: number
+  taxRate: number
   lossRate: number
   remarks: number
   createdAt: number
@@ -88,11 +98,15 @@ export type GreigeFabricCountAggregateOutputType = {
 
 
 export type GreigeFabricAvgAggregateInputType = {
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
 }
 
 export type GreigeFabricSumAggregateInputType = {
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
 }
 
 export type GreigeFabricMinAggregateInputType = {
@@ -105,7 +119,9 @@ export type GreigeFabricMinAggregateInputType = {
   weight?: true
   width?: true
   yarnOrDensity?: true
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
   lossRate?: true
   remarks?: true
   createdAt?: true
@@ -122,7 +138,9 @@ export type GreigeFabricMaxAggregateInputType = {
   weight?: true
   width?: true
   yarnOrDensity?: true
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
   lossRate?: true
   remarks?: true
   createdAt?: true
@@ -139,7 +157,9 @@ export type GreigeFabricCountAggregateInputType = {
   weight?: true
   width?: true
   yarnOrDensity?: true
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
   lossRate?: true
   remarks?: true
   createdAt?: true
@@ -243,7 +263,9 @@ export type GreigeFabricGroupByOutputType = {
   weight: string | null
   width: string | null
   yarnOrDensity: string | null
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
   lossRate: string | null
   remarks: string | null
   createdAt: Date
@@ -283,7 +305,9 @@ export type GreigeFabricWhereInput = {
   weight?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
   width?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
   yarnOrDensity?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
-  unitPrice?: Prisma.DecimalNullableFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.DecimalNullableFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.DecimalNullableFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.DecimalNullableFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
   remarks?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
   createdAt?: Prisma.DateTimeFilter<"GreigeFabric"> | Date | string
@@ -302,7 +326,9 @@ export type GreigeFabricOrderByWithRelationInput = {
   weight?: Prisma.SortOrderInput | Prisma.SortOrder
   width?: Prisma.SortOrderInput | Prisma.SortOrder
   yarnOrDensity?: Prisma.SortOrderInput | Prisma.SortOrder
-  unitPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxRate?: Prisma.SortOrderInput | Prisma.SortOrder
   lossRate?: Prisma.SortOrderInput | Prisma.SortOrder
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -324,7 +350,9 @@ export type GreigeFabricWhereUniqueInput = Prisma.AtLeast<{
   weight?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
   width?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
   yarnOrDensity?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
-  unitPrice?: Prisma.DecimalNullableFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.DecimalNullableFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.DecimalNullableFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.DecimalNullableFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
   remarks?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
   createdAt?: Prisma.DateTimeFilter<"GreigeFabric"> | Date | string
@@ -343,7 +371,9 @@ export type GreigeFabricOrderByWithAggregationInput = {
   weight?: Prisma.SortOrderInput | Prisma.SortOrder
   width?: Prisma.SortOrderInput | Prisma.SortOrder
   yarnOrDensity?: Prisma.SortOrderInput | Prisma.SortOrder
-  unitPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxRate?: Prisma.SortOrderInput | Prisma.SortOrder
   lossRate?: Prisma.SortOrderInput | Prisma.SortOrder
   remarks?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -368,7 +398,9 @@ export type GreigeFabricScalarWhereWithAggregatesInput = {
   weight?: Prisma.StringNullableWithAggregatesFilter<"GreigeFabric"> | string | null
   width?: Prisma.StringNullableWithAggregatesFilter<"GreigeFabric"> | string | null
   yarnOrDensity?: Prisma.StringNullableWithAggregatesFilter<"GreigeFabric"> | string | null
-  unitPrice?: Prisma.DecimalNullableWithAggregatesFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.DecimalNullableWithAggregatesFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.DecimalNullableWithAggregatesFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.DecimalNullableWithAggregatesFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.StringNullableWithAggregatesFilter<"GreigeFabric"> | string | null
   remarks?: Prisma.StringNullableWithAggregatesFilter<"GreigeFabric"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"GreigeFabric"> | Date | string
@@ -383,7 +415,9 @@ export type GreigeFabricCreateInput = {
   weight?: string | null
   width?: string | null
   yarnOrDensity?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   remarks?: string | null
   createdAt?: Date | string
@@ -402,7 +436,9 @@ export type GreigeFabricUncheckedCreateInput = {
   weight?: string | null
   width?: string | null
   yarnOrDensity?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   remarks?: string | null
   createdAt?: Date | string
@@ -417,7 +453,9 @@ export type GreigeFabricUpdateInput = {
   weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -436,7 +474,9 @@ export type GreigeFabricUncheckedUpdateInput = {
   weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -453,7 +493,9 @@ export type GreigeFabricCreateManyInput = {
   weight?: string | null
   width?: string | null
   yarnOrDensity?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   remarks?: string | null
   createdAt?: Date | string
@@ -468,7 +510,9 @@ export type GreigeFabricUpdateManyMutationInput = {
   weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -485,7 +529,9 @@ export type GreigeFabricUncheckedUpdateManyInput = {
   weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -512,7 +558,9 @@ export type GreigeFabricCountOrderByAggregateInput = {
   weight?: Prisma.SortOrder
   width?: Prisma.SortOrder
   yarnOrDensity?: Prisma.SortOrder
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
   lossRate?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -520,7 +568,9 @@ export type GreigeFabricCountOrderByAggregateInput = {
 }
 
 export type GreigeFabricAvgOrderByAggregateInput = {
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
 }
 
 export type GreigeFabricMaxOrderByAggregateInput = {
@@ -533,7 +583,9 @@ export type GreigeFabricMaxOrderByAggregateInput = {
   weight?: Prisma.SortOrder
   width?: Prisma.SortOrder
   yarnOrDensity?: Prisma.SortOrder
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
   lossRate?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -550,7 +602,9 @@ export type GreigeFabricMinOrderByAggregateInput = {
   weight?: Prisma.SortOrder
   width?: Prisma.SortOrder
   yarnOrDensity?: Prisma.SortOrder
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
   lossRate?: Prisma.SortOrder
   remarks?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -558,7 +612,9 @@ export type GreigeFabricMinOrderByAggregateInput = {
 }
 
 export type GreigeFabricSumOrderByAggregateInput = {
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
 }
 
 export type GreigeFabricCreateNestedManyWithoutSupplierInput = {
@@ -653,7 +709,9 @@ export type GreigeFabricCreateWithoutSupplierInput = {
   weight?: string | null
   width?: string | null
   yarnOrDensity?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   remarks?: string | null
   createdAt?: Date | string
@@ -670,7 +728,9 @@ export type GreigeFabricUncheckedCreateWithoutSupplierInput = {
   weight?: string | null
   width?: string | null
   yarnOrDensity?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   remarks?: string | null
   createdAt?: Date | string
@@ -716,7 +776,9 @@ export type GreigeFabricScalarWhereInput = {
   weight?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
   width?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
   yarnOrDensity?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
-  unitPrice?: Prisma.DecimalNullableFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.DecimalNullableFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.DecimalNullableFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.DecimalNullableFilter<"GreigeFabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
   remarks?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
   createdAt?: Prisma.DateTimeFilter<"GreigeFabric"> | Date | string
@@ -731,7 +793,9 @@ export type GreigeFabricCreateWithoutFabricInput = {
   weight?: string | null
   width?: string | null
   yarnOrDensity?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   remarks?: string | null
   createdAt?: Date | string
@@ -748,7 +812,9 @@ export type GreigeFabricUncheckedCreateWithoutFabricInput = {
   weight?: string | null
   width?: string | null
   yarnOrDensity?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   remarks?: string | null
   createdAt?: Date | string
@@ -790,7 +856,9 @@ export type GreigeFabricCreateManySupplierInput = {
   weight?: string | null
   width?: string | null
   yarnOrDensity?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   remarks?: string | null
   createdAt?: Date | string
@@ -805,7 +873,9 @@ export type GreigeFabricUpdateWithoutSupplierInput = {
   weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -822,7 +892,9 @@ export type GreigeFabricUncheckedUpdateWithoutSupplierInput = {
   weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -838,7 +910,9 @@ export type GreigeFabricUncheckedUpdateManyWithoutSupplierInput = {
   weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -854,7 +928,9 @@ export type GreigeFabricCreateManyFabricInput = {
   weight?: string | null
   width?: string | null
   yarnOrDensity?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   remarks?: string | null
   createdAt?: Date | string
@@ -869,7 +945,9 @@ export type GreigeFabricUpdateWithoutFabricInput = {
   weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -886,7 +964,9 @@ export type GreigeFabricUncheckedUpdateWithoutFabricInput = {
   weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -902,7 +982,9 @@ export type GreigeFabricUncheckedUpdateManyWithoutFabricInput = {
   weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -921,7 +1003,9 @@ export type GreigeFabricSelect<ExtArgs extends runtime.Types.Extensions.Internal
   weight?: boolean
   width?: boolean
   yarnOrDensity?: boolean
-  unitPrice?: boolean
+  unitPriceExclTax?: boolean
+  unitPriceInclTax?: boolean
+  taxRate?: boolean
   lossRate?: boolean
   remarks?: boolean
   createdAt?: boolean
@@ -940,7 +1024,9 @@ export type GreigeFabricSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   weight?: boolean
   width?: boolean
   yarnOrDensity?: boolean
-  unitPrice?: boolean
+  unitPriceExclTax?: boolean
+  unitPriceInclTax?: boolean
+  taxRate?: boolean
   lossRate?: boolean
   remarks?: boolean
   createdAt?: boolean
@@ -959,7 +1045,9 @@ export type GreigeFabricSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   weight?: boolean
   width?: boolean
   yarnOrDensity?: boolean
-  unitPrice?: boolean
+  unitPriceExclTax?: boolean
+  unitPriceInclTax?: boolean
+  taxRate?: boolean
   lossRate?: boolean
   remarks?: boolean
   createdAt?: boolean
@@ -978,14 +1066,16 @@ export type GreigeFabricSelectScalar = {
   weight?: boolean
   width?: boolean
   yarnOrDensity?: boolean
-  unitPrice?: boolean
+  unitPriceExclTax?: boolean
+  unitPriceInclTax?: boolean
+  taxRate?: boolean
   lossRate?: boolean
   remarks?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type GreigeFabricOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fabricId" | "supplierId" | "code" | "name" | "composition" | "weight" | "width" | "yarnOrDensity" | "unitPrice" | "lossRate" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["greigeFabric"]>
+export type GreigeFabricOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fabricId" | "supplierId" | "code" | "name" | "composition" | "weight" | "width" | "yarnOrDensity" | "unitPriceExclTax" | "unitPriceInclTax" | "taxRate" | "lossRate" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["greigeFabric"]>
 export type GreigeFabricInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fabric?: boolean | Prisma.FabricDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.GreigeFabric$supplierArgs<ExtArgs>
@@ -1015,7 +1105,9 @@ export type $GreigeFabricPayload<ExtArgs extends runtime.Types.Extensions.Intern
     weight: string | null
     width: string | null
     yarnOrDensity: string | null
-    unitPrice: runtime.Decimal | null
+    unitPriceExclTax: runtime.Decimal | null
+    unitPriceInclTax: runtime.Decimal | null
+    taxRate: runtime.Decimal | null
     lossRate: string | null
     remarks: string | null
     createdAt: Date
@@ -1454,7 +1546,9 @@ export interface GreigeFabricFieldRefs {
   readonly weight: Prisma.FieldRef<"GreigeFabric", 'String'>
   readonly width: Prisma.FieldRef<"GreigeFabric", 'String'>
   readonly yarnOrDensity: Prisma.FieldRef<"GreigeFabric", 'String'>
-  readonly unitPrice: Prisma.FieldRef<"GreigeFabric", 'Decimal'>
+  readonly unitPriceExclTax: Prisma.FieldRef<"GreigeFabric", 'Decimal'>
+  readonly unitPriceInclTax: Prisma.FieldRef<"GreigeFabric", 'Decimal'>
+  readonly taxRate: Prisma.FieldRef<"GreigeFabric", 'Decimal'>
   readonly lossRate: Prisma.FieldRef<"GreigeFabric", 'String'>
   readonly remarks: Prisma.FieldRef<"GreigeFabric", 'String'>
   readonly createdAt: Prisma.FieldRef<"GreigeFabric", 'DateTime'>

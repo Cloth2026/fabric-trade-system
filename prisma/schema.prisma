@@ -203,7 +203,11 @@ model Fabric {
   supplierId              String?
   sourceContact           String?
   sourceDate              DateTime?
-  finishedReferencePrice  Decimal?             @db.Decimal(12, 2)
+  // Prices are split into tax-exclusive and tax-inclusive values. Both are
+  // entered by hand and stored as-is; nothing is derived from the other.
+  finishedReferencePriceExclTax Decimal?            @db.Decimal(12, 2)
+  finishedReferencePriceInclTax Decimal?            @db.Decimal(12, 2)
+  finishedReferenceTaxRate      Decimal?            @db.Decimal(6, 3)
   supplierQuote           Decimal?             @db.Decimal(12, 2)
   minimumOrderQty         String?
   repurchaseStatus        String?
@@ -274,7 +278,9 @@ model FabricSupplierQuote {
   fabricSupplierId   String
   supplierUnit       SupplierUnit?  @relation("FabricSupplierQuoteProductionUnit", fields: [supplierUnitId], references: [id], onDelete: Restrict)
   supplierUnitId     String?
-  purchasePrice      Decimal        @db.Decimal(12, 2)
+  purchasePriceExclTax Decimal        @db.Decimal(12, 2)
+  purchasePriceInclTax Decimal?       @db.Decimal(12, 2)
+  purchaseTaxRate      Decimal?       @db.Decimal(6, 3)
   currency           String         @default("CNY") @db.VarChar(3)
   pricingUnit        PricingUnit
   minimumOrderQty    String?
@@ -304,7 +310,9 @@ model GreigeFabric {
   weight        String?
   width         String?
   yarnOrDensity String?
-  unitPrice     Decimal?  @db.Decimal(12, 2)
+  unitPriceExclTax Decimal?  @db.Decimal(12, 2)
+  unitPriceInclTax Decimal?  @db.Decimal(12, 2)
+  taxRate          Decimal?  @db.Decimal(6, 3)
   lossRate      String?
   remarks       String?
   createdAt     DateTime  @default(now())
@@ -321,7 +329,9 @@ model DyeingFinishing {
   processType String?
   factory     Supplier? @relation("DyeingFactory", fields: [factoryId], references: [id])
   factoryId   String?
-  unitPrice   Decimal?  @db.Decimal(12, 2)
+  unitPriceExclTax Decimal?  @db.Decimal(12, 2)
+  unitPriceInclTax Decimal?  @db.Decimal(12, 2)
+  taxRate          Decimal?  @db.Decimal(6, 3)
   lossRate    String?
   leadTime    String?
   cautions    String?
@@ -340,7 +350,9 @@ model PostProcess {
   factory           Supplier? @relation("PostProcessFactory", fields: [factoryId], references: [id])
   factoryId         String?
   effectDescription String?
-  unitPrice         Decimal?  @db.Decimal(12, 2)
+  unitPriceExclTax  Decimal?  @db.Decimal(12, 2)
+  unitPriceInclTax  Decimal?  @db.Decimal(12, 2)
+  taxRate           Decimal?  @db.Decimal(6, 3)
   lossRate          String?
   minimumOrderQty   String?
   leadTime          String?

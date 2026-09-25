@@ -27,11 +27,15 @@ export type AggregateDyeingFinishing = {
 }
 
 export type DyeingFinishingAvgAggregateOutputType = {
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
 }
 
 export type DyeingFinishingSumAggregateOutputType = {
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
 }
 
 export type DyeingFinishingMinAggregateOutputType = {
@@ -39,7 +43,9 @@ export type DyeingFinishingMinAggregateOutputType = {
   fabricId: string | null
   processType: string | null
   factoryId: string | null
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
   lossRate: string | null
   leadTime: string | null
   cautions: string | null
@@ -52,7 +58,9 @@ export type DyeingFinishingMaxAggregateOutputType = {
   fabricId: string | null
   processType: string | null
   factoryId: string | null
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
   lossRate: string | null
   leadTime: string | null
   cautions: string | null
@@ -65,7 +73,9 @@ export type DyeingFinishingCountAggregateOutputType = {
   fabricId: number
   processType: number
   factoryId: number
-  unitPrice: number
+  unitPriceExclTax: number
+  unitPriceInclTax: number
+  taxRate: number
   lossRate: number
   leadTime: number
   cautions: number
@@ -76,11 +86,15 @@ export type DyeingFinishingCountAggregateOutputType = {
 
 
 export type DyeingFinishingAvgAggregateInputType = {
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
 }
 
 export type DyeingFinishingSumAggregateInputType = {
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
 }
 
 export type DyeingFinishingMinAggregateInputType = {
@@ -88,7 +102,9 @@ export type DyeingFinishingMinAggregateInputType = {
   fabricId?: true
   processType?: true
   factoryId?: true
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
   lossRate?: true
   leadTime?: true
   cautions?: true
@@ -101,7 +117,9 @@ export type DyeingFinishingMaxAggregateInputType = {
   fabricId?: true
   processType?: true
   factoryId?: true
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
   lossRate?: true
   leadTime?: true
   cautions?: true
@@ -114,7 +132,9 @@ export type DyeingFinishingCountAggregateInputType = {
   fabricId?: true
   processType?: true
   factoryId?: true
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
   lossRate?: true
   leadTime?: true
   cautions?: true
@@ -214,7 +234,9 @@ export type DyeingFinishingGroupByOutputType = {
   fabricId: string
   processType: string | null
   factoryId: string | null
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
   lossRate: string | null
   leadTime: string | null
   cautions: string | null
@@ -250,7 +272,9 @@ export type DyeingFinishingWhereInput = {
   fabricId?: Prisma.StringFilter<"DyeingFinishing"> | string
   processType?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
   factoryId?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
-  unitPrice?: Prisma.DecimalNullableFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.DecimalNullableFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.DecimalNullableFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.DecimalNullableFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
   leadTime?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
   cautions?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
@@ -265,7 +289,9 @@ export type DyeingFinishingOrderByWithRelationInput = {
   fabricId?: Prisma.SortOrder
   processType?: Prisma.SortOrderInput | Prisma.SortOrder
   factoryId?: Prisma.SortOrderInput | Prisma.SortOrder
-  unitPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxRate?: Prisma.SortOrderInput | Prisma.SortOrder
   lossRate?: Prisma.SortOrderInput | Prisma.SortOrder
   leadTime?: Prisma.SortOrderInput | Prisma.SortOrder
   cautions?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -283,7 +309,9 @@ export type DyeingFinishingWhereUniqueInput = Prisma.AtLeast<{
   fabricId?: Prisma.StringFilter<"DyeingFinishing"> | string
   processType?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
   factoryId?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
-  unitPrice?: Prisma.DecimalNullableFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.DecimalNullableFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.DecimalNullableFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.DecimalNullableFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
   leadTime?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
   cautions?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
@@ -298,7 +326,9 @@ export type DyeingFinishingOrderByWithAggregationInput = {
   fabricId?: Prisma.SortOrder
   processType?: Prisma.SortOrderInput | Prisma.SortOrder
   factoryId?: Prisma.SortOrderInput | Prisma.SortOrder
-  unitPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxRate?: Prisma.SortOrderInput | Prisma.SortOrder
   lossRate?: Prisma.SortOrderInput | Prisma.SortOrder
   leadTime?: Prisma.SortOrderInput | Prisma.SortOrder
   cautions?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -319,7 +349,9 @@ export type DyeingFinishingScalarWhereWithAggregatesInput = {
   fabricId?: Prisma.StringWithAggregatesFilter<"DyeingFinishing"> | string
   processType?: Prisma.StringNullableWithAggregatesFilter<"DyeingFinishing"> | string | null
   factoryId?: Prisma.StringNullableWithAggregatesFilter<"DyeingFinishing"> | string | null
-  unitPrice?: Prisma.DecimalNullableWithAggregatesFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.DecimalNullableWithAggregatesFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.DecimalNullableWithAggregatesFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.DecimalNullableWithAggregatesFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.StringNullableWithAggregatesFilter<"DyeingFinishing"> | string | null
   leadTime?: Prisma.StringNullableWithAggregatesFilter<"DyeingFinishing"> | string | null
   cautions?: Prisma.StringNullableWithAggregatesFilter<"DyeingFinishing"> | string | null
@@ -330,7 +362,9 @@ export type DyeingFinishingScalarWhereWithAggregatesInput = {
 export type DyeingFinishingCreateInput = {
   id?: string
   processType?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   leadTime?: string | null
   cautions?: string | null
@@ -345,7 +379,9 @@ export type DyeingFinishingUncheckedCreateInput = {
   fabricId: string
   processType?: string | null
   factoryId?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   leadTime?: string | null
   cautions?: string | null
@@ -356,7 +392,9 @@ export type DyeingFinishingUncheckedCreateInput = {
 export type DyeingFinishingUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -371,7 +409,9 @@ export type DyeingFinishingUncheckedUpdateInput = {
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   factoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -384,7 +424,9 @@ export type DyeingFinishingCreateManyInput = {
   fabricId: string
   processType?: string | null
   factoryId?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   leadTime?: string | null
   cautions?: string | null
@@ -395,7 +437,9 @@ export type DyeingFinishingCreateManyInput = {
 export type DyeingFinishingUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -408,7 +452,9 @@ export type DyeingFinishingUncheckedUpdateManyInput = {
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   factoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -431,7 +477,9 @@ export type DyeingFinishingCountOrderByAggregateInput = {
   fabricId?: Prisma.SortOrder
   processType?: Prisma.SortOrder
   factoryId?: Prisma.SortOrder
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
   lossRate?: Prisma.SortOrder
   leadTime?: Prisma.SortOrder
   cautions?: Prisma.SortOrder
@@ -440,7 +488,9 @@ export type DyeingFinishingCountOrderByAggregateInput = {
 }
 
 export type DyeingFinishingAvgOrderByAggregateInput = {
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
 }
 
 export type DyeingFinishingMaxOrderByAggregateInput = {
@@ -448,7 +498,9 @@ export type DyeingFinishingMaxOrderByAggregateInput = {
   fabricId?: Prisma.SortOrder
   processType?: Prisma.SortOrder
   factoryId?: Prisma.SortOrder
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
   lossRate?: Prisma.SortOrder
   leadTime?: Prisma.SortOrder
   cautions?: Prisma.SortOrder
@@ -461,7 +513,9 @@ export type DyeingFinishingMinOrderByAggregateInput = {
   fabricId?: Prisma.SortOrder
   processType?: Prisma.SortOrder
   factoryId?: Prisma.SortOrder
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
   lossRate?: Prisma.SortOrder
   leadTime?: Prisma.SortOrder
   cautions?: Prisma.SortOrder
@@ -470,7 +524,9 @@ export type DyeingFinishingMinOrderByAggregateInput = {
 }
 
 export type DyeingFinishingSumOrderByAggregateInput = {
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
 }
 
 export type DyeingFinishingCreateNestedManyWithoutFactoryInput = {
@@ -560,7 +616,9 @@ export type DyeingFinishingUncheckedUpdateManyWithoutFabricNestedInput = {
 export type DyeingFinishingCreateWithoutFactoryInput = {
   id?: string
   processType?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   leadTime?: string | null
   cautions?: string | null
@@ -573,7 +631,9 @@ export type DyeingFinishingUncheckedCreateWithoutFactoryInput = {
   id?: string
   fabricId: string
   processType?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   leadTime?: string | null
   cautions?: string | null
@@ -615,7 +675,9 @@ export type DyeingFinishingScalarWhereInput = {
   fabricId?: Prisma.StringFilter<"DyeingFinishing"> | string
   processType?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
   factoryId?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
-  unitPrice?: Prisma.DecimalNullableFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.DecimalNullableFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.DecimalNullableFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.DecimalNullableFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
   leadTime?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
   cautions?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
@@ -626,7 +688,9 @@ export type DyeingFinishingScalarWhereInput = {
 export type DyeingFinishingCreateWithoutFabricInput = {
   id?: string
   processType?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   leadTime?: string | null
   cautions?: string | null
@@ -639,7 +703,9 @@ export type DyeingFinishingUncheckedCreateWithoutFabricInput = {
   id?: string
   processType?: string | null
   factoryId?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   leadTime?: string | null
   cautions?: string | null
@@ -677,7 +743,9 @@ export type DyeingFinishingCreateManyFactoryInput = {
   id?: string
   fabricId: string
   processType?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   leadTime?: string | null
   cautions?: string | null
@@ -688,7 +756,9 @@ export type DyeingFinishingCreateManyFactoryInput = {
 export type DyeingFinishingUpdateWithoutFactoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -701,7 +771,9 @@ export type DyeingFinishingUncheckedUpdateWithoutFactoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -713,7 +785,9 @@ export type DyeingFinishingUncheckedUpdateManyWithoutFactoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -725,7 +799,9 @@ export type DyeingFinishingCreateManyFabricInput = {
   id?: string
   processType?: string | null
   factoryId?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   leadTime?: string | null
   cautions?: string | null
@@ -736,7 +812,9 @@ export type DyeingFinishingCreateManyFabricInput = {
 export type DyeingFinishingUpdateWithoutFabricInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -749,7 +827,9 @@ export type DyeingFinishingUncheckedUpdateWithoutFabricInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   factoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -761,7 +841,9 @@ export type DyeingFinishingUncheckedUpdateManyWithoutFabricInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   factoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -776,7 +858,9 @@ export type DyeingFinishingSelect<ExtArgs extends runtime.Types.Extensions.Inter
   fabricId?: boolean
   processType?: boolean
   factoryId?: boolean
-  unitPrice?: boolean
+  unitPriceExclTax?: boolean
+  unitPriceInclTax?: boolean
+  taxRate?: boolean
   lossRate?: boolean
   leadTime?: boolean
   cautions?: boolean
@@ -791,7 +875,9 @@ export type DyeingFinishingSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   fabricId?: boolean
   processType?: boolean
   factoryId?: boolean
-  unitPrice?: boolean
+  unitPriceExclTax?: boolean
+  unitPriceInclTax?: boolean
+  taxRate?: boolean
   lossRate?: boolean
   leadTime?: boolean
   cautions?: boolean
@@ -806,7 +892,9 @@ export type DyeingFinishingSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   fabricId?: boolean
   processType?: boolean
   factoryId?: boolean
-  unitPrice?: boolean
+  unitPriceExclTax?: boolean
+  unitPriceInclTax?: boolean
+  taxRate?: boolean
   lossRate?: boolean
   leadTime?: boolean
   cautions?: boolean
@@ -821,7 +909,9 @@ export type DyeingFinishingSelectScalar = {
   fabricId?: boolean
   processType?: boolean
   factoryId?: boolean
-  unitPrice?: boolean
+  unitPriceExclTax?: boolean
+  unitPriceInclTax?: boolean
+  taxRate?: boolean
   lossRate?: boolean
   leadTime?: boolean
   cautions?: boolean
@@ -829,7 +919,7 @@ export type DyeingFinishingSelectScalar = {
   updatedAt?: boolean
 }
 
-export type DyeingFinishingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fabricId" | "processType" | "factoryId" | "unitPrice" | "lossRate" | "leadTime" | "cautions" | "createdAt" | "updatedAt", ExtArgs["result"]["dyeingFinishing"]>
+export type DyeingFinishingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fabricId" | "processType" | "factoryId" | "unitPriceExclTax" | "unitPriceInclTax" | "taxRate" | "lossRate" | "leadTime" | "cautions" | "createdAt" | "updatedAt", ExtArgs["result"]["dyeingFinishing"]>
 export type DyeingFinishingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fabric?: boolean | Prisma.FabricDefaultArgs<ExtArgs>
   factory?: boolean | Prisma.DyeingFinishing$factoryArgs<ExtArgs>
@@ -854,7 +944,9 @@ export type $DyeingFinishingPayload<ExtArgs extends runtime.Types.Extensions.Int
     fabricId: string
     processType: string | null
     factoryId: string | null
-    unitPrice: runtime.Decimal | null
+    unitPriceExclTax: runtime.Decimal | null
+    unitPriceInclTax: runtime.Decimal | null
+    taxRate: runtime.Decimal | null
     lossRate: string | null
     leadTime: string | null
     cautions: string | null
@@ -1289,7 +1381,9 @@ export interface DyeingFinishingFieldRefs {
   readonly fabricId: Prisma.FieldRef<"DyeingFinishing", 'String'>
   readonly processType: Prisma.FieldRef<"DyeingFinishing", 'String'>
   readonly factoryId: Prisma.FieldRef<"DyeingFinishing", 'String'>
-  readonly unitPrice: Prisma.FieldRef<"DyeingFinishing", 'Decimal'>
+  readonly unitPriceExclTax: Prisma.FieldRef<"DyeingFinishing", 'Decimal'>
+  readonly unitPriceInclTax: Prisma.FieldRef<"DyeingFinishing", 'Decimal'>
+  readonly taxRate: Prisma.FieldRef<"DyeingFinishing", 'Decimal'>
   readonly lossRate: Prisma.FieldRef<"DyeingFinishing", 'String'>
   readonly leadTime: Prisma.FieldRef<"DyeingFinishing", 'String'>
   readonly cautions: Prisma.FieldRef<"DyeingFinishing", 'String'>

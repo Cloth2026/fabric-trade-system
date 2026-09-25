@@ -27,13 +27,17 @@ export type AggregateFabric = {
 }
 
 export type FabricAvgAggregateOutputType = {
-  finishedReferencePrice: runtime.Decimal | null
+  finishedReferencePriceExclTax: runtime.Decimal | null
+  finishedReferencePriceInclTax: runtime.Decimal | null
+  finishedReferenceTaxRate: runtime.Decimal | null
   supplierQuote: runtime.Decimal | null
   completenessPercent: number | null
 }
 
 export type FabricSumAggregateOutputType = {
-  finishedReferencePrice: runtime.Decimal | null
+  finishedReferencePriceExclTax: runtime.Decimal | null
+  finishedReferencePriceInclTax: runtime.Decimal | null
+  finishedReferenceTaxRate: runtime.Decimal | null
   supplierQuote: runtime.Decimal | null
   completenessPercent: number | null
 }
@@ -59,7 +63,9 @@ export type FabricMinAggregateOutputType = {
   supplierId: string | null
   sourceContact: string | null
   sourceDate: Date | null
-  finishedReferencePrice: runtime.Decimal | null
+  finishedReferencePriceExclTax: runtime.Decimal | null
+  finishedReferencePriceInclTax: runtime.Decimal | null
+  finishedReferenceTaxRate: runtime.Decimal | null
   supplierQuote: runtime.Decimal | null
   minimumOrderQty: string | null
   repurchaseStatus: string | null
@@ -99,7 +105,9 @@ export type FabricMaxAggregateOutputType = {
   supplierId: string | null
   sourceContact: string | null
   sourceDate: Date | null
-  finishedReferencePrice: runtime.Decimal | null
+  finishedReferencePriceExclTax: runtime.Decimal | null
+  finishedReferencePriceInclTax: runtime.Decimal | null
+  finishedReferenceTaxRate: runtime.Decimal | null
   supplierQuote: runtime.Decimal | null
   minimumOrderQty: string | null
   repurchaseStatus: string | null
@@ -143,7 +151,9 @@ export type FabricCountAggregateOutputType = {
   supplierId: number
   sourceContact: number
   sourceDate: number
-  finishedReferencePrice: number
+  finishedReferencePriceExclTax: number
+  finishedReferencePriceInclTax: number
+  finishedReferenceTaxRate: number
   supplierQuote: number
   minimumOrderQty: number
   repurchaseStatus: number
@@ -166,13 +176,17 @@ export type FabricCountAggregateOutputType = {
 
 
 export type FabricAvgAggregateInputType = {
-  finishedReferencePrice?: true
+  finishedReferencePriceExclTax?: true
+  finishedReferencePriceInclTax?: true
+  finishedReferenceTaxRate?: true
   supplierQuote?: true
   completenessPercent?: true
 }
 
 export type FabricSumAggregateInputType = {
-  finishedReferencePrice?: true
+  finishedReferencePriceExclTax?: true
+  finishedReferencePriceInclTax?: true
+  finishedReferenceTaxRate?: true
   supplierQuote?: true
   completenessPercent?: true
 }
@@ -198,7 +212,9 @@ export type FabricMinAggregateInputType = {
   supplierId?: true
   sourceContact?: true
   sourceDate?: true
-  finishedReferencePrice?: true
+  finishedReferencePriceExclTax?: true
+  finishedReferencePriceInclTax?: true
+  finishedReferenceTaxRate?: true
   supplierQuote?: true
   minimumOrderQty?: true
   repurchaseStatus?: true
@@ -238,7 +254,9 @@ export type FabricMaxAggregateInputType = {
   supplierId?: true
   sourceContact?: true
   sourceDate?: true
-  finishedReferencePrice?: true
+  finishedReferencePriceExclTax?: true
+  finishedReferencePriceInclTax?: true
+  finishedReferenceTaxRate?: true
   supplierQuote?: true
   minimumOrderQty?: true
   repurchaseStatus?: true
@@ -282,7 +300,9 @@ export type FabricCountAggregateInputType = {
   supplierId?: true
   sourceContact?: true
   sourceDate?: true
-  finishedReferencePrice?: true
+  finishedReferencePriceExclTax?: true
+  finishedReferencePriceInclTax?: true
+  finishedReferenceTaxRate?: true
   supplierQuote?: true
   minimumOrderQty?: true
   repurchaseStatus?: true
@@ -414,7 +434,9 @@ export type FabricGroupByOutputType = {
   supplierId: string | null
   sourceContact: string | null
   sourceDate: Date | null
-  finishedReferencePrice: runtime.Decimal | null
+  finishedReferencePriceExclTax: runtime.Decimal | null
+  finishedReferencePriceInclTax: runtime.Decimal | null
+  finishedReferenceTaxRate: runtime.Decimal | null
   supplierQuote: runtime.Decimal | null
   minimumOrderQty: string | null
   repurchaseStatus: string | null
@@ -482,7 +504,9 @@ export type FabricWhereInput = {
   supplierId?: Prisma.StringNullableFilter<"Fabric"> | string | null
   sourceContact?: Prisma.StringNullableFilter<"Fabric"> | string | null
   sourceDate?: Prisma.DateTimeNullableFilter<"Fabric"> | Date | string | null
-  finishedReferencePrice?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.StringNullableFilter<"Fabric"> | string | null
   repurchaseStatus?: Prisma.StringNullableFilter<"Fabric"> | string | null
@@ -537,7 +561,9 @@ export type FabricOrderByWithRelationInput = {
   supplierId?: Prisma.SortOrderInput | Prisma.SortOrder
   sourceContact?: Prisma.SortOrderInput | Prisma.SortOrder
   sourceDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  finishedReferencePrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  finishedReferencePriceExclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  finishedReferencePriceInclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  finishedReferenceTaxRate?: Prisma.SortOrderInput | Prisma.SortOrder
   supplierQuote?: Prisma.SortOrderInput | Prisma.SortOrder
   minimumOrderQty?: Prisma.SortOrderInput | Prisma.SortOrder
   repurchaseStatus?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -596,7 +622,9 @@ export type FabricWhereUniqueInput = Prisma.AtLeast<{
   supplierId?: Prisma.StringNullableFilter<"Fabric"> | string | null
   sourceContact?: Prisma.StringNullableFilter<"Fabric"> | string | null
   sourceDate?: Prisma.DateTimeNullableFilter<"Fabric"> | Date | string | null
-  finishedReferencePrice?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.StringNullableFilter<"Fabric"> | string | null
   repurchaseStatus?: Prisma.StringNullableFilter<"Fabric"> | string | null
@@ -651,7 +679,9 @@ export type FabricOrderByWithAggregationInput = {
   supplierId?: Prisma.SortOrderInput | Prisma.SortOrder
   sourceContact?: Prisma.SortOrderInput | Prisma.SortOrder
   sourceDate?: Prisma.SortOrderInput | Prisma.SortOrder
-  finishedReferencePrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  finishedReferencePriceExclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  finishedReferencePriceInclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  finishedReferenceTaxRate?: Prisma.SortOrderInput | Prisma.SortOrder
   supplierQuote?: Prisma.SortOrderInput | Prisma.SortOrder
   minimumOrderQty?: Prisma.SortOrderInput | Prisma.SortOrder
   repurchaseStatus?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -704,7 +734,9 @@ export type FabricScalarWhereWithAggregatesInput = {
   supplierId?: Prisma.StringNullableWithAggregatesFilter<"Fabric"> | string | null
   sourceContact?: Prisma.StringNullableWithAggregatesFilter<"Fabric"> | string | null
   sourceDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Fabric"> | Date | string | null
-  finishedReferencePrice?: Prisma.DecimalNullableWithAggregatesFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.DecimalNullableWithAggregatesFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.DecimalNullableWithAggregatesFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.DecimalNullableWithAggregatesFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.DecimalNullableWithAggregatesFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.StringNullableWithAggregatesFilter<"Fabric"> | string | null
   repurchaseStatus?: Prisma.StringNullableWithAggregatesFilter<"Fabric"> | string | null
@@ -747,7 +779,9 @@ export type FabricCreateInput = {
   elasticity?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -802,7 +836,9 @@ export type FabricUncheckedCreateInput = {
   supplierId?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -853,7 +889,9 @@ export type FabricUpdateInput = {
   elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -908,7 +946,9 @@ export type FabricUncheckedUpdateInput = {
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -961,7 +1001,9 @@ export type FabricCreateManyInput = {
   supplierId?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -1004,7 +1046,9 @@ export type FabricUpdateManyMutationInput = {
   elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1049,7 +1093,9 @@ export type FabricUncheckedUpdateManyInput = {
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1109,7 +1155,9 @@ export type FabricCountOrderByAggregateInput = {
   supplierId?: Prisma.SortOrder
   sourceContact?: Prisma.SortOrder
   sourceDate?: Prisma.SortOrder
-  finishedReferencePrice?: Prisma.SortOrder
+  finishedReferencePriceExclTax?: Prisma.SortOrder
+  finishedReferencePriceInclTax?: Prisma.SortOrder
+  finishedReferenceTaxRate?: Prisma.SortOrder
   supplierQuote?: Prisma.SortOrder
   minimumOrderQty?: Prisma.SortOrder
   repurchaseStatus?: Prisma.SortOrder
@@ -1130,7 +1178,9 @@ export type FabricCountOrderByAggregateInput = {
 }
 
 export type FabricAvgOrderByAggregateInput = {
-  finishedReferencePrice?: Prisma.SortOrder
+  finishedReferencePriceExclTax?: Prisma.SortOrder
+  finishedReferencePriceInclTax?: Prisma.SortOrder
+  finishedReferenceTaxRate?: Prisma.SortOrder
   supplierQuote?: Prisma.SortOrder
   completenessPercent?: Prisma.SortOrder
 }
@@ -1156,7 +1206,9 @@ export type FabricMaxOrderByAggregateInput = {
   supplierId?: Prisma.SortOrder
   sourceContact?: Prisma.SortOrder
   sourceDate?: Prisma.SortOrder
-  finishedReferencePrice?: Prisma.SortOrder
+  finishedReferencePriceExclTax?: Prisma.SortOrder
+  finishedReferencePriceInclTax?: Prisma.SortOrder
+  finishedReferenceTaxRate?: Prisma.SortOrder
   supplierQuote?: Prisma.SortOrder
   minimumOrderQty?: Prisma.SortOrder
   repurchaseStatus?: Prisma.SortOrder
@@ -1196,7 +1248,9 @@ export type FabricMinOrderByAggregateInput = {
   supplierId?: Prisma.SortOrder
   sourceContact?: Prisma.SortOrder
   sourceDate?: Prisma.SortOrder
-  finishedReferencePrice?: Prisma.SortOrder
+  finishedReferencePriceExclTax?: Prisma.SortOrder
+  finishedReferencePriceInclTax?: Prisma.SortOrder
+  finishedReferenceTaxRate?: Prisma.SortOrder
   supplierQuote?: Prisma.SortOrder
   minimumOrderQty?: Prisma.SortOrder
   repurchaseStatus?: Prisma.SortOrder
@@ -1216,7 +1270,9 @@ export type FabricMinOrderByAggregateInput = {
 }
 
 export type FabricSumOrderByAggregateInput = {
-  finishedReferencePrice?: Prisma.SortOrder
+  finishedReferencePriceExclTax?: Prisma.SortOrder
+  finishedReferencePriceInclTax?: Prisma.SortOrder
+  finishedReferenceTaxRate?: Prisma.SortOrder
   supplierQuote?: Prisma.SortOrder
   completenessPercent?: Prisma.SortOrder
 }
@@ -1514,7 +1570,9 @@ export type FabricCreateWithoutTenantInput = {
   elasticity?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -1567,7 +1625,9 @@ export type FabricUncheckedCreateWithoutTenantInput = {
   supplierId?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -1649,7 +1709,9 @@ export type FabricScalarWhereInput = {
   supplierId?: Prisma.StringNullableFilter<"Fabric"> | string | null
   sourceContact?: Prisma.StringNullableFilter<"Fabric"> | string | null
   sourceDate?: Prisma.DateTimeNullableFilter<"Fabric"> | Date | string | null
-  finishedReferencePrice?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.DecimalNullableFilter<"Fabric"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.StringNullableFilter<"Fabric"> | string | null
   repurchaseStatus?: Prisma.StringNullableFilter<"Fabric"> | string | null
@@ -1692,7 +1754,9 @@ export type FabricCreateWithoutSupplierInput = {
   elasticity?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -1745,7 +1809,9 @@ export type FabricUncheckedCreateWithoutSupplierInput = {
   elasticity?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -1822,7 +1888,9 @@ export type FabricCreateWithoutSupplierSourcesInput = {
   elasticity?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -1876,7 +1944,9 @@ export type FabricUncheckedCreateWithoutSupplierSourcesInput = {
   supplierId?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -1942,7 +2012,9 @@ export type FabricUpdateWithoutSupplierSourcesInput = {
   elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1996,7 +2068,9 @@ export type FabricUncheckedUpdateWithoutSupplierSourcesInput = {
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2046,7 +2120,9 @@ export type FabricCreateWithoutGreigeFabricsInput = {
   elasticity?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -2100,7 +2176,9 @@ export type FabricUncheckedCreateWithoutGreigeFabricsInput = {
   supplierId?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -2166,7 +2244,9 @@ export type FabricUpdateWithoutGreigeFabricsInput = {
   elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2220,7 +2300,9 @@ export type FabricUncheckedUpdateWithoutGreigeFabricsInput = {
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2270,7 +2352,9 @@ export type FabricCreateWithoutDyeingFinishingsInput = {
   elasticity?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -2324,7 +2408,9 @@ export type FabricUncheckedCreateWithoutDyeingFinishingsInput = {
   supplierId?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -2390,7 +2476,9 @@ export type FabricUpdateWithoutDyeingFinishingsInput = {
   elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2444,7 +2532,9 @@ export type FabricUncheckedUpdateWithoutDyeingFinishingsInput = {
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2494,7 +2584,9 @@ export type FabricCreateWithoutPostProcessesInput = {
   elasticity?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -2548,7 +2640,9 @@ export type FabricUncheckedCreateWithoutPostProcessesInput = {
   supplierId?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -2614,7 +2708,9 @@ export type FabricUpdateWithoutPostProcessesInput = {
   elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2668,7 +2764,9 @@ export type FabricUncheckedUpdateWithoutPostProcessesInput = {
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2718,7 +2816,9 @@ export type FabricCreateWithoutStockInBatchesInput = {
   elasticity?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -2772,7 +2872,9 @@ export type FabricUncheckedCreateWithoutStockInBatchesInput = {
   supplierId?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -2838,7 +2940,9 @@ export type FabricUpdateWithoutStockInBatchesInput = {
   elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2892,7 +2996,9 @@ export type FabricUncheckedUpdateWithoutStockInBatchesInput = {
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2942,7 +3048,9 @@ export type FabricCreateWithoutSampleRequestItemsInput = {
   elasticity?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -2996,7 +3104,9 @@ export type FabricUncheckedCreateWithoutSampleRequestItemsInput = {
   supplierId?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -3062,7 +3172,9 @@ export type FabricUpdateWithoutSampleRequestItemsInput = {
   elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3116,7 +3228,9 @@ export type FabricUncheckedUpdateWithoutSampleRequestItemsInput = {
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3166,7 +3280,9 @@ export type FabricCreateWithoutCustomerQuoteItemsInput = {
   elasticity?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -3220,7 +3336,9 @@ export type FabricUncheckedCreateWithoutCustomerQuoteItemsInput = {
   supplierId?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -3286,7 +3404,9 @@ export type FabricUpdateWithoutCustomerQuoteItemsInput = {
   elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3340,7 +3460,9 @@ export type FabricUncheckedUpdateWithoutCustomerQuoteItemsInput = {
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3390,7 +3512,9 @@ export type FabricCreateWithoutSalesOrderItemsInput = {
   elasticity?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -3444,7 +3568,9 @@ export type FabricUncheckedCreateWithoutSalesOrderItemsInput = {
   supplierId?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -3510,7 +3636,9 @@ export type FabricUpdateWithoutSalesOrderItemsInput = {
   elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3564,7 +3692,9 @@ export type FabricUncheckedUpdateWithoutSalesOrderItemsInput = {
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3615,7 +3745,9 @@ export type FabricCreateManyTenantInput = {
   supplierId?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -3658,7 +3790,9 @@ export type FabricUpdateWithoutTenantInput = {
   elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3711,7 +3845,9 @@ export type FabricUncheckedUpdateWithoutTenantInput = {
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3763,7 +3899,9 @@ export type FabricUncheckedUpdateManyWithoutTenantInput = {
   supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3807,7 +3945,9 @@ export type FabricCreateManySupplierInput = {
   elasticity?: string | null
   sourceContact?: string | null
   sourceDate?: Date | string | null
-  finishedReferencePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: string | null
   repurchaseStatus?: string | null
@@ -3850,7 +3990,9 @@ export type FabricUpdateWithoutSupplierInput = {
   elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3903,7 +4045,9 @@ export type FabricUncheckedUpdateWithoutSupplierInput = {
   elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3955,7 +4099,9 @@ export type FabricUncheckedUpdateManyWithoutSupplierInput = {
   elasticity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  finishedReferencePrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferencePriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  finishedReferenceTaxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   supplierQuote?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   repurchaseStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4094,7 +4240,9 @@ export type FabricSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   supplierId?: boolean
   sourceContact?: boolean
   sourceDate?: boolean
-  finishedReferencePrice?: boolean
+  finishedReferencePriceExclTax?: boolean
+  finishedReferencePriceInclTax?: boolean
+  finishedReferenceTaxRate?: boolean
   supplierQuote?: boolean
   minimumOrderQty?: boolean
   repurchaseStatus?: boolean
@@ -4150,7 +4298,9 @@ export type FabricSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   supplierId?: boolean
   sourceContact?: boolean
   sourceDate?: boolean
-  finishedReferencePrice?: boolean
+  finishedReferencePriceExclTax?: boolean
+  finishedReferencePriceInclTax?: boolean
+  finishedReferenceTaxRate?: boolean
   supplierQuote?: boolean
   minimumOrderQty?: boolean
   repurchaseStatus?: boolean
@@ -4197,7 +4347,9 @@ export type FabricSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   supplierId?: boolean
   sourceContact?: boolean
   sourceDate?: boolean
-  finishedReferencePrice?: boolean
+  finishedReferencePriceExclTax?: boolean
+  finishedReferencePriceInclTax?: boolean
+  finishedReferenceTaxRate?: boolean
   supplierQuote?: boolean
   minimumOrderQty?: boolean
   repurchaseStatus?: boolean
@@ -4244,7 +4396,9 @@ export type FabricSelectScalar = {
   supplierId?: boolean
   sourceContact?: boolean
   sourceDate?: boolean
-  finishedReferencePrice?: boolean
+  finishedReferencePriceExclTax?: boolean
+  finishedReferencePriceInclTax?: boolean
+  finishedReferenceTaxRate?: boolean
   supplierQuote?: boolean
   minimumOrderQty?: boolean
   repurchaseStatus?: boolean
@@ -4264,7 +4418,7 @@ export type FabricSelectScalar = {
   updatedAt?: boolean
 }
 
-export type FabricOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "code" | "englishName" | "name" | "fabricType" | "pricingUnit" | "developmentSource" | "status" | "composition" | "weight" | "width" | "yarnCount" | "warpWeftDensity" | "category" | "structure" | "tags" | "usageOptionKeys" | "seasonOptionKeys" | "certificationOptionKeys" | "elasticity" | "supplierId" | "sourceContact" | "sourceDate" | "finishedReferencePrice" | "supplierQuote" | "minimumOrderQty" | "repurchaseStatus" | "tubeWeight" | "tolerance" | "greigeStatus" | "dyeingStatus" | "postProcessStatus" | "colorFastness" | "pilling" | "inspectionConclusion" | "handFeel" | "remarks" | "completenessPercent" | "missingInfoFlags" | "createdAt" | "updatedAt", ExtArgs["result"]["fabric"]>
+export type FabricOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "code" | "englishName" | "name" | "fabricType" | "pricingUnit" | "developmentSource" | "status" | "composition" | "weight" | "width" | "yarnCount" | "warpWeftDensity" | "category" | "structure" | "tags" | "usageOptionKeys" | "seasonOptionKeys" | "certificationOptionKeys" | "elasticity" | "supplierId" | "sourceContact" | "sourceDate" | "finishedReferencePriceExclTax" | "finishedReferencePriceInclTax" | "finishedReferenceTaxRate" | "supplierQuote" | "minimumOrderQty" | "repurchaseStatus" | "tubeWeight" | "tolerance" | "greigeStatus" | "dyeingStatus" | "postProcessStatus" | "colorFastness" | "pilling" | "inspectionConclusion" | "handFeel" | "remarks" | "completenessPercent" | "missingInfoFlags" | "createdAt" | "updatedAt", ExtArgs["result"]["fabric"]>
 export type FabricInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   supplier?: boolean | Prisma.Fabric$supplierArgs<ExtArgs>
@@ -4326,7 +4480,9 @@ export type $FabricPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     supplierId: string | null
     sourceContact: string | null
     sourceDate: Date | null
-    finishedReferencePrice: runtime.Decimal | null
+    finishedReferencePriceExclTax: runtime.Decimal | null
+    finishedReferencePriceInclTax: runtime.Decimal | null
+    finishedReferenceTaxRate: runtime.Decimal | null
     supplierQuote: runtime.Decimal | null
     minimumOrderQty: string | null
     repurchaseStatus: string | null
@@ -4801,7 +4957,9 @@ export interface FabricFieldRefs {
   readonly supplierId: Prisma.FieldRef<"Fabric", 'String'>
   readonly sourceContact: Prisma.FieldRef<"Fabric", 'String'>
   readonly sourceDate: Prisma.FieldRef<"Fabric", 'DateTime'>
-  readonly finishedReferencePrice: Prisma.FieldRef<"Fabric", 'Decimal'>
+  readonly finishedReferencePriceExclTax: Prisma.FieldRef<"Fabric", 'Decimal'>
+  readonly finishedReferencePriceInclTax: Prisma.FieldRef<"Fabric", 'Decimal'>
+  readonly finishedReferenceTaxRate: Prisma.FieldRef<"Fabric", 'Decimal'>
   readonly supplierQuote: Prisma.FieldRef<"Fabric", 'Decimal'>
   readonly minimumOrderQty: Prisma.FieldRef<"Fabric", 'String'>
   readonly repurchaseStatus: Prisma.FieldRef<"Fabric", 'String'>

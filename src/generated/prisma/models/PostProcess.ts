@@ -27,11 +27,15 @@ export type AggregatePostProcess = {
 }
 
 export type PostProcessAvgAggregateOutputType = {
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
 }
 
 export type PostProcessSumAggregateOutputType = {
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
 }
 
 export type PostProcessMinAggregateOutputType = {
@@ -40,7 +44,9 @@ export type PostProcessMinAggregateOutputType = {
   processType: string | null
   factoryId: string | null
   effectDescription: string | null
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
   lossRate: string | null
   minimumOrderQty: string | null
   leadTime: string | null
@@ -56,7 +62,9 @@ export type PostProcessMaxAggregateOutputType = {
   processType: string | null
   factoryId: string | null
   effectDescription: string | null
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
   lossRate: string | null
   minimumOrderQty: string | null
   leadTime: string | null
@@ -72,7 +80,9 @@ export type PostProcessCountAggregateOutputType = {
   processType: number
   factoryId: number
   effectDescription: number
-  unitPrice: number
+  unitPriceExclTax: number
+  unitPriceInclTax: number
+  taxRate: number
   lossRate: number
   minimumOrderQty: number
   leadTime: number
@@ -85,11 +95,15 @@ export type PostProcessCountAggregateOutputType = {
 
 
 export type PostProcessAvgAggregateInputType = {
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
 }
 
 export type PostProcessSumAggregateInputType = {
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
 }
 
 export type PostProcessMinAggregateInputType = {
@@ -98,7 +112,9 @@ export type PostProcessMinAggregateInputType = {
   processType?: true
   factoryId?: true
   effectDescription?: true
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
   lossRate?: true
   minimumOrderQty?: true
   leadTime?: true
@@ -114,7 +130,9 @@ export type PostProcessMaxAggregateInputType = {
   processType?: true
   factoryId?: true
   effectDescription?: true
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
   lossRate?: true
   minimumOrderQty?: true
   leadTime?: true
@@ -130,7 +148,9 @@ export type PostProcessCountAggregateInputType = {
   processType?: true
   factoryId?: true
   effectDescription?: true
-  unitPrice?: true
+  unitPriceExclTax?: true
+  unitPriceInclTax?: true
+  taxRate?: true
   lossRate?: true
   minimumOrderQty?: true
   leadTime?: true
@@ -233,7 +253,9 @@ export type PostProcessGroupByOutputType = {
   processType: string | null
   factoryId: string | null
   effectDescription: string | null
-  unitPrice: runtime.Decimal | null
+  unitPriceExclTax: runtime.Decimal | null
+  unitPriceInclTax: runtime.Decimal | null
+  taxRate: runtime.Decimal | null
   lossRate: string | null
   minimumOrderQty: string | null
   leadTime: string | null
@@ -272,7 +294,9 @@ export type PostProcessWhereInput = {
   processType?: Prisma.StringNullableFilter<"PostProcess"> | string | null
   factoryId?: Prisma.StringNullableFilter<"PostProcess"> | string | null
   effectDescription?: Prisma.StringNullableFilter<"PostProcess"> | string | null
-  unitPrice?: Prisma.DecimalNullableFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.DecimalNullableFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.DecimalNullableFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.DecimalNullableFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.StringNullableFilter<"PostProcess"> | string | null
   minimumOrderQty?: Prisma.StringNullableFilter<"PostProcess"> | string | null
   leadTime?: Prisma.StringNullableFilter<"PostProcess"> | string | null
@@ -290,7 +314,9 @@ export type PostProcessOrderByWithRelationInput = {
   processType?: Prisma.SortOrderInput | Prisma.SortOrder
   factoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   effectDescription?: Prisma.SortOrderInput | Prisma.SortOrder
-  unitPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxRate?: Prisma.SortOrderInput | Prisma.SortOrder
   lossRate?: Prisma.SortOrderInput | Prisma.SortOrder
   minimumOrderQty?: Prisma.SortOrderInput | Prisma.SortOrder
   leadTime?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -311,7 +337,9 @@ export type PostProcessWhereUniqueInput = Prisma.AtLeast<{
   processType?: Prisma.StringNullableFilter<"PostProcess"> | string | null
   factoryId?: Prisma.StringNullableFilter<"PostProcess"> | string | null
   effectDescription?: Prisma.StringNullableFilter<"PostProcess"> | string | null
-  unitPrice?: Prisma.DecimalNullableFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.DecimalNullableFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.DecimalNullableFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.DecimalNullableFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.StringNullableFilter<"PostProcess"> | string | null
   minimumOrderQty?: Prisma.StringNullableFilter<"PostProcess"> | string | null
   leadTime?: Prisma.StringNullableFilter<"PostProcess"> | string | null
@@ -329,7 +357,9 @@ export type PostProcessOrderByWithAggregationInput = {
   processType?: Prisma.SortOrderInput | Prisma.SortOrder
   factoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   effectDescription?: Prisma.SortOrderInput | Prisma.SortOrder
-  unitPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxRate?: Prisma.SortOrderInput | Prisma.SortOrder
   lossRate?: Prisma.SortOrderInput | Prisma.SortOrder
   minimumOrderQty?: Prisma.SortOrderInput | Prisma.SortOrder
   leadTime?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -353,7 +383,9 @@ export type PostProcessScalarWhereWithAggregatesInput = {
   processType?: Prisma.StringNullableWithAggregatesFilter<"PostProcess"> | string | null
   factoryId?: Prisma.StringNullableWithAggregatesFilter<"PostProcess"> | string | null
   effectDescription?: Prisma.StringNullableWithAggregatesFilter<"PostProcess"> | string | null
-  unitPrice?: Prisma.DecimalNullableWithAggregatesFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.DecimalNullableWithAggregatesFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.DecimalNullableWithAggregatesFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.DecimalNullableWithAggregatesFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.StringNullableWithAggregatesFilter<"PostProcess"> | string | null
   minimumOrderQty?: Prisma.StringNullableWithAggregatesFilter<"PostProcess"> | string | null
   leadTime?: Prisma.StringNullableWithAggregatesFilter<"PostProcess"> | string | null
@@ -367,7 +399,9 @@ export type PostProcessCreateInput = {
   id?: string
   processType?: string | null
   effectDescription?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   minimumOrderQty?: string | null
   leadTime?: string | null
@@ -385,7 +419,9 @@ export type PostProcessUncheckedCreateInput = {
   processType?: string | null
   factoryId?: string | null
   effectDescription?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   minimumOrderQty?: string | null
   leadTime?: string | null
@@ -399,7 +435,9 @@ export type PostProcessUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -417,7 +455,9 @@ export type PostProcessUncheckedUpdateInput = {
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   factoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -433,7 +473,9 @@ export type PostProcessCreateManyInput = {
   processType?: string | null
   factoryId?: string | null
   effectDescription?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   minimumOrderQty?: string | null
   leadTime?: string | null
@@ -447,7 +489,9 @@ export type PostProcessUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -463,7 +507,9 @@ export type PostProcessUncheckedUpdateManyInput = {
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   factoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -489,7 +535,9 @@ export type PostProcessCountOrderByAggregateInput = {
   processType?: Prisma.SortOrder
   factoryId?: Prisma.SortOrder
   effectDescription?: Prisma.SortOrder
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
   lossRate?: Prisma.SortOrder
   minimumOrderQty?: Prisma.SortOrder
   leadTime?: Prisma.SortOrder
@@ -500,7 +548,9 @@ export type PostProcessCountOrderByAggregateInput = {
 }
 
 export type PostProcessAvgOrderByAggregateInput = {
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
 }
 
 export type PostProcessMaxOrderByAggregateInput = {
@@ -509,7 +559,9 @@ export type PostProcessMaxOrderByAggregateInput = {
   processType?: Prisma.SortOrder
   factoryId?: Prisma.SortOrder
   effectDescription?: Prisma.SortOrder
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
   lossRate?: Prisma.SortOrder
   minimumOrderQty?: Prisma.SortOrder
   leadTime?: Prisma.SortOrder
@@ -525,7 +577,9 @@ export type PostProcessMinOrderByAggregateInput = {
   processType?: Prisma.SortOrder
   factoryId?: Prisma.SortOrder
   effectDescription?: Prisma.SortOrder
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
   lossRate?: Prisma.SortOrder
   minimumOrderQty?: Prisma.SortOrder
   leadTime?: Prisma.SortOrder
@@ -536,7 +590,9 @@ export type PostProcessMinOrderByAggregateInput = {
 }
 
 export type PostProcessSumOrderByAggregateInput = {
-  unitPrice?: Prisma.SortOrder
+  unitPriceExclTax?: Prisma.SortOrder
+  unitPriceInclTax?: Prisma.SortOrder
+  taxRate?: Prisma.SortOrder
 }
 
 export type PostProcessCreateNestedManyWithoutFactoryInput = {
@@ -627,7 +683,9 @@ export type PostProcessCreateWithoutFactoryInput = {
   id?: string
   processType?: string | null
   effectDescription?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   minimumOrderQty?: string | null
   leadTime?: string | null
@@ -643,7 +701,9 @@ export type PostProcessUncheckedCreateWithoutFactoryInput = {
   fabricId: string
   processType?: string | null
   effectDescription?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   minimumOrderQty?: string | null
   leadTime?: string | null
@@ -688,7 +748,9 @@ export type PostProcessScalarWhereInput = {
   processType?: Prisma.StringNullableFilter<"PostProcess"> | string | null
   factoryId?: Prisma.StringNullableFilter<"PostProcess"> | string | null
   effectDescription?: Prisma.StringNullableFilter<"PostProcess"> | string | null
-  unitPrice?: Prisma.DecimalNullableFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.DecimalNullableFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.DecimalNullableFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.DecimalNullableFilter<"PostProcess"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.StringNullableFilter<"PostProcess"> | string | null
   minimumOrderQty?: Prisma.StringNullableFilter<"PostProcess"> | string | null
   leadTime?: Prisma.StringNullableFilter<"PostProcess"> | string | null
@@ -702,7 +764,9 @@ export type PostProcessCreateWithoutFabricInput = {
   id?: string
   processType?: string | null
   effectDescription?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   minimumOrderQty?: string | null
   leadTime?: string | null
@@ -718,7 +782,9 @@ export type PostProcessUncheckedCreateWithoutFabricInput = {
   processType?: string | null
   factoryId?: string | null
   effectDescription?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   minimumOrderQty?: string | null
   leadTime?: string | null
@@ -759,7 +825,9 @@ export type PostProcessCreateManyFactoryInput = {
   fabricId: string
   processType?: string | null
   effectDescription?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   minimumOrderQty?: string | null
   leadTime?: string | null
@@ -773,7 +841,9 @@ export type PostProcessUpdateWithoutFactoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -789,7 +859,9 @@ export type PostProcessUncheckedUpdateWithoutFactoryInput = {
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -804,7 +876,9 @@ export type PostProcessUncheckedUpdateManyWithoutFactoryInput = {
   fabricId?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -819,7 +893,9 @@ export type PostProcessCreateManyFabricInput = {
   processType?: string | null
   factoryId?: string | null
   effectDescription?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: string | null
   minimumOrderQty?: string | null
   leadTime?: string | null
@@ -833,7 +909,9 @@ export type PostProcessUpdateWithoutFabricInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -849,7 +927,9 @@ export type PostProcessUncheckedUpdateWithoutFabricInput = {
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   factoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -864,7 +944,9 @@ export type PostProcessUncheckedUpdateManyWithoutFabricInput = {
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   factoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   effectDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceExclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  unitPriceInclTax?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  taxRate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   minimumOrderQty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -882,7 +964,9 @@ export type PostProcessSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   processType?: boolean
   factoryId?: boolean
   effectDescription?: boolean
-  unitPrice?: boolean
+  unitPriceExclTax?: boolean
+  unitPriceInclTax?: boolean
+  taxRate?: boolean
   lossRate?: boolean
   minimumOrderQty?: boolean
   leadTime?: boolean
@@ -900,7 +984,9 @@ export type PostProcessSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   processType?: boolean
   factoryId?: boolean
   effectDescription?: boolean
-  unitPrice?: boolean
+  unitPriceExclTax?: boolean
+  unitPriceInclTax?: boolean
+  taxRate?: boolean
   lossRate?: boolean
   minimumOrderQty?: boolean
   leadTime?: boolean
@@ -918,7 +1004,9 @@ export type PostProcessSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   processType?: boolean
   factoryId?: boolean
   effectDescription?: boolean
-  unitPrice?: boolean
+  unitPriceExclTax?: boolean
+  unitPriceInclTax?: boolean
+  taxRate?: boolean
   lossRate?: boolean
   minimumOrderQty?: boolean
   leadTime?: boolean
@@ -936,7 +1024,9 @@ export type PostProcessSelectScalar = {
   processType?: boolean
   factoryId?: boolean
   effectDescription?: boolean
-  unitPrice?: boolean
+  unitPriceExclTax?: boolean
+  unitPriceInclTax?: boolean
+  taxRate?: boolean
   lossRate?: boolean
   minimumOrderQty?: boolean
   leadTime?: boolean
@@ -946,7 +1036,7 @@ export type PostProcessSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PostProcessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fabricId" | "processType" | "factoryId" | "effectDescription" | "unitPrice" | "lossRate" | "minimumOrderQty" | "leadTime" | "riskNotes" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["postProcess"]>
+export type PostProcessOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fabricId" | "processType" | "factoryId" | "effectDescription" | "unitPriceExclTax" | "unitPriceInclTax" | "taxRate" | "lossRate" | "minimumOrderQty" | "leadTime" | "riskNotes" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["postProcess"]>
 export type PostProcessInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   fabric?: boolean | Prisma.FabricDefaultArgs<ExtArgs>
   factory?: boolean | Prisma.PostProcess$factoryArgs<ExtArgs>
@@ -972,7 +1062,9 @@ export type $PostProcessPayload<ExtArgs extends runtime.Types.Extensions.Interna
     processType: string | null
     factoryId: string | null
     effectDescription: string | null
-    unitPrice: runtime.Decimal | null
+    unitPriceExclTax: runtime.Decimal | null
+    unitPriceInclTax: runtime.Decimal | null
+    taxRate: runtime.Decimal | null
     lossRate: string | null
     minimumOrderQty: string | null
     leadTime: string | null
@@ -1410,7 +1502,9 @@ export interface PostProcessFieldRefs {
   readonly processType: Prisma.FieldRef<"PostProcess", 'String'>
   readonly factoryId: Prisma.FieldRef<"PostProcess", 'String'>
   readonly effectDescription: Prisma.FieldRef<"PostProcess", 'String'>
-  readonly unitPrice: Prisma.FieldRef<"PostProcess", 'Decimal'>
+  readonly unitPriceExclTax: Prisma.FieldRef<"PostProcess", 'Decimal'>
+  readonly unitPriceInclTax: Prisma.FieldRef<"PostProcess", 'Decimal'>
+  readonly taxRate: Prisma.FieldRef<"PostProcess", 'Decimal'>
   readonly lossRate: Prisma.FieldRef<"PostProcess", 'String'>
   readonly minimumOrderQty: Prisma.FieldRef<"PostProcess", 'String'>
   readonly leadTime: Prisma.FieldRef<"PostProcess", 'String'>
