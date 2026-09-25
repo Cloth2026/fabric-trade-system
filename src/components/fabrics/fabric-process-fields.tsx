@@ -141,7 +141,9 @@ export function FabricProcessFields({
                 <GlassInput label="坯布克重" value={greige.weight} onChange={(value) => setGreige(greige.id, "weight", value)} placeholder="如 170g" />
                 <GlassInput label="坯布门幅" value={greige.width} onChange={(value) => setGreige(greige.id, "width", value)} placeholder="如 175cm" />
                 <GlassInput label="纱支 / 经纬密" value={greige.yarnOrDensity} onChange={(value) => setGreige(greige.id, "yarnOrDensity", value)} />
-                <GlassInput label="坯布单价" type="number" value={greige.unitPrice} onChange={(value) => setGreige(greige.id, "unitPrice", value)} placeholder={`¥ / ${unitLabel}`} />
+                <GlassInput label="坯布单价（不含税）" type="number" value={greige.unitPriceExclTax} onChange={(value) => setGreige(greige.id, "unitPriceExclTax", value)} placeholder={`¥ / ${unitLabel}`} error={errors[`greigeFabrics.${index}.unitPriceExclTax`]} />
+                <GlassInput label="坯布单价（含税）" type="number" value={greige.unitPriceInclTax} onChange={(value) => setGreige(greige.id, "unitPriceInclTax", value)} placeholder={`¥ / ${unitLabel}`} error={errors[`greigeFabrics.${index}.unitPriceInclTax`]} />
+                <GlassInput label="税点" type="number" value={greige.taxRate} onChange={(value) => setGreige(greige.id, "taxRate", value)} placeholder="如 13 表示 13%" error={errors[`greigeFabrics.${index}.taxRate`]} />
                 <GlassInput label="坯布损耗率" value={greige.lossRate} onChange={(value) => setGreige(greige.id, "lossRate", value)} placeholder="如 3%" />
                 <GlassTextarea label="坯布备注" value={greige.remarks} onChange={(value) => setGreige(greige.id, "remarks", value)} />
               </div>
@@ -200,7 +202,9 @@ export function FabricProcessFields({
                     setDyeing(dyeing.id, "factoryName", "");
                   }}
                 />
-                <GlassInput label="染整单价" type="number" value={dyeing.unitPrice} onChange={(value) => setDyeing(dyeing.id, "unitPrice", value)} placeholder={`¥ / ${unitLabel}`} />
+                <GlassInput label="染整单价（不含税）" type="number" value={dyeing.unitPriceExclTax} onChange={(value) => setDyeing(dyeing.id, "unitPriceExclTax", value)} placeholder={`¥ / ${unitLabel}`} error={errors[`dyeingFinishings.${index}.unitPriceExclTax`]} />
+                <GlassInput label="染整单价（含税）" type="number" value={dyeing.unitPriceInclTax} onChange={(value) => setDyeing(dyeing.id, "unitPriceInclTax", value)} placeholder={`¥ / ${unitLabel}`} error={errors[`dyeingFinishings.${index}.unitPriceInclTax`]} />
+                <GlassInput label="税点" type="number" value={dyeing.taxRate} onChange={(value) => setDyeing(dyeing.id, "taxRate", value)} placeholder="如 13 表示 13%" error={errors[`dyeingFinishings.${index}.taxRate`]} />
                 <GlassInput label="损耗率" value={dyeing.lossRate} onChange={(value) => setDyeing(dyeing.id, "lossRate", value)} placeholder="如 5%" />
                 <GlassInput label="交期" value={dyeing.leadTime} onChange={(value) => setDyeing(dyeing.id, "leadTime", value)} placeholder="如 7天" />
                 <GlassInput label="注意事项" value={dyeing.cautions} onChange={(value) => setDyeing(dyeing.id, "cautions", value)} placeholder="色差、手感、批次稳定性等" />
@@ -256,7 +260,9 @@ export function FabricProcessFields({
                   }}
                 />
                 <GlassInput label="效果描述" value={process.effectDescription} onChange={(value) => setPostProcess(process.id, "effectDescription", value)} placeholder="位置、效果、手感" />
-                <GlassInput label="单价" type="number" value={process.unitPrice} onChange={(value) => setPostProcess(process.id, "unitPrice", value)} placeholder={`¥ / ${unitLabel}`} />
+                <GlassInput label="单价（不含税）" type="number" value={process.unitPriceExclTax} onChange={(value) => setPostProcess(process.id, "unitPriceExclTax", value)} placeholder={`¥ / ${unitLabel}`} error={errors[`postProcesses.${index}.unitPriceExclTax`]} />
+                <GlassInput label="单价（含税）" type="number" value={process.unitPriceInclTax} onChange={(value) => setPostProcess(process.id, "unitPriceInclTax", value)} placeholder={`¥ / ${unitLabel}`} error={errors[`postProcesses.${index}.unitPriceInclTax`]} />
+                <GlassInput label="税点" type="number" value={process.taxRate} onChange={(value) => setPostProcess(process.id, "taxRate", value)} placeholder="如 13 表示 13%" error={errors[`postProcesses.${index}.taxRate`]} />
                 <GlassInput label="损耗率" value={process.lossRate} onChange={(value) => setPostProcess(process.id, "lossRate", value)} placeholder="如 5%" />
                 <GlassInput label="MOQ" value={process.minimumOrderQty} onChange={(value) => setPostProcess(process.id, "minimumOrderQty", value)} />
                 <GlassInput label="交期" value={process.leadTime} onChange={(value) => setPostProcess(process.id, "leadTime", value)} />

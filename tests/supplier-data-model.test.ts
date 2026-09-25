@@ -144,7 +144,7 @@ describe("supplier production unit data model", () => {
       suppliers: [
         {
           supplierId: legacyFlowSupplierId,
-          initialQuote: { purchasePrice: 18.5, currency: "CNY" },
+          initialQuote: { purchasePriceExclTax: 18.5, currency: "CNY" },
         },
       ],
     });
@@ -191,7 +191,7 @@ describe("supplier production unit data model", () => {
       suppliers: [
         {
           supplierId: legacyFlowSupplierId,
-          initialQuote: { purchasePrice: 21.25, currency: "CNY" },
+          initialQuote: { purchasePriceExclTax: 21.25, currency: "CNY" },
         },
       ],
     });

@@ -7,7 +7,9 @@ import { parseFabricListQuery, type FabricListQuery } from "./read-schema";
 
 const quoteSelect = {
   id: true,
-  purchasePrice: true,
+  purchasePriceExclTax: true,
+  purchasePriceInclTax: true,
+  purchaseTaxRate: true,
   currency: true,
   pricingUnit: true,
   minimumOrderQty: true,
@@ -47,13 +49,17 @@ function serializeDate(value: Date | null) {
 }
 
 function serializeQuote<T extends {
-  purchasePrice: { toString(): string };
+  purchasePriceExclTax: { toString(): string };
+  purchasePriceInclTax: { toString(): string } | null;
+  purchaseTaxRate: { toString(): string } | null;
   quoteDate: Date;
   createdAt: Date;
 }>(quote: T) {
   return {
     ...quote,
-    purchasePrice: quote.purchasePrice.toString(),
+    purchasePriceExclTax: quote.purchasePriceExclTax.toString(),
+    purchasePriceInclTax: serializeDecimal(quote.purchasePriceInclTax),
+    purchaseTaxRate: serializeDecimal(quote.purchaseTaxRate),
     quoteDate: quote.quoteDate.toISOString(),
     createdAt: quote.createdAt.toISOString(),
   };
@@ -247,7 +253,9 @@ export async function getFabricDetail(id: string) {
       tags: true,
       sourceContact: true,
       sourceDate: true,
-      finishedReferencePrice: true,
+      finishedReferencePriceExclTax: true,
+      finishedReferencePriceInclTax: true,
+      finishedReferenceTaxRate: true,
       repurchaseStatus: true,
       tubeWeight: true,
       tolerance: true,
@@ -303,7 +311,9 @@ export async function getFabricDetail(id: string) {
           weight: true,
           width: true,
           yarnOrDensity: true,
-          unitPrice: true,
+          unitPriceExclTax: true,
+          unitPriceInclTax: true,
+          taxRate: true,
           lossRate: true,
           remarks: true,
           createdAt: true,
@@ -317,7 +327,9 @@ export async function getFabricDetail(id: string) {
           processType: true,
           factoryId: true,
           factory: { select: supplierSummarySelect },
-          unitPrice: true,
+          unitPriceExclTax: true,
+          unitPriceInclTax: true,
+          taxRate: true,
           lossRate: true,
           leadTime: true,
           cautions: true,
@@ -333,7 +345,9 @@ export async function getFabricDetail(id: string) {
           factoryId: true,
           factory: { select: supplierSummarySelect },
           effectDescription: true,
-          unitPrice: true,
+          unitPriceExclTax: true,
+          unitPriceInclTax: true,
+          taxRate: true,
           lossRate: true,
           minimumOrderQty: true,
           leadTime: true,
@@ -351,7 +365,9 @@ export async function getFabricDetail(id: string) {
   return {
     ...fabric,
     sourceDate: serializeDate(fabric.sourceDate),
-    finishedReferencePrice: serializeDecimal(fabric.finishedReferencePrice),
+    finishedReferencePriceExclTax: serializeDecimal(fabric.finishedReferencePriceExclTax),
+    finishedReferencePriceInclTax: serializeDecimal(fabric.finishedReferencePriceInclTax),
+    finishedReferenceTaxRate: serializeDecimal(fabric.finishedReferenceTaxRate),
     createdAt: fabric.createdAt.toISOString(),
     updatedAt: fabric.updatedAt.toISOString(),
     supplierSources: fabric.supplierSources.map((source) => ({
@@ -362,19 +378,25 @@ export async function getFabricDetail(id: string) {
     })),
     greigeFabrics: fabric.greigeFabrics.map((greige) => ({
       ...greige,
-      unitPrice: serializeDecimal(greige.unitPrice),
+      unitPriceExclTax: serializeDecimal(greige.unitPriceExclTax),
+      unitPriceInclTax: serializeDecimal(greige.unitPriceInclTax),
+      taxRate: serializeDecimal(greige.taxRate),
       createdAt: greige.createdAt.toISOString(),
       updatedAt: greige.updatedAt.toISOString(),
     })),
     dyeingFinishings: fabric.dyeingFinishings.map((dyeing) => ({
       ...dyeing,
-      unitPrice: serializeDecimal(dyeing.unitPrice),
+      unitPriceExclTax: serializeDecimal(dyeing.unitPriceExclTax),
+      unitPriceInclTax: serializeDecimal(dyeing.unitPriceInclTax),
+      taxRate: serializeDecimal(dyeing.taxRate),
       createdAt: dyeing.createdAt.toISOString(),
       updatedAt: dyeing.updatedAt.toISOString(),
     })),
     postProcesses: fabric.postProcesses.map((process) => ({
       ...process,
-      unitPrice: serializeDecimal(process.unitPrice),
+      unitPriceExclTax: serializeDecimal(process.unitPriceExclTax),
+      unitPriceInclTax: serializeDecimal(process.unitPriceInclTax),
+      taxRate: serializeDecimal(process.taxRate),
       createdAt: process.createdAt.toISOString(),
       updatedAt: process.updatedAt.toISOString(),
     })),

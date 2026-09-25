@@ -49,7 +49,7 @@ import {
 // quoted in the order currency is converted with this order's own rate and
 // anything else has to be typed in by hand.
 function costFromPurchaseQuote(quote: PurchaseQuoteOption, currency: string, exchangeRate: string) {
-  const price = Number(quote.purchasePrice);
+  const price = Number(quote.purchasePriceExclTax);
   if (!Number.isFinite(price)) return "";
   if (quote.currency === "CNY") return String(price);
   if (quote.currency === currency) {

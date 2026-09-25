@@ -312,7 +312,7 @@ export function QuoteFabricPicker({
 
 export type PurchaseQuoteOption = {
   id: string;
-  purchasePrice: string;
+  purchasePriceExclTax: string;
   currency: string;
   pricingUnit: string;
   minimumOrderQty: string | null;
@@ -341,7 +341,7 @@ export function PurchaseQuotePicker({
         const quotes: PurchaseQuoteOption[] = (fabric.supplierSources ?? []).flatMap((source) =>
           (source.quotes ?? []).map((quote) => ({
             id: quote.id,
-            purchasePrice: quote.purchasePrice,
+            purchasePriceExclTax: quote.purchasePriceExclTax,
             currency: quote.currency,
             pricingUnit: quote.pricingUnit,
             minimumOrderQty: quote.minimumOrderQty,
@@ -352,12 +352,12 @@ export function PurchaseQuotePicker({
         quoteMap.current = new Map(quotes.map((quote) => [quote.id, quote]));
         const matched = keyword
           ? quotes.filter((quote) =>
-              `${quote.supplierName} ${quote.purchasePrice} ${quote.currency}`.includes(keyword),
+              `${quote.supplierName} ${quote.purchasePriceExclTax} ${quote.currency}`.includes(keyword),
             )
           : quotes;
         return matched.map((quote) => ({
           id: quote.id,
-          label: `${quote.supplierName} · ${quote.purchasePrice} ${quote.currency}/${quote.pricingUnit}`,
+          label: `${quote.supplierName} · ${quote.purchasePriceExclTax} ${quote.currency}/${quote.pricingUnit}`,
           note: [quote.minimumOrderQty ? `起订 ${quote.minimumOrderQty}` : null, quote.leadTime]
             .filter(Boolean)
             .join(" · "),

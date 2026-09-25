@@ -25,6 +25,14 @@ const processStatus = z.enum(["none", "pending", "available"]);
 const optionalDate = z.preprocess(emptyStringToNull, z.coerce.date().nullable().optional());
 const optionalMoney = z.preprocess(emptyStringToNull, nonNegativeMoney.nullable().optional());
 
+// Tax rates travel over the API as fractions: 0.13 means 13%. That is the same
+// convention CustomerQuote.taxRate already uses. The UI asks for a percentage
+// and divides by 100 before sending.
+const optionalTaxRate = z.preprocess(
+  emptyStringToNull,
+  z.coerce.number().min(0).max(1).nullable().optional(),
+);
+
 function derivePricingUnit(fabricType: "knitted" | "woven"): "kg" | "meter" {
   return fabricType === "knitted" ? "kg" : "meter";
 }
@@ -41,7 +49,9 @@ function requireDetail(
 }
 
 export const supplierQuoteInputSchema = z.object({
-  purchasePrice: requiredMoney,
+  purchasePriceExclTax: requiredMoney,
+  purchasePriceInclTax: optionalMoney,
+  purchaseTaxRate: optionalTaxRate,
   currency: z
     .preprocess(emptyStringToNull, z.string().regex(/^[A-Z]{3}$/).default("CNY"))
     .optional(),
@@ -86,7 +96,9 @@ export const createFabricInputSchema = z
     elasticity: optionalText,
     sourceContact: optionalText,
     sourceDate: optionalDate,
-    finishedReferencePrice: optionalMoney,
+    finishedReferencePriceExclTax: optionalMoney,
+    finishedReferencePriceInclTax: optionalMoney,
+    finishedReferenceTaxRate: optionalTaxRate,
     repurchaseStatus: optionalText,
     tubeWeight: optionalText,
     tolerance: optionalText,
@@ -110,7 +122,9 @@ export const createFabricInputSchema = z
           weight: optionalText,
           width: optionalText,
           yarnOrDensity: optionalText,
-          unitPrice: optionalMoney,
+          unitPriceExclTax: optionalMoney,
+          unitPriceInclTax: optionalMoney,
+          taxRate: optionalTaxRate,
           lossRate: optionalText,
           remarks: optionalText,
         }),
@@ -122,7 +136,9 @@ export const createFabricInputSchema = z
         z.object({
           processType: optionalText,
           factoryId: optionalText,
-          unitPrice: optionalMoney,
+          unitPriceExclTax: optionalMoney,
+          unitPriceInclTax: optionalMoney,
+          taxRate: optionalTaxRate,
           lossRate: optionalText,
           leadTime: optionalText,
           cautions: optionalText,
@@ -136,7 +152,9 @@ export const createFabricInputSchema = z
           processType: optionalText,
           factoryId: optionalText,
           effectDescription: optionalText,
-          unitPrice: optionalMoney,
+          unitPriceExclTax: optionalMoney,
+          unitPriceInclTax: optionalMoney,
+          taxRate: optionalTaxRate,
           lossRate: optionalText,
           minimumOrderQty: optionalText,
           leadTime: optionalText,

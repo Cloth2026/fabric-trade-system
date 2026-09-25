@@ -279,7 +279,7 @@ export function CustomerQuoteDetailDrawer({
                       </div>
                       {item.fabricSupplierQuote ? (
                         <div className="mt-1 text-xs text-stone-500">
-                          参考货源报价 {item.fabricSupplierQuote.purchasePrice}{" "}
+                          参考货源报价 {item.fabricSupplierQuote.purchasePriceExclTax}{" "}
                           {item.fabricSupplierQuote.currency}/{item.fabricSupplierQuote.pricingUnit}
                         </div>
                       ) : null}

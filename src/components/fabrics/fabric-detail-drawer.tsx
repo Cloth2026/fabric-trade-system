@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
+import { formatTaxRatePercent } from "@/lib/tax-rate";
 import {
   ApiClientError,
   createLatestRequestGuard,
@@ -143,7 +144,9 @@ function BasicTab({ fabric, labels }: { fabric: FabricDetail; labels: ConfigLabe
         <DetailField label="复购状态" value={getConfigLabel(labels, "repurchase_status", fabric.repurchaseStatus)} />
         <DetailField label="来源联系人" value={fabric.sourceContact} />
         <DetailField label="来源日期" value={fabric.sourceDate ? formatDate(fabric.sourceDate) : null} />
-        <DetailField label="成品参考价" value={fabric.finishedReferencePrice ? formatPrice(fabric.finishedReferencePrice, "CNY", fabric.pricingUnit) : null} />
+        <DetailField label="成品参考价（不含税）" value={fabric.finishedReferencePriceExclTax ? formatPrice(fabric.finishedReferencePriceExclTax, "CNY", fabric.pricingUnit) : null} />
+        <DetailField label="成品参考价（含税）" value={fabric.finishedReferencePriceInclTax ? formatPrice(fabric.finishedReferencePriceInclTax, "CNY", fabric.pricingUnit) : null} />
+        <DetailField label="成品参考价税点" value={formatTaxRatePercent(fabric.finishedReferenceTaxRate) || null} />
         <DetailField label="纸管重量" value={fabric.tubeWeight} />
         <DetailField label="空差" value={fabric.tolerance} />
         <DetailField label="用途" value={optionList(labels, "fabric_usage", fabric.usageOptionKeys)} wide />
@@ -163,10 +166,19 @@ function QuoteCard({ quote, latest }: { quote: FabricQuote; latest: boolean }) {
         <span className="flex items-center gap-2 text-[11px] font-medium text-stone-500">
           {latest ? "最新报价" : formatDate(quote.quoteDate)}
         </span>
-        <span className="text-sm font-semibold text-stone-950">{formatPrice(quote.purchasePrice, quote.currency, quote.pricingUnit)}</span>
+        <span className="text-sm font-semibold text-stone-950">{formatPrice(quote.purchasePriceExclTax, quote.currency, quote.pricingUnit)}</span>
       </div>
       <div className="mt-3 grid gap-x-4 gap-y-3 sm:grid-cols-2">
         <DetailField label="报价日期" value={formatDate(quote.quoteDate)} />
+        <DetailField
+          label="采购价（不含税）"
+          value={formatPrice(quote.purchasePriceExclTax, quote.currency, quote.pricingUnit)}
+        />
+        <DetailField
+          label="采购价（含税）"
+          value={quote.purchasePriceInclTax ? formatPrice(quote.purchasePriceInclTax, quote.currency, quote.pricingUnit) : null}
+        />
+        <DetailField label="税点" value={formatTaxRatePercent(quote.purchaseTaxRate) || null} />
         <DetailField label="报价对应生产单元" value={getQuoteSupplierUnitLabel(quote)} />
         <DetailField label="MOQ" value={quote.minimumOrderQty} />
         <DetailField label="交期" value={quote.leadTime} />
@@ -267,7 +279,9 @@ function ProcessTab({ fabric, labels }: { fabric: FabricDetail; labels: ConfigLa
               <span>成分：{greige.composition || "待补充"}</span>
               <span>克重 / 门幅：{[greige.weight, greige.width].filter(Boolean).join(" · ") || "待补充"}</span>
               <span>纱支或经纬密：{greige.yarnOrDensity || "待补充"}</span>
-              <span>单价：{greige.unitPrice ? `¥${greige.unitPrice}` : "待补充"}</span>
+              <span>单价（不含税）：{greige.unitPriceExclTax ? `¥${greige.unitPriceExclTax}` : "待补充"}</span>
+              <span>单价（含税）：{greige.unitPriceInclTax ? `¥${greige.unitPriceInclTax}` : "待补充"}</span>
+              <span>税点：{formatTaxRatePercent(greige.taxRate) || "未填写"}</span>
               <span className="sm:col-span-2">损耗：{greige.lossRate || "暂无"}　备注：{greige.remarks || "暂无"}</span>
             </div>
           </div>
@@ -283,7 +297,9 @@ function ProcessTab({ fabric, labels }: { fabric: FabricDetail; labels: ConfigLa
             </div>
             <div className="mt-2 grid gap-2 text-xs text-stone-600 sm:grid-cols-2">
               <span>染整厂：{dyeing.factory?.name || "待补充"}</span>
-              <span>加工单价：{dyeing.unitPrice ? `¥${dyeing.unitPrice}` : "待补充"}</span>
+              <span>加工单价（不含税）：{dyeing.unitPriceExclTax ? `¥${dyeing.unitPriceExclTax}` : "待补充"}</span>
+              <span>加工单价（含税）：{dyeing.unitPriceInclTax ? `¥${dyeing.unitPriceInclTax}` : "待补充"}</span>
+              <span>税点：{formatTaxRatePercent(dyeing.taxRate) || "未填写"}</span>
               <span>损耗：{dyeing.lossRate || "待补充"}</span>
               <span>交期：{dyeing.leadTime || "待补充"}</span>
               <span className="sm:col-span-2">注意事项：{dyeing.cautions || "暂无"}</span>
@@ -294,7 +310,7 @@ function ProcessTab({ fabric, labels }: { fabric: FabricDetail; labels: ConfigLa
       <DetailSection icon={Sparkles} title="后工艺信息" tone="amber">
         <DetailField label="资料状态" value={processStatusLabels[fabric.postProcessStatus]} />
         <DetailField label="工艺数量" value={fabric.postProcesses.length ? `${fabric.postProcesses.length} 项` : null} />
-        {fabric.postProcesses.map((process, index) => <div className="rounded-xl border border-white/36 bg-white/22 p-3 sm:col-span-2" key={process.id}><div className="text-xs font-medium text-stone-900">{index + 1}. {getConfigLabel(labels, "post_process_type", process.processType)}</div><div className="mt-2 grid gap-2 text-xs text-stone-600 sm:grid-cols-2"><span>工厂：{process.factory?.name || "待补充"}</span><span>单价：{process.unitPrice ? `¥${process.unitPrice}` : "待补充"}</span><span>效果：{process.effectDescription || "待补充"}</span><span>交期：{process.leadTime || "待补充"}</span><span className="sm:col-span-2">风险：{process.riskNotes || "暂无"}</span></div></div>)}
+        {fabric.postProcesses.map((process, index) => <div className="rounded-xl border border-white/36 bg-white/22 p-3 sm:col-span-2" key={process.id}><div className="text-xs font-medium text-stone-900">{index + 1}. {getConfigLabel(labels, "post_process_type", process.processType)}</div><div className="mt-2 grid gap-2 text-xs text-stone-600 sm:grid-cols-2"><span>工厂：{process.factory?.name || "待补充"}</span><span>单价（不含税）：{process.unitPriceExclTax ? `¥${process.unitPriceExclTax}` : "待补充"}</span><span>单价（含税）：{process.unitPriceInclTax ? `¥${process.unitPriceInclTax}` : "待补充"}</span><span>税点：{formatTaxRatePercent(process.taxRate) || "未填写"}</span><span>效果：{process.effectDescription || "待补充"}</span><span>交期：{process.leadTime || "待补充"}</span><span className="sm:col-span-2">风险：{process.riskNotes || "暂无"}</span></div></div>)}
       </DetailSection>
       <DetailSection icon={ClipboardCheck} title="质量记录" tone="emerald">
         <DetailField label="检验结论" value={getConfigLabel(labels, "inspection_conclusion", fabric.inspectionConclusion)} />

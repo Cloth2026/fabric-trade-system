@@ -68,7 +68,7 @@ const sourceQuoteBriefSelect = {
 
 const purchaseQuoteBriefSelect = {
   id: true,
-  purchasePrice: true,
+  purchasePriceExclTax: true,
   currency: true,
   pricingUnit: true,
   minimumOrderQty: true,
@@ -316,9 +316,9 @@ async function resolveItems(
         // is; one in the order currency is converted with this order's own
         // rate. Any other pairing has no rate available and must be typed in.
         if (purchaseQuote.currency === "CNY") {
-          costPrice = Number(purchaseQuote.purchasePrice);
+          costPrice = Number(purchaseQuote.purchasePriceExclTax);
         } else if (purchaseQuote.currency === orderCurrency) {
-          costPrice = Number(purchaseQuote.purchasePrice) * exchangeRate;
+          costPrice = Number(purchaseQuote.purchasePriceExclTax) * exchangeRate;
         } else {
           throw new AppError(
             400,

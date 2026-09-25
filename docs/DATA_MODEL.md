@@ -9,8 +9,8 @@ Tenant
   ├─ Supplier
   │    └─ SupplierUnit[]
   ├─ Fabric
-  │    ├─ GreigeFabric?
-  │    ├─ DyeingFinishing?
+  │    ├─ GreigeFabric[]
+  │    ├─ DyeingFinishing[]
   │    ├─ PostProcess[]
   │    ├─ FabricStockInBatch[]
   │    └─ FabricSupplier[]
@@ -43,8 +43,8 @@ Fabric
 | `SupplierUnit` | 供应商下属分厂、事业部、车间、部门、生产线或外协点，记录具体业务和工艺能力。 |
 | `FabricSupplier` | 面料与供应商的长期货源关系，保存供应商货号、样品状态、品质差异、首选状态和当前生产单元。 |
 | `FabricSupplierQuote` | 一次采购报价的不可覆盖快照，保存金额、币种、计价单位、MOQ、交期、联系人、日期和报价当时生产单元。 |
-| `GreigeFabric` | 一款面料可选的一对一坯布资料。 |
-| `DyeingFinishing` | 一款面料可选的一对一染整资料。 |
+| `GreigeFabric` | 一款面料可有多条坯布资料（多家织厂 / 不同规格）。 |
+| `DyeingFinishing` | 一款面料可有多条染整资料（不同染厂 / 不同工序）。 |
 | `PostProcess` | 一款面料可有多条后工艺资料。 |
 | `FabricStockInBatch` | 预留的入库批次模型；真实库存和 UI 尚未开发。 |
 | `ConfigOption` | 系统级或租户级枚举配置，保存稳定 `group`、`key` 和中文 `label`。 |
@@ -80,7 +80,22 @@ Fabric
 - 详情返回所有货源及全部报价历史，排序同上。
 - `FabricSupplierQuote.supplierUnitId` 是报价自己的历史关系，不能用 `FabricSupplier.supplierUnitId` 替代。
 - 修改货源当前生产单元不会改变旧报价关联的生产单元。
-- `purchasePrice` 使用 `Decimal`，API 返回字符串；日期返回 ISO 8601 字符串。
+- `purchasePriceExclTax` 使用 `Decimal`，API 返回字符串；日期返回 ISO 8601 字符串。
+
+## 价格口径：含税 / 不含税 / 税点
+
+面料库里每个价格都拆成三个字段，全部手工填写、原样存库：
+
+| 模型 | 不含税 | 含税 | 税点 |
+| --- | --- | --- | --- |
+| `Fabric`（成品参考价） | `finishedReferencePriceExclTax` `Decimal(12,2)?` | `finishedReferencePriceInclTax` `Decimal(12,2)?` | `finishedReferenceTaxRate` `Decimal(6,3)?` |
+| `FabricSupplierQuote`（采购价） | `purchasePriceExclTax` `Decimal(12,2)` 必填 | `purchasePriceInclTax` `Decimal(12,2)?` | `purchaseTaxRate` `Decimal(6,3)?` |
+| `GreigeFabric` / `DyeingFinishing` / `PostProcess`（工艺单价） | `unitPriceExclTax` `Decimal(12,2)?` | `unitPriceInclTax` `Decimal(12,2)?` | `taxRate` `Decimal(6,3)?` |
+
+- 税点存小数（`0.13` = 13%），界面按百分比录入；与客户报价单 `CustomerQuote.taxRate`、销售订单 `SalesOrder.taxRate` 的口径一致。
+- 系统不做含税 / 不含税互相推导，也不由两价反算税点，价格以录入原话为准。
+- 后端校验税率范围 `0 ≤ rate ≤ 1`，越界返回 400；留空表示未填写。
+- 迁移 `20260925055710_price_tax_exclusive_inclusive_split` 把旧价格列 RENAME 为不含税列（历史值按不含税价解释），再新增含税列与税点列，历史金额不丢失。
 
 ## 关键唯一约束与索引
 

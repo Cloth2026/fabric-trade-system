@@ -41,7 +41,7 @@ export type OrderFabricSupplierBrief = {
 
 export type OrderPurchaseQuoteBrief = {
   id: string;
-  purchasePrice: string;
+  purchasePriceExclTax: string;
   currency: string;
   pricingUnit: string;
   minimumOrderQty: string | null;

@@ -133,7 +133,7 @@ before(async () => {
     data: {
       tenantId,
       fabricSupplierId: source.id,
-      purchasePrice: "9.50",
+      purchasePriceExclTax: "9.50",
       currency: "CNY",
       pricingUnit: "meter",
       minimumOrderQty: "500m/color",
@@ -194,9 +194,9 @@ describe("customer quotes", () => {
 
     const purchaseQuote = await prisma.fabricSupplierQuote.findUniqueOrThrow({
       where: { id: purchaseQuoteId },
-      select: { purchasePrice: true },
+      select: { purchasePriceExclTax: true },
     });
-    assert.equal(purchaseQuote.purchasePrice.toString(), "9.5");
+    assert.equal(purchaseQuote.purchasePriceExclTax.toString(), "9.5");
   });
 
   test("requires an exchange rate for USD and reports margin in CNY", async () => {

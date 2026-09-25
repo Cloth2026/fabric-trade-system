@@ -61,8 +61,8 @@ describe("create fabric form state", () => {
 
     const errors = validateCreateFabricDraft(state);
     const payload = buildCreateFabricPayload(state);
-    assert.equal(errors["suppliers.0.initialQuote.purchasePrice"], "填写首次报价时，采购价不能为空");
-    assert.equal(payload.suppliers[0].initialQuote?.purchasePrice, undefined);
+    assert.equal(errors["suppliers.0.initialQuote.purchasePriceExclTax"], "填写首次报价时，不含税采购价不能为空");
+    assert.equal(payload.suppliers[0].initialQuote?.purchasePriceExclTax, undefined);
   });
 
   test("multiple suppliers can be added and removed", () => {
@@ -101,7 +101,8 @@ describe("create fabric form state", () => {
 
     state.postProcessStatus = "available";
     state.postProcesses = [{
-      id: "post-a", processType: "foil_stamping", factoryId: "", factoryName: "", effectDescription: "", unitPrice: "",
+      id: "post-a", processType: "foil_stamping", factoryId: "", factoryName: "", effectDescription: "", unitPriceExclTax: "",
+      unitPriceInclTax: "", taxRate: "",
       lossRate: "", minimumOrderQty: "", leadTime: "", riskNotes: "", remarks: "",
     }];
     state = changeProcessStatus(state, "postProcess", "none");

@@ -89,7 +89,7 @@ function fabricData(
     elasticity: "four_way",
     sourceContact: "Source Contact",
     sourceDate: new Date("2026-08-01T00:00:00.000Z"),
-    finishedReferencePrice: "28.80",
+    finishedReferencePriceExclTax: "28.80",
     repurchaseStatus: "available",
     tubeWeight: "0.8kg",
     tolerance: "3%",
@@ -277,7 +277,7 @@ before(async () => {
       data: {
         tenantId,
         fabricSupplierId: sourceAEarly.id,
-        purchasePrice: "19.50",
+        purchasePriceExclTax: "19.50",
         currency: "CNY",
         pricingUnit: "kg",
         quoteDate: new Date("2026-08-05T00:00:00.000Z"),
@@ -288,7 +288,7 @@ before(async () => {
         tenantId,
         fabricSupplierId: sourceAPreferred.id,
         supplierUnitId: historicalUnit.id,
-        purchasePrice: "23.10",
+        purchasePriceExclTax: "23.10",
         currency: "CNY",
         pricingUnit: "kg",
         minimumOrderQty: "500kg/color",
@@ -303,7 +303,7 @@ before(async () => {
         tenantId,
         fabricSupplierId: sourceAPreferred.id,
         supplierUnitId: preferredUnit.id,
-        purchasePrice: "24.80",
+        purchasePriceExclTax: "24.80",
         currency: "CNY",
         pricingUnit: "kg",
         minimumOrderQty: "600kg/color",
@@ -319,7 +319,7 @@ before(async () => {
       data: {
         tenantId,
         fabricSupplierId: sourceAPreferred.id,
-        purchasePrice: "22.00",
+        purchasePriceExclTax: "22.00",
         currency: "CNY",
         pricingUnit: "kg",
         quoteDate: new Date("2026-07-01T00:00:00.000Z"),
@@ -336,7 +336,7 @@ before(async () => {
         supplierId: supplierA.id,
         code: "GREIGE-001",
         composition: "88% polyester 12% spandex",
-        unitPrice: "12.30",
+        unitPriceExclTax: "12.30",
       },
     }),
     prisma.greigeFabric.create({
@@ -345,7 +345,7 @@ before(async () => {
         supplierId: supplierB.id,
         code: "GREIGE-002",
         composition: "92% polyester 8% spandex",
-        unitPrice: "13.10",
+        unitPriceExclTax: "13.10",
       },
     }),
     prisma.dyeingFinishing.create({
@@ -353,7 +353,7 @@ before(async () => {
         fabricId: fabricA.id,
         processType: "solid_dyeing",
         factoryId: supplierB.id,
-        unitPrice: "4.20",
+        unitPriceExclTax: "4.20",
         cautions: "Watch shade variation",
       },
     }),
@@ -362,7 +362,7 @@ before(async () => {
         fabricId: fabricA.id,
         processType: "heat_setting",
         factoryId: supplierB.id,
-        unitPrice: "1.80",
+        unitPriceExclTax: "1.80",
       },
     }),
     prisma.postProcess.create({
@@ -371,7 +371,7 @@ before(async () => {
         processType: "calendering",
         factoryId: supplierB.id,
         effectDescription: "Soft sheen",
-        unitPrice: "1.50",
+        unitPriceExclTax: "1.50",
       },
     }),
   ]);
@@ -456,8 +456,8 @@ describe("GET /api/fabrics", () => {
     assert.equal(item.preferredSupplierSource.supplierId, preferredSupplierId);
     assert.equal(item.preferredSupplierSource.supplierUnitId, preferredUnitId);
     assert.equal(item.preferredSupplierSource.supplierUnitName, "染色一车间");
-    assert.equal(item.preferredSupplierSource.latestQuote.purchasePrice, "24.8");
-    assert.equal(typeof item.preferredSupplierSource.latestQuote.purchasePrice, "string");
+    assert.equal(item.preferredSupplierSource.latestQuote.purchasePriceExclTax, "24.8");
+    assert.equal(typeof item.preferredSupplierSource.latestQuote.purchasePriceExclTax, "string");
     assert.equal(item.preferredSupplierSource.latestQuote.contactName, "Li Manager");
   });
 
@@ -505,7 +505,7 @@ describe("GET /api/fabrics/[id]", () => {
 
     assert.equal(response.status, 200);
     assert.equal(detail.code, `${codePrefix}A`);
-    assert.equal(detail.finishedReferencePrice, "28.8");
+    assert.equal(detail.finishedReferencePriceExclTax, "28.8");
     assert.equal("supplierId" in detail, false);
     assert.equal("supplierQuote" in detail, false);
     assert.equal("minimumOrderQty" in detail, false);
@@ -516,10 +516,10 @@ describe("GET /api/fabrics/[id]", () => {
     assert.equal(preferred.supplierUnit.id, preferredUnitId);
     assert.equal(preferred.supplierUnit.unitForm, "workshop");
     assert.deepEqual(
-      preferred.quotes.map((quote: { purchasePrice: string }) => quote.purchasePrice),
+      preferred.quotes.map((quote: { purchasePriceExclTax: string }) => quote.purchasePriceExclTax),
       ["24.8", "23.1", "22"],
     );
-    assert.equal(preferred.quotes.every((quote: { purchasePrice: unknown }) => typeof quote.purchasePrice === "string"), true);
+    assert.equal(preferred.quotes.every((quote: { purchasePriceExclTax: unknown }) => typeof quote.purchasePriceExclTax === "string"), true);
 
     const [currentUnitQuote, historicalUnitQuote, noUnitQuote] = preferred.quotes;
     assert.equal(currentUnitQuote.supplierUnitId, preferredUnitId);
@@ -550,15 +550,15 @@ describe("GET /api/fabrics/[id]", () => {
 
     assert.equal(detail.greigeFabrics.length, 2);
     assert.equal(detail.greigeFabrics[0].code, "GREIGE-001");
-    assert.equal(detail.greigeFabrics[0].unitPrice, "12.3");
+    assert.equal(detail.greigeFabrics[0].unitPriceExclTax, "12.3");
     assert.equal(detail.greigeFabrics[1].code, "GREIGE-002");
     assert.equal(detail.dyeingFinishings.length, 2);
     assert.equal(detail.dyeingFinishings[0].processType, "solid_dyeing");
-    assert.equal(detail.dyeingFinishings[0].unitPrice, "4.2");
+    assert.equal(detail.dyeingFinishings[0].unitPriceExclTax, "4.2");
     assert.equal(detail.dyeingFinishings[1].processType, "heat_setting");
     assert.equal(detail.postProcesses.length, 1);
     assert.equal(detail.postProcesses[0].effectDescription, "Soft sheen");
-    assert.equal(detail.postProcesses[0].unitPrice, "1.5");
+    assert.equal(detail.postProcesses[0].unitPriceExclTax, "1.5");
   });
 
   test("returns 404 for missing or cross-tenant fabrics", async () => {

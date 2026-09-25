@@ -34,6 +34,12 @@ const optionalNonEmptyText = z.preprocess(emptyStringToUndefined, z.string().tri
 const requiredText = z.string().trim().min(1);
 const nonNegativeMoney = z.coerce.number().nonnegative();
 const optionalMoney = z.preprocess(emptyStringToNull, nonNegativeMoney.nullable().optional());
+
+// Tax rates travel as fractions: 0.13 means 13%, matching CustomerQuote.taxRate.
+const optionalTaxRate = z.preprocess(
+  emptyStringToNull,
+  z.coerce.number().min(0).max(1).nullable().optional(),
+);
 const optionalDate = z.preprocess(emptyStringToNull, z.coerce.date().nullable().optional());
 const optionKeys = z.array(z.string().trim().min(1));
 const processStatus = z.enum(["none", "pending", "available"]);
@@ -46,7 +52,9 @@ const greigeInputSchema = z.object({
   weight: optionalText,
   width: optionalText,
   yarnOrDensity: optionalText,
-  unitPrice: optionalMoney,
+  unitPriceExclTax: optionalMoney,
+  unitPriceInclTax: optionalMoney,
+  taxRate: optionalTaxRate,
   lossRate: optionalText,
   remarks: optionalText,
 });
@@ -54,7 +62,9 @@ const greigeInputSchema = z.object({
 const dyeingInputSchema = z.object({
   processType: optionalText,
   factoryId: optionalText,
-  unitPrice: optionalMoney,
+  unitPriceExclTax: optionalMoney,
+  unitPriceInclTax: optionalMoney,
+  taxRate: optionalTaxRate,
   lossRate: optionalText,
   leadTime: optionalText,
   cautions: optionalText,
@@ -64,7 +74,9 @@ const postProcessInputSchema = z.object({
   processType: optionalText,
   factoryId: optionalText,
   effectDescription: optionalText,
-  unitPrice: optionalMoney,
+  unitPriceExclTax: optionalMoney,
+  unitPriceInclTax: optionalMoney,
+  taxRate: optionalTaxRate,
   lossRate: optionalText,
   minimumOrderQty: optionalText,
   leadTime: optionalText,
@@ -97,7 +109,9 @@ export const updateFabricSchema = z
     elasticity: optionalText,
     sourceContact: optionalText,
     sourceDate: optionalDate,
-    finishedReferencePrice: optionalMoney,
+    finishedReferencePriceExclTax: optionalMoney,
+    finishedReferencePriceInclTax: optionalMoney,
+    finishedReferenceTaxRate: optionalTaxRate,
     repurchaseStatus: optionalText,
     tubeWeight: optionalText,
     tolerance: optionalText,
@@ -302,7 +316,9 @@ export async function updateFabric(fabricId: string, input: unknown, options: { 
         elasticity: data.elasticity,
         sourceContact: data.sourceContact,
         sourceDate: data.sourceDate,
-        finishedReferencePrice: data.finishedReferencePrice,
+        finishedReferencePriceExclTax: data.finishedReferencePriceExclTax,
+        finishedReferencePriceInclTax: data.finishedReferencePriceInclTax,
+        finishedReferenceTaxRate: data.finishedReferenceTaxRate,
         repurchaseStatus: data.repurchaseStatus,
         tubeWeight: data.tubeWeight,
         tolerance: data.tolerance,
@@ -331,7 +347,9 @@ export async function updateFabric(fabricId: string, input: unknown, options: { 
             weight: greige.weight,
             width: greige.width,
             yarnOrDensity: greige.yarnOrDensity,
-            unitPrice: greige.unitPrice,
+            unitPriceExclTax: greige.unitPriceExclTax,
+            unitPriceInclTax: greige.unitPriceInclTax,
+            taxRate: greige.taxRate,
             lossRate: greige.lossRate,
             remarks: greige.remarks,
           },
@@ -348,7 +366,9 @@ export async function updateFabric(fabricId: string, input: unknown, options: { 
             fabricId: fabric.id,
             processType: dyeing.processType,
             factoryId: dyeing.factoryId,
-            unitPrice: dyeing.unitPrice,
+            unitPriceExclTax: dyeing.unitPriceExclTax,
+            unitPriceInclTax: dyeing.unitPriceInclTax,
+            taxRate: dyeing.taxRate,
             lossRate: dyeing.lossRate,
             leadTime: dyeing.leadTime,
             cautions: dyeing.cautions,
@@ -367,7 +387,9 @@ export async function updateFabric(fabricId: string, input: unknown, options: { 
             processType: process.processType,
             factoryId: process.factoryId,
             effectDescription: process.effectDescription,
-            unitPrice: process.unitPrice,
+            unitPriceExclTax: process.unitPriceExclTax,
+            unitPriceInclTax: process.unitPriceInclTax,
+            taxRate: process.taxRate,
             lossRate: process.lossRate,
             minimumOrderQty: process.minimumOrderQty,
             leadTime: process.leadTime,

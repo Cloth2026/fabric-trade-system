@@ -71,7 +71,7 @@ before(async () => {
 
   const quoted = await createFabric({
     ...basePayload("QUOTED"),
-    suppliers: [{ supplierId, initialQuote: { purchasePrice: "10" } }],
+    suppliers: [{ supplierId, initialQuote: { purchasePriceExclTax: "10" } }],
   });
   quotedFabricId = quoted.id;
 
@@ -222,19 +222,19 @@ describe("updateFabric", () => {
       dyeingStatus: "available",
       postProcessStatus: "available",
       greigeFabrics: [
-        { code: "G-1", name: "坯布一", unitPrice: 12.5 },
-        { code: "G-2", name: "坯布二", unitPrice: 13.5 },
+        { code: "G-1", name: "坯布一", unitPriceExclTax: 12.5 },
+        { code: "G-2", name: "坯布二", unitPriceExclTax: 13.5 },
       ],
       dyeingFinishings: [
-        { processType: "dyeing", unitPrice: 4.2 },
-        { processType: "heat_setting", unitPrice: 1.8 },
+        { processType: "dyeing", unitPriceExclTax: 4.2 },
+        { processType: "heat_setting", unitPriceExclTax: 1.8 },
       ],
-      postProcesses: [{ processType: "embossing", unitPrice: 1.5 }],
+      postProcesses: [{ processType: "embossing", unitPriceExclTax: 1.5 }],
     });
 
     assert.equal(detail.greigeFabrics.length, 2);
     assert.deepEqual(detail.greigeFabrics.map((greige) => greige.code), ["G-1", "G-2"]);
-    assert.equal(detail.greigeFabrics[0].unitPrice, "12.5");
+    assert.equal(detail.greigeFabrics[0].unitPriceExclTax, "12.5");
     assert.equal(detail.dyeingFinishings.length, 2);
     assert.deepEqual(detail.dyeingFinishings.map((dyeing) => dyeing.processType), [
       "dyeing",
@@ -251,6 +251,43 @@ describe("updateFabric", () => {
     assert.equal(shrunk.greigeFabrics[0].code, "G-3");
     assert.equal(shrunk.dyeingFinishings.length, 0);
     assert.equal(shrunk.dyeingStatus, "none");
+  });
+
+  test("stores tax-exclusive price, tax-inclusive price and a hand-entered tax rate", async () => {
+    const detail = await updateFabric(fabricId, {
+      finishedReferencePriceExclTax: 20,
+      finishedReferencePriceInclTax: 22.6,
+      finishedReferenceTaxRate: 0.13,
+      greigeStatus: "available",
+      greigeFabrics: [
+        { code: "G-TAX", unitPriceExclTax: 10, unitPriceInclTax: 11.3, taxRate: 0.13 },
+      ],
+      dyeingStatus: "none",
+      postProcessStatus: "none",
+    });
+
+    assert.equal(detail.finishedReferencePriceExclTax, "20");
+    assert.equal(detail.finishedReferencePriceInclTax, "22.6");
+    assert.equal(detail.finishedReferenceTaxRate, "0.13");
+    assert.equal(detail.greigeFabrics.length, 1);
+    assert.equal(detail.greigeFabrics[0].unitPriceExclTax, "10");
+    assert.equal(detail.greigeFabrics[0].unitPriceInclTax, "11.3");
+    assert.equal(detail.greigeFabrics[0].taxRate, "0.13");
+
+    const row = await prisma.greigeFabric.findFirstOrThrow({
+      where: { fabricId, code: "G-TAX" },
+      select: { unitPriceExclTax: true, unitPriceInclTax: true, taxRate: true },
+    });
+    assert.equal(Number(row.unitPriceExclTax), 10);
+    assert.equal(Number(row.unitPriceInclTax), 11.3);
+    assert.equal(Number(row.taxRate), 0.13);
+  });
+
+  test("a tax rate above 100 percent is rejected", async () => {
+    await assert.rejects(
+      () => updateFabric(fabricId, { finishedReferenceTaxRate: 1.5 }),
+      (error: { status?: number }) => error.status === 400,
+    );
   });
 
   test("process status must match the submitted details", async () => {

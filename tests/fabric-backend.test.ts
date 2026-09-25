@@ -121,31 +121,31 @@ describe("create fabric schema", () => {
     assert.throws(() =>
       createFabricInputSchema.parse({
         ...basePayload("NEG"),
-        suppliers: [{ supplierId: "supplier-id", initialQuote: { purchasePrice: -1 } }],
+        suppliers: [{ supplierId: "supplier-id", initialQuote: { purchasePriceExclTax: -1 } }],
       }),
     );
   });
 
   test("empty required quote price is rejected instead of coerced to zero", () => {
-    for (const purchasePrice of ["", "   ", null]) {
+    for (const purchasePriceExclTax of ["", "   ", null]) {
       const parsed = createFabricInputSchema.safeParse({
-        ...basePayload(`EMPTY-PRICE-${String(purchasePrice).length}`),
-        suppliers: [{ supplierId: "supplier-id", initialQuote: { purchasePrice } }],
+        ...basePayload(`EMPTY-PRICE-${String(purchasePriceExclTax).length}`),
+        suppliers: [{ supplierId: "supplier-id", initialQuote: { purchasePriceExclTax } }],
       });
 
       assert.equal(parsed.success, false);
       assert.equal(
-        parsed.error.issues.some((issue) => issue.path.join(".") === "suppliers.0.initialQuote.purchasePrice"),
+        parsed.error.issues.some((issue) => issue.path.join(".") === "suppliers.0.initialQuote.purchasePriceExclTax"),
         true,
       );
     }
 
     const zeroPrice = createFabricInputSchema.parse({
       ...basePayload("ZERO-PRICE"),
-      suppliers: [{ supplierId: "supplier-id", initialQuote: { purchasePrice: 0 } }],
+      suppliers: [{ supplierId: "supplier-id", initialQuote: { purchasePriceExclTax: 0 } }],
     });
 
-    assert.equal(zeroPrice.suppliers[0]?.initialQuote?.purchasePrice, 0);
+    assert.equal(zeroPrice.suppliers[0]?.initialQuote?.purchasePriceExclTax, 0);
   });
 
   test("process status rejects conflicting greige, dyeing, and post-process details", () => {
@@ -204,7 +204,7 @@ describe("fabric creation service", () => {
           supplierFabricCode: "A-001",
           isPreferred: true,
           initialQuote: {
-            purchasePrice: 45,
+            purchasePriceExclTax: 45,
             currency: "CNY",
             minimumOrderQty: "500m",
             contactName: "Alice",
@@ -214,7 +214,7 @@ describe("fabric creation service", () => {
           supplierId: supplierBId,
           supplierFabricCode: "B-001",
           initialQuote: {
-            purchasePrice: 47,
+            purchasePriceExclTax: 47,
             currency: "CNY",
           },
         },
@@ -233,7 +233,7 @@ describe("fabric creation service", () => {
       ...basePayload("AUTO-PREFERRED"),
       suppliers: [
         { supplierId: supplierAId },
-        { supplierId: supplierBId, initialQuote: { purchasePrice: 39, currency: "CNY" } },
+        { supplierId: supplierBId, initialQuote: { purchasePriceExclTax: 39, currency: "CNY" } },
       ],
     });
 

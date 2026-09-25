@@ -381,7 +381,7 @@ export function SalesOrderDetailDrawer({
                               .filter(Boolean)
                               .join(" · ") || "未命名货源"}
                             {item.fabricSupplierQuote
-                              ? ` · 参考报价 ${item.fabricSupplierQuote.purchasePrice} ${item.fabricSupplierQuote.currency}/${item.fabricSupplierQuote.pricingUnit}`
+                              ? ` · 参考报价 ${item.fabricSupplierQuote.purchasePriceExclTax} ${item.fabricSupplierQuote.currency}/${item.fabricSupplierQuote.pricingUnit}`
                               : ""}
                           </div>
                         ) : null}

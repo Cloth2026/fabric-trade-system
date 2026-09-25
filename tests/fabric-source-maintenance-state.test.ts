@@ -49,7 +49,9 @@ function sourceDraftFixture(overrides: Partial<SourceDraft> = {}): SourceDraft {
 
 function quoteDraftFixture(overrides: Partial<QuoteDraft> = {}): QuoteDraft {
   return {
-    purchasePrice: "18.50",
+    purchasePriceExclTax: "18.50",
+    purchasePriceInclTax: "20.91",
+    purchaseTaxRate: "13",
     currency: "CNY",
     minimumOrderQty: "",
     leadTime: "",
@@ -121,13 +123,13 @@ describe("source payloads", () => {
 
 describe("quote drafts and payloads", () => {
   test("empty price is rejected", () => {
-    const errors = validateQuoteDraft(quoteDraftFixture({ purchasePrice: "" }));
-    assert.match(errors.purchasePrice, /不能为空/);
+    const errors = validateQuoteDraft(quoteDraftFixture({ purchasePriceExclTax: "" }));
+    assert.match(errors.purchasePriceExclTax, /不能为空/);
   });
 
   test("negative price is rejected", () => {
-    const errors = validateQuoteDraft(quoteDraftFixture({ purchasePrice: "-1" }));
-    assert.match(errors.purchasePrice, /非负数/);
+    const errors = validateQuoteDraft(quoteDraftFixture({ purchasePriceExclTax: "-1" }));
+    assert.match(errors.purchasePriceExclTax, /非负数/);
   });
 
   test("invalid currency is rejected", () => {

@@ -1,3 +1,5 @@
+import { percentInputToTaxRate, validateTaxRatePercent } from "@/lib/tax-rate";
+
 export type FabricType = "knitted" | "woven";
 export type ProcessStatus = "none" | "pending" | "available";
 
@@ -11,7 +13,9 @@ export type GreigeDraft = {
   weight: string;
   width: string;
   yarnOrDensity: string;
-  unitPrice: string;
+  unitPriceExclTax: string;
+  unitPriceInclTax: string;
+  taxRate: string;
   lossRate: string;
   remarks: string;
 };
@@ -21,7 +25,9 @@ export type DyeingDraft = {
   processType: string;
   factoryId: string;
   factoryName: string;
-  unitPrice: string;
+  unitPriceExclTax: string;
+  unitPriceInclTax: string;
+  taxRate: string;
   lossRate: string;
   leadTime: string;
   cautions: string;
@@ -33,7 +39,9 @@ export type PostProcessDraft = {
   factoryId: string;
   factoryName: string;
   effectDescription: string;
-  unitPrice: string;
+  unitPriceExclTax: string;
+  unitPriceInclTax: string;
+  taxRate: string;
   lossRate: string;
   minimumOrderQty: string;
   leadTime: string;
@@ -42,7 +50,9 @@ export type PostProcessDraft = {
 };
 
 export type SupplierQuoteDraft = {
-  purchasePrice: string;
+  purchasePriceExclTax: string;
+  purchasePriceInclTax: string;
+  purchaseTaxRate: string;
   currency: string;
   minimumOrderQty: string;
   leadTime: string;
@@ -80,7 +90,9 @@ export type FabricFormState = {
   elasticity: string;
   sourceContact: string;
   sourceDate: string;
-  finishedReferencePrice: string;
+  finishedReferencePriceExclTax: string;
+  finishedReferencePriceInclTax: string;
+  finishedReferenceTaxRate: string;
   repurchaseStatus: string;
   tubeWeight: string;
   tolerance: string;
@@ -115,7 +127,9 @@ export const emptyGreige = (id = randomId()): GreigeDraft => ({
   weight: "",
   width: "",
   yarnOrDensity: "",
-  unitPrice: "",
+  unitPriceExclTax: "",
+  unitPriceInclTax: "",
+  taxRate: "",
   lossRate: "",
   remarks: "",
 });
@@ -125,7 +139,9 @@ export const emptyDyeing = (id = randomId()): DyeingDraft => ({
   processType: "",
   factoryId: "",
   factoryName: "",
-  unitPrice: "",
+  unitPriceExclTax: "",
+  unitPriceInclTax: "",
+  taxRate: "",
   lossRate: "",
   leadTime: "",
   cautions: "",
@@ -141,7 +157,9 @@ export function createPostProcessDraft(id = globalThis.crypto?.randomUUID?.() ??
     factoryId: "",
     factoryName: "",
     effectDescription: "",
-    unitPrice: "",
+    unitPriceExclTax: "",
+    unitPriceInclTax: "",
+    taxRate: "",
     lossRate: "",
     minimumOrderQty: "",
     leadTime: "",
@@ -164,7 +182,9 @@ export function createSupplierDraft(
     isPreferred: false,
     remarks: "",
     initialQuote: {
-      purchasePrice: "",
+      purchasePriceExclTax: "",
+      purchasePriceInclTax: "",
+      purchaseTaxRate: "",
       currency: "CNY",
       minimumOrderQty: "",
       leadTime: "",
@@ -193,7 +213,9 @@ export function createInitialFabricFormState(): FabricFormState {
     elasticity: "",
     sourceContact: "",
     sourceDate: "",
-    finishedReferencePrice: "",
+    finishedReferencePriceExclTax: "",
+    finishedReferencePriceInclTax: "",
+    finishedReferenceTaxRate: "",
     repurchaseStatus: "",
     tubeWeight: "",
     tolerance: "",
@@ -309,9 +331,46 @@ const optionalNumber = (value: string) => {
 };
 
 function hasQuoteDetails(quote: SupplierQuoteDraft) {
-  return [quote.purchasePrice, quote.minimumOrderQty, quote.leadTime, quote.contactName, quote.quoteDate, quote.remarks].some(
-    (value) => value.trim().length > 0,
-  );
+  return [
+    quote.purchasePriceExclTax,
+    quote.purchasePriceInclTax,
+    quote.purchaseTaxRate,
+    quote.minimumOrderQty,
+    quote.leadTime,
+    quote.contactName,
+    quote.quoteDate,
+    quote.remarks,
+  ].some((value) => value.trim().length > 0);
+}
+
+export function assertNonNegativeMoney(value: string, label: string, errors: FieldErrors, path: string) {
+  const trimmedValue = value.trim();
+  if (trimmedValue.length === 0) {
+    return;
+  }
+
+  const parsed = Number(trimmedValue);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    errors[path] = `${label}必须是非负数`;
+  }
+}
+
+export function assertTaxRatePercent(value: string, errors: FieldErrors, path: string) {
+  const message = validateTaxRatePercent(value);
+  if (message) {
+    errors[path] = message;
+  }
+}
+
+export function assertPriceTaxTriple(
+  value: { unitPriceExclTax: string; unitPriceInclTax: string; taxRate: string },
+  label: string,
+  errors: FieldErrors,
+  path: string,
+) {
+  assertNonNegativeMoney(value.unitPriceExclTax, `${label}不含税单价`, errors, `${path}.unitPriceExclTax`);
+  assertNonNegativeMoney(value.unitPriceInclTax, `${label}含税单价`, errors, `${path}.unitPriceInclTax`);
+  assertTaxRatePercent(value.taxRate, errors, `${path}.taxRate`);
 }
 
 export function validateCreateFabricDraft(state: FabricFormState): FieldErrors {
@@ -335,22 +394,28 @@ export function validateCreateFabricDraft(state: FabricFormState): FieldErrors {
     errors.codeSuffix = "面料编号总长度不能超过64个字符";
   }
 
-  if (state.finishedReferencePrice.trim() && (!Number.isFinite(Number(state.finishedReferencePrice)) || Number(state.finishedReferencePrice) < 0)) {
-    errors.finishedReferencePrice = "成品参考价必须是非负数";
-  }
+  assertNonNegativeMoney(state.finishedReferencePriceExclTax, "不含税参考价", errors, "finishedReferencePriceExclTax");
+  assertNonNegativeMoney(state.finishedReferencePriceInclTax, "含税参考价", errors, "finishedReferencePriceInclTax");
+  assertTaxRatePercent(state.finishedReferenceTaxRate, errors, "finishedReferenceTaxRate");
 
   state.suppliers.forEach((supplier, index) => {
-    const quotePath = `suppliers.${index}.initialQuote.purchasePrice`;
-    if (hasQuoteDetails(supplier.initialQuote) && supplier.initialQuote.purchasePrice.trim().length === 0) {
-      errors[quotePath] = "填写首次报价时，采购价不能为空";
+    const quotePath = `suppliers.${index}.initialQuote.purchasePriceExclTax`;
+    if (hasQuoteDetails(supplier.initialQuote) && supplier.initialQuote.purchasePriceExclTax.trim().length === 0) {
+      errors[quotePath] = "填写首次报价时，不含税采购价不能为空";
     }
 
-    if (
-      supplier.initialQuote.purchasePrice.trim() &&
-      (!Number.isFinite(Number(supplier.initialQuote.purchasePrice)) || Number(supplier.initialQuote.purchasePrice) < 0)
-    ) {
-      errors[quotePath] = "采购价必须是非负数";
-    }
+    assertNonNegativeMoney(supplier.initialQuote.purchasePriceExclTax, "不含税采购价", errors, quotePath);
+    assertNonNegativeMoney(
+      supplier.initialQuote.purchasePriceInclTax,
+      "含税采购价",
+      errors,
+      `suppliers.${index}.initialQuote.purchasePriceInclTax`,
+    );
+    assertTaxRatePercent(
+      supplier.initialQuote.purchaseTaxRate,
+      errors,
+      `suppliers.${index}.initialQuote.purchaseTaxRate`,
+    );
 
     if (hasQuoteDetails(supplier.initialQuote) && !/^[A-Z]{3}$/.test(supplier.initialQuote.currency.trim().toUpperCase())) {
       errors[`suppliers.${index}.initialQuote.currency`] = "币种需使用3位大写代码";
@@ -377,6 +442,24 @@ export function validateCreateFabricDraft(state: FabricFormState): FieldErrors {
     errors.postProcesses = "请至少添加一条后工艺信息";
   }
 
+  if (state.greigeStatus === "available") {
+    state.greigeFabrics.forEach((greige, index) => {
+      assertPriceTaxTriple(greige, "坯布", errors, `greigeFabrics.${index}`);
+    });
+  }
+
+  if (state.dyeingStatus === "available") {
+    state.dyeingFinishings.forEach((dyeing, index) => {
+      assertPriceTaxTriple(dyeing, "染整", errors, `dyeingFinishings.${index}`);
+    });
+  }
+
+  if (state.postProcessStatus === "available") {
+    state.postProcesses.forEach((process, index) => {
+      assertPriceTaxTriple(process, "后工艺", errors, `postProcesses.${index}`);
+    });
+  }
+
   return errors;
 }
 
@@ -398,7 +481,9 @@ export function buildCreateFabricPayload(state: FabricFormState) {
     elasticity: optional(state.elasticity),
     sourceContact: optional(state.sourceContact),
     sourceDate: optional(state.sourceDate),
-    finishedReferencePrice: optionalNumber(state.finishedReferencePrice),
+    finishedReferencePriceExclTax: optionalNumber(state.finishedReferencePriceExclTax),
+    finishedReferencePriceInclTax: optionalNumber(state.finishedReferencePriceInclTax),
+    finishedReferenceTaxRate: percentInputToTaxRate(state.finishedReferenceTaxRate),
     repurchaseStatus: optional(state.repurchaseStatus),
     tubeWeight: state.fabricType === "knitted" ? optional(state.tubeWeight) : undefined,
     tolerance: optional(state.tolerance),
@@ -423,7 +508,9 @@ export function buildCreateFabricPayload(state: FabricFormState) {
             weight: optional(greige.weight),
             width: optional(greige.width),
             yarnOrDensity: optional(greige.yarnOrDensity),
-            unitPrice: optionalNumber(greige.unitPrice),
+            unitPriceExclTax: optionalNumber(greige.unitPriceExclTax),
+            unitPriceInclTax: optionalNumber(greige.unitPriceInclTax),
+            taxRate: percentInputToTaxRate(greige.taxRate),
             lossRate: optional(greige.lossRate),
             remarks: optional(greige.remarks),
           }))
@@ -433,7 +520,9 @@ export function buildCreateFabricPayload(state: FabricFormState) {
         ? state.dyeingFinishings.map((dyeing) => ({
             processType: optional(dyeing.processType),
             factoryId: optional(dyeing.factoryId),
-            unitPrice: optionalNumber(dyeing.unitPrice),
+            unitPriceExclTax: optionalNumber(dyeing.unitPriceExclTax),
+            unitPriceInclTax: optionalNumber(dyeing.unitPriceInclTax),
+            taxRate: percentInputToTaxRate(dyeing.taxRate),
             lossRate: optional(dyeing.lossRate),
             leadTime: optional(dyeing.leadTime),
             cautions: optional(dyeing.cautions),
@@ -445,7 +534,9 @@ export function buildCreateFabricPayload(state: FabricFormState) {
             processType: optional(process.processType),
             factoryId: optional(process.factoryId),
             effectDescription: optional(process.effectDescription),
-            unitPrice: optionalNumber(process.unitPrice),
+            unitPriceExclTax: optionalNumber(process.unitPriceExclTax),
+            unitPriceInclTax: optionalNumber(process.unitPriceInclTax),
+            taxRate: percentInputToTaxRate(process.taxRate),
             lossRate: optional(process.lossRate),
             minimumOrderQty: optional(process.minimumOrderQty),
             leadTime: optional(process.leadTime),
@@ -462,7 +553,9 @@ export function buildCreateFabricPayload(state: FabricFormState) {
       remarks: optional(supplier.remarks),
       initialQuote: hasQuoteDetails(supplier.initialQuote)
         ? {
-            purchasePrice: optionalNumber(supplier.initialQuote.purchasePrice),
+            purchasePriceExclTax: optionalNumber(supplier.initialQuote.purchasePriceExclTax),
+            purchasePriceInclTax: optionalNumber(supplier.initialQuote.purchasePriceInclTax),
+            purchaseTaxRate: percentInputToTaxRate(supplier.initialQuote.purchaseTaxRate),
             currency: supplier.initialQuote.currency.trim().toUpperCase(),
             minimumOrderQty: optional(supplier.initialQuote.minimumOrderQty),
             leadTime: optional(supplier.initialQuote.leadTime),

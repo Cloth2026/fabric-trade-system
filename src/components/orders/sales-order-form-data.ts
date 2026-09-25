@@ -150,7 +150,7 @@ export function orderFormStateFromRecord(record: SalesOrderDetailRecord): OrderF
               : "",
             fabricSupplierQuoteId: item.fabricSupplierQuoteId ?? "",
             purchaseQuoteLabel: item.fabricSupplierQuote
-              ? `${item.fabricSupplierQuote.purchasePrice} ${item.fabricSupplierQuote.currency}/${item.fabricSupplierQuote.pricingUnit}`
+              ? `${item.fabricSupplierQuote.purchasePriceExclTax} ${item.fabricSupplierQuote.currency}/${item.fabricSupplierQuote.pricingUnit}`
               : "",
             quantity: item.quantity ?? "",
             unitPrice: item.unitPrice,

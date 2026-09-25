@@ -1,5 +1,9 @@
 import type { FabricDetail } from "@/lib/api/fabric-client";
+import { percentInputToTaxRate, taxRateToPercentInput } from "@/lib/tax-rate";
 import {
+  assertNonNegativeMoney,
+  assertPriceTaxTriple,
+  assertTaxRatePercent,
   createPostProcessDraft,
   createGreigeDraft,
   createDyeingDraft,
@@ -41,7 +45,9 @@ export function createEditFabricFormState(fabric: FabricDetail): FabricFormState
     elasticity: fabric.elasticity ?? "",
     sourceContact: fabric.sourceContact ?? "",
     sourceDate: isoDateToInputValue(fabric.sourceDate),
-    finishedReferencePrice: decimalToInputValue(fabric.finishedReferencePrice),
+    finishedReferencePriceExclTax: decimalToInputValue(fabric.finishedReferencePriceExclTax),
+    finishedReferencePriceInclTax: decimalToInputValue(fabric.finishedReferencePriceInclTax),
+    finishedReferenceTaxRate: taxRateToPercentInput(fabric.finishedReferenceTaxRate),
     repurchaseStatus: fabric.repurchaseStatus ?? "",
     tubeWeight: fabric.tubeWeight ?? "",
     tolerance: fabric.tolerance ?? "",
@@ -66,7 +72,9 @@ export function createEditFabricFormState(fabric: FabricDetail): FabricFormState
       weight: greige.weight ?? "",
       width: greige.width ?? "",
       yarnOrDensity: greige.yarnOrDensity ?? "",
-      unitPrice: decimalToInputValue(greige.unitPrice),
+      unitPriceExclTax: decimalToInputValue(greige.unitPriceExclTax),
+      unitPriceInclTax: decimalToInputValue(greige.unitPriceInclTax),
+      taxRate: taxRateToPercentInput(greige.taxRate),
       lossRate: greige.lossRate ?? "",
       remarks: greige.remarks ?? "",
     })),
@@ -75,7 +83,9 @@ export function createEditFabricFormState(fabric: FabricDetail): FabricFormState
       processType: dyeing.processType ?? "",
       factoryId: dyeing.factoryId ?? "",
       factoryName: dyeing.factory?.name ?? "",
-      unitPrice: decimalToInputValue(dyeing.unitPrice),
+      unitPriceExclTax: decimalToInputValue(dyeing.unitPriceExclTax),
+      unitPriceInclTax: decimalToInputValue(dyeing.unitPriceInclTax),
+      taxRate: taxRateToPercentInput(dyeing.taxRate),
       lossRate: dyeing.lossRate ?? "",
       leadTime: dyeing.leadTime ?? "",
       cautions: dyeing.cautions ?? "",
@@ -86,7 +96,9 @@ export function createEditFabricFormState(fabric: FabricDetail): FabricFormState
       factoryId: process.factoryId ?? "",
       factoryName: process.factory?.name ?? "",
       effectDescription: process.effectDescription ?? "",
-      unitPrice: decimalToInputValue(process.unitPrice),
+      unitPriceExclTax: decimalToInputValue(process.unitPriceExclTax),
+      unitPriceInclTax: decimalToInputValue(process.unitPriceInclTax),
+      taxRate: taxRateToPercentInput(process.taxRate),
       lossRate: process.lossRate ?? "",
       minimumOrderQty: process.minimumOrderQty ?? "",
       leadTime: process.leadTime ?? "",
@@ -119,12 +131,9 @@ export function validateEditFabricDraft(state: FabricFormState): FieldErrors {
     errors.codeSuffix = "面料编号总长度不能超过64个字符";
   }
 
-  if (state.finishedReferencePrice.trim().length > 0) {
-    const price = Number(state.finishedReferencePrice);
-    if (!Number.isFinite(price) || price < 0) {
-      errors.finishedReferencePrice = "成品参考价必须是非负数";
-    }
-  }
+  assertNonNegativeMoney(state.finishedReferencePriceExclTax, "不含税参考价", errors, "finishedReferencePriceExclTax");
+  assertNonNegativeMoney(state.finishedReferencePriceInclTax, "含税参考价", errors, "finishedReferencePriceInclTax");
+  assertTaxRatePercent(state.finishedReferenceTaxRate, errors, "finishedReferenceTaxRate");
 
   if (state.greigeStatus === "available" && state.greigeFabrics.length === 0) {
     errors.greigeFabrics = "请至少添加一条坯布信息";
@@ -136,6 +145,24 @@ export function validateEditFabricDraft(state: FabricFormState): FieldErrors {
 
   if (state.postProcessStatus === "available" && state.postProcesses.length === 0) {
     errors.postProcesses = "请至少添加一条后工艺信息";
+  }
+
+  if (state.greigeStatus === "available") {
+    state.greigeFabrics.forEach((greige, index) => {
+      assertPriceTaxTriple(greige, "坯布", errors, `greigeFabrics.${index}`);
+    });
+  }
+
+  if (state.dyeingStatus === "available") {
+    state.dyeingFinishings.forEach((dyeing, index) => {
+      assertPriceTaxTriple(dyeing, "染整", errors, `dyeingFinishings.${index}`);
+    });
+  }
+
+  if (state.postProcessStatus === "available") {
+    state.postProcesses.forEach((process, index) => {
+      assertPriceTaxTriple(process, "后工艺", errors, `postProcesses.${index}`);
+    });
   }
 
   return errors;
@@ -172,7 +199,9 @@ export function buildEditFabricPayload(state: FabricFormState, baseCode: string)
     elasticity: optional(state.elasticity),
     sourceContact: optional(state.sourceContact),
     sourceDate: optional(state.sourceDate) || null,
-    finishedReferencePrice: optionalNumber(state.finishedReferencePrice),
+    finishedReferencePriceExclTax: optionalNumber(state.finishedReferencePriceExclTax),
+    finishedReferencePriceInclTax: optionalNumber(state.finishedReferencePriceInclTax),
+    finishedReferenceTaxRate: percentInputToTaxRate(state.finishedReferenceTaxRate),
     repurchaseStatus: optional(state.repurchaseStatus),
     tubeWeight: optional(state.tubeWeight),
     tolerance: optional(state.tolerance),
@@ -196,7 +225,9 @@ export function buildEditFabricPayload(state: FabricFormState, baseCode: string)
           weight: optional(greige.weight),
           width: optional(greige.width),
           yarnOrDensity: optional(greige.yarnOrDensity),
-          unitPrice: optionalNumber(greige.unitPrice),
+          unitPriceExclTax: optionalNumber(greige.unitPriceExclTax),
+          unitPriceInclTax: optionalNumber(greige.unitPriceInclTax),
+          taxRate: percentInputToTaxRate(greige.taxRate),
           lossRate: optional(greige.lossRate),
           remarks: optional(greige.remarks),
         }))
@@ -205,7 +236,9 @@ export function buildEditFabricPayload(state: FabricFormState, baseCode: string)
       ? state.dyeingFinishings.map((dyeing) => ({
           processType: optional(dyeing.processType),
           factoryId: optional(dyeing.factoryId),
-          unitPrice: optionalNumber(dyeing.unitPrice),
+          unitPriceExclTax: optionalNumber(dyeing.unitPriceExclTax),
+          unitPriceInclTax: optionalNumber(dyeing.unitPriceInclTax),
+          taxRate: percentInputToTaxRate(dyeing.taxRate),
           lossRate: optional(dyeing.lossRate),
           leadTime: optional(dyeing.leadTime),
           cautions: optional(dyeing.cautions),
@@ -216,7 +249,9 @@ export function buildEditFabricPayload(state: FabricFormState, baseCode: string)
           processType: optional(process.processType),
           factoryId: optional(process.factoryId),
           effectDescription: optional(process.effectDescription),
-          unitPrice: optionalNumber(process.unitPrice),
+          unitPriceExclTax: optionalNumber(process.unitPriceExclTax),
+          unitPriceInclTax: optionalNumber(process.unitPriceInclTax),
+          taxRate: percentInputToTaxRate(process.taxRate),
           lossRate: optional(process.lossRate),
           minimumOrderQty: optional(process.minimumOrderQty),
           leadTime: optional(process.leadTime),

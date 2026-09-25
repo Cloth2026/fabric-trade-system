@@ -104,7 +104,7 @@ before(async () => {
     suppliers: [
       {
         supplierId: supplierA.id,
-        initialQuote: { purchasePrice: "12.50" },
+        initialQuote: { purchasePriceExclTax: "12.50" },
       },
     ],
   });
@@ -185,7 +185,7 @@ describe("addFabricSourceQuote", () => {
 
     const preferred = await preferredSourceOf(fabricWithoutSourceId);
     const updated = await addFabricSourceQuote(fabricWithoutSourceId, preferred.id, {
-      purchasePrice: "15.80",
+      purchasePriceExclTax: "15.80",
       minimumOrderQty: "300kg",
       contactName: "王经理",
     });
@@ -193,9 +193,24 @@ describe("addFabricSourceQuote", () => {
     const preferredAfter = updated.supplierSources.find((source) => source.id === preferred.id);
     assert.ok(preferredAfter);
     assert.equal(preferredAfter.quotes.length, 1);
-    assert.equal(preferredAfter.quotes[0].purchasePrice, "15.8");
+    assert.equal(preferredAfter.quotes[0].purchasePriceExclTax, "15.8");
     assert.equal(preferredAfter.quotes[0].supplierUnitId, unitA1Id);
     assert.equal(preferredAfter.quotes[0].pricingUnit, "kg");
+
+    // A quote may carry both prices and the tax rate; the inclusive price is
+    // stored as typed instead of being derived.
+    const withTax = await addFabricSourceQuote(fabricWithoutSourceId, preferred.id, {
+      purchasePriceExclTax: "16.00",
+      purchasePriceInclTax: "18.08",
+      purchaseTaxRate: 0.13,
+    });
+    const latest = withTax.supplierSources.find((source) => source.id === preferred.id)?.quotes[0];
+    assert.ok(latest);
+    assert.equal(latest.purchasePriceExclTax, "16");
+    assert.equal(latest.purchasePriceInclTax, "18.08");
+    assert.equal(latest.purchaseTaxRate, "0.13");
+    assert.equal(typeof latest.purchasePriceInclTax, "string");
+    assert.equal(typeof latest.purchaseTaxRate, "string");
 
     const after = await prisma.fabric.findUniqueOrThrow({
       where: { id: fabricWithoutSourceId },
@@ -207,7 +222,7 @@ describe("addFabricSourceQuote", () => {
 
   test("quote with explicit unit keeps it as snapshot", async () => {
     const detail = await addFabricSourceQuote(fabricWithSourceId, sourceOnFabricWithId, {
-      purchasePrice: "13.00",
+      purchasePriceExclTax: "13.00",
       supplierUnitId: unitA1Id,
     });
 
@@ -219,14 +234,25 @@ describe("addFabricSourceQuote", () => {
 
   test("missing price is rejected", async () => {
     await assert.rejects(
-      () => addFabricSourceQuote(fabricWithSourceId, sourceOnFabricWithId, { purchasePrice: "" }),
+      () => addFabricSourceQuote(fabricWithSourceId, sourceOnFabricWithId, { purchasePriceExclTax: "" }),
+      /Invalid fabric quote payload/,
+    );
+  });
+
+  test("tax rate outside 0-100 percent is rejected", async () => {
+    await assert.rejects(
+      () =>
+        addFabricSourceQuote(fabricWithSourceId, sourceOnFabricWithId, {
+          purchasePriceExclTax: "12.00",
+          purchaseTaxRate: 1.5,
+        }),
       /Invalid fabric quote payload/,
     );
   });
 
   test("unknown source id returns 404", async () => {
     await assert.rejects(
-      () => addFabricSourceQuote(fabricWithSourceId, "missing-source-id", { purchasePrice: "10.00" }),
+      () => addFabricSourceQuote(fabricWithSourceId, "missing-source-id", { purchasePriceExclTax: "10.00" }),
       /not found/i,
     );
   });

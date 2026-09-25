@@ -22,6 +22,13 @@ const emptyStringToNull = (value: unknown) => {
 const optionalText = z.preprocess(emptyStringToNull, z.string().nullable().optional());
 const requiredText = z.string().trim().min(1);
 const nonNegativeMoney = z.coerce.number().nonnegative();
+const optionalMoney = z.preprocess(emptyStringToNull, nonNegativeMoney.nullable().optional());
+
+// Tax rates travel as fractions: 0.13 means 13%, matching CustomerQuote.taxRate.
+const optionalTaxRate = z.preprocess(
+  emptyStringToNull,
+  z.coerce.number().min(0).max(1).nullable().optional(),
+);
 const requiredMoney = z.preprocess((value) => {
   if (typeof value === "string") {
     const trimmed = value.trim();
@@ -46,7 +53,9 @@ const sourceDetailFields = {
 } as const;
 
 const initialQuoteSchema = z.object({
-  purchasePrice: requiredMoney,
+  purchasePriceExclTax: requiredMoney,
+  purchasePriceInclTax: optionalMoney,
+  purchaseTaxRate: optionalTaxRate,
   currency,
   minimumOrderQty: optionalText,
   leadTime: optionalText,
@@ -66,7 +75,9 @@ export const addFabricSourceSchema = z
 
 export const addFabricSourceQuoteSchema = z
   .object({
-    purchasePrice: requiredMoney,
+    purchasePriceExclTax: requiredMoney,
+    purchasePriceInclTax: optionalMoney,
+    purchaseTaxRate: optionalTaxRate,
     currency,
     minimumOrderQty: optionalText,
     leadTime: optionalText,
@@ -275,7 +286,9 @@ export async function addFabricSource(fabricId: string, input: unknown, options:
           tenantId,
           fabricSupplierId: source.id,
           supplierUnitId: source.supplierUnitId,
-          purchasePrice: data.initialQuote.purchasePrice,
+          purchasePriceExclTax: data.initialQuote.purchasePriceExclTax,
+          purchasePriceInclTax: data.initialQuote.purchasePriceInclTax,
+          purchaseTaxRate: data.initialQuote.purchaseTaxRate,
           currency: data.initialQuote.currency ?? "CNY",
           pricingUnit: fabric.pricingUnit,
           minimumOrderQty: data.initialQuote.minimumOrderQty ?? null,
@@ -352,7 +365,9 @@ export async function addFabricSourceQuote(
         tenantId,
         fabricSupplierId: source.id,
         supplierUnitId: effectiveUnitId,
-        purchasePrice: data.purchasePrice,
+        purchasePriceExclTax: data.purchasePriceExclTax,
+        purchasePriceInclTax: data.purchasePriceInclTax,
+        purchaseTaxRate: data.purchaseTaxRate,
         currency: data.currency ?? "CNY",
         pricingUnit: fabric.pricingUnit,
         minimumOrderQty: data.minimumOrderQty ?? null,
@@ -379,7 +394,9 @@ export async function addFabricSourceQuote(
           fabricSupplierId: source.id,
           supplierId: source.supplierId,
           supplierUnitId: effectiveUnitId,
-          purchasePrice: data.purchasePrice,
+          purchasePriceExclTax: data.purchasePriceExclTax,
+          purchasePriceInclTax: data.purchasePriceInclTax,
+          purchaseTaxRate: data.purchaseTaxRate,
           pricingUnit: fabric.pricingUnit,
         },
       },

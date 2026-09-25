@@ -141,7 +141,7 @@ export function quoteFormStateFromRecord(record: CustomerQuoteDetailRecord): Quo
             fabricUnit: item.unit ?? "",
             fabricSupplierQuoteId: item.fabricSupplierQuoteId ?? "",
             purchaseQuoteLabel: item.fabricSupplierQuote
-              ? `${item.fabricSupplierQuote.purchasePrice} ${item.fabricSupplierQuote.currency}/${item.fabricSupplierQuote.pricingUnit}`
+              ? `${item.fabricSupplierQuote.purchasePriceExclTax} ${item.fabricSupplierQuote.currency}/${item.fabricSupplierQuote.pricingUnit}`
               : "",
             quantity: item.quantity ?? "",
             minimumOrderQty: item.minimumOrderQty ?? "",

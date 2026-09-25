@@ -84,10 +84,12 @@ export function FabricBasicFields({ state, errors, optionsByGroup, onFieldChange
         <GlassSelect label="弹力等级" options={options("elasticity_level")} value={state.elasticity} onChange={(value) => onFieldChange("elasticity", value)} />
       </FormPanel>
 
-      <FormPanel icon={DollarSign} tone="emerald" title="来源与价格" description="成品参考价用于档案参考；采购报价在下方按供应商独立保存。">
+      <FormPanel icon={DollarSign} tone="emerald" title="来源与价格" description="成品参考价区分不含税与含税，税点手工填写；采购报价在下方按供应商独立保存。">
         <GlassInput label="来源联系人" value={state.sourceContact} onChange={(value) => onFieldChange("sourceContact", value)} placeholder="联系人 / 业务员" />
         <GlassInput label="来源日期" type="date" value={state.sourceDate} onChange={(value) => onFieldChange("sourceDate", value)} />
-        <GlassInput label="成品参考价" type="number" value={state.finishedReferencePrice} onChange={(value) => onFieldChange("finishedReferencePrice", value)} placeholder={`¥ / ${unitLabel}`} error={errors.finishedReferencePrice} />
+        <GlassInput label="成品参考价（不含税）" type="number" value={state.finishedReferencePriceExclTax} onChange={(value) => onFieldChange("finishedReferencePriceExclTax", value)} placeholder={`¥ / ${unitLabel}`} error={errors.finishedReferencePriceExclTax} />
+        <GlassInput label="成品参考价（含税）" type="number" value={state.finishedReferencePriceInclTax} onChange={(value) => onFieldChange("finishedReferencePriceInclTax", value)} placeholder={`¥ / ${unitLabel}`} error={errors.finishedReferencePriceInclTax} />
+        <GlassInput label="成品参考价税点" type="number" value={state.finishedReferenceTaxRate} onChange={(value) => onFieldChange("finishedReferenceTaxRate", value)} placeholder="如 13 表示 13%" error={errors.finishedReferenceTaxRate} />
         <GlassSelect label="是否可复购" options={options("repurchase_status")} value={state.repurchaseStatus} onChange={(value) => onFieldChange("repurchaseStatus", value)} />
         {state.fabricType === "knitted" ? (
           <GlassInput label="纸管重量" value={state.tubeWeight} onChange={(value) => onFieldChange("tubeWeight", value)} placeholder="如 1.2kg/卷" />

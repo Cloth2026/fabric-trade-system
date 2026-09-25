@@ -26,7 +26,7 @@ export type QuoteContactBrief = {
 
 export type QuotePurchaseQuoteBrief = {
   id: string;
-  purchasePrice: string;
+  purchasePriceExclTax: string;
   currency: string;
   pricingUnit: string;
   minimumOrderQty: string | null;

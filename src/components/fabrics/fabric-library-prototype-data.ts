@@ -122,7 +122,7 @@ export function toFabricListDisplayData(fabric: FabricListItem, labels: ConfigLa
     specification: getFabricSpecification(fabric) || "待补充",
     supplierName: source?.supplierName ?? "暂无货源",
     supplierUnitName: source?.supplierUnitName ?? "未指定生产单元",
-    latestPrice: formatPrice(quote?.purchasePrice, quote?.currency, quote?.pricingUnit),
+    latestPrice: formatPrice(quote?.purchasePriceExclTax, quote?.currency, quote?.pricingUnit),
     latestQuoteDate: formatDate(quote?.quoteDate),
   };
 }

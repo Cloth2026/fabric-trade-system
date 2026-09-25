@@ -195,7 +195,7 @@ before(async () => {
     data: {
       tenantId,
       fabricSupplierId: source.id,
-      purchasePrice: "9.50",
+      purchasePriceExclTax: "9.50",
       currency: "CNY",
       pricingUnit: "meter",
       minimumOrderQty: "500m/color",
@@ -209,7 +209,7 @@ before(async () => {
     data: {
       tenantId,
       fabricSupplierId: source.id,
-      purchasePrice: "2.40",
+      purchasePriceExclTax: "2.40",
       currency: "USD",
       pricingUnit: "meter",
     },
@@ -355,9 +355,9 @@ describe("sales orders", () => {
     // The supplier's own quote is never rewritten by our orders.
     const purchaseQuote = await prisma.fabricSupplierQuote.findUniqueOrThrow({
       where: { id: cnyPurchaseQuoteId },
-      select: { purchasePrice: true },
+      select: { purchasePriceExclTax: true },
     });
-    assert.equal(Number(purchaseQuote.purchasePrice), 9.5);
+    assert.equal(Number(purchaseQuote.purchasePriceExclTax), 9.5);
   });
 
   test("walks the status pipeline and blocks illegal jumps", async () => {

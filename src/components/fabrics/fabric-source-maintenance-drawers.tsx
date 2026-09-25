@@ -353,8 +353,10 @@ export function QuoteDrawer({
       }
     >
       <div className="grid gap-4">
-        <div className="grid gap-3 sm:grid-cols-3">
-          <GlassInput error={errors.purchasePrice} label="采购价" onChange={(value) => update({ purchasePrice: value })} placeholder="0.00" required type="number" value={draft.purchasePrice} />
+        <div className="grid gap-3 sm:grid-cols-2">
+          <GlassInput error={errors.purchasePriceExclTax} label="采购价（不含税）" onChange={(value) => update({ purchasePriceExclTax: value })} placeholder="0.00" required type="number" value={draft.purchasePriceExclTax} />
+          <GlassInput error={errors.purchasePriceInclTax} label="采购价（含税）" onChange={(value) => update({ purchasePriceInclTax: value })} placeholder="0.00" type="number" value={draft.purchasePriceInclTax} />
+          <GlassInput error={errors.purchaseTaxRate} label="税点" onChange={(value) => update({ purchaseTaxRate: value })} placeholder="如 13 表示 13%" type="number" value={draft.purchaseTaxRate} />
           <GlassInput error={errors.currency} label="币种" maxLength={3} onChange={(value) => update({ currency: value.toUpperCase() })} placeholder="CNY" value={draft.currency} />
           <ReadonlyField label="计价单位（服务器派生）" value={pricingUnitLabels[fabric.pricingUnit]} />
         </div>

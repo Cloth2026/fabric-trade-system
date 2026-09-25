@@ -31,7 +31,9 @@ export type FabricQuote = {
   id: string;
   supplierUnitId: string | null;
   supplierUnit: SupplierUnitSummary | null;
-  purchasePrice: string;
+  purchasePriceExclTax: string;
+  purchasePriceInclTax: string | null;
+  purchaseTaxRate: string | null;
   currency: string;
   pricingUnit: PricingUnit;
   minimumOrderQty: string | null;
@@ -128,7 +130,9 @@ export type FabricDetail = Omit<FabricListItem, "supplierSourceCount" | "preferr
   tags: string[];
   sourceContact: string | null;
   sourceDate: string | null;
-  finishedReferencePrice: string | null;
+  finishedReferencePriceExclTax: string | null;
+  finishedReferencePriceInclTax: string | null;
+  finishedReferenceTaxRate: string | null;
   repurchaseStatus: string | null;
   tubeWeight: string | null;
   tolerance: string | null;
@@ -149,7 +153,9 @@ export type FabricDetail = Omit<FabricListItem, "supplierSourceCount" | "preferr
     weight: string | null;
     width: string | null;
     yarnOrDensity: string | null;
-    unitPrice: string | null;
+    unitPriceExclTax: string | null;
+    unitPriceInclTax: string | null;
+    taxRate: string | null;
     lossRate: string | null;
     remarks: string | null;
     createdAt: string;
@@ -158,7 +164,9 @@ export type FabricDetail = Omit<FabricListItem, "supplierSourceCount" | "preferr
   dyeingFinishings: Array<ProcessSupplierFields & {
     id: string;
     processType: string | null;
-    unitPrice: string | null;
+    unitPriceExclTax: string | null;
+    unitPriceInclTax: string | null;
+    taxRate: string | null;
     lossRate: string | null;
     leadTime: string | null;
     cautions: string | null;
@@ -169,7 +177,9 @@ export type FabricDetail = Omit<FabricListItem, "supplierSourceCount" | "preferr
     id: string;
     processType: string | null;
     effectDescription: string | null;
-    unitPrice: string | null;
+    unitPriceExclTax: string | null;
+    unitPriceInclTax: string | null;
+    taxRate: string | null;
     lossRate: string | null;
     minimumOrderQty: string | null;
     leadTime: string | null;
@@ -273,7 +283,9 @@ export type FabricSourcePayload = {
   remarks?: string | null;
   isPreferred?: boolean;
   initialQuote?: {
-    purchasePrice: string | number;
+    purchasePriceExclTax: string | number;
+    purchasePriceInclTax?: string | number | null;
+    purchaseTaxRate?: string | number | null;
     currency?: string | null;
     minimumOrderQty?: string | null;
     leadTime?: string | null;
@@ -294,7 +306,9 @@ export type FabricSourceUpdatePayload = {
 };
 
 export type FabricQuotePayload = {
-  purchasePrice: string | number;
+  purchasePriceExclTax: string | number;
+  purchasePriceInclTax?: string | number | null;
+  purchaseTaxRate?: string | number | null;
   currency?: string | null;
   minimumOrderQty?: string | null;
   leadTime?: string | null;
@@ -357,7 +371,9 @@ export type FabricGreigePayload = {
   weight?: string | null;
   width?: string | null;
   yarnOrDensity?: string | null;
-  unitPrice?: number | null;
+  unitPriceExclTax?: number | null;
+  unitPriceInclTax?: number | null;
+  taxRate?: number | null;
   lossRate?: string | null;
   remarks?: string | null;
 };
@@ -365,7 +381,9 @@ export type FabricGreigePayload = {
 export type FabricDyeingPayload = {
   processType?: string | null;
   factoryId?: string | null;
-  unitPrice?: number | null;
+  unitPriceExclTax?: number | null;
+  unitPriceInclTax?: number | null;
+  taxRate?: number | null;
   lossRate?: string | null;
   leadTime?: string | null;
   cautions?: string | null;
@@ -375,7 +393,9 @@ export type FabricPostProcessPayload = {
   processType?: string | null;
   factoryId?: string | null;
   effectDescription?: string | null;
-  unitPrice?: number | null;
+  unitPriceExclTax?: number | null;
+  unitPriceInclTax?: number | null;
+  taxRate?: number | null;
   lossRate?: string | null;
   minimumOrderQty?: string | null;
   leadTime?: string | null;
@@ -404,7 +424,9 @@ export type FabricUpdatePayload = {
   elasticity?: string | null;
   sourceContact?: string | null;
   sourceDate?: string | null;
-  finishedReferencePrice?: number | null;
+  finishedReferencePriceExclTax?: number | null;
+  finishedReferencePriceInclTax?: number | null;
+  finishedReferenceTaxRate?: number | null;
   repurchaseStatus?: string | null;
   tubeWeight?: string | null;
   tolerance?: string | null;
