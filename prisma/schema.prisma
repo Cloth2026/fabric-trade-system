@@ -219,8 +219,8 @@ model Fabric {
   remarks                 String?
   completenessPercent     Int                  @default(0)
   missingInfoFlags        String[]
-  greige                  GreigeFabric?
-  dyeingFinishing         DyeingFinishing?
+  greigeFabrics           GreigeFabric[]
+  dyeingFinishings        DyeingFinishing[]
   postProcesses           PostProcess[]
   supplierSources         FabricSupplier[]
   stockInBatches          FabricStockInBatch[]
@@ -295,7 +295,7 @@ model FabricSupplierQuote {
 model GreigeFabric {
   id            String    @id @default(cuid())
   fabric        Fabric    @relation(fields: [fabricId], references: [id], onDelete: Cascade)
-  fabricId      String    @unique
+  fabricId      String
   supplier      Supplier? @relation("GreigeSupplier", fields: [supplierId], references: [id])
   supplierId    String?
   code          String?
@@ -310,13 +310,14 @@ model GreigeFabric {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
+  @@index([fabricId])
   @@index([supplierId])
 }
 
 model DyeingFinishing {
   id          String    @id @default(cuid())
   fabric      Fabric    @relation(fields: [fabricId], references: [id], onDelete: Cascade)
-  fabricId    String    @unique
+  fabricId    String
   processType String?
   factory     Supplier? @relation("DyeingFactory", fields: [factoryId], references: [id])
   factoryId   String?
@@ -327,6 +328,7 @@ model DyeingFinishing {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
+  @@index([fabricId])
   @@index([factoryId])
 }
 

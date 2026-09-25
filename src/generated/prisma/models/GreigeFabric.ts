@@ -313,10 +313,10 @@ export type GreigeFabricOrderByWithRelationInput = {
 
 export type GreigeFabricWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  fabricId?: string
   AND?: Prisma.GreigeFabricWhereInput | Prisma.GreigeFabricWhereInput[]
   OR?: Prisma.GreigeFabricWhereInput[]
   NOT?: Prisma.GreigeFabricWhereInput | Prisma.GreigeFabricWhereInput[]
+  fabricId?: Prisma.StringFilter<"GreigeFabric"> | string
   supplierId?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
   code?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
   name?: Prisma.StringNullableFilter<"GreigeFabric"> | string | null
@@ -331,7 +331,7 @@ export type GreigeFabricWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"GreigeFabric"> | Date | string
   fabric?: Prisma.XOR<Prisma.FabricScalarRelationFilter, Prisma.FabricWhereInput>
   supplier?: Prisma.XOR<Prisma.SupplierNullableScalarRelationFilter, Prisma.SupplierWhereInput> | null
-}, "id" | "fabricId">
+}, "id">
 
 export type GreigeFabricOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -388,7 +388,7 @@ export type GreigeFabricCreateInput = {
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  fabric: Prisma.FabricCreateNestedOneWithoutGreigeInput
+  fabric: Prisma.FabricCreateNestedOneWithoutGreigeFabricsInput
   supplier?: Prisma.SupplierCreateNestedOneWithoutGreigeFabricsInput
 }
 
@@ -422,7 +422,7 @@ export type GreigeFabricUpdateInput = {
   remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  fabric?: Prisma.FabricUpdateOneRequiredWithoutGreigeNestedInput
+  fabric?: Prisma.FabricUpdateOneRequiredWithoutGreigeFabricsNestedInput
   supplier?: Prisma.SupplierUpdateOneWithoutGreigeFabricsNestedInput
 }
 
@@ -500,11 +500,6 @@ export type GreigeFabricListRelationFilter = {
 
 export type GreigeFabricOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type GreigeFabricNullableScalarRelationFilter = {
-  is?: Prisma.GreigeFabricWhereInput | null
-  isNot?: Prisma.GreigeFabricWhereInput | null
 }
 
 export type GreigeFabricCountOrderByAggregateInput = {
@@ -608,36 +603,46 @@ export type GreigeFabricUncheckedUpdateManyWithoutSupplierNestedInput = {
   deleteMany?: Prisma.GreigeFabricScalarWhereInput | Prisma.GreigeFabricScalarWhereInput[]
 }
 
-export type GreigeFabricCreateNestedOneWithoutFabricInput = {
-  create?: Prisma.XOR<Prisma.GreigeFabricCreateWithoutFabricInput, Prisma.GreigeFabricUncheckedCreateWithoutFabricInput>
-  connectOrCreate?: Prisma.GreigeFabricCreateOrConnectWithoutFabricInput
-  connect?: Prisma.GreigeFabricWhereUniqueInput
+export type GreigeFabricCreateNestedManyWithoutFabricInput = {
+  create?: Prisma.XOR<Prisma.GreigeFabricCreateWithoutFabricInput, Prisma.GreigeFabricUncheckedCreateWithoutFabricInput> | Prisma.GreigeFabricCreateWithoutFabricInput[] | Prisma.GreigeFabricUncheckedCreateWithoutFabricInput[]
+  connectOrCreate?: Prisma.GreigeFabricCreateOrConnectWithoutFabricInput | Prisma.GreigeFabricCreateOrConnectWithoutFabricInput[]
+  createMany?: Prisma.GreigeFabricCreateManyFabricInputEnvelope
+  connect?: Prisma.GreigeFabricWhereUniqueInput | Prisma.GreigeFabricWhereUniqueInput[]
 }
 
-export type GreigeFabricUncheckedCreateNestedOneWithoutFabricInput = {
-  create?: Prisma.XOR<Prisma.GreigeFabricCreateWithoutFabricInput, Prisma.GreigeFabricUncheckedCreateWithoutFabricInput>
-  connectOrCreate?: Prisma.GreigeFabricCreateOrConnectWithoutFabricInput
-  connect?: Prisma.GreigeFabricWhereUniqueInput
+export type GreigeFabricUncheckedCreateNestedManyWithoutFabricInput = {
+  create?: Prisma.XOR<Prisma.GreigeFabricCreateWithoutFabricInput, Prisma.GreigeFabricUncheckedCreateWithoutFabricInput> | Prisma.GreigeFabricCreateWithoutFabricInput[] | Prisma.GreigeFabricUncheckedCreateWithoutFabricInput[]
+  connectOrCreate?: Prisma.GreigeFabricCreateOrConnectWithoutFabricInput | Prisma.GreigeFabricCreateOrConnectWithoutFabricInput[]
+  createMany?: Prisma.GreigeFabricCreateManyFabricInputEnvelope
+  connect?: Prisma.GreigeFabricWhereUniqueInput | Prisma.GreigeFabricWhereUniqueInput[]
 }
 
-export type GreigeFabricUpdateOneWithoutFabricNestedInput = {
-  create?: Prisma.XOR<Prisma.GreigeFabricCreateWithoutFabricInput, Prisma.GreigeFabricUncheckedCreateWithoutFabricInput>
-  connectOrCreate?: Prisma.GreigeFabricCreateOrConnectWithoutFabricInput
-  upsert?: Prisma.GreigeFabricUpsertWithoutFabricInput
-  disconnect?: Prisma.GreigeFabricWhereInput | boolean
-  delete?: Prisma.GreigeFabricWhereInput | boolean
-  connect?: Prisma.GreigeFabricWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.GreigeFabricUpdateToOneWithWhereWithoutFabricInput, Prisma.GreigeFabricUpdateWithoutFabricInput>, Prisma.GreigeFabricUncheckedUpdateWithoutFabricInput>
+export type GreigeFabricUpdateManyWithoutFabricNestedInput = {
+  create?: Prisma.XOR<Prisma.GreigeFabricCreateWithoutFabricInput, Prisma.GreigeFabricUncheckedCreateWithoutFabricInput> | Prisma.GreigeFabricCreateWithoutFabricInput[] | Prisma.GreigeFabricUncheckedCreateWithoutFabricInput[]
+  connectOrCreate?: Prisma.GreigeFabricCreateOrConnectWithoutFabricInput | Prisma.GreigeFabricCreateOrConnectWithoutFabricInput[]
+  upsert?: Prisma.GreigeFabricUpsertWithWhereUniqueWithoutFabricInput | Prisma.GreigeFabricUpsertWithWhereUniqueWithoutFabricInput[]
+  createMany?: Prisma.GreigeFabricCreateManyFabricInputEnvelope
+  set?: Prisma.GreigeFabricWhereUniqueInput | Prisma.GreigeFabricWhereUniqueInput[]
+  disconnect?: Prisma.GreigeFabricWhereUniqueInput | Prisma.GreigeFabricWhereUniqueInput[]
+  delete?: Prisma.GreigeFabricWhereUniqueInput | Prisma.GreigeFabricWhereUniqueInput[]
+  connect?: Prisma.GreigeFabricWhereUniqueInput | Prisma.GreigeFabricWhereUniqueInput[]
+  update?: Prisma.GreigeFabricUpdateWithWhereUniqueWithoutFabricInput | Prisma.GreigeFabricUpdateWithWhereUniqueWithoutFabricInput[]
+  updateMany?: Prisma.GreigeFabricUpdateManyWithWhereWithoutFabricInput | Prisma.GreigeFabricUpdateManyWithWhereWithoutFabricInput[]
+  deleteMany?: Prisma.GreigeFabricScalarWhereInput | Prisma.GreigeFabricScalarWhereInput[]
 }
 
-export type GreigeFabricUncheckedUpdateOneWithoutFabricNestedInput = {
-  create?: Prisma.XOR<Prisma.GreigeFabricCreateWithoutFabricInput, Prisma.GreigeFabricUncheckedCreateWithoutFabricInput>
-  connectOrCreate?: Prisma.GreigeFabricCreateOrConnectWithoutFabricInput
-  upsert?: Prisma.GreigeFabricUpsertWithoutFabricInput
-  disconnect?: Prisma.GreigeFabricWhereInput | boolean
-  delete?: Prisma.GreigeFabricWhereInput | boolean
-  connect?: Prisma.GreigeFabricWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.GreigeFabricUpdateToOneWithWhereWithoutFabricInput, Prisma.GreigeFabricUpdateWithoutFabricInput>, Prisma.GreigeFabricUncheckedUpdateWithoutFabricInput>
+export type GreigeFabricUncheckedUpdateManyWithoutFabricNestedInput = {
+  create?: Prisma.XOR<Prisma.GreigeFabricCreateWithoutFabricInput, Prisma.GreigeFabricUncheckedCreateWithoutFabricInput> | Prisma.GreigeFabricCreateWithoutFabricInput[] | Prisma.GreigeFabricUncheckedCreateWithoutFabricInput[]
+  connectOrCreate?: Prisma.GreigeFabricCreateOrConnectWithoutFabricInput | Prisma.GreigeFabricCreateOrConnectWithoutFabricInput[]
+  upsert?: Prisma.GreigeFabricUpsertWithWhereUniqueWithoutFabricInput | Prisma.GreigeFabricUpsertWithWhereUniqueWithoutFabricInput[]
+  createMany?: Prisma.GreigeFabricCreateManyFabricInputEnvelope
+  set?: Prisma.GreigeFabricWhereUniqueInput | Prisma.GreigeFabricWhereUniqueInput[]
+  disconnect?: Prisma.GreigeFabricWhereUniqueInput | Prisma.GreigeFabricWhereUniqueInput[]
+  delete?: Prisma.GreigeFabricWhereUniqueInput | Prisma.GreigeFabricWhereUniqueInput[]
+  connect?: Prisma.GreigeFabricWhereUniqueInput | Prisma.GreigeFabricWhereUniqueInput[]
+  update?: Prisma.GreigeFabricUpdateWithWhereUniqueWithoutFabricInput | Prisma.GreigeFabricUpdateWithWhereUniqueWithoutFabricInput[]
+  updateMany?: Prisma.GreigeFabricUpdateManyWithWhereWithoutFabricInput | Prisma.GreigeFabricUpdateManyWithWhereWithoutFabricInput[]
+  deleteMany?: Prisma.GreigeFabricScalarWhereInput | Prisma.GreigeFabricScalarWhereInput[]
 }
 
 export type GreigeFabricCreateWithoutSupplierInput = {
@@ -653,7 +658,7 @@ export type GreigeFabricCreateWithoutSupplierInput = {
   remarks?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  fabric: Prisma.FabricCreateNestedOneWithoutGreigeInput
+  fabric: Prisma.FabricCreateNestedOneWithoutGreigeFabricsInput
 }
 
 export type GreigeFabricUncheckedCreateWithoutSupplierInput = {
@@ -755,15 +760,105 @@ export type GreigeFabricCreateOrConnectWithoutFabricInput = {
   create: Prisma.XOR<Prisma.GreigeFabricCreateWithoutFabricInput, Prisma.GreigeFabricUncheckedCreateWithoutFabricInput>
 }
 
-export type GreigeFabricUpsertWithoutFabricInput = {
-  update: Prisma.XOR<Prisma.GreigeFabricUpdateWithoutFabricInput, Prisma.GreigeFabricUncheckedUpdateWithoutFabricInput>
-  create: Prisma.XOR<Prisma.GreigeFabricCreateWithoutFabricInput, Prisma.GreigeFabricUncheckedCreateWithoutFabricInput>
-  where?: Prisma.GreigeFabricWhereInput
+export type GreigeFabricCreateManyFabricInputEnvelope = {
+  data: Prisma.GreigeFabricCreateManyFabricInput | Prisma.GreigeFabricCreateManyFabricInput[]
+  skipDuplicates?: boolean
 }
 
-export type GreigeFabricUpdateToOneWithWhereWithoutFabricInput = {
-  where?: Prisma.GreigeFabricWhereInput
+export type GreigeFabricUpsertWithWhereUniqueWithoutFabricInput = {
+  where: Prisma.GreigeFabricWhereUniqueInput
+  update: Prisma.XOR<Prisma.GreigeFabricUpdateWithoutFabricInput, Prisma.GreigeFabricUncheckedUpdateWithoutFabricInput>
+  create: Prisma.XOR<Prisma.GreigeFabricCreateWithoutFabricInput, Prisma.GreigeFabricUncheckedCreateWithoutFabricInput>
+}
+
+export type GreigeFabricUpdateWithWhereUniqueWithoutFabricInput = {
+  where: Prisma.GreigeFabricWhereUniqueInput
   data: Prisma.XOR<Prisma.GreigeFabricUpdateWithoutFabricInput, Prisma.GreigeFabricUncheckedUpdateWithoutFabricInput>
+}
+
+export type GreigeFabricUpdateManyWithWhereWithoutFabricInput = {
+  where: Prisma.GreigeFabricScalarWhereInput
+  data: Prisma.XOR<Prisma.GreigeFabricUpdateManyMutationInput, Prisma.GreigeFabricUncheckedUpdateManyWithoutFabricInput>
+}
+
+export type GreigeFabricCreateManySupplierInput = {
+  id?: string
+  fabricId: string
+  code?: string | null
+  name?: string | null
+  composition?: string | null
+  weight?: string | null
+  width?: string | null
+  yarnOrDensity?: string | null
+  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lossRate?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type GreigeFabricUpdateWithoutSupplierInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  composition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fabric?: Prisma.FabricUpdateOneRequiredWithoutGreigeFabricsNestedInput
+}
+
+export type GreigeFabricUncheckedUpdateWithoutSupplierInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fabricId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  composition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type GreigeFabricUncheckedUpdateManyWithoutSupplierInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fabricId?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  composition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type GreigeFabricCreateManyFabricInput = {
+  id?: string
+  supplierId?: string | null
+  code?: string | null
+  name?: string | null
+  composition?: string | null
+  weight?: string | null
+  width?: string | null
+  yarnOrDensity?: string | null
+  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lossRate?: string | null
+  remarks?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type GreigeFabricUpdateWithoutFabricInput = {
@@ -798,57 +893,9 @@ export type GreigeFabricUncheckedUpdateWithoutFabricInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type GreigeFabricCreateManySupplierInput = {
-  id?: string
-  fabricId: string
-  code?: string | null
-  name?: string | null
-  composition?: string | null
-  weight?: string | null
-  width?: string | null
-  yarnOrDensity?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  lossRate?: string | null
-  remarks?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type GreigeFabricUpdateWithoutSupplierInput = {
+export type GreigeFabricUncheckedUpdateManyWithoutFabricInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  composition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  fabric?: Prisma.FabricUpdateOneRequiredWithoutGreigeNestedInput
-}
-
-export type GreigeFabricUncheckedUpdateWithoutSupplierInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  fabricId?: Prisma.StringFieldUpdateOperationsInput | string
-  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  composition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  weight?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  width?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  yarnOrDensity?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type GreigeFabricUncheckedUpdateManyWithoutSupplierInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  fabricId?: Prisma.StringFieldUpdateOperationsInput | string
+  supplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   composition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null

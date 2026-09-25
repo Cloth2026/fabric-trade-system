@@ -277,10 +277,10 @@ export type DyeingFinishingOrderByWithRelationInput = {
 
 export type DyeingFinishingWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  fabricId?: string
   AND?: Prisma.DyeingFinishingWhereInput | Prisma.DyeingFinishingWhereInput[]
   OR?: Prisma.DyeingFinishingWhereInput[]
   NOT?: Prisma.DyeingFinishingWhereInput | Prisma.DyeingFinishingWhereInput[]
+  fabricId?: Prisma.StringFilter<"DyeingFinishing"> | string
   processType?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
   factoryId?: Prisma.StringNullableFilter<"DyeingFinishing"> | string | null
   unitPrice?: Prisma.DecimalNullableFilter<"DyeingFinishing"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
@@ -291,7 +291,7 @@ export type DyeingFinishingWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"DyeingFinishing"> | Date | string
   fabric?: Prisma.XOR<Prisma.FabricScalarRelationFilter, Prisma.FabricWhereInput>
   factory?: Prisma.XOR<Prisma.SupplierNullableScalarRelationFilter, Prisma.SupplierWhereInput> | null
-}, "id" | "fabricId">
+}, "id">
 
 export type DyeingFinishingOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -336,7 +336,7 @@ export type DyeingFinishingCreateInput = {
   cautions?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  fabric: Prisma.FabricCreateNestedOneWithoutDyeingFinishingInput
+  fabric: Prisma.FabricCreateNestedOneWithoutDyeingFinishingsInput
   factory?: Prisma.SupplierCreateNestedOneWithoutDyeingFinishingsInput
 }
 
@@ -362,7 +362,7 @@ export type DyeingFinishingUpdateInput = {
   cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  fabric?: Prisma.FabricUpdateOneRequiredWithoutDyeingFinishingNestedInput
+  fabric?: Prisma.FabricUpdateOneRequiredWithoutDyeingFinishingsNestedInput
   factory?: Prisma.SupplierUpdateOneWithoutDyeingFinishingsNestedInput
 }
 
@@ -424,11 +424,6 @@ export type DyeingFinishingListRelationFilter = {
 
 export type DyeingFinishingOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type DyeingFinishingNullableScalarRelationFilter = {
-  is?: Prisma.DyeingFinishingWhereInput | null
-  isNot?: Prisma.DyeingFinishingWhereInput | null
 }
 
 export type DyeingFinishingCountOrderByAggregateInput = {
@@ -520,36 +515,46 @@ export type DyeingFinishingUncheckedUpdateManyWithoutFactoryNestedInput = {
   deleteMany?: Prisma.DyeingFinishingScalarWhereInput | Prisma.DyeingFinishingScalarWhereInput[]
 }
 
-export type DyeingFinishingCreateNestedOneWithoutFabricInput = {
-  create?: Prisma.XOR<Prisma.DyeingFinishingCreateWithoutFabricInput, Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput>
-  connectOrCreate?: Prisma.DyeingFinishingCreateOrConnectWithoutFabricInput
-  connect?: Prisma.DyeingFinishingWhereUniqueInput
+export type DyeingFinishingCreateNestedManyWithoutFabricInput = {
+  create?: Prisma.XOR<Prisma.DyeingFinishingCreateWithoutFabricInput, Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput> | Prisma.DyeingFinishingCreateWithoutFabricInput[] | Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput[]
+  connectOrCreate?: Prisma.DyeingFinishingCreateOrConnectWithoutFabricInput | Prisma.DyeingFinishingCreateOrConnectWithoutFabricInput[]
+  createMany?: Prisma.DyeingFinishingCreateManyFabricInputEnvelope
+  connect?: Prisma.DyeingFinishingWhereUniqueInput | Prisma.DyeingFinishingWhereUniqueInput[]
 }
 
-export type DyeingFinishingUncheckedCreateNestedOneWithoutFabricInput = {
-  create?: Prisma.XOR<Prisma.DyeingFinishingCreateWithoutFabricInput, Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput>
-  connectOrCreate?: Prisma.DyeingFinishingCreateOrConnectWithoutFabricInput
-  connect?: Prisma.DyeingFinishingWhereUniqueInput
+export type DyeingFinishingUncheckedCreateNestedManyWithoutFabricInput = {
+  create?: Prisma.XOR<Prisma.DyeingFinishingCreateWithoutFabricInput, Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput> | Prisma.DyeingFinishingCreateWithoutFabricInput[] | Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput[]
+  connectOrCreate?: Prisma.DyeingFinishingCreateOrConnectWithoutFabricInput | Prisma.DyeingFinishingCreateOrConnectWithoutFabricInput[]
+  createMany?: Prisma.DyeingFinishingCreateManyFabricInputEnvelope
+  connect?: Prisma.DyeingFinishingWhereUniqueInput | Prisma.DyeingFinishingWhereUniqueInput[]
 }
 
-export type DyeingFinishingUpdateOneWithoutFabricNestedInput = {
-  create?: Prisma.XOR<Prisma.DyeingFinishingCreateWithoutFabricInput, Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput>
-  connectOrCreate?: Prisma.DyeingFinishingCreateOrConnectWithoutFabricInput
-  upsert?: Prisma.DyeingFinishingUpsertWithoutFabricInput
-  disconnect?: Prisma.DyeingFinishingWhereInput | boolean
-  delete?: Prisma.DyeingFinishingWhereInput | boolean
-  connect?: Prisma.DyeingFinishingWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.DyeingFinishingUpdateToOneWithWhereWithoutFabricInput, Prisma.DyeingFinishingUpdateWithoutFabricInput>, Prisma.DyeingFinishingUncheckedUpdateWithoutFabricInput>
+export type DyeingFinishingUpdateManyWithoutFabricNestedInput = {
+  create?: Prisma.XOR<Prisma.DyeingFinishingCreateWithoutFabricInput, Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput> | Prisma.DyeingFinishingCreateWithoutFabricInput[] | Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput[]
+  connectOrCreate?: Prisma.DyeingFinishingCreateOrConnectWithoutFabricInput | Prisma.DyeingFinishingCreateOrConnectWithoutFabricInput[]
+  upsert?: Prisma.DyeingFinishingUpsertWithWhereUniqueWithoutFabricInput | Prisma.DyeingFinishingUpsertWithWhereUniqueWithoutFabricInput[]
+  createMany?: Prisma.DyeingFinishingCreateManyFabricInputEnvelope
+  set?: Prisma.DyeingFinishingWhereUniqueInput | Prisma.DyeingFinishingWhereUniqueInput[]
+  disconnect?: Prisma.DyeingFinishingWhereUniqueInput | Prisma.DyeingFinishingWhereUniqueInput[]
+  delete?: Prisma.DyeingFinishingWhereUniqueInput | Prisma.DyeingFinishingWhereUniqueInput[]
+  connect?: Prisma.DyeingFinishingWhereUniqueInput | Prisma.DyeingFinishingWhereUniqueInput[]
+  update?: Prisma.DyeingFinishingUpdateWithWhereUniqueWithoutFabricInput | Prisma.DyeingFinishingUpdateWithWhereUniqueWithoutFabricInput[]
+  updateMany?: Prisma.DyeingFinishingUpdateManyWithWhereWithoutFabricInput | Prisma.DyeingFinishingUpdateManyWithWhereWithoutFabricInput[]
+  deleteMany?: Prisma.DyeingFinishingScalarWhereInput | Prisma.DyeingFinishingScalarWhereInput[]
 }
 
-export type DyeingFinishingUncheckedUpdateOneWithoutFabricNestedInput = {
-  create?: Prisma.XOR<Prisma.DyeingFinishingCreateWithoutFabricInput, Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput>
-  connectOrCreate?: Prisma.DyeingFinishingCreateOrConnectWithoutFabricInput
-  upsert?: Prisma.DyeingFinishingUpsertWithoutFabricInput
-  disconnect?: Prisma.DyeingFinishingWhereInput | boolean
-  delete?: Prisma.DyeingFinishingWhereInput | boolean
-  connect?: Prisma.DyeingFinishingWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.DyeingFinishingUpdateToOneWithWhereWithoutFabricInput, Prisma.DyeingFinishingUpdateWithoutFabricInput>, Prisma.DyeingFinishingUncheckedUpdateWithoutFabricInput>
+export type DyeingFinishingUncheckedUpdateManyWithoutFabricNestedInput = {
+  create?: Prisma.XOR<Prisma.DyeingFinishingCreateWithoutFabricInput, Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput> | Prisma.DyeingFinishingCreateWithoutFabricInput[] | Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput[]
+  connectOrCreate?: Prisma.DyeingFinishingCreateOrConnectWithoutFabricInput | Prisma.DyeingFinishingCreateOrConnectWithoutFabricInput[]
+  upsert?: Prisma.DyeingFinishingUpsertWithWhereUniqueWithoutFabricInput | Prisma.DyeingFinishingUpsertWithWhereUniqueWithoutFabricInput[]
+  createMany?: Prisma.DyeingFinishingCreateManyFabricInputEnvelope
+  set?: Prisma.DyeingFinishingWhereUniqueInput | Prisma.DyeingFinishingWhereUniqueInput[]
+  disconnect?: Prisma.DyeingFinishingWhereUniqueInput | Prisma.DyeingFinishingWhereUniqueInput[]
+  delete?: Prisma.DyeingFinishingWhereUniqueInput | Prisma.DyeingFinishingWhereUniqueInput[]
+  connect?: Prisma.DyeingFinishingWhereUniqueInput | Prisma.DyeingFinishingWhereUniqueInput[]
+  update?: Prisma.DyeingFinishingUpdateWithWhereUniqueWithoutFabricInput | Prisma.DyeingFinishingUpdateWithWhereUniqueWithoutFabricInput[]
+  updateMany?: Prisma.DyeingFinishingUpdateManyWithWhereWithoutFabricInput | Prisma.DyeingFinishingUpdateManyWithWhereWithoutFabricInput[]
+  deleteMany?: Prisma.DyeingFinishingScalarWhereInput | Prisma.DyeingFinishingScalarWhereInput[]
 }
 
 export type DyeingFinishingCreateWithoutFactoryInput = {
@@ -561,7 +566,7 @@ export type DyeingFinishingCreateWithoutFactoryInput = {
   cautions?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  fabric: Prisma.FabricCreateNestedOneWithoutDyeingFinishingInput
+  fabric: Prisma.FabricCreateNestedOneWithoutDyeingFinishingsInput
 }
 
 export type DyeingFinishingUncheckedCreateWithoutFactoryInput = {
@@ -647,15 +652,85 @@ export type DyeingFinishingCreateOrConnectWithoutFabricInput = {
   create: Prisma.XOR<Prisma.DyeingFinishingCreateWithoutFabricInput, Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput>
 }
 
-export type DyeingFinishingUpsertWithoutFabricInput = {
-  update: Prisma.XOR<Prisma.DyeingFinishingUpdateWithoutFabricInput, Prisma.DyeingFinishingUncheckedUpdateWithoutFabricInput>
-  create: Prisma.XOR<Prisma.DyeingFinishingCreateWithoutFabricInput, Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput>
-  where?: Prisma.DyeingFinishingWhereInput
+export type DyeingFinishingCreateManyFabricInputEnvelope = {
+  data: Prisma.DyeingFinishingCreateManyFabricInput | Prisma.DyeingFinishingCreateManyFabricInput[]
+  skipDuplicates?: boolean
 }
 
-export type DyeingFinishingUpdateToOneWithWhereWithoutFabricInput = {
-  where?: Prisma.DyeingFinishingWhereInput
+export type DyeingFinishingUpsertWithWhereUniqueWithoutFabricInput = {
+  where: Prisma.DyeingFinishingWhereUniqueInput
+  update: Prisma.XOR<Prisma.DyeingFinishingUpdateWithoutFabricInput, Prisma.DyeingFinishingUncheckedUpdateWithoutFabricInput>
+  create: Prisma.XOR<Prisma.DyeingFinishingCreateWithoutFabricInput, Prisma.DyeingFinishingUncheckedCreateWithoutFabricInput>
+}
+
+export type DyeingFinishingUpdateWithWhereUniqueWithoutFabricInput = {
+  where: Prisma.DyeingFinishingWhereUniqueInput
   data: Prisma.XOR<Prisma.DyeingFinishingUpdateWithoutFabricInput, Prisma.DyeingFinishingUncheckedUpdateWithoutFabricInput>
+}
+
+export type DyeingFinishingUpdateManyWithWhereWithoutFabricInput = {
+  where: Prisma.DyeingFinishingScalarWhereInput
+  data: Prisma.XOR<Prisma.DyeingFinishingUpdateManyMutationInput, Prisma.DyeingFinishingUncheckedUpdateManyWithoutFabricInput>
+}
+
+export type DyeingFinishingCreateManyFactoryInput = {
+  id?: string
+  fabricId: string
+  processType?: string | null
+  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lossRate?: string | null
+  leadTime?: string | null
+  cautions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DyeingFinishingUpdateWithoutFactoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  fabric?: Prisma.FabricUpdateOneRequiredWithoutDyeingFinishingsNestedInput
+}
+
+export type DyeingFinishingUncheckedUpdateWithoutFactoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fabricId?: Prisma.StringFieldUpdateOperationsInput | string
+  processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DyeingFinishingUncheckedUpdateManyWithoutFactoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fabricId?: Prisma.StringFieldUpdateOperationsInput | string
+  processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DyeingFinishingCreateManyFabricInput = {
+  id?: string
+  processType?: string | null
+  factoryId?: string | null
+  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  lossRate?: string | null
+  leadTime?: string | null
+  cautions?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type DyeingFinishingUpdateWithoutFabricInput = {
@@ -682,46 +757,10 @@ export type DyeingFinishingUncheckedUpdateWithoutFabricInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type DyeingFinishingCreateManyFactoryInput = {
-  id?: string
-  fabricId: string
-  processType?: string | null
-  unitPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  lossRate?: string | null
-  leadTime?: string | null
-  cautions?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type DyeingFinishingUpdateWithoutFactoryInput = {
+export type DyeingFinishingUncheckedUpdateManyWithoutFabricInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  fabric?: Prisma.FabricUpdateOneRequiredWithoutDyeingFinishingNestedInput
-}
-
-export type DyeingFinishingUncheckedUpdateWithoutFactoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  fabricId?: Prisma.StringFieldUpdateOperationsInput | string
-  processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
-  lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  cautions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type DyeingFinishingUncheckedUpdateManyWithoutFactoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  fabricId?: Prisma.StringFieldUpdateOperationsInput | string
-  processType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  factoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unitPrice?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   lossRate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leadTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
