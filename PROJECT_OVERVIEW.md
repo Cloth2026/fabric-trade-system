@@ -61,7 +61,8 @@ npm run dev
 ## 数据库与租户隔离
 
 - 业务核心表通过 `tenantId` 隔离；没有直接 `tenantId` 的工艺子表必须通过所属 `Fabric` 间接隔离。
-- 当前尚未实现登录和完整权限系统，`src/server/tenant.ts` 使用集中管理的临时单租户上下文，并在租户不存在时安全 upsert。
+- 认证基础设施中，`Verification` 与 `AuthLoginThrottle` 是**全局表、不带 `tenantId`**（登录前的 IP 与未识别邮箱尚不能归属租户）；`Session` 与 `Account` 通过 `User` 间接归属租户。
+- 当前尚未实现登录和完整权限系统，`src/server/tenant.ts` 使用集中管理的临时单租户上下文，并在租户不存在时安全 upsert。认证与权限的**数据表已建好但未启用**。
 - API 不接受客户端覆盖 `tenantId`。详情和更新查询同时限定资源 ID 与服务端租户；跨租户资源按不存在处理。
 - 金额使用 Prisma `Decimal`。只读 API 将金额序列化为字符串，前端不得先转为浮点数再修改精度。
 - 稳定英文 key 由数据库和 API 保存；中文标签由配置数据或前端映射负责。
@@ -95,6 +96,7 @@ npm run dev
 - `FabricSupplier` 保存长期货源关系，`FabricSupplierQuote` 保存不可覆盖的报价历史。
 - `FabricSupplier.supplierUnitId` 表示当前常用生产单元。
 - `FabricSupplierQuote.supplierUnitId` 独立保存报价当时的生产单元；详情 API 返回报价自身的 `supplierUnitId` 和 `supplierUnit`。
+- 认证与权限模型已落地（migration `20260926093217_add_authentication_and_authorization_models`）：`User` 扩展并删除 `role`、`email` 全局唯一；新增 `Account` / `Session` / `Verification` / `UserRoleAssignment` / `AuthLoginThrottle`；`OperationLog` 补分类、结果、请求 ID 与操作人快照。**这些表目前全是空的，登录功能未实现。**
 
 ## 尚未实现或仅为提示
 
@@ -103,7 +105,8 @@ npm run dev
 - 独立的面料货源新增、采购报价新增和首选货源维护 API 尚未实现。
 - 寄样与客户反馈、客户管理、客户报价单、订单和真实库存尚未开发。
 - `FabricStockInBatch` 仅有预留模型，入库批次 UI 暂缓。
-- 登录、权限和复杂审批尚未实现。认证与固定角色权限的正式设计见 `docs/DESIGN_AUTHORIZATION_AND_LOGIN.md`（已确认产品方向，待数据模型实施）。
+- 登录、权限和复杂审批尚未实现。认证与固定角色权限的正式设计见 `docs/DESIGN_AUTHORIZATION_AND_LOGIN.md`（产品方向已确认、兼容性已实测、**数据模型已落地**）。
+- **认证数据表已建好但完全未启用**：`Account` / `Session` / `Verification` / `UserRoleAssignment` / `AuthLoginThrottle` 均为空表，`User` 仍为 0 行；没有登录接口、没有权限校验、没有审计写入服务。详见 `docs/DATA_MODEL.md`「认证模型：已建表，尚未启用」。
 - V1 暂不管理颜色、色卡和色号。
 
 ## 当前真实 API
@@ -168,7 +171,7 @@ npm run prisma:migrate:status
 4. `docs/API_CONTRACTS.md`：当前真实 API 合同。
 5. `docs/PRODUCT_ROADMAP.md`：下一阶段路线与暂缓范围。
 6. `docs/FABRIC_LIBRARY_FIELDS.md`：面料字段详细定义。
-7. `docs/DESIGN_AUTHORIZATION_AND_LOGIN.md`：用户认证、固定角色权限与审计日志的正式设计（**待实施，不代表当前代码已实现**）。
-8. `docs/BETTER_AUTH_COMPATIBILITY_REPORT.md`：`better-auth@1.7.6` 兼容性实测证据与结论（设计阶段的验证记录）。
+7. `docs/DESIGN_AUTHORIZATION_AND_LOGIN.md`：用户认证、固定角色权限与审计日志的正式设计（**数据模型已实施；登录与权限功能仍未实现**）。
+8. `docs/BETTER_AUTH_COMPATIBILITY_REPORT.md`：`better-auth@1.7.6` 兼容性实测证据与结论（含 §7 数据模型落地对照）。
 9. `docs/DEV_LOG.md`：历史实施记录。
 10. `docs/HANDOFF_WORKBUDDY.md`：WorkBuddy 快速接管入口。

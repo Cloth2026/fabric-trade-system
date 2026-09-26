@@ -939,3 +939,46 @@ Current phase:
 - 面料新增、读取和供应商管理已形成真实基础闭环。
 - 面料详情中的编辑、添加货源和新增报价仍为静态提示。
 - 下一项推荐任务是“面料货源与采购报价维护”的静态 UI 原型，确认后再开发写 API。
+
+### 2026-09-26 认证与权限数据模型及增量 migration
+
+本轮目标：只实施 Prisma 数据模型、增量 migration、数据模型测试和文档同步。不实现登录 API、用户管理 API、Better Auth 配置、middleware、权限拦截、审计服务或 UI 改造。
+
+实施前数据库检查（dev `fabric_trade_dev` / test `fabric_trade_test`）：
+
+- `User`：**dev 0 行 / test 0 行**，无重复 email，`role` 无实际值 → 允许删除 `role` 列并改 email 唯一约束。
+- `OperationLog`：dev 69 行 / test 563 行，字段为 `id / tenantId / userId? / module / action / targetType? / targetId? / detail? / ipAddress? / createdAt`。
+- seed 不涉及 `User`；`grep` 确认没有任何业务代码读写 `User.role` 或 `prisma.user`。
+
+已完成：
+
+- `User`：新增 `emailVerified` / `image` / `mustChangePassword` / `lastLoginAt` / `failedLoginAttempts` / `lockedUntil` / `passwordChangedAt` / `provisioningRequestId`（全局唯一）/ `provisioningStatus`（`UserProvisioningStatus`，默认 `pending`）/ `provisionedAt`；**删除 `role` 列**；`email` 由 `@@unique([tenantId, email])` 改为全局唯一；新增 `@@unique([tenantId, id])` 供复合外键引用。
+- 新增 `Account` / `Session` / `Verification` / `UserRoleAssignment` / `AuthLoginThrottle` 五表，全部按 `better-auth@1.7.6` 官方 generator 字段落地（`Account` 只有 `@@index([userId])`，未加 `@@unique([providerId, accountId])`）。
+- 新增 enum：`UserProvisioningStatus` / `RoleKey` / `AuthThrottleScope` / `OperationLogCategory` / `OperationLogResult`。
+- `UserRoleAssignment` 用 `(tenantId, userId) → User(tenantId, id)` 复合外键；`createdByUserId` 因 Prisma 不支持"必填 + 可空"混合的复合关系，保留为可空审计快照字段，租户边界由服务层校验（已在设计文档与数据模型文档写明）。
+- `OperationLog` 新增 `actorNameSnapshot` / `actorEmailSnapshot` / `category`（枚举，默认 `business`）/ `result`（枚举，默认 `success`）/ `targetLabel` / `requestId` / `userAgent`，并新增 6 个以 `tenantId` 为前缀的索引；原有 3 个索引保留不删。
+- 新增 `tests/auth-authorization-data-model.test.ts`，13 个用例：email 全局唯一、`@@unique([tenantId, id])` 存在、跨租户角色外键失败、同 roleKey 重复失败、多角色并存、`provisioningRequestId` 唯一、限流 key 唯一、`Account` / `Session` 级联、日志复合索引、`User.role` 与 `passwordHash` 不存在、无 `Role` / `Permission` 表。
+
+修改文件：
+
+- `prisma/schema.prisma`
+- `prisma/migrations/20260926093217_add_authentication_and_authorization_models/migration.sql`（新增）
+- `tests/auth-authorization-data-model.test.ts`（新增）
+- `docs/DATA_MODEL.md`、`docs/DESIGN_AUTHORIZATION_AND_LOGIN.md`、`docs/BETTER_AUTH_COMPATIBILITY_REPORT.md`、`docs/PRODUCT_ROADMAP.md`、`docs/DEV_LOG.md`、`PROJECT_OVERVIEW.md`
+
+验证结果：
+
+- `npx prisma validate` 通过；`npm run prisma:generate` 成功（Prisma Client 7.10.0）。
+- migration 手工审核：无 `DROP TABLE`、无数据清空、未改动任何历史 migration；唯一的破坏性动作是 `DROP COLUMN "User"."role"` 与 `DROP INDEX "User_tenantId_email_key"`，两者都由 migration 顶部的"User 非空即中止"保护语句守卫，且执行前已实测两库 `User` 为空。
+- dev + test 双库 `prisma migrate deploy` 成功，`prisma migrate status` 均为 "Database schema is up to date!"，`migrate diff` 对 dev 库为空（无漂移）。
+- `npm test`：**194 pass / 0 fail**（存量 181 + 新增 13）；`npm run lint` 通过；`npm run build` 通过。
+- `git diff --check` 通过。
+
+下一步建议：
+
+- 阶段 2：Better Auth 基础接入（`src/lib/auth.ts`、三层 `tenantId` 注入、`disabledPaths`）与首个 owner 初始化脚本。仍不接 UI。
+
+未决问题：
+
+- `provisioningStatus` 由谁推进到 `ready`、孤儿账号的清理入口放在哪里，属服务层实现，本轮只建字段未定流程。
+- 指令中提到的 `actorId` 对应现有 `OperationLog.userId`，未改名（改名会牵动既有索引与所有审计写入点）。如需改名应在审计服务实施轮统一处理。

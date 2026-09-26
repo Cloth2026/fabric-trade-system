@@ -568,22 +568,6 @@ export type EnumConfigScopeFieldUpdateOperationsInput = {
   set?: $Enums.ConfigScope
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type ConfigOptionCreateWithoutTenantInput = {
   id?: string
   ownerKey?: string

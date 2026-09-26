@@ -28,11 +28,18 @@ export type OperationLogMinAggregateOutputType = {
   id: string | null
   tenantId: string | null
   userId: string | null
+  actorNameSnapshot: string | null
+  actorEmailSnapshot: string | null
+  category: $Enums.OperationLogCategory | null
   module: string | null
   action: string | null
   targetType: string | null
   targetId: string | null
+  targetLabel: string | null
+  result: $Enums.OperationLogResult | null
+  requestId: string | null
   ipAddress: string | null
+  userAgent: string | null
   createdAt: Date | null
 }
 
@@ -40,11 +47,18 @@ export type OperationLogMaxAggregateOutputType = {
   id: string | null
   tenantId: string | null
   userId: string | null
+  actorNameSnapshot: string | null
+  actorEmailSnapshot: string | null
+  category: $Enums.OperationLogCategory | null
   module: string | null
   action: string | null
   targetType: string | null
   targetId: string | null
+  targetLabel: string | null
+  result: $Enums.OperationLogResult | null
+  requestId: string | null
   ipAddress: string | null
+  userAgent: string | null
   createdAt: Date | null
 }
 
@@ -52,12 +66,19 @@ export type OperationLogCountAggregateOutputType = {
   id: number
   tenantId: number
   userId: number
+  actorNameSnapshot: number
+  actorEmailSnapshot: number
+  category: number
   module: number
   action: number
   targetType: number
   targetId: number
+  targetLabel: number
+  result: number
   detail: number
+  requestId: number
   ipAddress: number
+  userAgent: number
   createdAt: number
   _all: number
 }
@@ -67,11 +88,18 @@ export type OperationLogMinAggregateInputType = {
   id?: true
   tenantId?: true
   userId?: true
+  actorNameSnapshot?: true
+  actorEmailSnapshot?: true
+  category?: true
   module?: true
   action?: true
   targetType?: true
   targetId?: true
+  targetLabel?: true
+  result?: true
+  requestId?: true
   ipAddress?: true
+  userAgent?: true
   createdAt?: true
 }
 
@@ -79,11 +107,18 @@ export type OperationLogMaxAggregateInputType = {
   id?: true
   tenantId?: true
   userId?: true
+  actorNameSnapshot?: true
+  actorEmailSnapshot?: true
+  category?: true
   module?: true
   action?: true
   targetType?: true
   targetId?: true
+  targetLabel?: true
+  result?: true
+  requestId?: true
   ipAddress?: true
+  userAgent?: true
   createdAt?: true
 }
 
@@ -91,12 +126,19 @@ export type OperationLogCountAggregateInputType = {
   id?: true
   tenantId?: true
   userId?: true
+  actorNameSnapshot?: true
+  actorEmailSnapshot?: true
+  category?: true
   module?: true
   action?: true
   targetType?: true
   targetId?: true
+  targetLabel?: true
+  result?: true
   detail?: true
+  requestId?: true
   ipAddress?: true
+  userAgent?: true
   createdAt?: true
   _all?: true
 }
@@ -177,12 +219,19 @@ export type OperationLogGroupByOutputType = {
   id: string
   tenantId: string
   userId: string | null
+  actorNameSnapshot: string | null
+  actorEmailSnapshot: string | null
+  category: $Enums.OperationLogCategory
   module: string
   action: string
   targetType: string | null
   targetId: string | null
+  targetLabel: string | null
+  result: $Enums.OperationLogResult
   detail: runtime.JsonValue | null
+  requestId: string | null
   ipAddress: string | null
+  userAgent: string | null
   createdAt: Date
   _count: OperationLogCountAggregateOutputType | null
   _min: OperationLogMinAggregateOutputType | null
@@ -211,12 +260,19 @@ export type OperationLogWhereInput = {
   id?: Prisma.StringFilter<"OperationLog"> | string
   tenantId?: Prisma.StringFilter<"OperationLog"> | string
   userId?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  actorNameSnapshot?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  actorEmailSnapshot?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  category?: Prisma.EnumOperationLogCategoryFilter<"OperationLog"> | $Enums.OperationLogCategory
   module?: Prisma.StringFilter<"OperationLog"> | string
   action?: Prisma.StringFilter<"OperationLog"> | string
   targetType?: Prisma.StringNullableFilter<"OperationLog"> | string | null
   targetId?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  targetLabel?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  result?: Prisma.EnumOperationLogResultFilter<"OperationLog"> | $Enums.OperationLogResult
   detail?: Prisma.JsonNullableFilter<"OperationLog">
+  requestId?: Prisma.StringNullableFilter<"OperationLog"> | string | null
   ipAddress?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  userAgent?: Prisma.StringNullableFilter<"OperationLog"> | string | null
   createdAt?: Prisma.DateTimeFilter<"OperationLog"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -226,12 +282,19 @@ export type OperationLogOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  actorNameSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
+  actorEmailSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
+  category?: Prisma.SortOrder
   module?: Prisma.SortOrder
   action?: Prisma.SortOrder
   targetType?: Prisma.SortOrderInput | Prisma.SortOrder
   targetId?: Prisma.SortOrderInput | Prisma.SortOrder
+  targetLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  result?: Prisma.SortOrder
   detail?: Prisma.SortOrderInput | Prisma.SortOrder
+  requestId?: Prisma.SortOrderInput | Prisma.SortOrder
   ipAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
@@ -244,12 +307,19 @@ export type OperationLogWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.OperationLogWhereInput | Prisma.OperationLogWhereInput[]
   tenantId?: Prisma.StringFilter<"OperationLog"> | string
   userId?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  actorNameSnapshot?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  actorEmailSnapshot?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  category?: Prisma.EnumOperationLogCategoryFilter<"OperationLog"> | $Enums.OperationLogCategory
   module?: Prisma.StringFilter<"OperationLog"> | string
   action?: Prisma.StringFilter<"OperationLog"> | string
   targetType?: Prisma.StringNullableFilter<"OperationLog"> | string | null
   targetId?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  targetLabel?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  result?: Prisma.EnumOperationLogResultFilter<"OperationLog"> | $Enums.OperationLogResult
   detail?: Prisma.JsonNullableFilter<"OperationLog">
+  requestId?: Prisma.StringNullableFilter<"OperationLog"> | string | null
   ipAddress?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  userAgent?: Prisma.StringNullableFilter<"OperationLog"> | string | null
   createdAt?: Prisma.DateTimeFilter<"OperationLog"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -259,12 +329,19 @@ export type OperationLogOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  actorNameSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
+  actorEmailSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
+  category?: Prisma.SortOrder
   module?: Prisma.SortOrder
   action?: Prisma.SortOrder
   targetType?: Prisma.SortOrderInput | Prisma.SortOrder
   targetId?: Prisma.SortOrderInput | Prisma.SortOrder
+  targetLabel?: Prisma.SortOrderInput | Prisma.SortOrder
+  result?: Prisma.SortOrder
   detail?: Prisma.SortOrderInput | Prisma.SortOrder
+  requestId?: Prisma.SortOrderInput | Prisma.SortOrder
   ipAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.OperationLogCountOrderByAggregateInput
   _max?: Prisma.OperationLogMaxOrderByAggregateInput
@@ -278,23 +355,37 @@ export type OperationLogScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"OperationLog"> | string
   tenantId?: Prisma.StringWithAggregatesFilter<"OperationLog"> | string
   userId?: Prisma.StringNullableWithAggregatesFilter<"OperationLog"> | string | null
+  actorNameSnapshot?: Prisma.StringNullableWithAggregatesFilter<"OperationLog"> | string | null
+  actorEmailSnapshot?: Prisma.StringNullableWithAggregatesFilter<"OperationLog"> | string | null
+  category?: Prisma.EnumOperationLogCategoryWithAggregatesFilter<"OperationLog"> | $Enums.OperationLogCategory
   module?: Prisma.StringWithAggregatesFilter<"OperationLog"> | string
   action?: Prisma.StringWithAggregatesFilter<"OperationLog"> | string
   targetType?: Prisma.StringNullableWithAggregatesFilter<"OperationLog"> | string | null
   targetId?: Prisma.StringNullableWithAggregatesFilter<"OperationLog"> | string | null
+  targetLabel?: Prisma.StringNullableWithAggregatesFilter<"OperationLog"> | string | null
+  result?: Prisma.EnumOperationLogResultWithAggregatesFilter<"OperationLog"> | $Enums.OperationLogResult
   detail?: Prisma.JsonNullableWithAggregatesFilter<"OperationLog">
+  requestId?: Prisma.StringNullableWithAggregatesFilter<"OperationLog"> | string | null
   ipAddress?: Prisma.StringNullableWithAggregatesFilter<"OperationLog"> | string | null
+  userAgent?: Prisma.StringNullableWithAggregatesFilter<"OperationLog"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"OperationLog"> | Date | string
 }
 
 export type OperationLogCreateInput = {
   id?: string
+  actorNameSnapshot?: string | null
+  actorEmailSnapshot?: string | null
+  category?: $Enums.OperationLogCategory
   module: string
   action: string
   targetType?: string | null
   targetId?: string | null
+  targetLabel?: string | null
+  result?: $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: string | null
   ipAddress?: string | null
+  userAgent?: string | null
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutLogsInput
   user?: Prisma.UserCreateNestedOneWithoutLogsInput
@@ -304,23 +395,37 @@ export type OperationLogUncheckedCreateInput = {
   id?: string
   tenantId: string
   userId?: string | null
+  actorNameSnapshot?: string | null
+  actorEmailSnapshot?: string | null
+  category?: $Enums.OperationLogCategory
   module: string
   action: string
   targetType?: string | null
   targetId?: string | null
+  targetLabel?: string | null
+  result?: $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: string | null
   ipAddress?: string | null
+  userAgent?: string | null
   createdAt?: Date | string
 }
 
 export type OperationLogUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  actorNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorEmailSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumOperationLogCategoryFieldUpdateOperationsInput | $Enums.OperationLogCategory
   module?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  result?: Prisma.EnumOperationLogResultFieldUpdateOperationsInput | $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutLogsNestedInput
   user?: Prisma.UserUpdateOneWithoutLogsNestedInput
@@ -330,12 +435,19 @@ export type OperationLogUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorEmailSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumOperationLogCategoryFieldUpdateOperationsInput | $Enums.OperationLogCategory
   module?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  result?: Prisma.EnumOperationLogResultFieldUpdateOperationsInput | $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -343,23 +455,37 @@ export type OperationLogCreateManyInput = {
   id?: string
   tenantId: string
   userId?: string | null
+  actorNameSnapshot?: string | null
+  actorEmailSnapshot?: string | null
+  category?: $Enums.OperationLogCategory
   module: string
   action: string
   targetType?: string | null
   targetId?: string | null
+  targetLabel?: string | null
+  result?: $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: string | null
   ipAddress?: string | null
+  userAgent?: string | null
   createdAt?: Date | string
 }
 
 export type OperationLogUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  actorNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorEmailSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumOperationLogCategoryFieldUpdateOperationsInput | $Enums.OperationLogCategory
   module?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  result?: Prisma.EnumOperationLogResultFieldUpdateOperationsInput | $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -367,12 +493,19 @@ export type OperationLogUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorEmailSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumOperationLogCategoryFieldUpdateOperationsInput | $Enums.OperationLogCategory
   module?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  result?: Prisma.EnumOperationLogResultFieldUpdateOperationsInput | $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -390,12 +523,19 @@ export type OperationLogCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  actorNameSnapshot?: Prisma.SortOrder
+  actorEmailSnapshot?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   module?: Prisma.SortOrder
   action?: Prisma.SortOrder
   targetType?: Prisma.SortOrder
   targetId?: Prisma.SortOrder
+  targetLabel?: Prisma.SortOrder
+  result?: Prisma.SortOrder
   detail?: Prisma.SortOrder
+  requestId?: Prisma.SortOrder
   ipAddress?: Prisma.SortOrder
+  userAgent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -403,11 +543,18 @@ export type OperationLogMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  actorNameSnapshot?: Prisma.SortOrder
+  actorEmailSnapshot?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   module?: Prisma.SortOrder
   action?: Prisma.SortOrder
   targetType?: Prisma.SortOrder
   targetId?: Prisma.SortOrder
+  targetLabel?: Prisma.SortOrder
+  result?: Prisma.SortOrder
+  requestId?: Prisma.SortOrder
   ipAddress?: Prisma.SortOrder
+  userAgent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -415,11 +562,18 @@ export type OperationLogMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  actorNameSnapshot?: Prisma.SortOrder
+  actorEmailSnapshot?: Prisma.SortOrder
+  category?: Prisma.SortOrder
   module?: Prisma.SortOrder
   action?: Prisma.SortOrder
   targetType?: Prisma.SortOrder
   targetId?: Prisma.SortOrder
+  targetLabel?: Prisma.SortOrder
+  result?: Prisma.SortOrder
+  requestId?: Prisma.SortOrder
   ipAddress?: Prisma.SortOrder
+  userAgent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -507,14 +661,29 @@ export type OperationLogUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.OperationLogScalarWhereInput | Prisma.OperationLogScalarWhereInput[]
 }
 
+export type EnumOperationLogCategoryFieldUpdateOperationsInput = {
+  set?: $Enums.OperationLogCategory
+}
+
+export type EnumOperationLogResultFieldUpdateOperationsInput = {
+  set?: $Enums.OperationLogResult
+}
+
 export type OperationLogCreateWithoutTenantInput = {
   id?: string
+  actorNameSnapshot?: string | null
+  actorEmailSnapshot?: string | null
+  category?: $Enums.OperationLogCategory
   module: string
   action: string
   targetType?: string | null
   targetId?: string | null
+  targetLabel?: string | null
+  result?: $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: string | null
   ipAddress?: string | null
+  userAgent?: string | null
   createdAt?: Date | string
   user?: Prisma.UserCreateNestedOneWithoutLogsInput
 }
@@ -522,12 +691,19 @@ export type OperationLogCreateWithoutTenantInput = {
 export type OperationLogUncheckedCreateWithoutTenantInput = {
   id?: string
   userId?: string | null
+  actorNameSnapshot?: string | null
+  actorEmailSnapshot?: string | null
+  category?: $Enums.OperationLogCategory
   module: string
   action: string
   targetType?: string | null
   targetId?: string | null
+  targetLabel?: string | null
+  result?: $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: string | null
   ipAddress?: string | null
+  userAgent?: string | null
   createdAt?: Date | string
 }
 
@@ -564,23 +740,37 @@ export type OperationLogScalarWhereInput = {
   id?: Prisma.StringFilter<"OperationLog"> | string
   tenantId?: Prisma.StringFilter<"OperationLog"> | string
   userId?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  actorNameSnapshot?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  actorEmailSnapshot?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  category?: Prisma.EnumOperationLogCategoryFilter<"OperationLog"> | $Enums.OperationLogCategory
   module?: Prisma.StringFilter<"OperationLog"> | string
   action?: Prisma.StringFilter<"OperationLog"> | string
   targetType?: Prisma.StringNullableFilter<"OperationLog"> | string | null
   targetId?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  targetLabel?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  result?: Prisma.EnumOperationLogResultFilter<"OperationLog"> | $Enums.OperationLogResult
   detail?: Prisma.JsonNullableFilter<"OperationLog">
+  requestId?: Prisma.StringNullableFilter<"OperationLog"> | string | null
   ipAddress?: Prisma.StringNullableFilter<"OperationLog"> | string | null
+  userAgent?: Prisma.StringNullableFilter<"OperationLog"> | string | null
   createdAt?: Prisma.DateTimeFilter<"OperationLog"> | Date | string
 }
 
 export type OperationLogCreateWithoutUserInput = {
   id?: string
+  actorNameSnapshot?: string | null
+  actorEmailSnapshot?: string | null
+  category?: $Enums.OperationLogCategory
   module: string
   action: string
   targetType?: string | null
   targetId?: string | null
+  targetLabel?: string | null
+  result?: $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: string | null
   ipAddress?: string | null
+  userAgent?: string | null
   createdAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutLogsInput
 }
@@ -588,12 +778,19 @@ export type OperationLogCreateWithoutUserInput = {
 export type OperationLogUncheckedCreateWithoutUserInput = {
   id?: string
   tenantId: string
+  actorNameSnapshot?: string | null
+  actorEmailSnapshot?: string | null
+  category?: $Enums.OperationLogCategory
   module: string
   action: string
   targetType?: string | null
   targetId?: string | null
+  targetLabel?: string | null
+  result?: $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: string | null
   ipAddress?: string | null
+  userAgent?: string | null
   createdAt?: Date | string
 }
 
@@ -626,23 +823,37 @@ export type OperationLogUpdateManyWithWhereWithoutUserInput = {
 export type OperationLogCreateManyTenantInput = {
   id?: string
   userId?: string | null
+  actorNameSnapshot?: string | null
+  actorEmailSnapshot?: string | null
+  category?: $Enums.OperationLogCategory
   module: string
   action: string
   targetType?: string | null
   targetId?: string | null
+  targetLabel?: string | null
+  result?: $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: string | null
   ipAddress?: string | null
+  userAgent?: string | null
   createdAt?: Date | string
 }
 
 export type OperationLogUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  actorNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorEmailSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumOperationLogCategoryFieldUpdateOperationsInput | $Enums.OperationLogCategory
   module?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  result?: Prisma.EnumOperationLogResultFieldUpdateOperationsInput | $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneWithoutLogsNestedInput
 }
@@ -650,47 +861,75 @@ export type OperationLogUpdateWithoutTenantInput = {
 export type OperationLogUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorEmailSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumOperationLogCategoryFieldUpdateOperationsInput | $Enums.OperationLogCategory
   module?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  result?: Prisma.EnumOperationLogResultFieldUpdateOperationsInput | $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OperationLogUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorEmailSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumOperationLogCategoryFieldUpdateOperationsInput | $Enums.OperationLogCategory
   module?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  result?: Prisma.EnumOperationLogResultFieldUpdateOperationsInput | $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OperationLogCreateManyUserInput = {
   id?: string
   tenantId: string
+  actorNameSnapshot?: string | null
+  actorEmailSnapshot?: string | null
+  category?: $Enums.OperationLogCategory
   module: string
   action: string
   targetType?: string | null
   targetId?: string | null
+  targetLabel?: string | null
+  result?: $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: string | null
   ipAddress?: string | null
+  userAgent?: string | null
   createdAt?: Date | string
 }
 
 export type OperationLogUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  actorNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorEmailSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumOperationLogCategoryFieldUpdateOperationsInput | $Enums.OperationLogCategory
   module?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  result?: Prisma.EnumOperationLogResultFieldUpdateOperationsInput | $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutLogsNestedInput
 }
@@ -698,24 +937,38 @@ export type OperationLogUpdateWithoutUserInput = {
 export type OperationLogUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  actorNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorEmailSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumOperationLogCategoryFieldUpdateOperationsInput | $Enums.OperationLogCategory
   module?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  result?: Prisma.EnumOperationLogResultFieldUpdateOperationsInput | $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type OperationLogUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  actorNameSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorEmailSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumOperationLogCategoryFieldUpdateOperationsInput | $Enums.OperationLogCategory
   module?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.StringFieldUpdateOperationsInput | string
   targetType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   targetId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  targetLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  result?: Prisma.EnumOperationLogResultFieldUpdateOperationsInput | $Enums.OperationLogResult
   detail?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  requestId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -725,12 +978,19 @@ export type OperationLogSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   tenantId?: boolean
   userId?: boolean
+  actorNameSnapshot?: boolean
+  actorEmailSnapshot?: boolean
+  category?: boolean
   module?: boolean
   action?: boolean
   targetType?: boolean
   targetId?: boolean
+  targetLabel?: boolean
+  result?: boolean
   detail?: boolean
+  requestId?: boolean
   ipAddress?: boolean
+  userAgent?: boolean
   createdAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   user?: boolean | Prisma.OperationLog$userArgs<ExtArgs>
@@ -740,12 +1000,19 @@ export type OperationLogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   tenantId?: boolean
   userId?: boolean
+  actorNameSnapshot?: boolean
+  actorEmailSnapshot?: boolean
+  category?: boolean
   module?: boolean
   action?: boolean
   targetType?: boolean
   targetId?: boolean
+  targetLabel?: boolean
+  result?: boolean
   detail?: boolean
+  requestId?: boolean
   ipAddress?: boolean
+  userAgent?: boolean
   createdAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   user?: boolean | Prisma.OperationLog$userArgs<ExtArgs>
@@ -755,12 +1022,19 @@ export type OperationLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   tenantId?: boolean
   userId?: boolean
+  actorNameSnapshot?: boolean
+  actorEmailSnapshot?: boolean
+  category?: boolean
   module?: boolean
   action?: boolean
   targetType?: boolean
   targetId?: boolean
+  targetLabel?: boolean
+  result?: boolean
   detail?: boolean
+  requestId?: boolean
   ipAddress?: boolean
+  userAgent?: boolean
   createdAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   user?: boolean | Prisma.OperationLog$userArgs<ExtArgs>
@@ -770,16 +1044,23 @@ export type OperationLogSelectScalar = {
   id?: boolean
   tenantId?: boolean
   userId?: boolean
+  actorNameSnapshot?: boolean
+  actorEmailSnapshot?: boolean
+  category?: boolean
   module?: boolean
   action?: boolean
   targetType?: boolean
   targetId?: boolean
+  targetLabel?: boolean
+  result?: boolean
   detail?: boolean
+  requestId?: boolean
   ipAddress?: boolean
+  userAgent?: boolean
   createdAt?: boolean
 }
 
-export type OperationLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "userId" | "module" | "action" | "targetType" | "targetId" | "detail" | "ipAddress" | "createdAt", ExtArgs["result"]["operationLog"]>
+export type OperationLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "userId" | "actorNameSnapshot" | "actorEmailSnapshot" | "category" | "module" | "action" | "targetType" | "targetId" | "targetLabel" | "result" | "detail" | "requestId" | "ipAddress" | "userAgent" | "createdAt", ExtArgs["result"]["operationLog"]>
 export type OperationLogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   user?: boolean | Prisma.OperationLog$userArgs<ExtArgs>
@@ -803,12 +1084,19 @@ export type $OperationLogPayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: string
     tenantId: string
     userId: string | null
+    actorNameSnapshot: string | null
+    actorEmailSnapshot: string | null
+    category: $Enums.OperationLogCategory
     module: string
     action: string
     targetType: string | null
     targetId: string | null
+    targetLabel: string | null
+    result: $Enums.OperationLogResult
     detail: runtime.JsonValue | null
+    requestId: string | null
     ipAddress: string | null
+    userAgent: string | null
     createdAt: Date
   }, ExtArgs["result"]["operationLog"]>
   composites: {}
@@ -1238,12 +1526,19 @@ export interface OperationLogFieldRefs {
   readonly id: Prisma.FieldRef<"OperationLog", 'String'>
   readonly tenantId: Prisma.FieldRef<"OperationLog", 'String'>
   readonly userId: Prisma.FieldRef<"OperationLog", 'String'>
+  readonly actorNameSnapshot: Prisma.FieldRef<"OperationLog", 'String'>
+  readonly actorEmailSnapshot: Prisma.FieldRef<"OperationLog", 'String'>
+  readonly category: Prisma.FieldRef<"OperationLog", 'OperationLogCategory'>
   readonly module: Prisma.FieldRef<"OperationLog", 'String'>
   readonly action: Prisma.FieldRef<"OperationLog", 'String'>
   readonly targetType: Prisma.FieldRef<"OperationLog", 'String'>
   readonly targetId: Prisma.FieldRef<"OperationLog", 'String'>
+  readonly targetLabel: Prisma.FieldRef<"OperationLog", 'String'>
+  readonly result: Prisma.FieldRef<"OperationLog", 'OperationLogResult'>
   readonly detail: Prisma.FieldRef<"OperationLog", 'Json'>
+  readonly requestId: Prisma.FieldRef<"OperationLog", 'String'>
   readonly ipAddress: Prisma.FieldRef<"OperationLog", 'String'>
+  readonly userAgent: Prisma.FieldRef<"OperationLog", 'String'>
   readonly createdAt: Prisma.FieldRef<"OperationLog", 'DateTime'>
 }
     

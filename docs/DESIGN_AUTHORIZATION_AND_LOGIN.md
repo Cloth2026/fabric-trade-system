@@ -1,18 +1,20 @@
 # 用户认证、固定角色权限与审计日志 · 正式设计
 
-> **状态：已确认产品方向，待数据模型实施；本文描述目标设计，不代表当前代码已实现。**
+> **状态：产品设计已确认、Better Auth 兼容性已实测、数据模型已落地；登录与权限功能仍未实现。**
 >
-> 当前代码里没有登录、没有权限校验、没有真实用户数据（`User` 表实测 0 行），`src/server/tenant.ts` 仍是临时单租户上下文。本文是下一轮 Prisma 数据模型与 API 实施的依据，不是功能完成记录。
+> 当前代码里没有登录、没有权限校验、没有真实用户数据（dev / test 两库 `User` 表均为 0 行），`src/server/tenant.ts` 仍是临时单租户上下文。认证与权限的**数据表与枚举已经建好**，但没有任何登录 API、权限拦截或审计写入服务。本文是后续服务端实施阶段的依据，不是功能完成记录。
 
 | 项 | 值 |
 | --- | --- |
-| 文档状态 | 产品设计已确认，**Better Auth 兼容性已实测**，待数据模型实施 |
+| 文档状态 | 产品设计已确认，**Better Auth 兼容性已实测**，**数据模型与增量 migration 已实施** |
 | 设计基准提交 | `985da12`（`origin/main`） |
-| 兼容性验证提交 | `8147019` → 本轮（基于已安装 `better-auth@1.7.6`） |
+| 兼容性验证提交 | `8147019` → `332af15`（基于已安装 `better-auth@1.7.6`） |
+| 数据模型提交 | 本轮（`add_authentication_and_authorization_models`，dev / test 双库已应用） |
 | 设计日期 | 2026-09-26 |
 | 依赖的静态原型 | `src/components/system/`（用户管理、角色权限、操作日志、`/login`、账号菜单） |
-| 下一轮动作 | Prisma 数据模型 + 增量 migration（**本文不写 Prisma 代码**） |
+| 下一轮动作 | 服务端基建：Better Auth 实例、`AuthContext`、会话校验与权限中间件（**仍不接 UI**） |
 | 实测证据 | §12「Better Auth 实测合同」、`docs/BETTER_AUTH_COMPATIBILITY_REPORT.md` |
+| 已落地的数据模型 | `prisma/schema.prisma`、`docs/DATA_MODEL.md`「认证与权限数据模型」 |
 
 ---
 
@@ -260,8 +262,30 @@ Tenant
 | `failedLoginAttempts` | Int | `@default(0)` | **新增** | 连续失败计数，成功登录时清零 |
 | `lockedUntil` | DateTime? | 可空 | **新增** | 暂时锁定到期时间（§5.3） |
 | `passwordChangedAt` | DateTime? | 可空 | **新增** | 改密/重置时写入，用于审计与未来密码有效期 |
-| ~~`role`~~ | String `@default("admin")` | **下一轮 migration 删除** | 已有 | 决策 28。不转 legacy、不保留列：真实角色以 `UserRoleAssignment` 为准；BA 的 admin 插件不启用，不需要该列 |
-| `createdAt` / `updatedAt` | DateTime | 已有 | 已有 | — |
+| `provisioningRequestId` | String? | 可空，**全局唯一** | **新增** | 建号请求的幂等键，见下方「§3.2.1」 |
+| `provisioningStatus` | `UserProvisioningStatus` enum | `@default(pending)` | **新增** | 建号完成度，**与 `status` 是两个维度**，见下方「§3.2.1」 |
+| `provisionedAt` | DateTime? | 可空 | **新增** | 置为 `ready` 的时间 |
+| ~~`role`~~ | String `@default("admin")` | **本轮 migration 已删除** | 已有 | 决策 28。不转 legacy、不保留列：真实角色以 `UserRoleAssignment` 为准；BA 的 admin 插件不启用，不需要该列 |
+
+> 落地状态：上表除 `~~role~~`（已删）外**全部已在 `prisma/schema.prisma` 中实现**，并由 migration `20260926093217_add_authentication_and_authorization_models` 应用到 dev / test 双库。
+
+#### 3.2.1 `provisioningStatus` 与 `provisioningRequestId`（建号幂等与失败补偿）
+
+`provisioningStatus` 记录**账号是否配齐**，与管理员手上的启用/停用开关 `status` 是两个独立维度，不得合并：
+
+| 值 | 含义 |
+| --- | --- |
+| `pending` | 账号行已建，但建号流程（凭据 + 角色 + 审计日志）尚未全部完成。**默认状态** |
+| `ready` | 建号流程全部完成 |
+| `failed` | 建号流程已确定失败，保留账号行用于排查与重试；不等于停用 |
+
+**`pending` 用户必须被拒绝登录**：它此时没有 `UserRoleAssignment`，按 §4.3「无角色即无权限」，即使 Session 能建立也不该进入任何业务模块；登录接口要在建立 Session **之前**就拦截（`status = active` 且 `provisioningStatus = ready` 同时满足）。该判断属于登录实现，本轮只建字段。
+
+`provisioningRequestId` 是**建号幂等与失败补偿的持久化依据**，全局唯一：
+
+- §5.15 已实测 Better Auth 的写入与我们的业务写入**不在同一事务**，建号中途崩溃会留下"有 User/Account、无角色、无日志"的半完成账号；
+- 重试同一请求时，先按 `requestId` 查到上次创建的账号 → 认领并补齐角色与日志 → 推进到 `ready`，而不是再建一个账号，也不会把"邮箱已存在"误判成冲突；
+- 清理孤儿账号同样以它为准（有 `User` 但无 `UserRoleAssignment` 且创建时间超阈值的行）。
 
 `User.email` 统一小写存储（建号与登录入口都做 `trim().toLowerCase()`）。实测依据：BA 建号会把 email **自动小写**（`MiXeD@…` 存成 `mixed@…`），登录大小写不敏感，但**带空格会被 zod 判为 `INVALID_EMAIL`**（400）。因此在我们这一侧统一 `trim + lowercase`，既保证行为一致，也避免空格导致的 400 与账号枚举差异。
 
@@ -308,7 +332,7 @@ Tenant
 
 **V1 只建表不开放端点**（无邮件验证、无自助找回）。管理员重置密码若复用 Better Auth 重置链路（§5.7），会短暂使用该表。
 
-### 3.6 `RateLimit`（**本轮结论：暂不建表**）
+### 3.6 `RateLimit`（不采用）与 `AuthLoginThrottle`（**采用，已建表**）
 
 官方 1.7.6 的真实定义（来源 `@better-auth/core/dist/db/get-tables.mjs`，仅当 `rateLimit.storage === "database"` 时才进 schema；模型名默认 `rateLimit`）：
 
@@ -321,9 +345,47 @@ Tenant
 
 **为什么不建**：内置限速只在 **HTTP 请求入口**（`api/index.mjs` 的 router `onRequest` → `onRequestRateLimit`）生效，实测直接调用 `auth.api.signInEmail` **完全不走限速**（开启 `storage: "database"` 后连 `rateLimit` 表都没有写入）。而本设计不挂载 BA 的 HTTP handler（§2.1），内置限速没有触发路径。
 
-**替代方案（采用）**：登录限速与"暂时锁定"由我们自己在 `/api/auth/login` 里实现（§5.2、§5.3），计数落在 `User.failedLoginAttempts` / `User.lockedUntil`，不额外建表。
+**替代方案（采用，已建表）**：自建 `AuthLoginThrottle` 持久化限速，与 `User.failedLoginAttempts` 组成**两层不同保护**（详见下方）。
 
 **如果将来挂载 BA HTTP 端点**：必须同时启用 `rateLimit.storage = "database"` 并按上表建 `RateLimit` 表，否则多实例部署时限流计数只存在于单进程内存。
+
+#### 3.6.1 `AuthLoginThrottle`（已建表）
+
+```prisma
+enum AuthThrottleScope { login_ip  login_identifier }
+
+model AuthLoginThrottle {
+  id              String             @id @default(cuid())
+  scope           AuthThrottleScope
+  keyHash         String
+  attemptCount    Int                @default(0)
+  windowStartedAt DateTime           @default(now())
+  blockedUntil    DateTime?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@unique([scope, keyHash])
+  @@index([blockedUntil])
+  @@index([scope, windowStartedAt])
+}
+```
+
+| 字段 | 说明 |
+| --- | --- |
+| `scope` | `login_ip`（按来源 IP）/ `login_identifier`（按登录标识）两个维度各自独立计数 |
+| `keyHash` | **只保存带服务端 secret 的 HMAC（或等价不可逆摘要）**：不保存明文邮箱，不保存原始 IP |
+| `attemptCount` / `windowStartedAt` | 当前窗口内的尝试次数与窗口起点 |
+| `blockedUntil` | 该 key 被临时封禁到什么时候；有独立索引便于"是否被封"的快速判断 |
+| 索引 | `@@index([blockedUntil])` 支撑封禁判断，`@@index([scope, windowStartedAt])` 支撑过期记录清理 |
+
+**为什么必须单独建这张表**：`User.failedLoginAttempts` 挂在用户行上，一个**不存在的邮箱根本没有用户行可记数**，也无法处理"同一 IP 横扫多个账号"的撞库。两层保护的分工：
+
+| 层 | 载体 | 防什么 | 局限 |
+| --- | --- | --- | --- |
+| 入口限速 | `AuthLoginThrottle` | 同一 IP / 同一登录标识的高频尝试、按 IP 撞库 | 不区分账号是否存在，不负责账号本身的锁定状态 |
+| 账号锁定 | `User.failedLoginAttempts` + `User.lockedUntil` | 针对**已知账号**的连续密码猜解 | 覆盖不到不存在的邮箱，也覆盖不到跨账号撞库 |
+
+该表**不带 `tenantId`**：登录前的 IP、以及尚未被识别的邮箱，都还不能可靠归属租户。本轮只建表，**不实现限流算法**。
 
 ### 3.7 `UserRoleAssignment`（新增，多角色）
 
@@ -340,8 +402,10 @@ Tenant
 
 - `@@unique([userId, roleKey])` —— 防重复分配。
 - `@@index([tenantId, roleKey])` —— 支撑"本租户还有几个启用 owner"的校验。
-- **组合外键（决策：已实测通过）**：`User` 增加 `@@unique([tenantId, id])`，`UserRoleAssignment` 的关系写 `user User @relation(fields: [tenantId, userId], references: [tenantId, id], onDelete: Cascade)`。这样 `tenantId` 与 `userId` 必须同时匹配同一用户行，**数据库层面无法给 A 租户的用户挂 B 租户的角色**。实测：跨租户插入报 `Foreign key constraint violated: UserRoleAssignment_tenantId_userId_fkey`；同租户插入正常。
-- `createdByUserId` 若建立关系，同样用 `[tenantId, createdByUserId] → User[tenantId, id]` 的组合外键，不单独建单列关系。
+- **组合外键（决策：已实测通过，已落地）**：`User` 增加 `@@unique([tenantId, id])`，`UserRoleAssignment` 的关系写 `user User @relation(fields: [tenantId, userId], references: [tenantId, id], onDelete: Cascade)`。这样 `tenantId` 与 `userId` 必须同时匹配同一用户行，**数据库层面无法给 A 租户的用户挂 B 租户的角色**。实测：跨租户插入报 `Foreign key constraint violated: UserRoleAssignment_tenantId_userId_fkey`；同租户插入正常（已固化为自动化用例）。
+- **`createdByUserId` 落地结论：保留为可空审计快照字段，不建数据库外键。** 原计划的 `[tenantId, createdByUserId] → User[tenantId, id]` 复合外键在 Prisma 里做不到——Prisma 不允许复合关系的标量集合同时含必填列与可空列（`tenantId` 必填 + `createdByUserId` 可空），会直接校验失败；而单列外键 `createdByUserId → User[id]` 又无法保证租户边界。因此：
+  - 数据库：**不建外键**，该列只存"谁分配的"这一审计快照；
+  - 服务层：**写入时必须校验 `createdByUserId` 与当前 `tenantId` 属于同一租户**，数据库不兜底。实施角色分配 API 时不得遗漏这一步。
 
 `roleKey` 枚举值：`owner` / `admin` / `sales` / `purchasing` / `merchandiser` / `viewer`。
 
@@ -353,8 +417,9 @@ Tenant
 
 | 字段 | 类型 | 状态 | 说明 |
 | --- | --- | --- | --- |
-| `category` | String `@default("business")` | **新增**，索引 | `login_security` / `user_permission` / `business`，与静态原型三类一致 |
-| `result` | String `@default("success")` | **新增** | `success` / `failure` |
+| `category` | `OperationLogCategory` enum `@default(business)` | **新增**，索引 | `login_security` / `user_permission` / `business`，与静态原型三类一致 |
+| `result` | `OperationLogResult` enum `@default(success)` | **新增** | `success` / `failure` |
+| `targetLabel` | String? | **新增** | 目标的可读名称快照（列表展示用，不参与查询） |
 | `requestId` | String? | **新增**，索引 | 串联同一次请求的多条日志 |
 | `userAgent` | String? | **新增** | 设备信息（原型"设备"列） |
 | `actorNameSnapshot` | String? | **新增** | 操作当时的姓名快照，用户改名后日志不漂移 |
@@ -364,13 +429,15 @@ Tenant
 | `ipAddress` | String? | 已有 | 沿用 |
 | `detail` | Json? | 已有 | **禁止**写入密码、密码哈希、Session Token、完整 Cookie、完整请求体（§9） |
 
-新增索引（**优先复合索引，租户在前**）：
+新增索引（**已落地；全部以 `tenantId` 为前缀，保留原有三个索引不删除**）：
 
 - `@@index([tenantId, requestId])` —— 同一次请求的多条日志串联（替代原方案的单列 `requestId` 索引）。
-- `@@index([tenantId, userId])` —— 某用户在本租户内的操作流水（替代原方案的单列 `userId` 索引）。
-- `@@index([tenantId, category])`、`@@index([tenantId, result])`、`@@index([tenantId, module, action])`、`@@index([tenantId, createdAt])` —— 列表筛选与分页。
+- `@@index([tenantId, userId, createdAt])` —— 某用户在本租户内的操作流水（指令要求的三列形式，替代原方案的单列 `userId` 索引）。
+- `@@index([tenantId, category, createdAt])`、`@@index([tenantId, module, createdAt])`、`@@index([tenantId, module, action])`、`@@index([tenantId, result])`、`@@index([tenantId, createdAt])` —— 列表筛选与分页。
 
 不再建全局单列 `@@index([userId])` / `@@index([requestId])`：日志只会按租户维度查询，复合索引已覆盖，单列索引只是额外写放大。
+
+> **字段命名说明**：指令里提到的 `actorId` 对应本表现在已有的 `userId`（即操作人），未改列名——`OperationLog.userId` 是既有字段且已与 `User` 建立关系，改名会连带改动既有索引与后续所有审计写入点，收益不抵风险。复合索引按 `[tenantId, userId, createdAt]` 落地。
 
 **无角色用户**：`permissions` 为空集合时，除 §5.14 白名单与"仅要求已认证"的接口外，全部业务接口返回 403。Session 有效 ≠ 有权限（决策补充，见 §4.3）。
 
@@ -391,20 +458,22 @@ Tenant
 
 > **若未来出现"必须新增 Role 表"的诉求**：那只意味着产品决策 15 已被推翻，必须先回到本文档修改决策基线，不能以技术便利为由绕过。
 
-### 3.10 迁移顺序与数据影响
+### 3.10 迁移顺序与数据影响（**已执行**）
 
-单一增量 migration（目录名建议 `2026xxxx_add_auth_and_authorization`），顺序：
+单一增量 migration `20260926093217_add_authentication_and_authorization_models`，实际顺序：
 
-1. `User` 新增 6 个认证字段（全部可空或有默认值，**不 DROP 任何列**）；`role` 列保留。
-2. 删除 `@@unique([tenantId, email])`，新增 `User.email` 全局唯一索引。
-3. 新建 `Account` / `Session` / `Verification` / `RateLimit` / `UserRoleAssignment` 五张表。
-4. `OperationLog` 新增 5 个字段（全部可空或有默认值）+ 5 个索引。
+1. 前置保护：`User` 表非空则 `RAISE EXCEPTION` 中止（该 migration 会删列，必须先确认为空表）。
+2. 新建 5 个 enum：`UserProvisioningStatus` / `RoleKey` / `AuthThrottleScope` / `OperationLogCategory` / `OperationLogResult`。
+3. 删除 `@@unique([tenantId, email])`（`User_tenantId_email_key`），新增 `User.email` 全局唯一索引。
+4. `User` 新增 10 个认证字段（全部可空或带默认值），**删除 `role` 列**。
+5. 新建 `Account` / `Session` / `Verification` / `UserRoleAssignment` / `AuthLoginThrottle` 五张表（**不建 `RateLimit`**，见 §3.6）。
+6. `OperationLog` 新增 7 个字段 + 6 个新索引。
 
-数据影响（实测基线）：
+数据影响（实测基线，执行前两库均已核对）：
 
-- `User` 0 行 → 改唯一约束无数据冲突。
-- `OperationLog` 69 行 → 新字段走默认值（`category = business`、`result = success`），历史日志的 `requestId` / `userAgent` / 快照字段为 null，UI 显示"—"。
-- 现有 `User.role` 数据不存在，无需回填 `UserRoleAssignment`。
+- `User` **dev 0 行 / test 0 行** → 改唯一约束、删 `role` 列均无数据冲突，也无需回填 `UserRoleAssignment`。
+- `OperationLog` dev 69 行 / test 563 行 → `category` / `result` 是带默认值的 `NOT NULL`，PostgreSQL 把默认值应用到全部历史行（`business` / `success`，与这些历史行的真实语义一致，**不是伪造**）；`requestId` / `userAgent` / 快照字段为 null，UI 需显示"—"。
+- **未删除或重建任何业务表**，未 `DROP TABLE`，未改动任何历史 migration（`AGENTS.md` 硬性规则）。
 - **不回填、不改写、不删除任何历史 migration**（`AGENTS.md` 硬性规则）。
 
 ---
@@ -1065,8 +1134,8 @@ for (const cookie of result.headers.getSetCookie()) {
 
 | 阶段 | 内容 | 完成判据 |
 | --- | --- | --- |
-| **1. Prisma 数据模型与增量 migration** | §3 全部字段/表/索引；一条增量 migration；**删除 `User.role`**；dev + test 双库 `migrate deploy`；`prisma generate` | `prisma migrate status` 干净；`npm test` 全绿（存量测试不回归） |
-| **2. Better Auth 基础接入与首个 owner 初始化** | `better-auth@1.7.6` **已安装并锁定**（本轮完成）；`src/lib/auth.ts`；§2.4 的三层 tenantId 注入；**不挂载 BA HTTP handler**；`auth:bootstrap-owner` 脚本；登录页真实提交（仅登录，其它页面仍受限） | 能用首个 owner 登录；重复执行初始化脚本幂等；`curl /api/auth/*` 全部 404 |
+| **1. Prisma 数据模型与增量 migration** ✅ **已完成** | §3 全部字段/表/索引；一条增量 migration `20260926093217_add_authentication_and_authorization_models`；**已删除 `User.role`**；dev + test 双库 `migrate deploy`；`prisma generate`；13 条数据模型测试 | ✅ `prisma migrate status` 两库均 "up to date"；`npm test` 194 全绿；build / lint 通过 |
+| **2. Better Auth 基础接入与首个 owner 初始化** | `better-auth@1.7.6` **已安装并锁定**（兼容性验证轮完成）；`src/lib/auth.ts`；§2.4 的三层 tenantId 注入；**不挂载 BA HTTP handler**；`auth:bootstrap-owner` 脚本；登录页真实提交（仅登录，其它页面仍受限） | 能用首个 owner 登录；重复执行初始化脚本幂等；`curl /api/auth/*` 全部 404 |
 | **3. 登录、退出、Session、首次改密** | §5.1–5.6、5.8、5.9、5.14；统一失败文案、限速、锁定、停用拦截、审计日志 | §9 中登录相关用例全通过 |
 | **4. 用户管理与多角色分配 API** | `/api/users*`；`UserRoleAssignment` 读写；§4.4 的 R1/R2/R3 事务保护；管理员重置密码 | owner 并发用例、admin 不能操作 owner 用例通过 |
 | **5. 统一 AuthContext 与权限辅助函数** | `src/server/auth/context.ts`、权限字典常量、角色矩阵常量、`requirePermission`；`purchase_price.view` 字段裁剪工具 | 单元测试覆盖并集与裁剪 |
@@ -1135,7 +1204,7 @@ for (const cookie of result.headers.getSetCookie()) {
 | 4 | ~~管理员重置密码的服务端 API~~ | **已实测**：不用 Admin 插件；`requestPasswordReset` + `resetPassword` + `revokeSessionsOnPasswordReset`（§12.5） | — |
 | 5 | 局域网 HTTP 部署的 Cookie `secure` | 无 HTTPS 时无法启用，必须以网络隔离补偿 | 用户（部署时） |
 | 6 | 同邮箱多租户 | V1 全局唯一邮箱（§2.6）。未来若需要，需登录时选租户或外部 IdP | 未来评审 |
-| 7 | ~~`User.role` legacy 列~~ | **已拍板：下一轮 migration 直接删除**（决策 28，§3.2） | — |
+| 7 | ~~`User.role` legacy 列~~ | **已拍板并已执行：本轮 migration 已删除**（决策 28，§3.2、§3.10）。删除前已确认 dev / test 两库 `User` 均为 0 行 | — |
 | 8 | 忘记密码自助找回 | V1 不做（管理员重置）。若后续要做，需引入邮件发送与 `Verification` 流程 | 未来评审 |
 | 9 | ~~`finishedReferencePrice*` 是否受 `purchase_price.view` 保护~~ | **已拍板：不受保护**（决策 26，§4.7） | — |
 | 10 | 是否挂载 `/api/auth/[...all]` | 本设计倾向**不挂载**。若将来必须挂载（例如引入 OAuth），同步需要 `RateLimit` 表与 `disabledPaths` 白名单 | 实施阶段 2 复核 |
@@ -1143,7 +1212,9 @@ for (const cookie of result.headers.getSetCookie()) {
 
 ---
 
-## 11. 本轮（兼容性验证轮）做的事与没做的事
+## 11. 各轮边界：做了什么、没做什么
+
+### 11.1 兼容性验证轮（`332af15`）
 
 **做了**：
 
@@ -1162,6 +1233,28 @@ for (const cookie of result.headers.getSetCookie()) {
 - 未启用 Admin 插件；未写自制密码哈希；未直接写 `Account.password`。
 - 未恢复历史作废文档 `docs/DESIGN_USER_MODULE.md`，未采用其自建 Cookie Session / 自写哈希 / 单角色 / 自定义角色 / `AUTH_ENABLED` 方案。
 - 未修改 `docs/DATA_MODEL.md`、`docs/API_CONTRACTS.md`、`docs/DEV_LOG.md`。
+
+### 11.2 数据模型轮（本轮）
+
+**做了**：
+
+- `prisma/schema.prisma`：扩展 `User`（10 个新字段，含 `provisioningRequestId` / `provisioningStatus` / `provisionedAt`）、**删除 `User.role`**、`email` 改全局唯一、新增 `@@unique([tenantId, id])`。
+- 新增 `Account` / `Session` / `Verification` / `UserRoleAssignment` / `AuthLoginThrottle` 五张表，全部按 Better Auth 1.7.6 官方 generator 字段落地。
+- 新增 5 个 enum：`UserProvisioningStatus` / `RoleKey` / `AuthThrottleScope` / `OperationLogCategory` / `OperationLogResult`。
+- `OperationLog` 补 7 个字段（含 `category` / `result` 枚举化）与 6 个以 `tenantId` 为前缀的新索引；原有 3 个索引保留不删。
+- 新建**一条**增量 migration `20260926093217_add_authentication_and_authorization_models`（含 `User` 空表前置保护），已人工审核 SQL 并应用到 dev + test 双库。
+- 新增 `tests/auth-authorization-data-model.test.ts`（13 个用例，全部自建数据、用后清理）。
+- 同步 `docs/DATA_MODEL.md`、本文、`docs/BETTER_AUTH_COMPATIBILITY_REPORT.md`、`docs/PRODUCT_ROADMAP.md`、`docs/DEV_LOG.md`、`PROJECT_OVERVIEW.md`。
+
+**没做**（认证功能仍然完全未启用）：
+
+- 未创建 `/api/auth/*` 任何路由，未配置 Better Auth 实例，未建 `databaseHooks` / `AsyncLocalStorage`。
+- 未实现登录、退出、建号、重置密码、限流算法，未实现 middleware / `proxy.ts` / 权限拦截。
+- 未创建首个 owner，未修改 `prisma/seed.mjs`；dev / test 两库 `User` 仍为 0 行。
+- 未改造任何现有业务 API 的权限，未改动面料 / 供应商 / 生产单元 / 报价 / 订单业务逻辑。
+- 未修改系统管理静态 UI，未安装 Admin 插件，未创建 `Role` / `Permission` 表。
+- 未修改或删除任何历史 migration；未 `DROP` 任何业务表；未清空任何数据。
+- `Account` / `Session` / `Verification` / `AuthLoginThrottle` / `UserRoleAssignment` 目前**全是空表**，没有任何代码在写入它们。
 
 ---
 

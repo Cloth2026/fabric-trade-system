@@ -38,6 +38,48 @@ enum ProcessInfoStatus {
   available
 }
 
+// Account provisioning lifecycle for admin-created users. It is deliberately
+// separate from `User.status` (active/inactive): `status` is an operator's
+// on/off switch, `provisioningStatus` records whether the account was fully
+// provisioned (Better Auth credential + role assignment + audit log).
+// Only `ready` accounts will be allowed to sign in (enforced later, not now).
+enum UserProvisioningStatus {
+  pending
+  ready
+  failed
+}
+
+// Fixed role catalogue (product decision: V1 has no custom roles).
+// Stored as a database enum so the database itself rejects dirty values.
+enum RoleKey {
+  owner
+  admin
+  sales
+  purchasing
+  merchandiser
+  viewer
+}
+
+// Throttle dimension for AuthLoginThrottle.
+//   login_ip         -> keyed by a hashed client IP (credential stuffing)
+//   login_identifier -> keyed by a hashed login identifier (unknown emails too)
+enum AuthThrottleScope {
+  login_ip
+  login_identifier
+}
+
+// Audit log categories, aligned with the three static prototype filters.
+enum OperationLogCategory {
+  login_security
+  user_permission
+  business
+}
+
+enum OperationLogResult {
+  success
+  failure
+}
+
 model Tenant {
   id                   String                @id @default(cuid())
   name                 String
@@ -60,6 +102,7 @@ model Tenant {
   salesOrders          SalesOrder[]
   salesOrderItems      SalesOrderItem[]
   logs                 OperationLog[]
+  roleAssignments      UserRoleAssignment[]
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
 }
@@ -68,18 +111,129 @@ model User {
   id        String         @id @default(cuid())
   tenant    Tenant         @relation(fields: [tenantId], references: [id])
   tenantId  String
-  email     String
+  // Globally unique: Better Auth looks users up by email alone, and an email
+  // identifies one human across tenants. Always stored trim()ed + lowercased.
+  email     String         @unique
   username  String
   name      String
-  role      String         @default("admin")
+  emailVerified Boolean    @default(false)
+  image     String?
   status    UserStatus     @default(active)
+  mustChangePassword Boolean @default(false)
+  lastLoginAt DateTime?
+  failedLoginAttempts Int   @default(0)
+  lockedUntil DateTime?
+  passwordChangedAt DateTime?
+  // Idempotency key of the admin "create user" request that produced this
+  // account. Persisted so a retried or half-finished provisioning run can be
+  // detected and recovered instead of creating a second account.
+  provisioningRequestId String? @unique
+  provisioningStatus UserProvisioningStatus @default(pending)
+  provisionedAt DateTime?
+  accounts  Account[]
+  sessions  Session[]
+  roleAssignments UserRoleAssignment[]
   logs      OperationLog[]
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
 
-  @@unique([tenantId, email])
+  // Required by UserRoleAssignment's composite foreign key, so a role row can
+  // never point at a user from another tenant.
+  @@unique([tenantId, id])
   @@unique([tenantId, username])
   @@index([tenantId])
+}
+
+// Better Auth credential table. `password` holds the scrypt hash and is the
+// ONLY place a password is ever stored. Nothing in this codebase writes to it
+// directly: hashing and verification always go through auth.api.*.
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+// Database session. No tenantId: tenancy is reached through Session -> User.
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// Global Better Auth infrastructure (password reset tokens). No tenantId.
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+}
+
+// A user may hold several roles at once; effective permissions are the union.
+model UserRoleAssignment {
+  id        String   @id @default(cuid())
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId  String
+  userId    String
+  roleKey   RoleKey
+  // Composite foreign key: (tenantId, userId) must match one User row, so a
+  // tenant can never assign a role to another tenant's user.
+  user      User     @relation(fields: [tenantId, userId], references: [tenantId, id], onDelete: Cascade)
+  // Audit snapshot of who granted the role. Intentionally NOT a relation:
+  // Prisma rejects a composite relation whose scalar set mixes a required and
+  // an optional column, so tenant boundary is enforced in the service layer
+  // instead. See docs/DESIGN_AUTHORIZATION_AND_LOGIN.md 3.7.
+  createdByUserId String?
+  createdAt DateTime @default(now())
+
+  @@unique([userId, roleKey])
+  @@index([tenantId, roleKey])
+}
+
+// Login throttling. Needed on top of User.failedLoginAttempts because the
+// latter can only count attempts against an account that already exists, and
+// cannot slow down credential stuffing from one IP across many accounts.
+// Better Auth's built-in rate limiter is not used: it only runs in its HTTP
+// onRequest layer, which this project never mounts.
+model AuthLoginThrottle {
+  id              String             @id @default(cuid())
+  scope           AuthThrottleScope
+  // Irreversible digest (server-secret HMAC) of the IP or login identifier.
+  // Never a plaintext email, never a raw IP.
+  keyHash         String
+  attemptCount    Int                @default(0)
+  windowStartedAt DateTime           @default(now())
+  blockedUntil    DateTime?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@unique([scope, keyHash])
+  @@index([blockedUntil])
+  @@index([scope, windowStartedAt])
 }
 
 model ConfigOption {
@@ -402,17 +556,33 @@ model OperationLog {
   tenantId   String
   user       User?    @relation(fields: [userId], references: [id])
   userId     String?
+  // Snapshots keep the log stable when a user is renamed or deleted.
+  actorNameSnapshot  String?
+  actorEmailSnapshot String?
+  category   OperationLogCategory @default(business)
   module     String
   action     String
   targetType String?
   targetId   String?
+  targetLabel String?
+  result     OperationLogResult   @default(success)
   detail     Json?
+  requestId  String?
   ipAddress  String?
+  userAgent  String?
   createdAt  DateTime @default(now())
 
+  // Every index is prefixed with tenantId: logs are only ever queried inside
+  // one tenant, so a global single-column index is pure write amplification.
   @@index([tenantId])
   @@index([tenantId, module])
   @@index([tenantId, createdAt])
+  @@index([tenantId, userId, createdAt])
+  @@index([tenantId, category, createdAt])
+  @@index([tenantId, module, createdAt])
+  @@index([tenantId, module, action])
+  @@index([tenantId, result])
+  @@index([tenantId, requestId])
 }
 
 model Customer {

@@ -207,6 +207,7 @@ export type TenantWhereInput = {
   salesOrders?: Prisma.SalesOrderListRelationFilter
   salesOrderItems?: Prisma.SalesOrderItemListRelationFilter
   logs?: Prisma.OperationLogListRelationFilter
+  roleAssignments?: Prisma.UserRoleAssignmentListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -233,6 +234,7 @@ export type TenantOrderByWithRelationInput = {
   salesOrders?: Prisma.SalesOrderOrderByRelationAggregateInput
   salesOrderItems?: Prisma.SalesOrderItemOrderByRelationAggregateInput
   logs?: Prisma.OperationLogOrderByRelationAggregateInput
+  roleAssignments?: Prisma.UserRoleAssignmentOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -262,6 +264,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   salesOrders?: Prisma.SalesOrderListRelationFilter
   salesOrderItems?: Prisma.SalesOrderItemListRelationFilter
   logs?: Prisma.OperationLogListRelationFilter
+  roleAssignments?: Prisma.UserRoleAssignmentListRelationFilter
 }, "id" | "code">
 
 export type TenantOrderByWithAggregationInput = {
@@ -312,6 +315,7 @@ export type TenantCreateInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -338,6 +342,7 @@ export type TenantUncheckedCreateInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -364,6 +369,7 @@ export type TenantUpdateInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -390,6 +396,7 @@ export type TenantUncheckedUpdateInput = {
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -480,6 +487,20 @@ export type TenantUpdateOneRequiredWithoutUsersNestedInput = {
   upsert?: Prisma.TenantUpsertWithoutUsersInput
   connect?: Prisma.TenantWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutUsersInput, Prisma.TenantUpdateWithoutUsersInput>, Prisma.TenantUncheckedUpdateWithoutUsersInput>
+}
+
+export type TenantCreateNestedOneWithoutRoleAssignmentsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutRoleAssignmentsInput, Prisma.TenantUncheckedCreateWithoutRoleAssignmentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutRoleAssignmentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutRoleAssignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutRoleAssignmentsInput, Prisma.TenantUncheckedCreateWithoutRoleAssignmentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutRoleAssignmentsInput
+  upsert?: Prisma.TenantUpsertWithoutRoleAssignmentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutRoleAssignmentsInput, Prisma.TenantUpdateWithoutRoleAssignmentsInput>, Prisma.TenantUncheckedUpdateWithoutRoleAssignmentsInput>
 }
 
 export type TenantCreateNestedOneWithoutConfigOptionsInput = {
@@ -731,6 +752,7 @@ export type TenantCreateWithoutUsersInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUsersInput = {
@@ -756,6 +778,7 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUsersInput = {
@@ -797,6 +820,7 @@ export type TenantUpdateWithoutUsersInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -806,6 +830,127 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
+  configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
+  fabrics?: Prisma.FabricUncheckedUpdateManyWithoutTenantNestedInput
+  fabricSuppliers?: Prisma.FabricSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  batches?: Prisma.FabricStockInBatchUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUncheckedUpdateManyWithoutTenantNestedInput
+  sampleRequests?: Prisma.SampleRequestUncheckedUpdateManyWithoutTenantNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
+  salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
+  salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
+  logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutRoleAssignmentsInput = {
+  id?: string
+  name: string
+  code: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  suppliers?: Prisma.SupplierCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitCreateNestedManyWithoutTenantInput
+  configOptions?: Prisma.ConfigOptionCreateNestedManyWithoutTenantInput
+  fabrics?: Prisma.FabricCreateNestedManyWithoutTenantInput
+  fabricSuppliers?: Prisma.FabricSupplierCreateNestedManyWithoutTenantInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteCreateNestedManyWithoutTenantInput
+  batches?: Prisma.FabricStockInBatchCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactCreateNestedManyWithoutTenantInput
+  sampleRequests?: Prisma.SampleRequestCreateNestedManyWithoutTenantInput
+  sampleRequestItems?: Prisma.SampleRequestItemCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
+  salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
+  salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
+  logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutRoleAssignmentsInput = {
+  id?: string
+  name: string
+  code: string
+  status?: $Enums.TenantStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  suppliers?: Prisma.SupplierUncheckedCreateNestedManyWithoutTenantInput
+  supplierUnits?: Prisma.SupplierUnitUncheckedCreateNestedManyWithoutTenantInput
+  configOptions?: Prisma.ConfigOptionUncheckedCreateNestedManyWithoutTenantInput
+  fabrics?: Prisma.FabricUncheckedCreateNestedManyWithoutTenantInput
+  fabricSuppliers?: Prisma.FabricSupplierUncheckedCreateNestedManyWithoutTenantInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUncheckedCreateNestedManyWithoutTenantInput
+  batches?: Prisma.FabricStockInBatchUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  customerContacts?: Prisma.CustomerContactUncheckedCreateNestedManyWithoutTenantInput
+  sampleRequests?: Prisma.SampleRequestUncheckedCreateNestedManyWithoutTenantInput
+  sampleRequestItems?: Prisma.SampleRequestItemUncheckedCreateNestedManyWithoutTenantInput
+  customerQuotes?: Prisma.CustomerQuoteUncheckedCreateNestedManyWithoutTenantInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
+  salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
+  salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
+  logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutRoleAssignmentsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutRoleAssignmentsInput, Prisma.TenantUncheckedCreateWithoutRoleAssignmentsInput>
+}
+
+export type TenantUpsertWithoutRoleAssignmentsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutRoleAssignmentsInput, Prisma.TenantUncheckedUpdateWithoutRoleAssignmentsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutRoleAssignmentsInput, Prisma.TenantUncheckedCreateWithoutRoleAssignmentsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutRoleAssignmentsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutRoleAssignmentsInput, Prisma.TenantUncheckedUpdateWithoutRoleAssignmentsInput>
+}
+
+export type TenantUpdateWithoutRoleAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  suppliers?: Prisma.SupplierUpdateManyWithoutTenantNestedInput
+  supplierUnits?: Prisma.SupplierUnitUpdateManyWithoutTenantNestedInput
+  configOptions?: Prisma.ConfigOptionUpdateManyWithoutTenantNestedInput
+  fabrics?: Prisma.FabricUpdateManyWithoutTenantNestedInput
+  fabricSuppliers?: Prisma.FabricSupplierUpdateManyWithoutTenantNestedInput
+  fabricSupplierQuotes?: Prisma.FabricSupplierQuoteUpdateManyWithoutTenantNestedInput
+  batches?: Prisma.FabricStockInBatchUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  customerContacts?: Prisma.CustomerContactUpdateManyWithoutTenantNestedInput
+  sampleRequests?: Prisma.SampleRequestUpdateManyWithoutTenantNestedInput
+  sampleRequestItems?: Prisma.SampleRequestItemUpdateManyWithoutTenantNestedInput
+  customerQuotes?: Prisma.CustomerQuoteUpdateManyWithoutTenantNestedInput
+  customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
+  salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
+  salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
+  logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutRoleAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTenantStatusFieldUpdateOperationsInput | $Enums.TenantStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   suppliers?: Prisma.SupplierUncheckedUpdateManyWithoutTenantNestedInput
   supplierUnits?: Prisma.SupplierUnitUncheckedUpdateManyWithoutTenantNestedInput
   configOptions?: Prisma.ConfigOptionUncheckedUpdateManyWithoutTenantNestedInput
@@ -847,6 +992,7 @@ export type TenantCreateWithoutConfigOptionsInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutConfigOptionsInput = {
@@ -872,6 +1018,7 @@ export type TenantUncheckedCreateWithoutConfigOptionsInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutConfigOptionsInput = {
@@ -913,6 +1060,7 @@ export type TenantUpdateWithoutConfigOptionsInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutConfigOptionsInput = {
@@ -938,6 +1086,7 @@ export type TenantUncheckedUpdateWithoutConfigOptionsInput = {
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSuppliersInput = {
@@ -963,6 +1112,7 @@ export type TenantCreateWithoutSuppliersInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSuppliersInput = {
@@ -988,6 +1138,7 @@ export type TenantUncheckedCreateWithoutSuppliersInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSuppliersInput = {
@@ -1029,6 +1180,7 @@ export type TenantUpdateWithoutSuppliersInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSuppliersInput = {
@@ -1054,6 +1206,7 @@ export type TenantUncheckedUpdateWithoutSuppliersInput = {
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSupplierUnitsInput = {
@@ -1079,6 +1232,7 @@ export type TenantCreateWithoutSupplierUnitsInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSupplierUnitsInput = {
@@ -1104,6 +1258,7 @@ export type TenantUncheckedCreateWithoutSupplierUnitsInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSupplierUnitsInput = {
@@ -1145,6 +1300,7 @@ export type TenantUpdateWithoutSupplierUnitsInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSupplierUnitsInput = {
@@ -1170,6 +1326,7 @@ export type TenantUncheckedUpdateWithoutSupplierUnitsInput = {
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutFabricsInput = {
@@ -1195,6 +1352,7 @@ export type TenantCreateWithoutFabricsInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutFabricsInput = {
@@ -1220,6 +1378,7 @@ export type TenantUncheckedCreateWithoutFabricsInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutFabricsInput = {
@@ -1261,6 +1420,7 @@ export type TenantUpdateWithoutFabricsInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutFabricsInput = {
@@ -1286,6 +1446,7 @@ export type TenantUncheckedUpdateWithoutFabricsInput = {
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutFabricSuppliersInput = {
@@ -1311,6 +1472,7 @@ export type TenantCreateWithoutFabricSuppliersInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutFabricSuppliersInput = {
@@ -1336,6 +1498,7 @@ export type TenantUncheckedCreateWithoutFabricSuppliersInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutFabricSuppliersInput = {
@@ -1377,6 +1540,7 @@ export type TenantUpdateWithoutFabricSuppliersInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutFabricSuppliersInput = {
@@ -1402,6 +1566,7 @@ export type TenantUncheckedUpdateWithoutFabricSuppliersInput = {
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutFabricSupplierQuotesInput = {
@@ -1427,6 +1592,7 @@ export type TenantCreateWithoutFabricSupplierQuotesInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutFabricSupplierQuotesInput = {
@@ -1452,6 +1618,7 @@ export type TenantUncheckedCreateWithoutFabricSupplierQuotesInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutFabricSupplierQuotesInput = {
@@ -1493,6 +1660,7 @@ export type TenantUpdateWithoutFabricSupplierQuotesInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutFabricSupplierQuotesInput = {
@@ -1518,6 +1686,7 @@ export type TenantUncheckedUpdateWithoutFabricSupplierQuotesInput = {
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutBatchesInput = {
@@ -1543,6 +1712,7 @@ export type TenantCreateWithoutBatchesInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutBatchesInput = {
@@ -1568,6 +1738,7 @@ export type TenantUncheckedCreateWithoutBatchesInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutBatchesInput = {
@@ -1609,6 +1780,7 @@ export type TenantUpdateWithoutBatchesInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutBatchesInput = {
@@ -1634,6 +1806,7 @@ export type TenantUncheckedUpdateWithoutBatchesInput = {
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutLogsInput = {
@@ -1659,6 +1832,7 @@ export type TenantCreateWithoutLogsInput = {
   customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutLogsInput = {
@@ -1684,6 +1858,7 @@ export type TenantUncheckedCreateWithoutLogsInput = {
   customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutLogsInput = {
@@ -1725,6 +1900,7 @@ export type TenantUpdateWithoutLogsInput = {
   customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutLogsInput = {
@@ -1750,6 +1926,7 @@ export type TenantUncheckedUpdateWithoutLogsInput = {
   customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomersInput = {
@@ -1775,6 +1952,7 @@ export type TenantCreateWithoutCustomersInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomersInput = {
@@ -1800,6 +1978,7 @@ export type TenantUncheckedCreateWithoutCustomersInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomersInput = {
@@ -1841,6 +2020,7 @@ export type TenantUpdateWithoutCustomersInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomersInput = {
@@ -1866,6 +2046,7 @@ export type TenantUncheckedUpdateWithoutCustomersInput = {
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomerContactsInput = {
@@ -1891,6 +2072,7 @@ export type TenantCreateWithoutCustomerContactsInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomerContactsInput = {
@@ -1916,6 +2098,7 @@ export type TenantUncheckedCreateWithoutCustomerContactsInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomerContactsInput = {
@@ -1957,6 +2140,7 @@ export type TenantUpdateWithoutCustomerContactsInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomerContactsInput = {
@@ -1982,6 +2166,7 @@ export type TenantUncheckedUpdateWithoutCustomerContactsInput = {
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSampleRequestsInput = {
@@ -2007,6 +2192,7 @@ export type TenantCreateWithoutSampleRequestsInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSampleRequestsInput = {
@@ -2032,6 +2218,7 @@ export type TenantUncheckedCreateWithoutSampleRequestsInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSampleRequestsInput = {
@@ -2073,6 +2260,7 @@ export type TenantUpdateWithoutSampleRequestsInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSampleRequestsInput = {
@@ -2098,6 +2286,7 @@ export type TenantUncheckedUpdateWithoutSampleRequestsInput = {
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSampleRequestItemsInput = {
@@ -2123,6 +2312,7 @@ export type TenantCreateWithoutSampleRequestItemsInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSampleRequestItemsInput = {
@@ -2148,6 +2338,7 @@ export type TenantUncheckedCreateWithoutSampleRequestItemsInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSampleRequestItemsInput = {
@@ -2189,6 +2380,7 @@ export type TenantUpdateWithoutSampleRequestItemsInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSampleRequestItemsInput = {
@@ -2214,6 +2406,7 @@ export type TenantUncheckedUpdateWithoutSampleRequestItemsInput = {
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomerQuotesInput = {
@@ -2239,6 +2432,7 @@ export type TenantCreateWithoutCustomerQuotesInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomerQuotesInput = {
@@ -2264,6 +2458,7 @@ export type TenantUncheckedCreateWithoutCustomerQuotesInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomerQuotesInput = {
@@ -2305,6 +2500,7 @@ export type TenantUpdateWithoutCustomerQuotesInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomerQuotesInput = {
@@ -2330,6 +2526,7 @@ export type TenantUncheckedUpdateWithoutCustomerQuotesInput = {
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomerQuoteItemsInput = {
@@ -2355,6 +2552,7 @@ export type TenantCreateWithoutCustomerQuoteItemsInput = {
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomerQuoteItemsInput = {
@@ -2380,6 +2578,7 @@ export type TenantUncheckedCreateWithoutCustomerQuoteItemsInput = {
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomerQuoteItemsInput = {
@@ -2421,6 +2620,7 @@ export type TenantUpdateWithoutCustomerQuoteItemsInput = {
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomerQuoteItemsInput = {
@@ -2446,6 +2646,7 @@ export type TenantUncheckedUpdateWithoutCustomerQuoteItemsInput = {
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSalesOrdersInput = {
@@ -2471,6 +2672,7 @@ export type TenantCreateWithoutSalesOrdersInput = {
   customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSalesOrdersInput = {
@@ -2496,6 +2698,7 @@ export type TenantUncheckedCreateWithoutSalesOrdersInput = {
   customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSalesOrdersInput = {
@@ -2537,6 +2740,7 @@ export type TenantUpdateWithoutSalesOrdersInput = {
   customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSalesOrdersInput = {
@@ -2562,6 +2766,7 @@ export type TenantUncheckedUpdateWithoutSalesOrdersInput = {
   customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   salesOrderItems?: Prisma.SalesOrderItemUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSalesOrderItemsInput = {
@@ -2587,6 +2792,7 @@ export type TenantCreateWithoutSalesOrderItemsInput = {
   customerQuoteItems?: Prisma.CustomerQuoteItemCreateNestedManyWithoutTenantInput
   salesOrders?: Prisma.SalesOrderCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSalesOrderItemsInput = {
@@ -2612,6 +2818,7 @@ export type TenantUncheckedCreateWithoutSalesOrderItemsInput = {
   customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedCreateNestedManyWithoutTenantInput
   salesOrders?: Prisma.SalesOrderUncheckedCreateNestedManyWithoutTenantInput
   logs?: Prisma.OperationLogUncheckedCreateNestedManyWithoutTenantInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSalesOrderItemsInput = {
@@ -2653,6 +2860,7 @@ export type TenantUpdateWithoutSalesOrderItemsInput = {
   customerQuoteItems?: Prisma.CustomerQuoteItemUpdateManyWithoutTenantNestedInput
   salesOrders?: Prisma.SalesOrderUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSalesOrderItemsInput = {
@@ -2678,6 +2886,7 @@ export type TenantUncheckedUpdateWithoutSalesOrderItemsInput = {
   customerQuoteItems?: Prisma.CustomerQuoteItemUncheckedUpdateManyWithoutTenantNestedInput
   salesOrders?: Prisma.SalesOrderUncheckedUpdateManyWithoutTenantNestedInput
   logs?: Prisma.OperationLogUncheckedUpdateManyWithoutTenantNestedInput
+  roleAssignments?: Prisma.UserRoleAssignmentUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -2703,6 +2912,7 @@ export type TenantCountOutputType = {
   salesOrders: number
   salesOrderItems: number
   logs: number
+  roleAssignments: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2723,6 +2933,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   salesOrders?: boolean | TenantCountOutputTypeCountSalesOrdersArgs
   salesOrderItems?: boolean | TenantCountOutputTypeCountSalesOrderItemsArgs
   logs?: boolean | TenantCountOutputTypeCountLogsArgs
+  roleAssignments?: boolean | TenantCountOutputTypeCountRoleAssignmentsArgs
 }
 
 /**
@@ -2854,6 +3065,13 @@ export type TenantCountOutputTypeCountLogsArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.OperationLogWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountRoleAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserRoleAssignmentWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2879,6 +3097,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   salesOrders?: boolean | Prisma.Tenant$salesOrdersArgs<ExtArgs>
   salesOrderItems?: boolean | Prisma.Tenant$salesOrderItemsArgs<ExtArgs>
   logs?: boolean | Prisma.Tenant$logsArgs<ExtArgs>
+  roleAssignments?: boolean | Prisma.Tenant$roleAssignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -2928,6 +3147,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   salesOrders?: boolean | Prisma.Tenant$salesOrdersArgs<ExtArgs>
   salesOrderItems?: boolean | Prisma.Tenant$salesOrderItemsArgs<ExtArgs>
   logs?: boolean | Prisma.Tenant$logsArgs<ExtArgs>
+  roleAssignments?: boolean | Prisma.Tenant$roleAssignmentsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2953,6 +3173,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     salesOrders: Prisma.$SalesOrderPayload<ExtArgs>[]
     salesOrderItems: Prisma.$SalesOrderItemPayload<ExtArgs>[]
     logs: Prisma.$OperationLogPayload<ExtArgs>[]
+    roleAssignments: Prisma.$UserRoleAssignmentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3372,6 +3593,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   salesOrders<T extends Prisma.Tenant$salesOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$salesOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalesOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   salesOrderItems<T extends Prisma.Tenant$salesOrderItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$salesOrderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalesOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   logs<T extends Prisma.Tenant$logsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$logsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OperationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  roleAssignments<T extends Prisma.Tenant$roleAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$roleAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserRoleAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4205,6 +4427,30 @@ export type Tenant$logsArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.OperationLogScalarFieldEnum | Prisma.OperationLogScalarFieldEnum[]
+}
+
+/**
+ * Tenant.roleAssignments
+ */
+export type Tenant$roleAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserRoleAssignment
+   */
+  select?: Prisma.UserRoleAssignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserRoleAssignment
+   */
+  omit?: Prisma.UserRoleAssignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserRoleAssignmentInclude<ExtArgs> | null
+  where?: Prisma.UserRoleAssignmentWhereInput
+  orderBy?: Prisma.UserRoleAssignmentOrderByWithRelationInput | Prisma.UserRoleAssignmentOrderByWithRelationInput[]
+  cursor?: Prisma.UserRoleAssignmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserRoleAssignmentScalarFieldEnum | Prisma.UserRoleAssignmentScalarFieldEnum[]
 }
 
 /**

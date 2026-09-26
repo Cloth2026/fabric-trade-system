@@ -254,7 +254,14 @@ Prisma 7 相关实测：
 - 未产生任何 `rateLimit` 行（内存库表键仍只有 `user / account / session / verification`）；
 - 源码依据：`onRequestRateLimit` 只在 router 的 `onRequest` 里调用。
 
-→ 内置限速只对 HTTP 生效。本设计不挂载 BA HTTP handler，因此**不启用内置限速、不建 `RateLimit` 表**，改为自建 `failedLoginAttempts` + `lockedUntil`。
+→ 内置限速只对 HTTP 生效。本设计不挂载 BA HTTP handler，因此**不启用内置限速、不建 `RateLimit` 表**，改为自建限速 + 账号锁定两层保护。
+
+**落地补充（数据模型轮）**：最终建成 `AuthLoginThrottle` 表（按 `login_ip` / `login_identifier` 两种 scope 计数，`keyHash` 只存 HMAC 摘要），与 `User.failedLoginAttempts` / `User.lockedUntil` 组成两层：
+
+- `AuthLoginThrottle`：IP / 登录标识维度的**入口限速**，能覆盖不存在的邮箱与跨账号撞库；
+- `User.failedLoginAttempts` / `lockedUntil`：**已知账号**的锁定状态，针对单账号连续猜解。
+
+只有 `User.failedLoginAttempts` 是不够的——不存在的邮箱没有用户行可记数。两层的分工与索引见 `docs/DATA_MODEL.md`「认证与权限数据模型」。
 
 ### 3.9 Cookie 与服务端调用合同
 
@@ -294,7 +301,7 @@ Prisma 7 相关实测：
 | 本人改密 | `auth.api.changePassword({ revokeOtherSessions: true })` |
 | 事务 | **不能共享**；按设计文档 §5.15 的顺序与补偿执行 |
 | Admin 插件 | **不采用** |
-| 限速 | **不启用内置**；自建 `failedLoginAttempts` + `lockedUntil`；不建 `RateLimit` 表 |
+| 限速 | **不启用内置**；自建 `AuthLoginThrottle`（入口限速）+ `failedLoginAttempts` / `lockedUntil`（账号锁定）两层；不建 `RateLimit` 表 |
 | Set-Cookie 透传 | `returnHeaders: true` + `getSetCookie()` 逐条 `append` |
 | 邮箱 | 全局唯一 + 全入口 `trim().toLowerCase()` |
 | 无角色用户 | 权限集合为空 → 仅能访问白名单，业务接口一律 403 |
@@ -319,8 +326,28 @@ Prisma 7 相关实测：
 
 ## 6. 遗留风险
 
-1. **建号/重置与业务写入不同事务**，存在短窗口孤儿账号（无角色 → 无权限，需"未完成初始化"标记与清理入口）。
+1. **建号/重置与业务写入不同事务**，存在短窗口孤儿账号（无角色 → 无权限，需"未完成初始化"标记与清理入口）。数据模型轮已为它准备 `User.provisioningStatus` + `User.provisioningRequestId`：前者标记完成度（`pending` 默认、不允许登录），后者是重试认领与清理的依据。
 2. **`ctx.headers` 在纯服务端调用下为 null**，若后续改造忘记 ALS 通道会在 bootstrap 路径静默失效。
 3. **不挂载 BA HTTP handler 是安全前提**，挂载时必须同步 `disabledPaths`（建议加回归用例断言 `/api/auth/sign-up/email` 返回 404）。
 4. **`databaseHooks` 属官方 API 但可能随版本变化**，升级 Better Auth 时需重跑本轮验证（建议把关键断言固化为集成测试）。
 5. **局域网 HTTP 部署无法启用 `Secure`**，必须以网络隔离补偿，不得暴露公网。
+6. **`UserRoleAssignment.createdByUserId` 没有数据库外键**：Prisma 不允许复合关系的标量集合混合必填列与可空列，无法建 `(tenantId, createdByUserId)` 复合外键；单列外键又保证不了租户边界。该列只作审计快照，**服务层必须自行校验分配人与当前租户一致**。
+
+---
+
+## 7. 数据模型落地对照（数据模型轮补记）
+
+`prisma/schema.prisma` 已按本报告 §3.4 的 generator 结果落地，并由 migration `20260926093217_add_authentication_and_authorization_models` 应用到 dev / test 双库：
+
+| 模型 | 落地情况 |
+| --- | --- |
+| `User` | 官方字段（`emailVerified` / `image`）已加；`email` 改全局唯一；新增 `@@unique([tenantId, id])` 支撑复合外键；**`role` 列已删除**（执行前两库均为 0 行） |
+| `Account` | 完全按官方字段，**只有 `@@index([userId])`**，未加 `@@unique([providerId, accountId])`；`onDelete: Cascade` |
+| `Session` | 完全按官方字段（`token` 唯一、`@@index([userId])`）；`onDelete: Cascade`；不带 `tenantId` |
+| `Verification` | 完全按官方字段 + `@@index([identifier])`；不带 `tenantId` |
+| `RateLimit` | **未建**（本报告 §3.8：内置限速只在 HTTP 层生效） |
+| `UserRoleAssignment` | 本报告 §3.7 结论落地：`@@unique([userId, roleKey])` + `(tenantId, userId) → User(tenantId, id)` 复合外键 |
+| `AuthLoginThrottle` | 自建（本报告 §3.8 补充）；`@@unique([scope, keyHash])`；不带 `tenantId` |
+| `OperationLog` | 新增 `category` / `result` 枚举化 + 操作人快照 + `requestId` / `userAgent` / `targetLabel`；索引全部以 `tenantId` 为前缀 |
+
+**仍未实现**：Better Auth 实例、`databaseHooks`、任何 `/api/auth/*` 路由、登录与权限逻辑。上表全部是空表，`User` 仍为 0 行。

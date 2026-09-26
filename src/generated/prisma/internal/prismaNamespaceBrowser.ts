@@ -53,6 +53,11 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   Tenant: 'Tenant',
   User: 'User',
+  Account: 'Account',
+  Session: 'Session',
+  Verification: 'Verification',
+  UserRoleAssignment: 'UserRoleAssignment',
+  AuthLoginThrottle: 'AuthLoginThrottle',
   ConfigOption: 'ConfigOption',
   Supplier: 'Supplier',
   SupplierUnit: 'SupplierUnit',
@@ -108,13 +113,93 @@ export const UserScalarFieldEnum = {
   email: 'email',
   username: 'username',
   name: 'name',
-  role: 'role',
+  emailVerified: 'emailVerified',
+  image: 'image',
   status: 'status',
+  mustChangePassword: 'mustChangePassword',
+  lastLoginAt: 'lastLoginAt',
+  failedLoginAttempts: 'failedLoginAttempts',
+  lockedUntil: 'lockedUntil',
+  passwordChangedAt: 'passwordChangedAt',
+  provisioningRequestId: 'provisioningRequestId',
+  provisioningStatus: 'provisioningStatus',
+  provisionedAt: 'provisionedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const AccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  accountId: 'accountId',
+  providerId: 'providerId',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  idToken: 'idToken',
+  accessTokenExpiresAt: 'accessTokenExpiresAt',
+  refreshTokenExpiresAt: 'refreshTokenExpiresAt',
+  scope: 'scope',
+  password: 'password',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
+
+
+export const SessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  token: 'token',
+  expiresAt: 'expiresAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
+export const VerificationScalarFieldEnum = {
+  id: 'id',
+  identifier: 'identifier',
+  value: 'value',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+export const UserRoleAssignmentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  roleKey: 'roleKey',
+  createdByUserId: 'createdByUserId',
+  createdAt: 'createdAt'
+} as const
+
+export type UserRoleAssignmentScalarFieldEnum = (typeof UserRoleAssignmentScalarFieldEnum)[keyof typeof UserRoleAssignmentScalarFieldEnum]
+
+
+export const AuthLoginThrottleScalarFieldEnum = {
+  id: 'id',
+  scope: 'scope',
+  keyHash: 'keyHash',
+  attemptCount: 'attemptCount',
+  windowStartedAt: 'windowStartedAt',
+  blockedUntil: 'blockedUntil',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AuthLoginThrottleScalarFieldEnum = (typeof AuthLoginThrottleScalarFieldEnum)[keyof typeof AuthLoginThrottleScalarFieldEnum]
 
 
 export const ConfigOptionScalarFieldEnum = {
@@ -374,12 +459,19 @@ export const OperationLogScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   userId: 'userId',
+  actorNameSnapshot: 'actorNameSnapshot',
+  actorEmailSnapshot: 'actorEmailSnapshot',
+  category: 'category',
   module: 'module',
   action: 'action',
   targetType: 'targetType',
   targetId: 'targetId',
+  targetLabel: 'targetLabel',
+  result: 'result',
   detail: 'detail',
+  requestId: 'requestId',
   ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
   createdAt: 'createdAt'
 } as const
 

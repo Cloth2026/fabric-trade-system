@@ -56,3 +56,49 @@ export const ProcessInfoStatus = {
 } as const
 
 export type ProcessInfoStatus = (typeof ProcessInfoStatus)[keyof typeof ProcessInfoStatus]
+
+
+export const UserProvisioningStatus = {
+  pending: 'pending',
+  ready: 'ready',
+  failed: 'failed'
+} as const
+
+export type UserProvisioningStatus = (typeof UserProvisioningStatus)[keyof typeof UserProvisioningStatus]
+
+
+export const RoleKey = {
+  owner: 'owner',
+  admin: 'admin',
+  sales: 'sales',
+  purchasing: 'purchasing',
+  merchandiser: 'merchandiser',
+  viewer: 'viewer'
+} as const
+
+export type RoleKey = (typeof RoleKey)[keyof typeof RoleKey]
+
+
+export const AuthThrottleScope = {
+  login_ip: 'login_ip',
+  login_identifier: 'login_identifier'
+} as const
+
+export type AuthThrottleScope = (typeof AuthThrottleScope)[keyof typeof AuthThrottleScope]
+
+
+export const OperationLogCategory = {
+  login_security: 'login_security',
+  user_permission: 'user_permission',
+  business: 'business'
+} as const
+
+export type OperationLogCategory = (typeof OperationLogCategory)[keyof typeof OperationLogCategory]
+
+
+export const OperationLogResult = {
+  success: 'success',
+  failure: 'failure'
+} as const
+
+export type OperationLogResult = (typeof OperationLogResult)[keyof typeof OperationLogResult]

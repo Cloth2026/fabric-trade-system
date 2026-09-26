@@ -27,7 +27,9 @@
 
 ### 0. 系统认证、固定角色权限与审计日志（当前优先）
 
-正式设计已完成：`docs/DESIGN_AUTHORIZATION_AND_LOGIN.md`。状态为**已确认产品方向，待数据模型实施**。
+正式设计：`docs/DESIGN_AUTHORIZATION_AND_LOGIN.md`；兼容性与 schema 实测：`docs/BETTER_AUTH_COMPATIBILITY_REPORT.md`。
+
+状态：**产品方向已确认 → Better Auth 兼容性已实测 → 数据模型已落地；登录与权限功能仍未启用。**
 
 范围：
 
@@ -39,7 +41,7 @@
 
 按以下顺序实施，每轮独立 commit：
 
-1. Prisma 数据模型与增量 migration（`User` 扩展、`Account` / `Session` / `Verification` / `RateLimit` / `UserRoleAssignment`、`OperationLog` 扩展）。
+1. ✅ **已完成** Prisma 数据模型与增量 migration（`User` 扩展并删除 `role`、`email` 改全局唯一、`Account` / `Session` / `Verification` / `UserRoleAssignment` / `AuthLoginThrottle`、`OperationLog` 扩展；migration `20260926093217_add_authentication_and_authorization_models`，dev + test 双库已应用）。**不采用 Better Auth 内置 `RateLimit` 表**，改用自建 `AuthLoginThrottle`。
 2. Better Auth 基础接入与首个 owner 初始化。
 3. 登录、退出、Session、首次改密。
 4. 用户管理与多角色分配 API。

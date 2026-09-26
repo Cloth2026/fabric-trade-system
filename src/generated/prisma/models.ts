@@ -10,6 +10,11 @@
  */
 export type * from './models/Tenant'
 export type * from './models/User'
+export type * from './models/Account'
+export type * from './models/Session'
+export type * from './models/Verification'
+export type * from './models/UserRoleAssignment'
+export type * from './models/AuthLoginThrottle'
 export type * from './models/ConfigOption'
 export type * from './models/Supplier'
 export type * from './models/SupplierUnit'
