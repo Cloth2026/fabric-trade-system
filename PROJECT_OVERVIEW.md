@@ -103,7 +103,7 @@ npm run dev
 - 独立的面料货源新增、采购报价新增和首选货源维护 API 尚未实现。
 - 寄样与客户反馈、客户管理、客户报价单、订单和真实库存尚未开发。
 - `FabricStockInBatch` 仅有预留模型，入库批次 UI 暂缓。
-- 登录、权限和复杂审批尚未实现。
+- 登录、权限和复杂审批尚未实现。认证与固定角色权限的正式设计见 `docs/DESIGN_AUTHORIZATION_AND_LOGIN.md`（已确认产品方向，待数据模型实施）。
 - V1 暂不管理颜色、色卡和色号。
 
 ## 当前真实 API
@@ -168,5 +168,6 @@ npm run prisma:migrate:status
 4. `docs/API_CONTRACTS.md`：当前真实 API 合同。
 5. `docs/PRODUCT_ROADMAP.md`：下一阶段路线与暂缓范围。
 6. `docs/FABRIC_LIBRARY_FIELDS.md`：面料字段详细定义。
-7. `docs/DEV_LOG.md`：历史实施记录。
-8. `docs/HANDOFF_WORKBUDDY.md`：WorkBuddy 快速接管入口。
+7. `docs/DESIGN_AUTHORIZATION_AND_LOGIN.md`：用户认证、固定角色权限与审计日志的正式设计（**待实施，不代表当前代码已实现**）。
+8. `docs/DEV_LOG.md`：历史实施记录。
+9. `docs/HANDOFF_WORKBUDDY.md`：WorkBuddy 快速接管入口。
