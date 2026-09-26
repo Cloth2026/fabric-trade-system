@@ -169,5 +169,6 @@ npm run prisma:migrate:status
 5. `docs/PRODUCT_ROADMAP.md`：下一阶段路线与暂缓范围。
 6. `docs/FABRIC_LIBRARY_FIELDS.md`：面料字段详细定义。
 7. `docs/DESIGN_AUTHORIZATION_AND_LOGIN.md`：用户认证、固定角色权限与审计日志的正式设计（**待实施，不代表当前代码已实现**）。
-8. `docs/DEV_LOG.md`：历史实施记录。
-9. `docs/HANDOFF_WORKBUDDY.md`：WorkBuddy 快速接管入口。
+8. `docs/BETTER_AUTH_COMPATIBILITY_REPORT.md`：`better-auth@1.7.6` 兼容性实测证据与结论（设计阶段的验证记录）。
+9. `docs/DEV_LOG.md`：历史实施记录。
+10. `docs/HANDOFF_WORKBUDDY.md`：WorkBuddy 快速接管入口。

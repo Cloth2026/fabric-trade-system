@@ -319,7 +319,7 @@ export const rolePermissionMatrix: Record<UserRoleKey, RolePermissionMap> = {
       edit: "restricted",
       deactivate: "restricted",
       assign_role: "restricted",
-      reset_password: "allow",
+      reset_password: "restricted",
     },
     audit_log: { view: "allow" },
     system_settings: { view: "allow", maintain_config: "allow" },
@@ -421,6 +421,12 @@ export const permissionRestrictions: PermissionRestriction[] = [
     note: "可以为普通账号分配业务角色，但不能分配或回收 owner 角色。",
   },
   {
+    role: "admin",
+    module: "user_management",
+    action: "reset_password",
+    note: "只能重置非 owner 账号的密码；owner 账号的密码只能由另一个 owner 重置。",
+  },
+  {
     role: "merchandiser",
     module: "order",
     action: "update_fulfillment",
@@ -442,11 +448,13 @@ export const permissionRestrictionNotes: Record<UserRoleKey, string[]> = {
     "一个租户允许有多个 owner；至少保留一个启用状态的 owner。",
     "最后一个启用的 owner 不能被停用、移除 owner 角色或降级。",
     "可以新增、编辑、停用其他 owner 身份账号并分配 owner 角色。",
+    "可以重置其他 owner 与普通用户的密码；admin 不能重置 owner 密码。",
   ],
   admin: [
     "拥有除 owner 身份处置外的日常系统与业务权限。",
     "不能新增、停用、编辑 owner 身份账号，也不能分配 owner 角色。",
     "可以看到真实采购价格，并对普通账号执行停用与重置密码。",
+    "重置密码为受限允许：只能重置非 owner 账号，owner 密码需由另一个 owner 重置。",
   ],
   sales: [
     "写操作集中在客户、寄样、客户报价与销售订单。",

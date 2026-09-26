@@ -6,18 +6,19 @@
 
 | 项 | 值 |
 | --- | --- |
-| 文档状态 | 产品设计已确认，待实施 |
+| 文档状态 | 产品设计已确认，**Better Auth 兼容性已实测**，待数据模型实施 |
 | 设计基准提交 | `985da12`（`origin/main`） |
+| 兼容性验证提交 | `8147019` → 本轮（基于已安装 `better-auth@1.7.6`） |
 | 设计日期 | 2026-09-26 |
 | 依赖的静态原型 | `src/components/system/`（用户管理、角色权限、操作日志、`/login`、账号菜单） |
 | 下一轮动作 | Prisma 数据模型 + 增量 migration（**本文不写 Prisma 代码**） |
-| 不在本轮范围 | 代码、依赖安装、schema、migration、seed、API、数据库、UI |
+| 实测证据 | §12「Better Auth 实测合同」、`docs/BETTER_AUTH_COMPATIBILITY_REPORT.md` |
 
 ---
 
 ## 0. 决策基线（已确认，不重新论证）
 
-以下 23 条来自本轮产品决策，文档后续内容必须与之一致，不得改成其他方案。
+以下 32 条（23 条产品决策 + 9 条本轮拍板增补）已确认，文档后续内容必须与之一致，不得改成其他方案。
 
 | # | 决策 | 本文落点 |
 | --- | --- | --- |
@@ -43,7 +44,21 @@
 | 20 | 操作日志只允许查看，不允许编辑或删除 | §3.8、§4.1 |
 | 21 | 不使用 `AUTH_ENABLED` 或本地免登录开关作为正式运行方案 | §2.1、§8 |
 | 22 | 不做公开注册、SSO、OAuth、MFA、组织架构、审批流、行级"只能看自己数据"、自定义角色、日志清理任务 | §1.2 |
-| 23 | 本轮不修改已冻结的静态 UI | §11 |
+| 23 | 本轮不修改已冻结的静态 UI（admin 重置密码规则说明除外） | §11 |
+
+**本轮（Better Auth 兼容性验证轮）拍板增补的 9 条**：
+
+| # | 决策 | 本文落点 |
+| --- | --- | --- |
+| 24 | 保留 `sales_order.advance_status`（第 28 项权限） | §4.1 |
+| 25 | admin **不得**重置 owner 密码；只有 owner 可以重置 owner 密码 | §4.4 R1、§4.2 |
+| 26 | `Fabric.finishedReferencePrice*` 属销售参考价，**不受** `purchase_price.view` 保护 | §4.7 |
+| 27 | 用户本人改密日志 `action = change_password`，管理员重置密码日志 `action = reset_password` | §5.6、§5.7 |
+| 28 | 下一轮 migration **删除** `User.role` 字段，不作 legacy 保留 | §3.2、§8.1 |
+| 29 | 权限字典为 **39 项**（不是 32 项） | §4.1 |
+| 30 | database hook 请求头统一写作 **`ctx.headers`**（`GenericEndpointContext` 的第二参数），不写 `context.headers` | §2.4、§12 |
+| 31 | 建号走服务端 `auth.api.signUpEmail` + `disabledPaths` 屏蔽 HTTP，**不启用 Admin 插件** | §2.2、§2.4、§12 |
+| 32 | 管理员重置密码走 `requestPasswordReset` + `resetPassword`（`revokeSessionsOnPasswordReset: true`），不直接写 `Account.password` | §5.7、§12 |
 
 **明确排除的历史方案**（已作废，不得复活）：
 
@@ -101,27 +116,33 @@
 
 | 维度 | 结论 |
 | --- | --- |
-| Next.js 16 兼容 | Better Auth 官方声明完全兼容 Next.js 16；`middleware.ts` 已改名为 `proxy.ts`，Better Auth 提供对应迁移（`npx @next/codemod@canary middleware-to-proxy .`）。 |
-| App Router 集成 | `src/app/api/auth/[...all]/route.ts` 中 `export const { GET, POST } = toNextJsHandler(auth)`；服务端用 `auth.api.*` 调用。 |
-| Prisma 7 adapter | 官方 Prisma 适配器支持 Prisma 7 + driver adapter（`@prisma/adapter-pg`），与本项目 `src/lib/prisma.ts` 现有写法完全一致（`new PrismaClient({ adapter })`）。 |
-| 密码存储 | 密码**不在 `user` 表**，存在 `account.password`，`providerId = "credential"`；默认使用 Node 原生 scrypt。因此**不在 `User` 上新增 `passwordHash`**。 |
-| 数据库 Session | `session` 表保存 `token / expiresAt / ipAddress / userAgent`；主 Cookie `session_token` 是不透明服务端标识符，不是 JWT。符合决策 2。 |
-| 管理员创建用户 | 服务端 `auth.api.signUpEmail`（配 `autoSignIn: false`，避免污染管理员自己的 Cookie）。 |
-| 改密 / 撤销 Session | `auth.api.changePassword({ revokeOtherSessions: true })`；管理员侧撤销用数据库会话行删除（见 §2.4）。 |
-| 禁止公开注册 | `emailAndPassword.disableSignUp = true`；并且服务端不暴露 `/api/auth/sign-up/email` 的可用路径（见 §5）。 |
+> 以下结论均已用 **已安装的 `better-auth@1.7.6`** 实测复核（方法与原始输出见 §12）。
+
+| 维度 | 结论 |
+| --- | --- |
+| 安装版本 | **`better-auth@1.7.6`**，在 `package.json` 中精确锁定（无 `^`）；`npm ls better-auth` → `better-auth@1.7.6` |
+| Next.js 16 兼容 | 官方声明兼容；`middleware.ts` 已改名 `proxy.ts`。**本项目不挂载 `toNextJsHandler`**（见下条），因此不存在 BA 的 HTTP 暴露面 |
+| App Router 集成 | **结论修正**：浏览器不接触 BA 端点。服务端只用 `auth.api.*`；Cookie 通过 `returnHeaders: true` 拿到的 `Headers` 透传到我们自己的 `Response`（实测可用，见 §12.7） |
+| Prisma 7 adapter | `prismaAdapter(prisma, { provider: "postgresql", transaction: true })`，与 `src/lib/prisma.ts` 的 `new PrismaClient({ adapter: new PrismaPg(...) })` **实测可跑通**（沙箱库建号 / 登录 / 改密成功） |
+| 密码存储 | 密码**不在 `user` 表**，存在 `account.password`（`providerId = "credential"`），默认 Node 原生 scrypt。`User` 上不新增 `passwordHash` |
+| 数据库 Session | `session` 表保存 `token / expiresAt / ipAddress / userAgent`（实测 `ipAddress`、`userAgent` 由请求头自动写入）；Cookie 是不透明串，不是 JWT |
+| 管理员创建用户 | **结论修正**：`disableSignUp: true` 会**连服务端 `auth.api.signUpEmail` 一起拒绝**（实测 400 `EMAIL_PASSWORD_SIGN_UP_DISABLED`）。因此改为 `disableSignUp: false` + `disabledPaths: ["/sign-up/email"]`（实测 HTTP 404、服务端仍可用） |
+| 改密 / 撤销 Session | 本人：`auth.api.changePassword({ revokeOtherSessions: true })`（实测生效）。管理员重置：`requestPasswordReset` + `resetPassword` 配 `revokeSessionsOnPasswordReset: true`（实测会话清空） |
+| 禁止公开注册 | 三条同时生效：① 不挂载 BA HTTP handler（首选）；② 若挂载则必须 `disabledPaths` 屏蔽 `/sign-up/email`；③ 服务端建号全部由我们的 `/api/users` 走权限校验后调用。**不使用 `disableSignUp: true`**（它会把服务端建号一起关掉） |
 
 **不使用 `AUTH_ENABLED` 一类开关**：上线即启用认证，不存在"绕过登录"的运行模式。本地开发同样需要登录（首个 owner 由 §6 初始化）。
 
-### 2.2 不使用 Better Auth Admin 插件（重要取舍）
+### 2.2 不使用 Better Auth Admin 插件（实测后确认）
 
-Better Auth 的 `admin` 插件提供 `createUser / setRole / revokeUserSessions / banUser` 等能力，但**本设计不启用它**。理由：
+`admin` 插件提供 `createUser / setRole / setUserPassword / revokeUserSessions / banUser / impersonateUser` 等能力（本轮已逐个确认方法名与端点路径，见 §12.4）。**经实测验证，本设计仍不启用它**。理由（含实测证据）：
 
-1. **角色模型不匹配**：admin 插件的角色存在 `user.role` 单列，多角色以逗号分隔字符串存储（`"admin,editor"`）。决策 13 要求多角色权限并集、决策 18 要求"最后一个启用 owner 不能被降级"——这类**跨行约束无法用逗号字符串可靠表达**，也无法在事务里原子校验。
-2. **不感知租户**：插件的 `createUser` 不会写 `tenantId`，而本项目 `User.tenantId` 是必填外键（决策 11）。
-3. **无法承载审计**：每个用户/角色变更必须与 `OperationLog` 在同一事务写入（项目既有约定），插件内部事务无法并入。
-4. **权限模型不同**：插件默认只有 `admin` / `user` 两级，与六角色 + 32 项权限字典不一致；强行套用需要完整自定义 `createAccessControl`，等于重写。
+1. **要求 `user.role` 列，与决策 28 冲突**：插件 schema 实测会向 `user` 增加 `role / banned / banReason / banExpires`、向 `session` 增加 `impersonatedBy`（`plugins/admin/schema.mjs`）。而决策 28 要求下一轮 migration **删除** `User.role`。采用插件就必须保留/新增该列，直接冲突。
+2. **权限判定绑死在 `user.role` 上**：`createUser`、`setUserPassword`、`revokeUserSessions` 的 `hasPermission({ userId, role: session.user.role, ... })` 只看 BA 自己的 role 值。我们若把 BA role 当成"能否调用管理端点"的开关，等于又造了一套角色来源，与决策 16（权限字典与矩阵只在服务端常量里）相悖。
+3. **`setUserPassword` / `revokeUserSessions` 必须带管理员会话**：实测无 `headers` 直调返回 `401 UNAUTHORIZED`（`use: [adminMiddleware]`）。想让它工作就得给 ERP 管理员发一个 BA 眼中的 admin 会话，进一步强化第 2 条问题。
+4. **16 个 `/admin/*` HTTP 端点默认可被调用**：实测未配置 `disabledPaths` 时 `POST /api/auth/admin/create-user` 走 HTTP 可达（无会话返回 401，有 BA admin 会话即可执行）。虽然可以用 `disabledPaths` 全部屏蔽，但"引入一堆必须屏蔽的端点"不如一开始就不装。
+5. **角色模型不匹配**（沿用原有判断）：多角色以逗号字符串存 `user.role`，无法表达并集与 owner 跨行约束；插件不会写 `tenantId`；插件内部事务无法并入 `OperationLog`。
 
-**代价（明确接受）**：需要自己写用户管理 API（创建、编辑、停用、分配角色、重置密码）。这些 API 内部仍调用 Better Auth 完成"建号 / 改密 / 撤销 Session"，只是外层套上租户、权限、审计和 owner 规则。
+**代价（明确接受）**：自己写用户管理 API（创建、编辑、停用、分配角色、重置密码）。这些 API 内部仍调用 Better Auth 完成建号 / 改密 / 撤销 Session，只是外层套上租户、权限、审计和 owner 规则。实测证明这条路径完全可行（§12.3、§12.5）。
 
 ### 2.3 数据模型映射结论（Better Auth → 现有库）
 
@@ -132,26 +153,30 @@ Better Auth 的 `admin` 插件提供 `createUser / setRole / revokeUserSessions 
 | `session` | **新增 `Session`** | 数据库会话；撤销 = 删除/失效行 |
 | `verification` | **新增 `Verification`** | 仅为 Better Auth schema 完整性存在，V1 不开放邮件验证 / 自助找回端点 |
 | `rateLimit`（可选插件态） | **新增 `RateLimit`** | 登录限速计数持久化到数据库，避免多实例/重启后计数丢失 |
-| 角色 | **新增 `UserRoleAssignment`** | 不用 `user.role` 单列；现有 `User.role` 转为 legacy，停止读写 |
+| 角色 | **新增 `UserRoleAssignment`** | 不用 `user.role` 单列；**现有 `User.role` 在下一轮 migration 直接删除**（决策 28） |
 | 权限字典 / 角色矩阵 | **不落库**，服务端 TS 常量 | 决策 16 |
 | `OperationLog` | **扩展现有模型** | 见 §3.8 |
 
-### 2.4 `User.tenantId` 必填与 Better Auth 建号的冲突（关键工程问题与解法）
+### 2.4 `User.tenantId` 必填与 Better Auth 建号的冲突（**已实测定稿**）
 
-`User.tenantId` 是非空外键，而 `auth.api.signUpEmail` 只接受 `email / password / name`，不会传 `tenantId`。直接调用会因 NOT NULL 约束失败。
+`User.tenantId` 是非空外键，而 Better Auth 的建号入参不接受它。1.7.6 上的实测把原设计里的两处假设都推翻了，方案相应调整：
 
-**主方案：`databaseHooks.user.create.before` 注入 `tenantId`**
+| 原假设 | 实测结果 | 结论 |
+| --- | --- | --- |
+| `additionalFields.tenantId = { required: true, input: false }`，由 hook 注入 | `required: true` 的校验发生在 **`databaseHooks` 之前**，hook 一次都没被调用，直接 400 `MISSING_FIELD: tenantId is required` | **`tenantId` 在 BA 侧必须配成 `required: false, input: false`**，靠 hook 注入 |
+| hook 从 `context.headers` 读调用者 | hook 第二参数类型是 `GenericEndpointContext \| null`，实测字段名是 **`ctx.headers`**（`Headers` 实例），且**只有调用时显式传了 `headers` 才存在**；纯服务端直调时 `ctx.headers` 为 `null`、`ctx.request` 为 falsy | 写作 `ctx.headers`；并且**不能只依赖它**（见下） |
+| hook 不注入时靠 NOT NULL 兜底 | 兜底确实存在，但形态是 **Prisma 校验错误**：`Argument 'tenant' is missing`，BA 包装成 422 `FAILED_TO_CREATE_USER`，用户行未落库 | 兜底有效，但错误信息对调用方不友好，**主防线必须放在 hook 里** |
 
-Better Auth 的 `databaseHooks` 支持 `user.create.before`，其 context 携带发起请求的 `headers`。在 hook 内：
+**最终方案（三层）**：
 
-1. 从 `context.headers` 解析出**调用者（owner/admin）的 Session**；
-2. 取出该 Session 用户的 `tenantId`；
-3. 注入到待创建的 user 数据里返回；
-4. 解析不到或调用者无 `user.create` 权限 → 抛 `APIError`（fail-closed，宁可建号失败也不产生无租户的孤儿账号）。
+1. **注入层（主）**：`databaseHooks.user.create.before(user, ctx)` 里按优先级解析 `tenantId`
+   1. 我们的服务端请求上下文（`AsyncLocalStorage`，由 `resolveAuthContext` / 建号服务写入）——**实测可跨 Better Auth 的 async 链路读到**；
+   2. 回退：`ctx.headers` 存在时，用它调 `auth.api.getSession({ headers: ctx.headers })` 取调用者 `tenantId`（实测 `ctx.headers` 是完整 `Headers`，含 `cookie`、`x-forwarded-for`）；
+   3. 两者都拿不到 → **直接抛错**（fail-closed）。
+2. **fail-closed 语义**：hook 抛错后 BA 返回 422 `FAILED_TO_CREATE_USER`（实测），数据库无任何写入。因此**我们的 API 必须在调用 BA 之前先做权限与租户校验**，把这类错误变成可解释的 403/409，而不是把 422 透给用户。
+3. **数据库兜底**：`User.tenantId` 保持 NOT NULL + 外键。即使 hook 被改坏到"既不抛错也不注入"，Prisma 也会拒绝写入（实测）。
 
-**保持 `tenantId` NOT NULL**，让数据库成为最后一道兜底：hook 未生效时创建失败（500/400），而不是产生无租户用户。
-
-**退路（若实施时确认 hook context 取不到 headers）**：把 `User.tenantId` 改为可空 + 应用层强校验 + 启动巡检脚本拒绝无租户用户存在，并在 `UserRoleAssignment` 层面强制租户一致。该退路安全性较弱，**必须**在文档中记录原因，不得默认采用。
+**不使用退路方案**：`tenantId` 改可空 + 巡检脚本的方案**已排除**，因为实测证明 NOT NULL + 必填外键在 Prisma 层就能挡住，无需牺牲约束强度。
 
 ### 2.5 Session 策略结论
 
@@ -163,7 +188,9 @@ Better Auth 的 `databaseHooks` 支持 `user.create.before`，其 context 携带
 | `updateAge` | **1 小时（3600 秒）** | 活跃用户滚动续期；停止操作 12 小时后失效 |
 | `freshAge` | **10 分钟（600 秒）** | 改密等敏感操作要求会话较新 |
 | `disableSessionRefresh` | `false` | 允许滚动续期 |
-| 撤销方式 | `prisma.session.deleteMany({ where: { userId } })` | 数据库会话行即事实来源；这不是"自建认证"，只是删除 Better Auth 定义的会话行 |
+| 撤销方式 | 停用/降权用 `prisma.session.deleteMany({ where: { userId } })`；改密与重置优先用 Better Auth 自带开关（`revokeOtherSessions` / `revokeSessionsOnPasswordReset`） | 数据库会话行即事实来源；实测两种方式都能立即生效 |
+| Cookie 名（实测） | `advanced.cookiePrefix = "fabric"` → `fabric.session_token`；退出时会同时下发 `fabric.session_data`、`fabric.dont_remember` 的清除指令 | 实测 `set-cookie`：`fabric.session_token=…; Max-Age=43200; Path=/; HttpOnly; SameSite=Lax` |
+| 内置限速 | **不启用**（实测只在 `auth.api.*` 之外的 HTTP 层生效；我们不挂 HTTP handler，所以 `rateLimit.storage = "database"` 无意义，且需要额外 `rateLimit` 表） | 登录限速与锁定由我们自己的 `failedLoginAttempts` + `lockedUntil` 实现（§5.2、§5.3） |
 
 ### 2.6 `User.email` 唯一性结论：**从"租户内唯一"改为"全局唯一"**
 
@@ -233,10 +260,10 @@ Tenant
 | `failedLoginAttempts` | Int | `@default(0)` | **新增** | 连续失败计数，成功登录时清零 |
 | `lockedUntil` | DateTime? | 可空 | **新增** | 暂时锁定到期时间（§5.3） |
 | `passwordChangedAt` | DateTime? | 可空 | **新增** | 改密/重置时写入，用于审计与未来密码有效期 |
-| `role` | String `@default("admin")` | 保留列，**停止读写** | 已有 | **转为 legacy**，与 `Fabric.supplierId` 同等处置；真实角色以 `UserRoleAssignment` 为准 |
+| ~~`role`~~ | String `@default("admin")` | **下一轮 migration 删除** | 已有 | 决策 28。不转 legacy、不保留列：真实角色以 `UserRoleAssignment` 为准；BA 的 admin 插件不启用，不需要该列 |
 | `createdAt` / `updatedAt` | DateTime | 已有 | 已有 | — |
 
-`User.email` 统一小写存储（登录前 `trim().toLowerCase()`），避免大小写绕过唯一约束。
+`User.email` 统一小写存储（建号与登录入口都做 `trim().toLowerCase()`）。实测依据：BA 建号会把 email **自动小写**（`MiXeD@…` 存成 `mixed@…`），登录大小写不敏感，但**带空格会被 zod 判为 `INVALID_EMAIL`**（400）。因此在我们这一侧统一 `trim + lowercase`，既保证行为一致，也避免空格导致的 400 与账号枚举差异。
 
 ### 3.3 `Account`（新增）
 
@@ -251,9 +278,9 @@ Tenant
 | **`password`** | String? | 可空 | **密码哈希唯一存放位置**；默认 scrypt，由 Better Auth 计算与校验 |
 | `createdAt` / `updatedAt` | DateTime | — | — |
 
-约束：`@@unique([providerId, accountId])`、`@@index([userId])`。
+约束：`@@index([userId])`（官方 1.7.6 生成器**只给这一个**索引，未给 `@@unique([providerId, accountId])`；本设计按官方生成器落地，不额外加唯一约束，以免与 BA 的 upsert 语义冲突）。
 
-**`User` 上不新增 `passwordHash`**（决策 1、4）。
+**`User` 上不新增 `passwordHash`**，也**不在任何代码里直接写 `Account.password`**（决策 1；密码一律经 `auth.api.*` 由 BA 计算哈希）。
 
 ### 3.4 `Session`（新增）
 
@@ -281,16 +308,22 @@ Tenant
 
 **V1 只建表不开放端点**（无邮件验证、无自助找回）。管理员重置密码若复用 Better Auth 重置链路（§5.7），会短暂使用该表。
 
-### 3.6 `RateLimit`（新增）
+### 3.6 `RateLimit`（**本轮结论：暂不建表**）
 
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `id` | String PK | — |
-| `key` | String **唯一** | 限流键（IP + 路径 + 标识） |
-| `count` | Int | 窗口内请求数 |
-| `lastRequest` | BigInt | 上次请求时间（epoch ms） |
+官方 1.7.6 的真实定义（来源 `@better-auth/core/dist/db/get-tables.mjs`，仅当 `rateLimit.storage === "database"` 时才进 schema；模型名默认 `rateLimit`）：
 
-采用 `rateLimit.storage = "database"`，并额外配置 `customRules`：`/sign-in/email` 使用更严格窗口（Better Auth 默认为 10 秒内 3 次）。**注意**：内置限流只返回 429，**不做账号锁定**；"暂时锁定"由我们自己的 `failedLoginAttempts + lockedUntil` 实现（§5.3）。
+| 字段 | 类型 | 约束 | 说明 |
+| --- | --- | --- | --- |
+| `id` | String | PK | 生成器给出的字段 |
+| `key` | String | **unique**, required | 限流键（可通过 `rateLimit.fields.key` 改名） |
+| `count` | Int | required | 窗口内请求数 |
+| `lastRequest` | BigInt | required，默认 `Date.now()` | 上次请求时间（epoch ms），**`bigint: true`，Prisma 里是 `BigInt`** |
+
+**为什么不建**：内置限速只在 **HTTP 请求入口**（`api/index.mjs` 的 router `onRequest` → `onRequestRateLimit`）生效，实测直接调用 `auth.api.signInEmail` **完全不走限速**（开启 `storage: "database"` 后连 `rateLimit` 表都没有写入）。而本设计不挂载 BA 的 HTTP handler（§2.1），内置限速没有触发路径。
+
+**替代方案（采用）**：登录限速与"暂时锁定"由我们自己在 `/api/auth/login` 里实现（§5.2、§5.3），计数落在 `User.failedLoginAttempts` / `User.lockedUntil`，不额外建表。
+
+**如果将来挂载 BA HTTP 端点**：必须同时启用 `rateLimit.storage = "database"` 并按上表建 `RateLimit` 表，否则多实例部署时限流计数只存在于单进程内存。
 
 ### 3.7 `UserRoleAssignment`（新增，多角色）
 
@@ -301,12 +334,14 @@ Tenant
 | `userId` | String | 非空 FK → User，级联删除，索引 | — |
 | `roleKey` | `RoleKey` enum | 见下 | 固定六值之一 |
 | `createdAt` | DateTime | `@default(now())` | — |
-| `createdByUserId` | String? | 可空 | 分配人，审计用 |
+| `createdByUserId` | String? | 可空 | 分配人，审计用；若建关系必须同样用组合外键防止跨租户引用（见下） |
 
 约束：
 
-- `@@unique([userId, roleKey])` —— 防重复分配（`userId` 已唯一决定租户，无需把 `tenantId` 放进唯一键）。
+- `@@unique([userId, roleKey])` —— 防重复分配。
 - `@@index([tenantId, roleKey])` —— 支撑"本租户还有几个启用 owner"的校验。
+- **组合外键（决策：已实测通过）**：`User` 增加 `@@unique([tenantId, id])`，`UserRoleAssignment` 的关系写 `user User @relation(fields: [tenantId, userId], references: [tenantId, id], onDelete: Cascade)`。这样 `tenantId` 与 `userId` 必须同时匹配同一用户行，**数据库层面无法给 A 租户的用户挂 B 租户的角色**。实测：跨租户插入报 `Foreign key constraint violated: UserRoleAssignment_tenantId_userId_fkey`；同租户插入正常。
+- `createdByUserId` 若建立关系，同样用 `[tenantId, createdByUserId] → User[tenantId, id]` 的组合外键，不单独建单列关系。
 
 `roleKey` 枚举值：`owner` / `admin` / `sales` / `purchasing` / `merchandiser` / `viewer`。
 
@@ -329,7 +364,15 @@ Tenant
 | `ipAddress` | String? | 已有 | 沿用 |
 | `detail` | Json? | 已有 | **禁止**写入密码、密码哈希、Session Token、完整 Cookie、完整请求体（§9） |
 
-新增索引：`@@index([tenantId, category])`、`@@index([tenantId, result])`、`@@index([tenantId, module, action])`、`@@index([userId])`、`@@index([requestId])`。
+新增索引（**优先复合索引，租户在前**）：
+
+- `@@index([tenantId, requestId])` —— 同一次请求的多条日志串联（替代原方案的单列 `requestId` 索引）。
+- `@@index([tenantId, userId])` —— 某用户在本租户内的操作流水（替代原方案的单列 `userId` 索引）。
+- `@@index([tenantId, category])`、`@@index([tenantId, result])`、`@@index([tenantId, module, action])`、`@@index([tenantId, createdAt])` —— 列表筛选与分页。
+
+不再建全局单列 `@@index([userId])` / `@@index([requestId])`：日志只会按租户维度查询，复合索引已覆盖，单列索引只是额外写放大。
+
+**无角色用户**：`permissions` 为空集合时，除 §5.14 白名单与"仅要求已认证"的接口外，全部业务接口返回 403。Session 有效 ≠ 有权限（决策补充，见 §4.3）。
 
 **日志只增不改不删（决策 20）**：
 
@@ -408,16 +451,17 @@ Tenant
 | 32 | `user.edit` | 编辑用户资料与状态 | owner 全权；admin 受限 |
 | 33 | `user.deactivate` | 停用用户 | owner 全权；admin 受限 |
 | 34 | `user.assign_roles` | 分配/回收角色 | owner 全权；admin 受限 |
-| 35 | `user.reset_password` | 重置用户密码 | owner 与 admin 均可 |
+| 35 | `user.reset_password` | 重置用户密码 | **owner 可重置 owner 与普通用户；admin 只能重置非 owner**（决策 25） |
 | 36 | `role_matrix.view` | 查看角色权限矩阵 | — |
 | 37 | `audit_log.view` | 查看操作日志 | **只有查看，无编辑/删除** |
 | 38 | `system_settings.view` | 查看系统设置 | — |
 | 39 | `system_settings.manage` | 维护系统设置与配置组 | — |
 
-**在已确认清单基础上补充的 1 个 key（需知悉）**：`sales_order.advance_status`（第 28 项）。
+**字典总数：39 项**（此前文档里出现的"32 项"是笔误，已更正）。
+
+**第 28 项 `sales_order.advance_status` 已确认保留（决策 24）**：
 
 - 理由：销售订单状态机是六态（草稿/已确认/备货中/已发货/已完成/已取消），且跟单员（merchandiser）是"**非终态可推进、终态不可推进**"的受限语义。若把它并进 `sales_order.edit`，则无法表达"edit 允许但终态推进受限"这一差异，会直接破坏已冻结静态原型中 merchandiser 的"受限允许"单元格。
-- 若坚持只用已确认清单：可退化为让 `sales_order.edit` 覆盖状态推进，代价是 merchandiser 要么能取消/完成订单、要么连非终态也推不动。建议在实施前确认。
 
 **不需要权限 key 的接口**（仅需已认证）：
 
@@ -468,13 +512,15 @@ Tenant
 | `user.edit` | A | **受限** | — | — | — | — |
 | `user.deactivate` | A | **受限** | — | — | — | — |
 | `user.assign_roles` | A | **受限** | — | — | — | — |
-| `user.reset_password` | A | A | — | — | — | — |
+| `user.reset_password` | A | **受限** | — | — | — | — |
 | `role_matrix.view` | A | A | — | — | — | — |
 | `audit_log.view` | A | A | — | — | — | — |
 | `system_settings.view` | A | A | — | — | — | — |
 | `system_settings.manage` | A | A | — | — | — | — |
 
 **"受限"不是第三种权限值**。权限层只有 `allow` / `deny` 两态；"受限"表示 `allow` + 一条服务端强制的业务前置校验（§4.4）。这样服务端判定是二值且可测试的，UI 仍可沿用静态原型的"受限允许 + 文字说明"展示。
+
+> 静态原型已同步：`admin` 的 `user_management.reset_password` 由"允许"改为"受限允许"，并补充限制说明"只能重置非 owner 账号的密码；owner 账号的密码只能由另一个 owner 重置。"（本轮唯一允许的 UI 改动）。
 
 ### 4.3 多角色权限并集规则
 
@@ -499,7 +545,7 @@ permissions(user) = ⋃  permissions(role)  for role in user.roles
 | `user.edit` | 目标用户含 owner 角色时，编辑其资料返回 403 |
 | `user.deactivate` | 目标用户含 owner 角色时返回 403 |
 | `user.assign_roles` | 不得授予或回收 `owner` 角色，涉及即 403 |
-| `user.reset_password` | 允许（原型确认 admin 可重置普通账号密码）；对 owner 账号建议同样允许但强制写审计日志——**待确认**，见 §10 |
+| `user.reset_password` | **受限允许**（决策 25）：只能重置**非 owner** 账号；目标用户含 `owner` 角色 → **403**，不走"重置 + 审计"的放宽路线 |
 
 **R2 · 至少一个启用 owner（决策 17、18）**
 
@@ -579,7 +625,7 @@ permissions(user) = ⋃  permissions(role)  for role in user.roles
 | `SalesOrderItem` | `costPrice` |
 | 报价单/订单聚合结果 | `costCny`、`marginCny`、`marginRate` → `null`（沿用现有"缺成本显示 —"逻辑） |
 
-**不受控（仍随 `fabric.view` 返回）**：`Fabric.finishedReferencePriceExclTax / finishedReferencePriceInclTax / finishedReferenceTaxRate`。理由：成品参考价是**面向客户的销售参考价**，业务员报价时需要它；它不是我方进货成本，不属于"采购价格"范畴。
+**不受控（仍随 `fabric.view` 返回，决策 26：已拍板）**：`Fabric.finishedReferencePriceExclTax / finishedReferencePriceInclTax / finishedReferenceTaxRate`。理由：成品参考价是**面向客户的销售参考价**，业务员报价时需要它；它不是我方进货成本，不属于"采购价格"范畴。此结论已冻结，不再作为开放议题。
 
 配套响应标志：所有可能含价格的响应统一带 `purchasePriceVisible: boolean`，UI 据此显示"— / 需要采购角色授权"，避免出现"看起来是 0"的误导。
 
@@ -630,9 +676,31 @@ POST /api/auth/login
 
 理由：统一失败文案、暂时锁定、停用拦截、审计日志四项都无法通过裸 Better Auth 端点实现。会话本身仍完全由 Better Auth 创建与校验——**没有自建 Session**。
 
-> 实施第一步需确认 `auth.api.signInEmail` 的 `returnHeaders` 选项可用，以便透传 `Set-Cookie`。若不可用，退路：让浏览器直接调 `/api/auth/sign-in/email`（`toNextJsHandler` 会设置 Cookie），随后前端再调一次 `POST /api/auth/login-audit` 补写审计——该退路会让审计可绕过，**仅在确认无法实现时采用并记录原因**。
+**`Set-Cookie` 透传（已实测，方案确定）**：
 
-同样原则下自建的端点：`/api/auth/logout`、`/api/auth/change-password`、`/api/auth/session`。Better Auth 的原生端点只在服务端被 `auth.api.*` 调用，浏览器侧不放开其它路径。
+```text
+const result = await auth.api.signInEmail({
+  body: { email, password },
+  headers: request.headers,
+  returnHeaders: true,          // 实测有效
+});
+// result = { headers: Headers, response: { token, user, ... } }
+// headers 里只有 set-cookie（实测 header 键集合）
+const res = NextResponse.json(payload, { status: 200 });
+for (const cookie of result.headers.getSetCookie()) {
+  res.headers.append("set-cookie", cookie);   // 必须逐个 append
+}
+```
+
+实测要点（都写进实现约定，避免踩坑）：
+
+- `returnHeaders: true` 时返回 `{ headers, response }`，`headers` 是标准 `Headers` 实例（不是普通对象）。
+- **必须用 `headers.getSetCookie()` 而不是 `headers.get("set-cookie")`**。退出登录时 Better Auth 会一次性下发 3 个清除指令（`session_token`、`session_data`、`dont_remember`），`get()` 会把它们用逗号拼成一个非法 Cookie 串；实测 `getSetCookie()` 正确返回 3 条。
+- 透传后 `res.headers.has("set-cookie")` 为 true，可被浏览器正常接收。
+
+> **被否决的退路（不再采用）**：让浏览器直接调 `/api/auth/sign-in/email` 再由前端补调 `login-audit`。这条退路会让审计可被绕过，且实测证明 `returnHeaders` 完全可用，因此**禁止**采用。
+
+同样原则下自建的端点：`/api/auth/logout`、`/api/auth/change-password`、`/api/auth/session`。**Better Auth 的 HTTP handler 不挂载**（或用 `disabledPaths` 全量屏蔽），浏览器侧不放开任何 BA 路径。
 
 ### 5.1 登录成功流程
 
@@ -691,18 +759,23 @@ POST /api/auth/login
 
 - 入参：`currentPassword`、`newPassword`。
 - 校验：新密码长度 ≥ 10（在 Better Auth 默认 8 之上收紧）、不得与当前密码相同、不得等于邮箱或账号名。
-- 调用 `auth.api.changePassword({ body: { currentPassword, newPassword, revokeOtherSessions: true }, headers: request.headers })`。
-- 事务/后续：更新 `passwordChangedAt`、`mustChangePassword = false`，写 `OperationLog`（`action = reset_password`，detail 只记"自助修改 / 其他会话已失效"）。
-- 撤销其他会话，当前会话保留。
+- 调用 `auth.api.changePassword({ body: { currentPassword, newPassword, revokeOtherSessions: true }, headers: request.headers })`（实测：带 cookie 的 `Headers` 可正常执行，其它会话被撤销、当前会话保留）。
+- 后续：更新 `passwordChangedAt`、`mustChangePassword = false`，写 `OperationLog`（**`action = change_password`**，决策 27；`category = login_security`、`module = auth`、`result = success`，detail 只记"自助修改 / 其他会话已失效"）。
+- 调用失败（原密码错误等）按 §5.2 的统一文案处理，并写 `result = failure` 日志。
 
 ### 5.7 管理员重置密码流程
 
 `POST /api/users/[id]/reset-password`，需 `user.reset_password` + 通过 §4.4 校验：
 
 1. 服务器生成临时密码：`crypto.randomBytes(12).toString("base64url")`（约 16 字符）。
-2. 写入新凭据（**主方案**：复用 Better Auth 密码重置链路 —— 服务端调用 `requestPasswordReset` 取 token，再 `resetPassword(token, tempPassword)`，全程不经过邮件）。
-   > 实施时需确认当前版本的准确方法名（候选 `auth.api.requestPasswordReset` / `auth.api.forgetPassword`）。若官方提供管理员直设密码的服务端方法，优先使用。禁止自行计算哈希写入 `Account.password`。
-3. 事务内：`mustChangePassword = true`、`passwordChangedAt = now`、撤销该用户**全部** Session、写 `OperationLog`（`action = reset_password`，detail 记"管理员重置 / 强制改密：是 / 历史会话：已失效"）。
+2. 写入新凭据（**方案已实测定稿**，不采用 Admin 插件，也不碰 `Account.password`）：
+   1. 配置 `emailAndPassword.revokeSessionsOnPasswordReset = true` 与 `sendResetPassword`（回调里**只把 token 存到局部变量**，不真的发邮件、不落日志）；
+   2. 服务端调用 `auth.api.requestPasswordReset({ body: { email, redirectTo } })`（实测返回通用文案，不泄露账号是否存在）；
+   3. 拿到回调里的 token，调用 `auth.api.resetPassword({ body: { token, newPassword: 临时密码 } })`。
+   实测结果：旧密码立即失效、新密码可登录、`session` 表行被清空、`verification` 行被消费。全程不经过邮件，也不需要任何管理员会话。
+   > 被否决的方案：Admin 插件 `auth.api.setUserPassword` —— 实测无 `headers` 直调返回 401（`use: [adminMiddleware]`），要使用它就必须引入 `user.role` 列与 BA 的 admin 会话，与决策 28、16 冲突（§2.2）。
+3. 事务/后续：`mustChangePassword = true`、`passwordChangedAt = now`、`failedLoginAttempts = 0`、`lockedUntil = null`，写 `OperationLog`（**`action = reset_password`**，决策 27；`category = user_permission`、`module = user_management`、`result = success`，detail 记"管理员重置 / 强制改密：是 / 历史会话：已失效"）。
+   > 会话撤销由 BA 的 `revokeSessionsOnPasswordReset` 完成，不与我们同事务（§5.10 的补偿规则适用）。
 4. 响应体**一次性返回明文临时密码**，服务端不保存明文、不写入日志、不写入任何文件。
 5. UI 必须弹窗提示"该密码只显示一次，请复制并线下交付"。
 
@@ -789,6 +862,37 @@ POST /api/auth/login
 
 实现要求：拒绝逻辑放在 `AuthContext` 构造之后、权限校验之前的统一中间件函数里，**不允许靠前端重定向实现**。前端跳转只是把用户引导到正确页面。
 
+### 5.15 Better Auth 写入与业务写入**不能共享事务**的补偿策略（实测结论）
+
+**实测事实**：
+
+- `auth.api.*` 没有传入事务客户端的入口（`toAuthEndpoints` 里 `context: authContext` 会覆盖调用方传入的 `context`；端点调用选项只有 `headers / body / query / asResponse / returnHeaders / returnStatus`）。
+- `databaseHooks` 的签名是 `(data, ctx: GenericEndpointContext | null)`，**拿不到事务句柄**。
+- Prisma 适配器的 `transaction: true` 只是 **Better Auth 自己内部**把 user + account 写入包起来，与我们的 `$transaction` 无关。实测：在我们的 `$transaction` 里调用 `auth.api.signUpEmail`，外层回滚后**用户行依然存在** —— 说明 BA 的写入独立提交。
+- 因此：`User` / `Account`（BA 写）与 `UserRoleAssignment` / `OperationLog`（我们写）**分处两个提交单元**，必须设计补偿。
+
+**建号补偿（顺序即安全边界）**：
+
+| 步骤 | 动作 | 失败后的处理 |
+| --- | --- | --- |
+| 0 | 生成 `requestId`，先查 `OperationLog` 是否已有同 `requestId` 且 `action = create_user`、`result = success` 的记录 | 有 → 直接返回原结果（幂等，不重复建号） |
+| 1 | 校验权限、租户、owner 规则、邮箱唯一性（我们自己的查库） | 直接返回 403/409，**不调用 Better Auth** |
+| 2 | `auth.api.signUpEmail`（`tenantId` 由 §2.4 的 hook 注入） | 抛错 → 记录 `result = failure` 日志（可写，因为还没产生数据）→ 返回 400/422 的友好文案 |
+| 3 | 我们的事务：`UserRoleAssignment` 写入 + 更新业务字段 + `OperationLog` | 事务内任一失败 → 整体回滚 → 重试最多 2 次；仍失败 → 删除第 2 步创建的账号（`prisma.user.delete`，级联清掉 Account/Session），返回 500 并写失败日志 |
+| 4 | 孤儿账号清理 | 定义"未完成初始化账号"= `User` 存在但 `UserRoleAssignment` 为空且 `createdAt` 早于 10 分钟；管理员列表标记为"待完成初始化"，提供"补分配角色"或"删除"两个动作；不允许这类账号登录（`AuthContext` 里 roles 为空即无权限，见 §3.8） |
+
+- **重试时邮箱已存在**：因为 `email` 全局唯一，先按 email 精确查用户——命中且属本租户且无角色 → 走第 3 步补写（自动恢复）；命中且已激活 → 409 `USER_EMAIL_EXISTS`。
+- **`requestId` 贯穿**：建号请求由前端在打开抽屉时生成并随表单提交（或服务端用 `crypto.randomUUID()` + 幂等键表），日志与重试都以它为准。
+
+**重置密码补偿（禁止回滚到旧密码）**：
+
+| 场景 | 处理 |
+| --- | --- |
+| 密码已改、Session 未撤销 | BA 的 `revokeSessionsOnPasswordReset` 负责；返回前**再执行一次** `prisma.session.deleteMany({ where: { userId } })` 作为幂等兜底 |
+| 密码已改、`OperationLog` 未写 | **不回滚密码**（旧密码已不可恢复）。日志按"必须成功"重试；仍失败则返回 `500` + 明确文案"密码已重置但审计日志写入失败，请联系管理员补记"，并保留 `requestId` 供幂等补写 |
+| `mustChangePassword` 更新失败 | **顺序前置**：先在事务里写 `mustChangePassword = true` + 失败计数清零，再调用 BA 改密。这样任何后续失败都停在"必须改密、旧密码仍有效"的安全态，重试即可；绝不会出现"密码已换但用户不知道要改密" |
+| 最终状态不变式 | 任一路径结束后必须满足：新临时密码可用 **且** `mustChangePassword = true` **且** 无残留 Session **且** 有对应审计记录（缺失时以失败响应显式暴露，不静默） |
+
 ---
 
 ## 6. 首个 owner 初始化
@@ -815,7 +919,7 @@ POST /api/auth/login
    - `> 0` → 输出已存在信息，**不创建、不修改任何数据**，退出码 0。
    - `= 0` → 继续。
 5. 生成临时密码 `crypto.randomBytes(12).toString("base64url")`。
-6. 走 §2.4 的建号路径创建 `User`（`tenantId` 由脚本显式注入，不经 hook）+ 写 `Account` 凭据 + `UserRoleAssignment(owner)` + `OperationLog`（`module = auth`、`action = create_user`、`result = success`）。
+6. 走 §2.4 的建号路径：`AsyncLocalStorage` 里放入 `{ tenantId }` 后调用服务端 `auth.api.signUpEmail`（`disableSignUp` 必须为 `false`，公开注册靠不挂 HTTP handler / `disabledPaths` 屏蔽，见 §2.1）+ 写 `Account` 凭据；随后在同一租户事务里写 `UserRoleAssignment(owner)` + `OperationLog`（`module = auth`、`action = create_user`、`result = success`）。失败补偿按 §5.15 执行。
 7. 提交事务。
 8. stdout 打印：
 
@@ -961,8 +1065,8 @@ POST /api/auth/login
 
 | 阶段 | 内容 | 完成判据 |
 | --- | --- | --- |
-| **1. Prisma 数据模型与增量 migration** | §3 全部字段/表/索引；一条增量 migration；dev + test 双库 `migrate deploy`；`prisma generate` | `prisma migrate status` 干净；`npm test` 全绿（存量测试不回归） |
-| **2. Better Auth 基础接入与首个 owner 初始化** | 安装 `better-auth`（本轮不装）；`src/lib/auth.ts`；`databaseHooks` 注入 tenantId；`/api/auth/[...all]`；`auth:bootstrap-owner` 脚本；登录页真实提交（仅登录，其它页面仍受限） | 能用首个 owner 登录；重复执行初始化脚本幂等 |
+| **1. Prisma 数据模型与增量 migration** | §3 全部字段/表/索引；一条增量 migration；**删除 `User.role`**；dev + test 双库 `migrate deploy`；`prisma generate` | `prisma migrate status` 干净；`npm test` 全绿（存量测试不回归） |
+| **2. Better Auth 基础接入与首个 owner 初始化** | `better-auth@1.7.6` **已安装并锁定**（本轮完成）；`src/lib/auth.ts`；§2.4 的三层 tenantId 注入；**不挂载 BA HTTP handler**；`auth:bootstrap-owner` 脚本；登录页真实提交（仅登录，其它页面仍受限） | 能用首个 owner 登录；重复执行初始化脚本幂等；`curl /api/auth/*` 全部 404 |
 | **3. 登录、退出、Session、首次改密** | §5.1–5.6、5.8、5.9、5.14；统一失败文案、限速、锁定、停用拦截、审计日志 | §9 中登录相关用例全通过 |
 | **4. 用户管理与多角色分配 API** | `/api/users*`；`UserRoleAssignment` 读写；§4.4 的 R1/R2/R3 事务保护；管理员重置密码 | owner 并发用例、admin 不能操作 owner 用例通过 |
 | **5. 统一 AuthContext 与权限辅助函数** | `src/server/auth/context.ts`、权限字典常量、角色矩阵常量、`requirePermission`；`purchase_price.view` 字段裁剪工具 | 单元测试覆盖并集与裁剪 |
@@ -1023,25 +1127,152 @@ POST /api/auth/login
 
 ## 10. 风险与开放议题
 
-| # | 议题 | 现状 / 建议 | 需要谁拍板 |
+| # | 议题 | 现状 | 需要谁拍板 |
 | --- | --- | --- | --- |
-| 1 | `sales_order.advance_status` 是否保留 | 本文建议保留（§4.1）。若取消，merchandiser 的"非终态受限"语义无法表达 | 用户（实施前） |
-| 2 | admin 能否重置 owner 密码 | 本文按原型允许，但强制审计。也可收紧为仅 owner 可重置 owner | 用户 |
-| 3 | `databaseHooks.user.create.before` 能否拿到 `context.headers` | 主方案依赖此点。**实施第一步必须验证**；不可行则退回 §2.4 退路 | 实施时验证 |
-| 4 | 管理员重置密码的服务端 API 名称 | 主方案复用重置链路，需确认方法名；禁止自行算哈希 | 实施时验证 |
+| 1 | ~~`sales_order.advance_status` 是否保留~~ | **已拍板：保留**（决策 24，§4.1） | — |
+| 2 | ~~admin 能否重置 owner 密码~~ | **已拍板：admin 不能，仅 owner 可重置 owner**（决策 25，§4.4） | — |
+| 3 | ~~`databaseHooks` 能否拿到请求头~~ | **已实测**：第二参数 `ctx` 存在，字段是 **`ctx.headers`**（`Headers` 实例），仅在调用时传了 `headers` 时非空（§12.2） | — |
+| 4 | ~~管理员重置密码的服务端 API~~ | **已实测**：不用 Admin 插件；`requestPasswordReset` + `resetPassword` + `revokeSessionsOnPasswordReset`（§12.5） | — |
 | 5 | 局域网 HTTP 部署的 Cookie `secure` | 无 HTTPS 时无法启用，必须以网络隔离补偿 | 用户（部署时） |
 | 6 | 同邮箱多租户 | V1 全局唯一邮箱（§2.6）。未来若需要，需登录时选租户或外部 IdP | 未来评审 |
-| 7 | `User.role` legacy 列 | 保留列、停止读写。是否彻底删除列属于独立迁移任务，不在本设计范围 | 未来评审 |
+| 7 | ~~`User.role` legacy 列~~ | **已拍板：下一轮 migration 直接删除**（决策 28，§3.2） | — |
 | 8 | 忘记密码自助找回 | V1 不做（管理员重置）。若后续要做，需引入邮件发送与 `Verification` 流程 | 未来评审 |
-| 9 | `FinishedReferencePrice` 是否应受 `purchase_price.view` 保护 | 本文结论：不受保护（它是销售参考价，sales 报价需要）。若业务认为它是成本价，需改判定 | 用户（可下一轮调整） |
+| 9 | ~~`finishedReferencePrice*` 是否受 `purchase_price.view` 保护~~ | **已拍板：不受保护**（决策 26，§4.7） | — |
+| 10 | 是否挂载 `/api/auth/[...all]` | 本设计倾向**不挂载**。若将来必须挂载（例如引入 OAuth），同步需要 `RateLimit` 表与 `disabledPaths` 白名单 | 实施阶段 2 复核 |
+| 11 | Better Auth 写入与业务写入不同事务 | 已接受并设计补偿（§5.15）。若后续官方提供事务桥接，可简化 | 持续跟踪 |
 
 ---
 
-## 11. 本轮未做的事
+## 11. 本轮（兼容性验证轮）做的事与没做的事
 
-- 未编写任何认证代码、未安装依赖。
-- 未修改 `prisma/schema.prisma`、未生成 migration、未改动 `prisma/seed.mjs`、未触碰数据库。
-- 未新增或修改任何 API、未修改 `src/server/tenant.ts`。
-- 未修改 `src/components/system/` 下已冻结的静态 UI 与 `src/app/login/page.tsx`。
+**做了**：
+
+- 安装并锁定 `better-auth@1.7.6`（`package.json` 精确版本 + lock 更新）。
+- 用已安装包 + 临时 PostgreSQL 沙箱库完成 §12 的全部实测，并据此修正了 §2.1、§2.2、§2.4、§3.2、§3.6、§5.0、§5.6、§5.7、§5.15 等技术结论。
+- 用官方 CLI（`auth@1.7.6`，与 `better-auth` 同版本）在**系统临时目录**生成 Prisma schema 做字段对照，临时文件已删除。
+- 静态原型仅改一处：admin 的 `reset_password` 权限与限制说明（决策 25）。
+
+**没做**：
+
+- 未编写认证代码、未接入真实登录、未写生产 Route Handler。
+- 未修改 `prisma/schema.prisma`、未创建/运行任何 migration、未改 `prisma/seed.mjs`。
+- **未修改项目数据库**：沙箱验证用的是临时库 `fabric_auth_probe`，验证结束后已 `DROP DATABASE`，`fabric_trade_dev` / `fabric_trade_test` 未做任何写入。
+- 未新增或修改任何业务 API、未修改 `src/server/tenant.ts`。
+- 除 admin 重置密码规则说明外，未调整其它 UI（`/login`、`src/components/system/` 其余部分保持冻结）。
+- 未启用 Admin 插件；未写自制密码哈希；未直接写 `Account.password`。
 - 未恢复历史作废文档 `docs/DESIGN_USER_MODULE.md`，未采用其自建 Cookie Session / 自写哈希 / 单角色 / 自定义角色 / `AUTH_ENABLED` 方案。
 - 未修改 `docs/DATA_MODEL.md`、`docs/API_CONTRACTS.md`、`docs/DEV_LOG.md`。
+
+---
+
+## 12. Better Auth 实测合同（版本 `1.7.6`）
+
+> 本章记录"用什么方式验证、看到什么结果、最终采用什么"。完整证据与原始输出见 `docs/BETTER_AUTH_COMPATIBILITY_REPORT.md`。
+>
+> **验证环境**：`better-auth@1.7.6`（`package.json` 精确锁定）+ `better-auth/adapters/memory`（无库行为验证）+ 临时 PostgreSQL 沙箱库 `fabric_auth_probe`（Prisma 7.10 + `@prisma/adapter-pg` 真实链路，验证结束后已删除）。所有验证脚本与生成的临时 schema 都放在系统临时目录，**未进入仓库**。
+
+### 12.1 版本与安装
+
+| 项 | 实测值 |
+| --- | --- |
+| 安装命令 | `npm install better-auth@1.7.6 --save-exact` |
+| `npm ls better-auth` | `better-auth@1.7.6` |
+| `package.json` | `"better-auth": "1.7.6"`（无 `^`，精确锁定） |
+| 直接依赖 | `@better-auth/core@1.7.6`、`@better-auth/prisma-adapter@1.7.6`、`@better-auth/memory-adapter@1.7.6` 等 |
+| Prisma peer | `@prisma/client: ^5 || ^6 || ^7` —— 与本项目 7.10 兼容 |
+| 未安装 | Admin 插件是 `better-auth/plugins` 的内置导出，不需要额外包；本轮仅临时装了官方 CLI `auth@1.7.6`（`--no-save`，已卸载，未写入 `package.json`） |
+
+### 12.2 验证项与结果汇总
+
+| # | 验证项 | 方式 | 实测结果 | 采用结论 |
+| --- | --- | --- | --- | --- |
+| A | `disableSignUp: true` 时服务端能否建号 | `auth.api.signUpEmail`（带/不带 headers 各一次） | **均失败**：`APIError 400`，body `{ message: "Email and password sign up is not enabled", code: "EMAIL_PASSWORD_SIGN_UP_DISABLED" }`，hook 调用次数 0 | **否决** `disableSignUp: true`；改用 `disabledPaths` 屏蔽 HTTP |
+| B1 | `tenantId` 配 `required: true, input: false` | `signUpEmail` | **失败**：400 `MISSING_FIELD: tenantId is required`，**hook 未被调用** | 改为 `required: false, input: false` |
+| B2 | body 里强塞 `tenantId` | `signUpEmail({ body: { ..., tenantId } })` | **被拒**：400 `FIELD_NOT_ALLOWED: tenantId is not allowed to be set` | `input: false` 有效，客户端无法伪造租户 |
+| B3 | `ctx.headers` 是否存在 | hook 第二参数打点 | 调用时**传了 `headers`**：`ctx` 非 null，`ctx.headers` 是 `Headers` 实例（含 `cookie`、`x-forwarded-for`），`ctx.path = "/sign-up/email"`，`ctx.request` 为 falsy | 字段名是 **`ctx.headers`**；可作为回退来源 |
+| B4 | 纯服务端直调（不传 headers） | `signUpEmail` 不带 headers | `ctx` 非 null 但 `ctx.headers` 为 **null**，`ctx.request` 为 falsy | **不能只依赖 `ctx.headers`**，必须有 ALS 主通道 |
+| B5 | hook 注入是否生效 | `required: false` + hook 返回 `{ data: { ...user, tenantId } }` | **成功**：落库 `tenantId: "tenant-default"` | 主方案可行 |
+| B6 | hook 不注入 | hook 直接 return | 内存库里 `tenantId` 为 null（内存库无约束） | 必须 fail-closed |
+| B7 | hook 抛错 | hook 内 `throw new Error(...)` | BA 包装为 **422 `FAILED_TO_CREATE_USER`**，无任何落库 | 采用：hook 抛错即 fail-closed |
+| B8 | 真实库上 hook 不注入 | PostgreSQL 沙箱 | **Prisma 校验错误**：`Argument 'tenant' is missing` → 422，用户行未落库 | NOT NULL + 外键是有效兜底 |
+| C | `AsyncLocalStorage` 跨 BA 调用链 | `als.run({ tenantId }, () => auth.api.signUpEmail(...))` | **成功**：hook 内读到 `tenantId`，落库正确；ALS 之外调用则被 fail-closed 拒绝 | **主通道定为 ALS**（不依赖 headers） |
+| D | Admin 插件方法名 | 读 `plugins/admin/routes.mjs` + 运行时枚举 `auth.api` | `createUser` / `setUserPassword` / `revokeUserSessions` / `revokeUserSession` / `setRole` / `banUser` / `adminUpdateUser` …；对应 16 个 `/admin/*` HTTP 端点 | 见 12.4 |
+| E | Admin `createUser` 无 headers 直调 | `auth.api.createUser({ body })` | **成功且跳过权限校验**（源码：`if (!session && (ctx.request \|\| ctx.headers)) throw UNAUTHORIZED`） | 能力可用，但不需要（见 12.4） |
+| F | Admin `setUserPassword` / `revokeUserSessions` 无 headers 直调 | 同上 | **均失败**：401 `UNAUTHORIZED`（`use: [adminMiddleware]`） | 否决 Admin 插件的关键证据 |
+| G | `disabledPaths` 的作用范围 | 同一实例：HTTP 调 `/admin/create-user` + 服务端 `auth.api.createUser` | HTTP → **404 Not Found**；`auth.api.*` → **照常成功** | 采用：屏蔽 HTTP 不影响服务端 |
+| H | 不配 `disabledPaths` 时 HTTP 打 admin 端点 | `POST /api/auth/admin/create-user`（无会话） | **401**（有 BA admin 会话即可执行） | 必须屏蔽或干脆不挂载 |
+| I | 无 Admin 插件的重置密码链路 | `requestPasswordReset` → 回调取 token → `resetPassword`，配 `revokeSessionsOnPasswordReset: true` | **成功**：session 数 2 → 0；旧密码失效、新密码可登录；`verification` 行被消费 | **采用**（§5.7） |
+| J | 本人改密 | `changePassword({ revokeOtherSessions: true }, headers)` | **成功**：其它会话被撤销，当前会话保留（session 数 3 → 1） | 采用 |
+| K | 事务共享 | 在我们的 `$transaction` 内调 `auth.api.signUpEmail`，外层 `throw` 回滚 | **用户行仍存在**（BA 独立提交）；`auth.api.signUpEmail` 上无 `transaction` 选项；hook 无事务句柄 | **无法共享事务**，按 §5.15 补偿 |
+| L | 限速作用范围 | `rateLimit: { enabled: true, storage: "database" }` 后直调 `auth.api.signInEmail` 4 次 | 未产生任何 `rateLimit` 行；源码显示只在 router `onRequest` 生效 | 不启用内置限速，自建锁定 |
+| M | 邮箱大小写 / 空格 | 建号 `MiXeD@…`；登录分别用全小写 / 原样 / 带空格 | 建号**自动小写**；小写与原样均可登录；带空格 → 400 `INVALID_EMAIL` | 我们侧统一 `trim().toLowerCase()` |
+| N | `returnHeaders` / Set-Cookie | `signInEmail({ returnHeaders: true })` | 返回 `{ headers, response }`，`headers` 键集合只有 `set-cookie`；`getSetCookie()` 正确返回多条 | 采用，逐个 `append` |
+| O | Cookie 前缀与属性 | `advanced.cookiePrefix = "fabric"` | `fabric.session_token=…; Max-Age=43200; Path=/; HttpOnly; SameSite=Lax`（`expiresIn` 已设为 12h） | 采用 |
+| P | `signOut` | `auth.api.signOut({ headers, returnHeaders: true })` | 返回 `{ success: true }` + **3 条** `set-cookie` 清除指令；session 行数减 1 | 必须用 `getSetCookie()` |
+| Q | 组合外键跨租户防护 | `UserRoleAssignment` 用 `[tenantId, userId] → User[tenantId, id]`，插入 `tenantId = B` / `userId ∈ A` | **拒绝**：`Foreign key constraint violated: UserRoleAssignment_tenantId_userId_fkey`；同租户插入正常 | 采用（§3.7） |
+| R | Prisma 7 全链路 | 沙箱库 `db push` + `prisma-client` generator + `prismaAdapter` | 建号 / 登录 / `getSession` / 改密 / 重置全部成功 | 与现有技术栈兼容 |
+
+### 12.3 最终用户创建方案（定稿）
+
+```text
+POST /api/users（我们的 Route Handler）
+  1. resolveAuthContext(request)            → 权限校验 user.create + §4.4 R1
+  2. 校验租户、邮箱唯一、owner 规则             → 不通过直接 403/409，不调 BA
+  3. AsyncLocalStorage.run({ tenantId }, …)
+       auth.api.signUpEmail({ body: { email, name, password, username }, headers: request.headers })
+           └─ databaseHooks.user.create.before: 注入 tenantId（ALS → ctx.headers → 抛错）
+  4. 我们的事务：UserRoleAssignment + 业务字段 + OperationLog
+  5. 失败补偿按 §5.15
+```
+
+关键点：`disableSignUp` 必须保持 `false`；公开注册靠"不挂载 BA HTTP handler"（或 `disabledPaths: ["/sign-up/email"]`）阻断，实测两者都能让 HTTP 侧 404，而服务端 `auth.api.signUpEmail` 继续可用。
+
+### 12.4 Admin 插件：不采用（附完整理由）
+
+| 维度 | 实测事实 | 后果 |
+| --- | --- | --- |
+| schema | 新增 `user.role / banned / banReason / banExpires`、`session.impersonatedBy` | 与决策 28（删除 `User.role`）直接冲突 |
+| 权限判定 | `hasPermission({ userId, role: session.user.role, ... })` | 等于引入第二套角色来源，与决策 16 冲突 |
+| `setUserPassword` | 无 headers 直调 → 401 | 必须使用就得发 BA admin 会话 |
+| `revokeUserSessions` | 无 headers 直调 → 401 | 同上 |
+| HTTP 面 | 16 个 `/admin/*` 端点默认可达（无会话 401，有 BA admin 会话可执行） | 需要 `disabledPaths` 全量屏蔽才安全 |
+| 租户 | `createUser` 不写 `tenantId`（需靠 `data` 传入，`data` 会绕过 `input: false`） | 需要额外校验，容易漏 |
+
+**结论**：只为"建号 / 改密"引入一整套必须屏蔽的管理端点不划算。实测证明 §12.3 与 §12.5 的无插件路径完全可行，因此**不采用 Admin 插件**。
+
+### 12.5 最终管理员重置密码方案（定稿）
+
+```text
+配置：emailAndPassword.revokeSessionsOnPasswordReset = true
+      emailAndPassword.sendResetPassword = async ({ user, url, token }) => { 局部变量保存 token，不发信、不落日志 }
+
+POST /api/users/[id]/reset-password
+  1. 权限 user.reset_password + §4.4 R1（owner 目标 → 403，除非操作者本人是 owner）
+  2. 我们的事务：mustChangePassword = true、failedLoginAttempts = 0、lockedUntil = null  （顺序前置）
+  3. auth.api.requestPasswordReset({ body: { email, redirectTo } })
+  4. auth.api.resetPassword({ body: { token, newPassword: 临时密码 } })
+  5. 兜底 prisma.session.deleteMany({ where: { userId } })
+  6. 写 OperationLog（action = reset_password）；日志失败按 §5.15 处理，绝不回滚密码
+```
+
+### 12.6 被否决方案清单
+
+| 方案 | 否决原因（实测） |
+| --- | --- |
+| `emailAndPassword.disableSignUp = true` | 连服务端 `auth.api.signUpEmail` 一起拒（400 `EMAIL_PASSWORD_SIGN_UP_DISABLED`） |
+| `tenantId` 配 `required: true` 由 hook 注入 | 校验在 hook 之前，hook 根本不执行（400 `MISSING_FIELD`） |
+| 只靠 `ctx.headers` 解析调用者 | 纯服务端直调时 `ctx.headers` 为 null |
+| 只靠 NOT NULL 兜底（hook 静默失败） | 错误形态是 BA 的 422 `FAILED_TO_CREATE_USER`，对调用方不可解释；必须 hook 主动抛错 |
+| `tenantId` 改可空 + 巡检脚本 | 实测 NOT NULL + 外键足以挡住，无需牺牲约束 |
+| Admin 插件 `createUser` / `setUserPassword` | 见 §12.4 |
+| 浏览器直调 `/api/auth/sign-in/email` + 前端补调 `login-audit` | 审计可被绕过；且实测 `returnHeaders` 可用，无必要 |
+| 内置限速（`rateLimit.storage = "database"`） | 只在 HTTP 层生效，我们无 HTTP 面；还会额外要求 `RateLimit` 表 |
+| `headers.get("set-cookie")` 单条透传 | 退出登录有 3 条清除指令，`get()` 会拼成非法串；必须用 `getSetCookie()` |
+
+### 12.7 仍未解决 / 需持续关注的风险
+
+1. **BA 写入与业务写入不同事务**（§5.15）：建号存在"账号已建但角色/日志没写"的短窗口。缓解：无角色账号无任何权限且被标记"未完成初始化"；仍需运维关注孤儿账号。
+2. **Bootstrap owner 脚本同样受此限制**：脚本必须按 §5.15 的补偿顺序执行，否则可能留下无角色的 owner。
+3. **`ctx.headers` 在纯服务端调用下为 null**：若将来有人改成只从 headers 解析租户，会在 bootstrap 路径上静默失效。代码注释必须写明这一点。
+4. **不挂载 BA HTTP handler 是安全前提**：一旦挂载而未配 `disabledPaths`，公开注册与管理端点会重新暴露。实施阶段 2 必须有回归用例断言 `/api/auth/sign-up/email` 返回 404。
+5. **Better Auth 版本升级可能改变 hook 行为**：`databaseHooks` 属于官方 API 但未承诺不变更；升级时需重跑本轮的验证脚本（建议把关键断言固化成集成测试）。
