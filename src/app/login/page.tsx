@@ -6,11 +6,12 @@ import { useState } from "react";
 import { PrototypeBadge } from "@/components/system/system-page-parts";
 import { SYSTEM_WRITE_DEMO_MESSAGE } from "@/components/system/system-prototype-data";
 
-type DemoState = "normal" | "login_failed" | "account_disabled" | "must_change_password";
+type DemoState = "normal" | "login_failed" | "account_locked" | "account_disabled" | "must_change_password";
 
 const demoStateOptions: Array<{ value: DemoState; label: string }> = [
   { value: "normal", label: "正常" },
   { value: "login_failed", label: "登录失败" },
+  { value: "account_locked", label: "暂时锁定" },
   { value: "account_disabled", label: "账号停用" },
   { value: "must_change_password", label: "首次登录改密" },
 ];
@@ -24,7 +25,12 @@ const demoStateCopy: Record<DemoState, { tone: string; title: string; detail: st
   login_failed: {
     tone: "border-rose-200/60 bg-rose-50/72 text-rose-800",
     title: "登录失败演示",
-    detail: "邮箱或密码错误，还可重试 2 次；连续 5 次失败将锁定 15 分钟。",
+    detail: "账号或密码不正确，请检查后重试。",
+  },
+  account_locked: {
+    tone: "border-rose-200/60 bg-rose-50/72 text-rose-800",
+    title: "暂时锁定演示",
+    detail: "登录尝试过于频繁，请在 15 分钟后重试，或联系系统管理员。",
   },
   account_disabled: {
     tone: "border-stone-300/60 bg-stone-200/72 text-stone-800",

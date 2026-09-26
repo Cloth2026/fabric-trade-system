@@ -40,40 +40,41 @@ export function AccountMenu() {
       </button>
 
       {open ? (
-        <div className="absolute bottom-[56px] left-0 right-0 z-40 rounded-2xl border border-white/30 bg-white/82 p-1.5 text-sm text-stone-900 shadow-[0_24px_70px_rgba(22,18,14,0.28),inset_0_1px_0_rgba(255,255,255,0.24)] backdrop-blur-3xl">
-          <div className="px-3 py-2 text-xs text-stone-600">静态演示账号，未接入真实登录</div>
+        <div className="absolute bottom-[56px] left-0 right-0 z-50 overflow-hidden rounded-2xl border border-stone-200 bg-white p-1.5 text-sm text-stone-900 shadow-[0_24px_70px_rgba(22,18,14,0.34)]">
+          <div className="rounded-xl bg-stone-100 px-3 py-2 text-xs text-stone-600">静态演示账号，未接入真实登录</div>
           <button
-            className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left transition hover:bg-white/70"
+            className="mt-1 flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium text-stone-900 transition hover:bg-stone-100"
             onClick={() => {
               setOpen(false);
               showToast(`${SYSTEM_WRITE_DEMO_MESSAGE}（个人资料）`);
             }}
             type="button"
           >
-            <UserRound className="size-4 text-stone-600" />个人资料
+            <UserRound className="size-4 text-stone-700" />个人资料
           </button>
           <button
-            className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left transition hover:bg-white/70"
+            className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium text-stone-900 transition hover:bg-stone-100"
             onClick={() => {
               setOpen(false);
               showToast(`${SYSTEM_WRITE_DEMO_MESSAGE}（修改密码）`);
             }}
             type="button"
           >
-            <KeyRound className="size-4 text-stone-600" />修改密码
+            <KeyRound className="size-4 text-stone-700" />修改密码
           </button>
-          <Link className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left transition hover:bg-white/70" href="/login" onClick={() => setOpen(false)}>
-            <LifeBuoy className="size-4 text-stone-600" />查看登录页原型
+          <Link className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium text-stone-900 transition hover:bg-stone-100" href="/login" onClick={() => setOpen(false)}>
+            <LifeBuoy className="size-4 text-stone-700" />查看登录页原型
           </Link>
+          <div className="my-1 h-px bg-stone-200" />
           <button
-            className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-stone-700 transition hover:bg-white/70 hover:text-stone-950"
+            className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left font-medium text-rose-700 transition hover:bg-rose-50"
             onClick={() => {
               setOpen(false);
               showToast(`${SYSTEM_WRITE_DEMO_MESSAGE}（退出登录）`);
             }}
             type="button"
           >
-            <LogOut className="size-4 text-stone-600" />退出登录
+            <LogOut className="size-4 text-rose-700" />退出登录
           </button>
         </div>
       ) : null}

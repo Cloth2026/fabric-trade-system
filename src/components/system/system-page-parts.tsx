@@ -82,13 +82,13 @@ const metricTones = {
 
 export function SystemMetric({ label, value, note, icon: Icon, tone }: { label: string; value: number; note: string; icon: LucideIcon; tone: "blue" | "emerald" | "violet" | "amber" }) {
   return (
-    <div className="rounded-[18px] border border-white/26 bg-white/20 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.20)] backdrop-blur-2xl transition hover:bg-white/28">
-      <div className="flex items-center justify-between">
-        <span className="text-xs text-stone-700">{label}</span>
-        <span className={`flex size-8 items-center justify-center rounded-xl border ${metricTones[tone]}`}><Icon className="size-4" /></span>
+    <div className="flex items-center gap-3 rounded-[16px] border border-white/26 bg-white/22 px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.20)] backdrop-blur-2xl transition hover:bg-white/30">
+      <span className={`flex size-9 shrink-0 items-center justify-center rounded-xl border ${metricTones[tone]}`}><Icon className="size-4" /></span>
+      <div className="min-w-0">
+        <div className="truncate text-[11px] leading-4 text-stone-600">{label}</div>
+        <div className="text-xl font-semibold leading-6 text-stone-950">{value}</div>
       </div>
-      <div className="mt-1 text-2xl font-semibold text-stone-950">{value}</div>
-      <div className="mt-1 truncate text-xs text-stone-600">{note}</div>
+      <span className="ml-auto hidden truncate text-[11px] text-stone-500 xl:block">{note}</span>
     </div>
   );
 }
@@ -107,8 +107,8 @@ export function RolePills({ roles }: { roles: UserRoleKey[] }) {
 
 export function StatusPill({ status }: { status: UserStatusKey }) {
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${status === "active" ? "bg-emerald-50/82 text-emerald-800" : "bg-stone-200/72 text-stone-700"}`}>
-      {status === "active" ? <CheckCircle2 className="size-3" /> : <CircleDashed className="size-3" />}
+    <span className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-xs ${status === "active" ? "bg-emerald-50/82 text-emerald-800" : "bg-stone-200/72 text-stone-700"}`}>
+      {status === "active" ? <CheckCircle2 className="size-3 shrink-0" /> : <CircleDashed className="size-3 shrink-0" />}
       {userStatusLabels[status]}
     </span>
   );

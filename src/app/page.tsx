@@ -60,25 +60,27 @@ export default function Home() {
             <span className="flex items-center gap-2"><Command className="size-4" />快速搜索</span><span className="rounded-lg bg-white/18 px-1.5 py-0.5 text-[11px]">Ctrl K</span>
           </button>
 
-          <nav className="mt-6 space-y-4 text-sm">
-            {navGroups.map((group) => (
-              <div className="space-y-1" key={group.title ?? "main"}>
-                {group.title ? <div className="px-3 pb-1 text-[11px] uppercase tracking-wide text-white/52">{group.title}</div> : null}
-                {group.items.map((item) => (
-                  <button className={`flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-left transition ${item === activeModule ? "bg-white/72 text-stone-950 shadow-[0_12px_32px_rgba(255,255,255,0.18)]" : "text-white/76 hover:bg-white/18 hover:text-white"}`} key={item} onClick={() => { if (isOpenableModule(item)) openModule(item); }} type="button">
-                    {item}{item === activeModule ? <ChevronRight className="size-4" /> : null}
-                  </button>
-                ))}
-              </div>
-            ))}
-          </nav>
+          <div className="mt-6 flex min-h-0 flex-1 flex-col overflow-y-auto pr-1">
+            <nav className="space-y-4 text-sm">
+              {navGroups.map((group) => (
+                <div className="space-y-1" key={group.title ?? "main"}>
+                  {group.title ? <div className="px-3 pb-1 text-[11px] uppercase tracking-wide text-white/52">{group.title}</div> : null}
+                  {group.items.map((item) => (
+                    <button className={`flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-left transition ${item === activeModule ? "bg-white/72 text-stone-950 shadow-[0_12px_32px_rgba(255,255,255,0.18)]" : "text-white/76 hover:bg-white/18 hover:text-white"}`} key={item} onClick={() => { if (isOpenableModule(item)) openModule(item); }} type="button">
+                      {item}{item === activeModule ? <ChevronRight className="size-4" /> : null}
+                    </button>
+                  ))}
+                </div>
+              ))}
+            </nav>
 
-          <div className="mt-6 rounded-3xl border border-white/24 bg-black/12 p-4 text-white/72 backdrop-blur-xl">
-            <div className="flex items-center gap-2 text-xs font-medium text-white"><Layers3 className="size-4" />UI Style Locked</div>
-            <p className="mt-3 text-xs leading-5">空间背景、玻璃浮层、面料样品卡、低对比专业表格，作为后续模块统一视觉基准。</p>
+            <div className="mt-6 rounded-3xl border border-white/24 bg-black/12 p-4 text-white/72 backdrop-blur-xl">
+              <div className="flex items-center gap-2 text-xs font-medium text-white"><Layers3 className="size-4" />UI Style Locked</div>
+              <p className="mt-3 text-xs leading-5">空间背景、玻璃浮层、面料样品卡、低对比专业表格，作为后续模块统一视觉基准。</p>
+            </div>
           </div>
 
-          <div className="mt-auto pt-6">
+          <div className="shrink-0 pt-4">
             <AccountMenu />
           </div>
         </aside>

@@ -4,7 +4,7 @@ import { Clock3, KeyRound, Menu, Pencil, Plus, Search, ShieldCheck, Sparkles, Us
 import { useEffect, useMemo, useRef, useState } from "react";
 import { UserDetailDrawer } from "./user-detail-drawer";
 import { UserFormDrawer } from "./user-form-drawer";
-import { DemoToast, PrototypeBadge, PrototypeNotice, RolePills, SearchBox, StatusPill, SystemFilterSelect, SystemMetric } from "./system-page-parts";
+import { DemoToast, PrototypeBadge, RolePills, SearchBox, StatusPill, SystemFilterSelect, SystemMetric } from "./system-page-parts";
 import { countRecentlyLoggedIn, formatSystemDate, formatSystemDateTime, prototypeUsers, userRoleLabels, userRoles, SYSTEM_WRITE_DEMO_MESSAGE } from "./system-prototype-data";
 import type { PrototypeUser, UserRoleKey, UserStatusKey } from "./system-prototype-data";
 
@@ -90,56 +90,44 @@ export function UserManagementPage() {
         </button>
       </header>
 
-      <section className="grid shrink-0 gap-2 px-4 py-3 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="grid shrink-0 grid-cols-2 gap-2 px-4 pb-2 pt-2 md:grid-cols-4">
         <SystemMetric icon={Users} label="用户总数" note="全部演示账号" tone="blue" value={totalCount} />
         <SystemMetric icon={ShieldCheck} label="启用用户" note="可正常登录" tone="emerald" value={activeCount} />
         <SystemMetric icon={Clock3} label="停用用户" note="保留历史记录" tone="amber" value={inactiveCount} />
         <SystemMetric icon={Sparkles} label="最近登录人数" note="近 7 天有登录记录" tone="violet" value={recentCount} />
       </section>
 
-      <section className="flex min-h-0 flex-1 flex-col border-t border-white/14 bg-white/22 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-3xl">
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-          <div>
-            <div className="flex items-center gap-2 text-sm font-medium text-stone-700">
-              <Search className="size-4 text-blue-600" />账号名录
-              <PrototypeBadge>静态演示数据</PrototypeBadge>
-            </div>
-            <h1 className="mt-2 text-2xl font-semibold text-stone-950">维护内部账号与角色</h1>
-            <p className="mt-1 text-sm text-stone-600">点击任意用户查看只读详情；编辑与停用都在独立抽屉或提示中演示，不写入数据库</p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <SearchBox ariaLabel="搜索用户" onChange={setQuery} placeholder="搜索姓名、邮箱或内部账号" value={query} />
-            <SystemFilterSelect label="角色" onChange={setRoleFilter} options={roleOptions} value={roleFilter} />
-            <SystemFilterSelect label="状态" onChange={setStatusFilter} options={statusOptions} value={statusFilter} />
-            <button className="flex h-9 items-center rounded-xl border border-white/30 bg-white/24 px-3 text-sm transition hover:bg-white/40" onClick={resetFilters} type="button">重置筛选</button>
-          </div>
+      <section className="flex min-h-0 flex-1 flex-col border-t border-white/14 bg-white/22 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-3xl">
+        <div className="flex shrink-0 flex-wrap items-center gap-2 px-4 py-2">
+          <span className="flex items-center gap-1.5 text-sm font-medium text-stone-700">
+            <Search className="size-4 text-blue-600" />账号名录
+            <PrototypeBadge>静态演示数据</PrototypeBadge>
+          </span>
+          <SearchBox ariaLabel="搜索用户" onChange={setQuery} placeholder="搜索姓名、邮箱或内部账号" value={query} />
+          <SystemFilterSelect label="角色" onChange={setRoleFilter} options={roleOptions} value={roleFilter} />
+          <SystemFilterSelect label="状态" onChange={setStatusFilter} options={statusOptions} value={statusFilter} />
+          <button className="flex h-9 items-center rounded-xl border border-white/30 bg-white/24 px-3 text-sm transition hover:bg-white/40" onClick={resetFilters} type="button">重置筛选</button>
+          <span className="ml-auto text-xs text-stone-600">
+            共 {totalCount} 个演示账号，当前筛选出 {filtered.length} 个 · 最近登录统计以演示基准时间 2026-09-26 09:41 计算
+          </span>
         </div>
 
-        <div className="mt-4">
-          <PrototypeNotice>当前为静态原型页面：所有账号、角色与登录记录都是演示样例。</PrototypeNotice>
-        </div>
-
-        <div className="mt-4 flex items-center justify-between border-t border-white/44 pt-3 text-xs text-stone-600">
-          <span>共 {totalCount} 个演示账号，当前筛选出 {filtered.length} 个</span>
-          <span>最近登录统计以演示基准时间 2026-09-26 09:41 计算</span>
-        </div>
-
-        <div className="relative mt-3 min-h-0 flex-1 overflow-auto rounded-[18px] border border-white/26 bg-white/18 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl">
-          <table className="w-full min-w-[1080px] table-fixed border-collapse text-left text-sm">
+        <div className="relative mx-4 mb-4 min-h-0 flex-1 overflow-auto rounded-[18px] border border-white/26 bg-white/18 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-2xl">
+          <table className="w-full min-w-[960px] table-fixed border-collapse text-left text-sm">
             <colgroup>
-              <col className="w-[10%]" />
-              <col className="w-[12%]" />
-              <col className="w-[18%]" />
-              <col className="w-[18%]" />
+              <col className="w-[9%]" />
+              <col className="w-[11%]" />
+              <col className="w-[16%]" />
+              <col className="w-[15%]" />
               <col className="w-[8%]" />
-              <col className="w-[12%]" />
-              <col className="w-[10%]" />
-              <col className="w-[12%]" />
+              <col className="w-[11%]" />
+              <col className="w-[9%]" />
+              <col className="w-[21%]" />
             </colgroup>
             <thead className="sticky top-0 z-10 bg-white/60 text-xs text-stone-700 backdrop-blur-2xl">
               <tr>
                 {["姓名", "内部账号", "邮箱", "角色", "状态", "最近登录时间", "创建时间", "操作"].map((header) => (
-                  <th className="px-4 py-3 font-medium" key={header}>{header}</th>
+                  <th className="px-4 py-2 font-medium" key={header}>{header}</th>
                 ))}
               </tr>
             </thead>
@@ -158,17 +146,17 @@ export function UserManagementPage() {
                   }}
                   tabIndex={0}
                 >
-                  <td className="px-4 py-3 font-medium text-stone-950">{user.name}</td>
-                  <td className="px-4 py-3 font-mono text-stone-800">{user.account}</td>
-                  <td className="px-4 py-3 text-stone-700">{user.email}</td>
-                  <td className="px-4 py-3"><RolePills roles={user.roles} /></td>
-                  <td className="px-4 py-3"><StatusPill status={user.status} /></td>
-                  <td className="px-4 py-3 text-stone-700">{formatSystemDateTime(user.lastLoginAt)}</td>
-                  <td className="px-4 py-3 text-stone-700">{formatSystemDate(user.createdAt)}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-1.5">
+                  <td className="px-4 py-2 font-medium text-stone-950">{user.name}</td>
+                  <td className="px-4 py-2 font-mono text-stone-800">{user.account}</td>
+                  <td className="px-4 py-2 text-stone-700">{user.email}</td>
+                  <td className="px-4 py-2"><RolePills roles={user.roles} /></td>
+                  <td className="px-4 py-2"><StatusPill status={user.status} /></td>
+                  <td className="px-4 py-2 text-stone-700">{formatSystemDateTime(user.lastLoginAt)}</td>
+                  <td className="px-4 py-2 text-stone-700">{formatSystemDate(user.createdAt)}</td>
+                  <td className="px-4 py-2">
+                    <div className="flex flex-wrap items-center gap-1">
                       <button
-                        className="rounded-lg border border-white/40 bg-white/34 px-2 py-1 text-xs transition hover:bg-white/54"
+                        className="rounded-lg border border-white/40 bg-white/34 px-1.5 py-1 text-[11px] transition hover:bg-white/54"
                         onClick={(event) => {
                           event.stopPropagation();
                           setSelectedId(user.id);
@@ -176,10 +164,10 @@ export function UserManagementPage() {
                         }}
                         type="button"
                       >
-                        <span className="flex items-center gap-1"><Pencil className="size-3" />编辑</span>
+                        <span className="flex items-center gap-0.5"><Pencil className="size-3" />编辑</span>
                       </button>
                       <button
-                        className="rounded-lg border border-white/40 bg-white/34 px-2 py-1 text-xs transition hover:bg-white/54"
+                        className="rounded-lg border border-white/40 bg-white/34 px-1.5 py-1 text-[11px] transition hover:bg-white/54"
                         onClick={(event) => {
                           event.stopPropagation();
                           demoAction(user.status === "active" ? "停用账号" : "启用账号", user);
@@ -189,14 +177,14 @@ export function UserManagementPage() {
                         {user.status === "active" ? "停用" : "启用"}
                       </button>
                       <button
-                        className="rounded-lg border border-white/40 bg-white/34 px-2 py-1 text-xs transition hover:bg-white/54"
+                        className="rounded-lg border border-white/40 bg-white/34 px-1.5 py-1 text-[11px] transition hover:bg-white/54"
                         onClick={(event) => {
                           event.stopPropagation();
                           demoAction("重置密码", user);
                         }}
                         type="button"
                       >
-                        <span className="flex items-center gap-1"><KeyRound className="size-3" />重置密码</span>
+                        <span className="flex items-center gap-0.5"><KeyRound className="size-3" />重置密码</span>
                       </button>
                     </div>
                   </td>

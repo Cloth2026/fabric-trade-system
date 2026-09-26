@@ -19,13 +19,22 @@ export const userRoleLabels: Record<UserRoleKey, string> = {
 };
 
 export const userRoleSummaries: Record<UserRoleKey, string> = {
-  owner: "拥有全部模块的查看、编辑、停用与管理权限，企业唯一最高负责人。",
-  admin: "日常系统与业务全权管理者，但不允许改动企业所有者账号与其身份。",
+  owner: "企业最高权限角色，拥有全部模块的查看、写操作与维护权限。",
+  admin: "日常系统与业务的管理者，但不能处置企业所有者身份与其账号状态。",
   sales: "负责客户、寄样、报价与订单业务，默认看不到真实采购价格。",
   purchasing: "负责面料货源、供应商与生产单元，掌管采购报价与采购价格。",
-  merchandiser: "负责寄样进度与客户订单执行，不改动用户角色，也看不到采购价格。",
-  viewer: "只读用户，可查看业务范围但不允许任何写操作。",
+  merchandiser: "负责寄样执行与订单跟进，不能创建销售订单，也看不到采购价格。",
+  viewer: "只读用户，可查看业务资料但不允许任何写操作。",
 };
+
+/** 企业所有者身份规则：V1 只作为静态说明展示，本轮不实现真实校验。 */
+export const ownerRoleRules: string[] = [
+  "owner 是企业最高权限角色。",
+  "一个租户允许有多个 owner。",
+  "系统必须始终保留至少一个启用状态的 owner。",
+  "最后一个启用的 owner 不能被停用、移除 owner 角色或降级。",
+  "admin 不能新增、停用、编辑或分配 owner 身份。",
+];
 
 /* ---------------------------------- 状态 ---------------------------------- */
 
@@ -96,7 +105,7 @@ export const prototypeUsers: PrototypeUser[] = [
     createdAt: "2026-06-25T01:05:00.000Z",
     updatedAt: "2026-09-24T09:02:00.000Z",
     forcePasswordChange: false,
-    note: "面料开发与坯布采购，唯一可维护采购 prices 的常规账号。",
+    note: "面料开发与坯布采购，可维护采购价格与采购报价。",
   },
   {
     id: "su-1004",
@@ -226,7 +235,25 @@ export type PermissionModuleKey =
   | "audit_log"
   | "system_settings";
 
-export type PermissionActionKey = "view" | "create" | "edit" | "deactivate" | "manage" | "view_purchase_price";
+/**
+ * 权限操作使用业务语言命名，不使用含义模糊的通用「管理 manage」。
+ * 英文 key 保持稳定，中文标签仅在展示层映射。
+ */
+export type PermissionActionKey =
+  | "view"
+  | "create"
+  | "edit"
+  | "deactivate"
+  | "view_purchase_price"
+  | "manage_source"
+  | "manage_purchase_quote"
+  | "manage_production_unit"
+  | "record_feedback"
+  | "advance_quote_status"
+  | "update_fulfillment"
+  | "assign_role"
+  | "reset_password"
+  | "maintain_config";
 
 export type PermissionLevel = "allow" | "restricted" | "deny";
 
@@ -235,22 +262,30 @@ export const permissionActionLabels: Record<PermissionActionKey, string> = {
   create: "新增",
   edit: "编辑",
   deactivate: "停用",
-  manage: "管理",
   view_purchase_price: "查看采购价格",
+  manage_source: "管理货源",
+  manage_purchase_quote: "管理采购报价",
+  manage_production_unit: "管理生产单元",
+  record_feedback: "登记客户反馈",
+  advance_quote_status: "推进报价状态",
+  update_fulfillment: "跟进履约状态",
+  assign_role: "分配角色",
+  reset_password: "重置密码",
+  maintain_config: "维护配置",
 };
 
 export const permissionModules: Array<{ key: PermissionModuleKey; label: string; description: string; actions: PermissionActionKey[] }> = [
   { key: "dashboard", label: "工作台", description: "经营概览与待办汇总", actions: ["view"] },
-  { key: "fabric", label: "面料库", description: "面料主档、工艺明细与货源", actions: ["view", "create", "edit", "manage"] },
-  { key: "purchase_price", label: "采购价格", description: "采购报价与真实采购价格", actions: ["view_purchase_price", "manage"] },
-  { key: "supplier_unit", label: "供应商与生产单元", description: "供应商档案、车间与产能", actions: ["view", "create", "edit", "deactivate", "manage"] },
-  { key: "customer", label: "客户", description: "客户主档与联系人", actions: ["view", "create", "edit", "deactivate", "manage"] },
-  { key: "sample", label: "寄样", description: "寄样登记与客户反馈", actions: ["view", "create", "edit", "manage"] },
-  { key: "quote", label: "客户报价", description: "报价单与状态推进", actions: ["view", "create", "edit", "manage"] },
-  { key: "order", label: "订单", description: "销售订单与交付跟踪", actions: ["view", "create", "edit", "manage"] },
-  { key: "user_management", label: "用户管理", description: "账号、角色与密码维护", actions: ["view", "create", "edit", "deactivate", "manage"] },
-  { key: "audit_log", label: "操作日志", description: "操作记录与安全事件", actions: ["view", "manage"] },
-  { key: "system_settings", label: "系统设置", description: "租户级参数与配置组", actions: ["view", "manage"] },
+  { key: "fabric", label: "面料库", description: "面料主档、工艺明细与货源", actions: ["view", "create", "edit", "manage_source"] },
+  { key: "purchase_price", label: "采购价格", description: "采购报价与真实采购价格", actions: ["view_purchase_price", "manage_purchase_quote"] },
+  { key: "supplier_unit", label: "供应商与生产单元", description: "供应商档案、车间与产能", actions: ["view", "create", "edit", "deactivate", "manage_production_unit"] },
+  { key: "customer", label: "客户", description: "客户主档与联系人", actions: ["view", "create", "edit", "deactivate"] },
+  { key: "sample", label: "寄样", description: "寄样登记与客户反馈", actions: ["view", "create", "edit", "record_feedback"] },
+  { key: "quote", label: "客户报价", description: "报价单与状态推进", actions: ["view", "create", "edit", "advance_quote_status"] },
+  { key: "order", label: "订单", description: "销售订单与交付跟踪", actions: ["view", "create", "edit", "update_fulfillment"] },
+  { key: "user_management", label: "用户管理", description: "账号、角色与密码维护", actions: ["view", "create", "edit", "deactivate", "assign_role", "reset_password"] },
+  { key: "audit_log", label: "操作日志", description: "操作记录与安全事件，仅提供查看", actions: ["view"] },
+  { key: "system_settings", label: "系统设置", description: "租户级参数与配置组", actions: ["view", "maintain_config"] },
 ];
 
 type RolePermissionMap = Partial<Record<PermissionModuleKey, Partial<Record<PermissionActionKey, PermissionLevel>>>>;
@@ -258,87 +293,88 @@ type RolePermissionMap = Partial<Record<PermissionModuleKey, Partial<Record<Perm
 export const rolePermissionMatrix: Record<UserRoleKey, RolePermissionMap> = {
   owner: {
     dashboard: { view: "allow" },
-    fabric: { view: "allow", create: "allow", edit: "allow", manage: "allow" },
-    purchase_price: { view_purchase_price: "allow", manage: "allow" },
-    supplier_unit: { view: "allow", create: "allow", edit: "allow", deactivate: "allow", manage: "allow" },
-    customer: { view: "allow", create: "allow", edit: "allow", deactivate: "allow", manage: "allow" },
-    sample: { view: "allow", create: "allow", edit: "allow", manage: "allow" },
-    quote: { view: "allow", create: "allow", edit: "allow", manage: "allow" },
-    order: { view: "allow", create: "allow", edit: "allow", manage: "allow" },
-    user_management: { view: "allow", create: "allow", edit: "allow", deactivate: "allow", manage: "allow" },
-    audit_log: { view: "allow", manage: "allow" },
-    system_settings: { view: "allow", manage: "allow" },
+    fabric: { view: "allow", create: "allow", edit: "allow", manage_source: "allow" },
+    purchase_price: { view_purchase_price: "allow", manage_purchase_quote: "allow" },
+    supplier_unit: { view: "allow", create: "allow", edit: "allow", deactivate: "allow", manage_production_unit: "allow" },
+    customer: { view: "allow", create: "allow", edit: "allow", deactivate: "allow" },
+    sample: { view: "allow", create: "allow", edit: "allow", record_feedback: "allow" },
+    quote: { view: "allow", create: "allow", edit: "allow", advance_quote_status: "allow" },
+    order: { view: "allow", create: "allow", edit: "allow", update_fulfillment: "allow" },
+    user_management: { view: "allow", create: "allow", edit: "allow", deactivate: "allow", assign_role: "allow", reset_password: "allow" },
+    audit_log: { view: "allow" },
+    system_settings: { view: "allow", maintain_config: "allow" },
   },
   admin: {
     dashboard: { view: "allow" },
-    fabric: { view: "allow", create: "allow", edit: "allow", manage: "allow" },
-    purchase_price: { view_purchase_price: "allow", manage: "allow" },
-    supplier_unit: { view: "allow", create: "allow", edit: "allow", deactivate: "allow", manage: "allow" },
-    customer: { view: "allow", create: "allow", edit: "allow", deactivate: "allow", manage: "allow" },
-    sample: { view: "allow", create: "allow", edit: "allow", manage: "allow" },
-    quote: { view: "allow", create: "allow", edit: "allow", manage: "allow" },
-    order: { view: "allow", create: "allow", edit: "allow", manage: "allow" },
+    fabric: { view: "allow", create: "allow", edit: "allow", manage_source: "allow" },
+    purchase_price: { view_purchase_price: "allow", manage_purchase_quote: "allow" },
+    supplier_unit: { view: "allow", create: "allow", edit: "allow", deactivate: "allow", manage_production_unit: "allow" },
+    customer: { view: "allow", create: "allow", edit: "allow", deactivate: "allow" },
+    sample: { view: "allow", create: "allow", edit: "allow", record_feedback: "allow" },
+    quote: { view: "allow", create: "allow", edit: "allow", advance_quote_status: "allow" },
+    order: { view: "allow", create: "allow", edit: "allow", update_fulfillment: "allow" },
     user_management: {
       view: "allow",
-      create: "allow",
+      create: "restricted",
       edit: "restricted",
       deactivate: "restricted",
-      manage: "allow",
+      assign_role: "restricted",
+      reset_password: "allow",
     },
-    audit_log: { view: "allow", manage: "restricted" },
-    system_settings: { view: "allow", manage: "restricted" },
+    audit_log: { view: "allow" },
+    system_settings: { view: "allow", maintain_config: "allow" },
   },
   sales: {
     dashboard: { view: "allow" },
-    fabric: { view: "allow", create: "allow", edit: "allow", manage: "deny" },
-    purchase_price: { view_purchase_price: "deny", manage: "deny" },
-    supplier_unit: { view: "allow", create: "deny", edit: "deny", deactivate: "deny", manage: "deny" },
-    customer: { view: "allow", create: "allow", edit: "allow", deactivate: "deny", manage: "deny" },
-    sample: { view: "allow", create: "allow", edit: "allow", manage: "deny" },
-    quote: { view: "allow", create: "allow", edit: "allow", manage: "deny" },
-    order: { view: "allow", create: "allow", edit: "allow", manage: "deny" },
-    user_management: { view: "deny", create: "deny", edit: "deny", deactivate: "deny", manage: "deny" },
-    audit_log: { view: "deny", manage: "deny" },
-    system_settings: { view: "deny", manage: "deny" },
+    fabric: { view: "allow", create: "deny", edit: "deny", manage_source: "deny" },
+    purchase_price: { view_purchase_price: "deny", manage_purchase_quote: "deny" },
+    supplier_unit: { view: "allow", create: "deny", edit: "deny", deactivate: "deny", manage_production_unit: "deny" },
+    customer: { view: "allow", create: "allow", edit: "allow", deactivate: "deny" },
+    sample: { view: "allow", create: "allow", edit: "allow", record_feedback: "allow" },
+    quote: { view: "allow", create: "allow", edit: "allow", advance_quote_status: "allow" },
+    order: { view: "allow", create: "allow", edit: "allow", update_fulfillment: "allow" },
+    user_management: { view: "deny", create: "deny", edit: "deny", deactivate: "deny", assign_role: "deny", reset_password: "deny" },
+    audit_log: { view: "deny" },
+    system_settings: { view: "deny", maintain_config: "deny" },
   },
   purchasing: {
     dashboard: { view: "allow" },
-    fabric: { view: "allow", create: "allow", edit: "allow", manage: "allow" },
-    purchase_price: { view_purchase_price: "allow", manage: "allow" },
-    supplier_unit: { view: "allow", create: "allow", edit: "allow", deactivate: "allow", manage: "allow" },
-    customer: { view: "allow", create: "deny", edit: "deny", deactivate: "deny", manage: "deny" },
-    sample: { view: "allow", create: "allow", edit: "allow", manage: "deny" },
-    quote: { view: "allow", create: "deny", edit: "deny", manage: "deny" },
-    order: { view: "allow", create: "deny", edit: "deny", manage: "deny" },
-    user_management: { view: "deny", create: "deny", edit: "deny", deactivate: "deny", manage: "deny" },
-    audit_log: { view: "deny", manage: "deny" },
-    system_settings: { view: "deny", manage: "deny" },
+    fabric: { view: "allow", create: "allow", edit: "allow", manage_source: "allow" },
+    purchase_price: { view_purchase_price: "allow", manage_purchase_quote: "allow" },
+    supplier_unit: { view: "allow", create: "allow", edit: "allow", deactivate: "allow", manage_production_unit: "allow" },
+    customer: { view: "allow", create: "deny", edit: "deny", deactivate: "deny" },
+    sample: { view: "allow", create: "deny", edit: "deny", record_feedback: "deny" },
+    quote: { view: "allow", create: "deny", edit: "deny", advance_quote_status: "deny" },
+    order: { view: "allow", create: "deny", edit: "deny", update_fulfillment: "deny" },
+    user_management: { view: "deny", create: "deny", edit: "deny", deactivate: "deny", assign_role: "deny", reset_password: "deny" },
+    audit_log: { view: "deny" },
+    system_settings: { view: "deny", maintain_config: "deny" },
   },
   merchandiser: {
     dashboard: { view: "allow" },
-    fabric: { view: "allow", create: "deny", edit: "deny", manage: "deny" },
-    purchase_price: { view_purchase_price: "deny", manage: "deny" },
-    supplier_unit: { view: "allow", create: "deny", edit: "deny", deactivate: "deny", manage: "deny" },
-    customer: { view: "allow", create: "deny", edit: "allow", deactivate: "deny", manage: "deny" },
-    sample: { view: "allow", create: "allow", edit: "allow", manage: "allow" },
-    quote: { view: "allow", create: "deny", edit: "deny", manage: "deny" },
-    order: { view: "allow", create: "allow", edit: "allow", manage: "restricted" },
-    user_management: { view: "deny", create: "deny", edit: "deny", deactivate: "deny", manage: "deny" },
-    audit_log: { view: "deny", manage: "deny" },
-    system_settings: { view: "deny", manage: "deny" },
+    fabric: { view: "allow", create: "deny", edit: "deny", manage_source: "deny" },
+    purchase_price: { view_purchase_price: "deny", manage_purchase_quote: "deny" },
+    supplier_unit: { view: "allow", create: "deny", edit: "deny", deactivate: "deny", manage_production_unit: "deny" },
+    customer: { view: "allow", create: "deny", edit: "deny", deactivate: "deny" },
+    sample: { view: "allow", create: "allow", edit: "allow", record_feedback: "allow" },
+    quote: { view: "allow", create: "deny", edit: "deny", advance_quote_status: "deny" },
+    order: { view: "allow", create: "deny", edit: "allow", update_fulfillment: "restricted" },
+    user_management: { view: "deny", create: "deny", edit: "deny", deactivate: "deny", assign_role: "deny", reset_password: "deny" },
+    audit_log: { view: "deny" },
+    system_settings: { view: "deny", maintain_config: "deny" },
   },
   viewer: {
     dashboard: { view: "allow" },
-    fabric: { view: "allow", create: "deny", edit: "deny", manage: "deny" },
-    purchase_price: { view_purchase_price: "deny", manage: "deny" },
-    supplier_unit: { view: "allow", create: "deny", edit: "deny", deactivate: "deny", manage: "deny" },
-    customer: { view: "allow", create: "deny", edit: "deny", deactivate: "deny", manage: "deny" },
-    sample: { view: "allow", create: "deny", edit: "deny", manage: "deny" },
-    quote: { view: "allow", create: "deny", edit: "deny", manage: "deny" },
-    order: { view: "allow", create: "deny", edit: "deny", manage: "deny" },
-    user_management: { view: "deny", create: "deny", edit: "deny", deactivate: "deny", manage: "deny" },
-    audit_log: { view: "deny", manage: "deny" },
-    system_settings: { view: "deny", manage: "deny" },
+    fabric: { view: "allow", create: "deny", edit: "deny", manage_source: "deny" },
+    purchase_price: { view_purchase_price: "deny", manage_purchase_quote: "deny" },
+    supplier_unit: { view: "allow", create: "deny", edit: "deny", deactivate: "deny", manage_production_unit: "deny" },
+    customer: { view: "allow", create: "deny", edit: "deny", deactivate: "deny" },
+    sample: { view: "allow", create: "deny", edit: "deny", record_feedback: "deny" },
+    quote: { view: "allow", create: "deny", edit: "deny", advance_quote_status: "deny" },
+    order: { view: "allow", create: "deny", edit: "deny", update_fulfillment: "deny" },
+    user_management: { view: "deny", create: "deny", edit: "deny", deactivate: "deny", assign_role: "deny", reset_password: "deny" },
+    audit_log: { view: "deny" },
+    system_settings: { view: "deny", maintain_config: "deny" },
   },
 };
 
@@ -348,13 +384,89 @@ export const permissionLevelLabels: Record<PermissionLevel, string> = {
   deny: "不允许",
 };
 
+/**
+ * 「受限允许」必须给出可阅读的限制说明，页面上不能只展示图标。
+ * 说明以模块为单位聚合展示，同时作为单元格的悬浮提示。
+ */
+export type PermissionRestriction = {
+  role: UserRoleKey;
+  module: PermissionModuleKey;
+  action: PermissionActionKey;
+  note: string;
+};
+
+export const permissionRestrictions: PermissionRestriction[] = [
+  {
+    role: "admin",
+    module: "user_management",
+    action: "create",
+    note: "可以新增普通账号，但不能新增 owner 身份账号。",
+  },
+  {
+    role: "admin",
+    module: "user_management",
+    action: "edit",
+    note: "可以编辑普通账号的资料与角色，但不能编辑 owner 身份账号。",
+  },
+  {
+    role: "admin",
+    module: "user_management",
+    action: "deactivate",
+    note: "可以停用普通账号，但不能停用 owner 身份账号；最后一个启用的 owner 任何人都不能停用。",
+  },
+  {
+    role: "admin",
+    module: "user_management",
+    action: "assign_role",
+    note: "可以为普通账号分配业务角色，但不能分配或回收 owner 角色。",
+  },
+  {
+    role: "merchandiser",
+    module: "order",
+    action: "update_fulfillment",
+    note: "可以编辑履约资料并推进非终态进度（如已发货 → 部分到货），终态（完成、取消）由 owner 或 admin 处理。",
+  },
+];
+
+export function restrictionNoteOf(role: UserRoleKey, moduleKey: PermissionModuleKey, action: PermissionActionKey): string | undefined {
+  return permissionRestrictions.find((item) => item.role === role && item.module === moduleKey && item.action === action)?.note;
+}
+
+export function restrictionsOfModule(moduleKey: PermissionModuleKey): PermissionRestriction[] {
+  return permissionRestrictions.filter((item) => item.module === moduleKey);
+}
+
 export const permissionRestrictionNotes: Record<UserRoleKey, string[]> = {
-  owner: ["拥有全部模块的查看、新增、编辑、停用与管理权限。", "唯一可以处置企业所有者身份的角色。"],
-  admin: ["不能修改企业所有者的账号资料、角色或停用其账号。", "日志与系统设置可以查看和导出，但不能清理或改写核心参数。"],
-  sales: ["默认不能查看真实采购价格与采购报价，需要时向采购角色索取。", "不能停用客户或面料数据，也不会看到用户管理模块。"],
-  purchasing: ["可以管理供应商、生产单元、货源与采购报价，也能查看采购价格。", "不参与客户报价与销售订单的写操作。"],
-  merchandiser: ["主要负责寄样执行与订单推进，订单状态终态推进需要主管处理。", "不能查看采购价格，也不能改动面料主档。"],
-  viewer: ["只能查看业务数据，任何写操作都会被拒绝。", "不开放采购价格与系统管理模块。"],
+  owner: [
+    "拥有全部模块的查看、写操作与维护权限。",
+    "一个租户允许有多个 owner；至少保留一个启用状态的 owner。",
+    "最后一个启用的 owner 不能被停用、移除 owner 角色或降级。",
+    "可以新增、编辑、停用其他 owner 身份账号并分配 owner 角色。",
+  ],
+  admin: [
+    "拥有除 owner 身份处置外的日常系统与业务权限。",
+    "不能新增、停用、编辑 owner 身份账号，也不能分配 owner 角色。",
+    "可以看到真实采购价格，并对普通账号执行停用与重置密码。",
+  ],
+  sales: [
+    "写操作集中在客户、寄样、客户报价与销售订单。",
+    "默认不能查看真实采购价格，报价所需成本需由采购角色提供。",
+    "不能停用客户主档，也看不到用户管理与操作日志。",
+  ],
+  purchasing: [
+    "可以管理面料货源、供应商、生产单元与采购报价。",
+    "可以查看采购价格；客户、寄样、报价、订单仅可查看。",
+    "不开放用户管理与系统设置。",
+  ],
+  merchandiser: [
+    "负责寄样执行与订单跟进，不能创建销售订单。",
+    "订单终态推进需要 owner 或 admin 处理。",
+    "不能查看采购价格，也不改动客户、面料与供应商主档。",
+  ],
+  viewer: [
+    "只能查看业务资料，任何写操作都会被拒绝。",
+    "不开放采购价格、用户管理、操作日志与系统设置。",
+  ],
 };
 
 export function resolvePermissionLevel(role: UserRoleKey, moduleKey: PermissionModuleKey, action: PermissionActionKey): PermissionLevel {
@@ -499,17 +611,17 @@ export const prototypeLogs: PrototypeLog[] = [
     id: "log-20260926-002",
     requestId: "req-6b41de09c3",
     occurredAt: "2026-09-26T01:26:00.000Z",
-    actorId: "su-1007",
-    actorName: "赵敏",
-    actorEmail: "zhao.min@cloth2026.com",
+    actorId: "",
+    actorName: "未识别账号",
+    actorEmail: "z***@cloth2026.com",
     category: "login_security",
     module: "auth",
     action: "login_failed",
-    target: "User:su-1007",
+    target: "登录主体:z***@cloth2026.com",
     result: "failure",
     ipAddress: "192.168.1.58",
     device: "macOS 15 · Safari 19",
-    detail: { 失败原因: "密码错误", 连续失败次数: "3", 剩余尝试次数: "2" },
+    detail: { 处理阶段: "登录校验", 返回提示: "账号或密码不正确，请检查后重试。", 记录范围: "脱敏邮箱、IP、设备信息" },
   },
   {
     id: "log-20260926-003",
@@ -716,7 +828,8 @@ export function latestLoginEventOf(userId: string): PrototypeLog | undefined {
 export function buildSecurityNotes(user: PrototypeUser): string[] {
   const notes: string[] = [];
   if (user.roles.includes("owner")) {
-    notes.push("企业所有者账号：系统管理员不可修改其资料、角色，也不能停用该账号。");
+    notes.push("企业所有者账号：一个租户允许有多个 owner，系统必须保留至少一个启用状态的 owner。");
+    notes.push("该账号不能被系统管理员停用、编辑或降级；若它是最后一个启用的 owner，任何人都不能停用它。");
   }
   if (user.roles.includes("admin")) {
     notes.push("系统管理员可以创建与停用普通账号，但无法改动企业所有者身份。");
